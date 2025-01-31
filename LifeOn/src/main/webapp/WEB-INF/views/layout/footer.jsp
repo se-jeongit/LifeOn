@@ -10,7 +10,7 @@
         <li class="nav-item"><span>&nbsp;&middot;&nbsp;</span></li>
         <li class="nav-item"><a class="text-reset" href="#">개인정보취급방침</a></li>
     </ul>
-    <div class="mb-2">&copy; 2025. SingleLife Co.Ltd. All Rights Reserved.</div>
+    <div class="mb-2">&copy; 2025. LifeOn Co.Ltd. All Rights Reserved.</div>
 </div>
 
 <!-- 로딩 -->
