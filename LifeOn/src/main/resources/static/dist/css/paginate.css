@@ -12,7 +12,6 @@
 	font-size: 14px;	
 }
 .paginate a {
-	border: 1px solid #ccc;
 	color: #000;
 	font-weight: 600;
 	text-decoration: none;
@@ -24,8 +23,9 @@
 	color: #6771ff;
 }
 .paginate span {
-	border: 1px solid #e28d8d;
-	color: #cb3536;
+	border-radius: 7px;
+	background: #0d6efd;
+	color: #ffffff;
 	font-weight: 600;
 	padding: 3px 7px;
 	margin-left: 3px;
