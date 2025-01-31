@@ -18,14 +18,14 @@
 </header>
 	
 <main>
-	<div class="container body-container">
+	<div class="d-flex flex-column min-vh-100 align-items-center">
 	    <div class="inner-page">
 			홈 화면 입니다.
 	    </div>
 	</div>
 </main>
 
-<footer>
+<footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
 </footer>
 
