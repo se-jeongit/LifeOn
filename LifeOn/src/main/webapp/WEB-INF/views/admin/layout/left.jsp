@@ -61,22 +61,21 @@ $(function(){
     }catch(e) {
     }
 });
-
-$(function(){
-	$('nav ul>.menu--item__has_sub_menu ul>li>a').each(function() {
-		if($(this).hasClass('active_menu')) {
-			$(this).closest(".menu--item__has_sub_menu").addClass('menu--subitens__opened');
-			return false;
-		}
-	});
-});
 </script>
 
 <nav class="vertical_nav">
 	<ul id="js-menu" class="menu">
-		<li class="menu--item" style="height: 200px; padding: 10px; background: #006AFF;">
-			<p>관리자님</p>
-			<p>안녕하세요!</p>
+		<li class="menu--item" style="height: 300px; padding: 20px; margin-bottom: 10px; background: #006AFF;">
+			<div class="p-2 profile" style="width: 120px; height: 120px; border-radius: 70%; overflow: hidden;">
+				<img src="${pageContext.request.contextPath}/dist/images/profile.jpg" class="profileImage" style="object-fit: cover;" name="profileImage" id="profileImage" alt="프로필">
+			</div>	
+			
+			<div style="color: #FFF;">
+				<h5>관리자님</h5>
+				<p>안녕하세요!</p>
+				<span>최근접속일자</span>
+				<p>2025-01-23 16:02:34</p>
+			</div>
 		</li>
 		<li class="menu--item">
 			<a href="<c:url value='/admin' />" class="menu--link" title="Home">

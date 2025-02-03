@@ -11,22 +11,17 @@
 				</button>
 			</div>
 			<div class="col align-self-center">
-				<h2 class="fs-4 fw-bold">관리자 페이지</h2>
+				<img class="fs-4" src="${pageContext.request.contextPath}/dist/images/logo.png" alt="logo" style="width: 150px; height: 60px; object-fit: cover;">
 			</div>
 			<div class="col-auto">
-				<div class="row">
 					<div class="col-3 align-self-center">
 						<span class="img-person" style="background-image: url('${pageContext.request.contextPath}/dist/images/person.png');"></span>
 					</div>
 					<div class="col-auto text-end align-self-center ps-3">
-						<div class="text-start">
-							<span class="fw-semibold" style="font-size: 10px;">관리자</span>
-						</div>
-						<div class="text-start">
+						<div style="font-size: 14px;">
 							<span>관리자 님</span>
 							&nbsp;<a href="${pageContext.request.contextPath}/"><i class="bi bi-box-arrow-right"></i></a>
 						</div>
-					</div>
 				</div>
 			</div>
 		</div>

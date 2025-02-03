@@ -30,7 +30,7 @@
 .vertical_nav {
 	position: absolute;
 	left: -200px;
-	top: 25px;
+	top: 40px;
 	bottom: 0px;
 	width: 200px;
 	background: #FFF;
@@ -58,16 +58,6 @@
 	line-height: 40px;
 }
 
-.menu--item__has_sub_menu .menu--link:after {
-	position: absolute;
-	top: 0;
-	right: 15px;
-	height: 40px;
-	line-height: 40px;
-	font-family: "bootstrap-icons";
-	content: "\F229";
-}
-
 .menu--subitens__opened { background: #FFF; }
 .menu--subitens__opened .menu--link { color: #222; }
 .menu--subitens__opened .sub_menu { display: block; }
@@ -92,7 +82,7 @@
 	display: block;
 	float: left;
 	width: 50px;
-	height: 40px;
+	height: 50px;
 	line-height: 40px;
 	text-align: center;
 	font-size: 20px;
@@ -100,7 +90,7 @@
 
 .menu--label {
 	display: block;
-	height: 40px;
+	height: 50px;
 	line-height: 40px;
 }
 
