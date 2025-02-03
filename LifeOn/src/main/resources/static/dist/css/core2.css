@@ -1,12 +1,19 @@
 ﻿@charset "UTF-8";
 
-* { padding: 0; margin: 0; }
+@font-face {
+    font-family: 'NEXON Lv1 Gothic OTF';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* { padding: 0; margin: 0; font-family: 'NEXON Lv1 Gothic OTF', sans-serif; }
 *, *::after, *::before { box-sizing: border-box; }
 
-body { font-size: 14px; font-family: "Malgun Gothic", "맑은 고딕", NanumGothic, 나눔고딕, 돋움, sans-serif; }
+body { font-size: 14px; font-family: 'NEXON Lv1 Gothic OTF', sans-serif; }
 
 a { text-decoration: none; color: #333; }
-a:hover, a:active{ text-decoration: underline; cursor: pointer; color: #F28011; }
+a:hover, a:active{ text-decoration: underline; cursor: pointer; color: #006AFF; }
 
 textarea:focus, input:focus { outline: none; }
 
@@ -63,32 +70,7 @@ main { margin-top: 55px; }
 }
 
 /* container */
-.body-container {
-	padding: 10px;
-	clear: both;
-}
 
-.body-title {
-    color: #424951;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    margin: 0 0 25px 0;
-    border-bottom: 1px solid #ddd;
-}
-.body-title h3 {
-    font-size: 23px;
-    min-width: 300px;
-    font-family:"Malgun Gothic", "맑은 고딕", NanumGothic, 나눔고딕, 돋움, sans-serif;
-    font-weight: bold;
-    margin: 0 0 -5px 0;
-    padding-bottom: 5px;
-    display: inline-block;
-    border-bottom: 3px solid #424951;
-}
-
-.body-main {
-	padding-bottom: 15px;
-}
 
 /* 페이징 */
 .page-navigation {
