@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>spring</title>
+<title>LifeOn</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 
@@ -17,12 +17,10 @@
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 	
-<main>
-	<div class="d-flex flex-column min-vh-100 align-items-center">
-	    <div class="inner-page">
-			홈 화면 입니다.
-	    </div>
-	</div>
+<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
+    <div class="container">
+		<p> 메인 페이지 입니다. </p>
+    </div>
 </main>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">

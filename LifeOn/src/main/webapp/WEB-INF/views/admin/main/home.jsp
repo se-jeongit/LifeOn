@@ -18,12 +18,8 @@
 <main>
 	<jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
 	<div class="wrapper">
-		<div class="body-container">
-		
-		    <div class="body-main">
-		    	<p> 관리자 페이지 입니다. </p>
-			</div>
-			
+		<div class="container">
+	    	<p> 관리자 페이지 입니다. </p>
 		</div>
 	</div>
 </main>

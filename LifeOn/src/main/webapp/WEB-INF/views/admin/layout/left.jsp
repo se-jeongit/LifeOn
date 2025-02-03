@@ -74,10 +74,14 @@ $(function(){
 
 <nav class="vertical_nav">
 	<ul id="js-menu" class="menu">
+		<li class="menu--item" style="height: 200px; padding: 10px; background: #006AFF;">
+			<p>관리자님</p>
+			<p>안녕하세요!</p>
+		</li>
 		<li class="menu--item">
 			<a href="<c:url value='/admin' />" class="menu--link" title="Home">
 				<i class="menu--icon bi bi-h-square"></i>
-				<span class="menu--label">Home</span>
+				<span class="menu--label">관리자홈</span>
 			</a>
 		</li>
 	
@@ -88,88 +92,32 @@ $(function(){
 			</a>
 		</li>
 	
-		<li class="menu--item menu--item__has_sub_menu">
-			<label class="menu--link" title="고객센터관리">
-				<i class="menu--icon bi bi-question-square"></i>
-				<span class="menu--label">고객센터관리</span>
-			</label>
-	
-			<ul class="sub_menu">
-				<li class="sub_menu--item">
-					<a href="<c:url value='/admin' />" class="sub_menu--link">자주하는 질문</a>
-				</li>
-				<li class="sub_menu--item">
-					<a href="<c:url value='/admin' />" class="sub_menu--link">공지사항</a>
-				</li>
-				<li class="sub_menu--item">
-					<a href="<c:url value='/admin' />" class="sub_menu--link">1:1문의</a>
-				</li>
-				<li class="sub_menu--item">
-					<a href="<c:url value='/admin' />" class="sub_menu--link">이벤트</a>
-				</li>
-				<li class="sub_menu--item">
-					<a href="#" class="sub_menu--link">신고</a>
-				</li>
-			</ul>
-		</li>
-	
-		<li class="menu--item menu--item__has_sub_menu">
-			<label class="menu--link" title="강좌관리">
-				<i class="menu--icon bi bi-book-half"></i>
-				<span class="menu--label">강좌관리</span>
-			</label>
-		
-			<ul class="sub_menu">
-				<li class="sub_menu--item">
-					<a href="#" class="sub_menu--link">카테고리</a>
-				</li>
-				<li class="sub_menu--item">
-					<a href="#" class="sub_menu--link">강좌</a>
-				</li>
-				<li class="sub_menu--item">
-					<a href="#" class="sub_menu--link">강사</a>
-				</li>
-			</ul>
-		</li>
-	
 		<li class="menu--item">
 	        <a href="#" class="menu--link" title="일정관리">
 				<i class="menu--icon bi bi-calendar"></i>
-				<span class="menu--label">일정관리</span>
+				<span class="menu--label">신고관리</span>
 			</a>
 		</li>
 		
 		<li class="menu--item">
 	        <a href="#" class="menu--link" title="지역명소관리">
 				<i class="menu--icon bi bi-geo"></i>
-				<span class="menu--label">지역명소관리</span>
+				<span class="menu--label">게시글관리</span>
 			</a>
 		</li>
 	
 		<li class="menu--item">
 	        <a href="#" class="menu--link" title="메인화면 설정">
 				<i class="menu--icon bi bi-gear-fill"></i>
-				<span class="menu--label">메인화면 설정</span>
-			</a>
-		</li>
-	
-		<li class="menu--item">
-	        <a href="#" class="menu--link" title="GroupWare">
-				<i class="menu--icon bi bi-c-square"></i>
-				<span class="menu--label">GroupWare</span>
+				<span class="menu--label">상품관리</span>
 			</a>
 		</li>
 	
 		<li class="menu--item">
 	        <a href="<c:url value='/member/logout'/>" class="menu--link" title="Logout">
 				<i class="menu--icon bi bi-unlock"></i>
-				<span class="menu--label">Logout</span>
+				<span class="menu--label">고객문의</span>
 			</a>
 		</li>
 	</ul>
-	
-	<button id="collapse_menu" class="collapse_menu">
-		<i class="collapse_menu--icon bi bi-chevron-left"></i>
-		<span class="menu--label">Menu</span>
-	</button>	
 </nav>

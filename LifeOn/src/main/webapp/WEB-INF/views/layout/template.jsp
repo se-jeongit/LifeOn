@@ -6,15 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>spring</title>
+<title>LifeOn</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
-
-<style type="text/css">
-.body-container {
-	max-width: 800px;
-}
-</style>
 
 </head>
 <body>
@@ -23,21 +17,13 @@
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 	
-<main>
-	<div class="container">
-		<div class="body-container">	
-			<div class="body-title">
-				<h3><i class="bi bi-app"></i> 제목 </h3>
-			</div>
-			
-			<div class="body-main">
-				내용 입니다.
-			</div>
-		</div>
-	</div>
+<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
+    <div class="container">
+		템플릿
+    </div>
 </main>
 
-<footer>
+<footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
 </footer>
 
