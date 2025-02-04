@@ -92,4 +92,12 @@ public class MemberController {
 		return "member/idFind";
 	}
 	
+	//비밀번호찾기
+	@GetMapping("pwdFind")
+	public String pwdFind() {
+		return "member/pwdFind";
+	}
+	
+	
+	
 }

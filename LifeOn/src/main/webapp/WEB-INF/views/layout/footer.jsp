@@ -32,8 +32,8 @@
     </div>
     
     <div style="width: 250px; text-align: right;">
-    	<img src="${pageContext.request.contextPath}/dist/images/" alt="OpenAPI" style="width: 120px; height: 50px; object-fit: cover;">
-    	<img src="${pageContext.request.contextPath}/dist/images/" alt="OpenAPI" style="width: 120px; height: 50px; object-fit: cover;">
+    	<img src="" alt="OpenAPI" style="width: 120px; height: 50px; object-fit: cover;">
+    	<img src="" alt="OpenAPI" style="width: 120px; height: 50px; object-fit: cover;">
     </div>
 </div>
 

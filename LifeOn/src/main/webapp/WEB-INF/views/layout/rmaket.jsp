@@ -52,7 +52,7 @@
 .container-r {
     float: right;
     top: 50%;
-    width: 200px;
+    width: 150px;
 }
   
 </style>
