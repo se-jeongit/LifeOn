@@ -95,7 +95,6 @@
 						<a href="<c:url value='/'/>" style="text-decoration: none;">고객센터</a>
 					</div>	
 				</c:when>
-				
 				<c:otherwise>
 					<div class="p-2">
 						<a href="<c:url value='/'/>" title="즐겨찾기"><i class="bi bi-bookmark"></i></a>
@@ -107,7 +106,7 @@
 					<form name="profileForm" method="post" enctype="multipart/form-data">
 						<div class="p-2 profile">
 							<a href="<c:url value='/member/mypage'/>">
-								<img src="${sessionScope.member.profileImageUrl}"  class="profileImage" name="profileImage" id="profileImage" alt="프로필">
+								<img src="#"  class="profileImage" name="profileImage" id="profileImage" alt="프로필">
 							</a>
 						</div>	
 					</form>
@@ -119,7 +118,7 @@
 						<a href="<c:url value='/'/>" style="text-decoration: none;">고객센터</a>
 					</div>	
 								
-					<c:if test="${sessionScope.member.userLevel >= 1}">
+					<c:if test="${sessionScope.member.grade >= 1}">
 						<div class="p-2">
 							<a href="<c:url value='/admin'/>" title="관리자페이지"><i class="bi bi-gear"></i></a>
 						</div>					
@@ -134,27 +133,27 @@
 <!-- 로그인 모달 -->
 <script type="text/javascript">
 	function dialogLogin() {
-	    $('form[name=modelLoginForm] input[name=userId]').val('');
-	    $('form[name=modelLoginForm] input[name=userPwd]').val('');
+	    $('form[name=modelLoginForm] input[name=id]').val('');
+	    $('form[name=modelLoginForm] input[name=pwd]').val('');
 	    
 		$('#loginModal').modal('show');	
 		
-	    $('form[name=modelLoginForm] input[name=userId]').focus();
+	    $('form[name=modelLoginForm] input[name=id]').focus();
 	}
 
 	function sendModelLogin() {
 	    var f = document.modelLoginForm;
 		var str;
 		
-		str = f.userId.value;
+		str = f.id.value;
 	    if(!str) {
-	        f.userId.focus();
+	        f.id.focus();
 	        return;
 	    }
 	
-	    str = f.userPwd.value;
+	    str = f.pwd.value;
 	    if(!str) {
-	        f.userPwd.focus();
+	        f.pwd.focus();
 	        return;
 	    }
 	
@@ -186,10 +185,10 @@
                 <div class="p-3">
                     <form name="modelLoginForm" action="" method="post" class="row g-3">
                         <div class="mt-0">
-                            <input type="text" name="userId" class="form-control" placeholder="아이디">
+                            <input type="text" name="id" class="form-control" placeholder="아이디">
                         </div>
                         <div style="margin-top: 7px;">
-                            <input type="password" name="userPwd" class="form-control" autocomplete="off" placeholder="비밀번호">
+                            <input type="password" name="pwd" class="form-control" autocomplete="off" placeholder="비밀번호">
                         </div>
                         <div>
                             <div class="form-check">

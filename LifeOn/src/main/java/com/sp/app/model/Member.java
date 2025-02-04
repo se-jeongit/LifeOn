@@ -8,26 +8,29 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Member {
-	private long memberIdx;
-	private String userId;
-	private String userPwd;
-	private String userName;
-	private int userLevel;
+	
+	//회원테이블
+	private long num;
+	private String id;
+	private String pwd;
+	private String nickName;
+	private int block;
+	private String reg_date;
+	private String mod_date;
+	private String last_login; //마지막접속때문에 추가 디비엔 아직 반영안함. 세션정보로 처리할수도 있을거 같아서 
+	private int grade;
 	private int enabled;
-	private String register_date;
-	private String modify_date;
-	private String last_login;
-	private String email;
+	
+	//회원상세테이블
+	private String name;
+	private String gender;
+	private String birth;
 	private String email1;
 	private String email2;
-	private int receiveEmail;
-	private String tel;
 	private String tel1;
 	private String tel2;
 	private String tel3;
-	private String birth;
-	private String zip;
 	private String addr1;
 	private String addr2;
-	private String ipAddr;
+	private int post;
 }
