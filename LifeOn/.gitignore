@@ -9,6 +9,8 @@ gradlew
 gradlew.bat
 settings.gradle
 .idea/
+**/build/
+build/
 
 ### STS ###
 .apt_generated
