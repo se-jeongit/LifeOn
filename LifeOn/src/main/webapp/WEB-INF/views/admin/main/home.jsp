@@ -6,14 +6,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>spring</title>
+<title>LifeOn</title>
 
 <jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp"/>
 
 </head>
 <body>
 
-<jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
+<header class="container-fluid header-top fixed-top px-4">
+	<jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
+</header>
 	
 <main>
 	<jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
@@ -24,7 +26,9 @@
 	</div>
 </main>
 
-<jsp:include page="/WEB-INF/views/admin/layout/footer.jsp"/>
+<footer>
+	<jsp:include page="/WEB-INF/views/admin/layout/footer.jsp"/>
+</footer>
 
 <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
 </body>
