@@ -9,6 +9,7 @@
 <title>LifeOn</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 
 </head>
 <body>
@@ -20,6 +21,7 @@
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="container">
 		<p> 메인 페이지 입니다. </p>
+		<button class="btn">버튼 폼</button>
     </div>
 </main>
 

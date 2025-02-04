@@ -9,6 +9,7 @@
 <title>LifeOn</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 
 </head>
 <body>
