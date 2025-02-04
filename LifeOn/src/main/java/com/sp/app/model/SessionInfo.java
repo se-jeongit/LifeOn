@@ -13,8 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class SessionInfo {
-	private long memberIdx;
-	private String userId;
-	private String userName;
-	private int userLevel;
+	private long num;
+	private String id;
+	private String nickName;
+	private int grade;
 }
