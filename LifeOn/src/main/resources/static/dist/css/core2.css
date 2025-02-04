@@ -33,10 +33,10 @@ header {
 }
 
 /* main */
-main { margin-top: 55px; }
+main { margin-top: 76px; }
 
 .wrapper {
-	padding: 30px 30px 15px;
+	padding: 30px 20px 30px 20px;
 	transition: all 0.3s ease-out;
 }
 

@@ -65,56 +65,52 @@ $(function(){
 
 <nav class="vertical_nav">
 	<ul id="js-menu" class="menu">
-		<li class="menu--item" style="height: 300px; padding: 20px; margin-bottom: 10px; background: #006AFF;">
-			<div class="p-2 profile" style="width: 120px; height: 120px; border-radius: 70%; overflow: hidden;">
-				<img src="${pageContext.request.contextPath}/dist/images/profile.jpg" class="profileImage" style="object-fit: cover;" name="profileImage" id="profileImage" alt="프로필">
-			</div>	
+		<li class="menu--item" style="height: 400px; padding: 20px; margin-bottom: 10px; background: #006AFF;">
+			<div class="profile" style="width: 150px; height: 150px; border-radius: 70%; position: relative; overflow: hidden;">
+				<img src="${pageContext.request.contextPath}/dist/images/profile.png" class="profileImage" style="width: 100%; height: 100%; object-fit: cover;" name="profileImage" id="profileImage" alt="프로필">
+			</div>
 			
 			<div style="color: #FFF;">
 				<h5>관리자님</h5>
-				<p>안녕하세요!</p>
+				<p>안녕하세요!</p><i class="bi bi-pen"></i>
 				<span>최근접속일자</span>
 				<p>2025-01-23 16:02:34</p>
 			</div>
 		</li>
+		
+
 		<li class="menu--item">
-			<a href="<c:url value='/admin' />" class="menu--link" title="Home">
-				<i class="menu--icon bi bi-h-square"></i>
+			<a href="<c:url value='/admin' />" class="menu--link" title="관리자홈">
 				<span class="menu--label">관리자홈</span>
 			</a>
 		</li>
 	
 		<li class="menu--item">
 	        <a href="<c:url value='/admin' />" class="menu--link" title="회원관리">
-				<i class="menu--icon bi bi-person-square"></i>
 				<span class="menu--label">회원관리</span>
 			</a>
 		</li>
 	
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="일정관리">
-				<i class="menu--icon bi bi-calendar"></i>
+	        <a href="#" class="menu--link" title="신고관리">
 				<span class="menu--label">신고관리</span>
 			</a>
 		</li>
 		
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="지역명소관리">
-				<i class="menu--icon bi bi-geo"></i>
+	        <a href="#" class="menu--link" title="게시글관리">
 				<span class="menu--label">게시글관리</span>
 			</a>
 		</li>
 	
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="메인화면 설정">
-				<i class="menu--icon bi bi-gear-fill"></i>
+	        <a href="#" class="menu--link" title="상품관리">
 				<span class="menu--label">상품관리</span>
 			</a>
 		</li>
 	
 		<li class="menu--item">
-	        <a href="<c:url value='/member/logout'/>" class="menu--link" title="Logout">
-				<i class="menu--icon bi bi-unlock"></i>
+	        <a href="#" class="menu--link" title="고객문의">
 				<span class="menu--label">고객문의</span>
 			</a>
 		</li>
