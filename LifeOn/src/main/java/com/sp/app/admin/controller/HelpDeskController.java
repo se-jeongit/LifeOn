@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HelpDeskController {
 	
-	@GetMapping("help")
+	@GetMapping("/helpdesk")
 	public String handleHelp(Model model) {
 		
 		return "list";
