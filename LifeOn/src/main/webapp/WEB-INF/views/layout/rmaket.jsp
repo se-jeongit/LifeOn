@@ -31,7 +31,6 @@
    
     
 }
-  
     .recent-products h3 {
     color: #222; 
     font-size: 14px;
@@ -50,7 +49,7 @@
     font-size: 12px;
 }
 
-.container {
+.container-r {
     float: right;
     top: 50%;
     width: 200px;
@@ -59,7 +58,7 @@
 </style>
 </head>
 <body>
-	<div class="container">
+	<div class="container-r">
 	<div class="recent-products">
     <h3>즐겨찾기</h3>
  	</div>
