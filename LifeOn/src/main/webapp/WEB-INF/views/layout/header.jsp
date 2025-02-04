@@ -89,7 +89,7 @@
 						<a href="javascript:dialogLogin()" style="text-decoration: none;">로그인</a>
 					</div>
 					<div class="p-2">
-						<a href="<c:url value='/'/>" style="text-decoration: none;">회원가입</a>
+						<a href="<c:url value='/member/join'/>" style="text-decoration: none;">회원가입</a>
 					</div>	
 					<div class="p-2">
 						<a href="<c:url value='/'/>" style="text-decoration: none;">고객센터</a>
