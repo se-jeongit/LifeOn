@@ -20,7 +20,7 @@
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="container">
         
-		<div class="row justify-content-md-center mt-5">
+		<div class="row justify-content-center mt-5">
 		    <div class="col-md-8">
 		        <div class="border shadow-sm rounded mt-5 p-5 bg-light">
 		            <h4 class="text-center fw-bold text-danger mb-4">

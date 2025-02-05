@@ -4,14 +4,14 @@
 
 <nav class="vertical_nav">
 	<ul id="js-menu" class="menu">
-		<li class="menu--item" style="height: 400px; padding: 25px; background: #006AFF;">
+		<li class="menu--item" style="height: 380px; padding: 25px; background: #006AFF;">
 			<div class="profile" style="width: 150px; height: 150px; border-radius: 70%; position: relative; overflow: hidden;">
 				<img src="${pageContext.request.contextPath}/dist/images/profile.png" class="profileImage" style="width: 100%; height: 100%; object-fit: cover;" name="profileImage" id="profileImage" alt="프로필">
 			</div>
 			
 			<div style="color: #FFF; padding: 30px 10px 10px 10px; line-height: 2;">
 				<p style="font-size: 18px; font-weight: 600; margin: 0px;">관리자 님</p>
-    			<p style="margin-bottom: 50px; font-size: 16px;">
+    			<p style="margin-bottom: 30px; font-size: 16px;">
     				안녕하세요!&emsp;
     				<a class="iconUpdate" href="" title="정보수정"><i class="bi bi-pencil-square"></i></a>
     			</p>
@@ -21,7 +21,7 @@
 		</li>
 
 		<li class="menu--item">
-			<a href="<c:url value='/admin' />" class="menu--link" title="관리자홈">
+			<a href="<c:url value='/admin' />" aria-current="page" class="menu--link" title="관리자홈">
 				<span class="menu--label">관리자홈</span>
 			</a>
 		</li>
