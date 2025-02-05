@@ -33,6 +33,8 @@ bin/
 *.iml
 *.ipr
 
+out/
+
 application.yml
 
 ### NetBeans ###
