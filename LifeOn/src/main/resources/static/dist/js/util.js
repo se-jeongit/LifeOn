@@ -158,3 +158,33 @@ function isValidPhone(data) {
     let format = /^(010)-[0-9]{4}-[0-9]{4}$/g;
     return format.test(data);
 }
+
+function ajaxFun(url, method, requestParams, dataType, callback, file = false, contentType = 'text') {
+    const settings = {
+        type: method,
+        data: requestParams,
+        dataType: dataType,
+        success: function (data) {
+            callback(data);
+        },
+        beforeSend: function (jqXHR) {
+        },
+        complete: function () {
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR.responseText);
+        }
+    };
+
+    if (file) {
+        settings.processData = false;  // file 전송시 필수. 서버로전송할 데이터를 쿼리문자열로 변환여부
+        settings.contentType = false;  // file 전송시 필수. 서버에전송할 데이터의 Content-Type. 기본:application/x-www-urlencoded
+    }
+
+    // 전송방식 : json 으로 전송하는 경우
+    if (contentType.toLowerCase() === 'json') {
+        settings.contentType = 'application/json; charset=utf-8';
+    }
+
+    $.ajax(url, settings);
+}

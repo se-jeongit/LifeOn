@@ -86,7 +86,7 @@
 			<c:choose>
 				<c:when test="${empty sessionScope.member}">
 					<div class="p-2">
-						<a href="javascript:dialogLogin()" style="text-decoration: none;">로그인</a>
+						<a href="javascript:dialogLogin()"  style="text-decoration: none;">로그인</a>
 					</div>
 					<div class="p-2">
 						<a href="<c:url value='/member/join'/>" style="text-decoration: none;">회원가입</a>
@@ -166,52 +166,52 @@
 			$('button, input, select, textarea').each(function(){
 				$(this).blur();
 			});
+
+			
 		});
 	});
+		
 </script>
 
-<div class="modal fade" id="loginModal" tabindex="-1"
-		data-bs-backdrop="static" data-bs-keyboard="false" 
-		aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="false" aria-labelledby="loginModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
-			<div class="modal-header" style=" padding-left: 70px; border: none;">
+			<div class="modal-header" style="padding-left: 70px; border: none;">
 				<div class="modal-title" id="loginViewerModalLabel">
 					<img src="${pageContext.request.contextPath}/dist/images/logo.png" alt="logo" style="width: 150px; height: 60px; object-fit: cover;">
 				</div>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-                <div class="p-3">
-                    <form name="modelLoginForm" action="" method="post" class="row g-3">
-                        <div class="mt-0">
-                            <input type="text" name="id" class="form-control" placeholder="아이디">
-                        </div>
-                        <div style="margin-top: 7px;">
-                            <input type="password" name="pwd" class="form-control" autocomplete="off" placeholder="비밀번호">
-                        </div>
-                        <div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="rememberMeModel">
-                                <label class="form-check-label" style="font-size: 12px;" for="rememberMeModel"> 아이디 저장</label>
-                            </div>
-                        </div>
-                        <div>
-                            <button type="button" class="btn w-100" style="background: #006AFF; color: #fff;" onclick="sendModelLogin();">로그인</button>
-                        </div>
-                        <div>
-                    		 <p class="form-control-plaintext text-center">
-                    		 	<a href="${pageContext.request.contextPath}/member/idFind" class="text-decoration-none" style="font-size: 12px;">아이디찾기</a> | 
-                    		 	<a href="${pageContext.request.contextPath}/member/pwdFind" class="text-decoration-none" style="font-size: 12px;">비밀번호재설정</a> | 
-                    		 	<a href="${pageContext.request.contextPath}/member/join" class="text-decoration-none" style="font-size: 12px;">회원가입</a>
-                    		 </p>
-                    		 <p class="form-control-plaintext text-center">
-                    		 	<a href="${pageContext.request.contextPath}/member/faq" class="text-decoration-none" style="font-size: 12px; color: #7F7F7F;">로그인에 문제가 있으신가요?</a>
-                    		 </p>
-                    	</div>
-                    </form>
-                </div>
-        
+				<div class="p-3">
+					<form name="modelLoginForm" action="" method="post" class="row g-3">
+						<div class="mt-0">
+							<input type="text" name="id" class="form-control" placeholder="아이디">
+						</div>
+						<div style="margin-top: 7px;">
+							<input type="password" name="pwd" class="form-control" autocomplete="off" placeholder="비밀번호">
+						</div>
+						<div>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" id="rememberMeModel">
+								<label class="form-check-label" style="font-size: 12px;" for="rememberMeModel"> 아이디 저장</label>
+							</div>
+						</div>
+						<div>
+							<button type="button" class="btn w-100" style="background: #006AFF; color: #fff;" onclick="sendModelLogin();">로그인</button>
+						</div>
+						<div>
+							<p class="form-control-plaintext text-center">
+								<a href="${pageContext.request.contextPath}/member/idFind" class="text-decoration-none" style="font-size: 12px;">아이디찾기</a> |
+								<a href="${pageContext.request.contextPath}/member/pwdFind" class="text-decoration-none" style="font-size: 12px;">비밀번호재설정</a> |
+								<a href="${pageContext.request.contextPath}/member/join" class="text-decoration-none" style="font-size: 12px;">회원가입</a>
+							</p>
+							<p class="form-control-plaintext text-center">
+								<a href="${pageContext.request.contextPath}/member/faq" class="text-decoration-none" style="font-size: 12px; color: #7F7F7F;">로그인에 문제가 있으신가요?</a>
+							</p>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>

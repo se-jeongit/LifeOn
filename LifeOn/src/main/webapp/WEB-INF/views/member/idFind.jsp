@@ -9,7 +9,6 @@
 <title>LifeOn</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
-
 <style>
     body {
         background: #f8f9fa;
@@ -48,23 +47,31 @@
         border-bottom: 1px solid #ddd;
         padding-bottom: 10px;
     }
-    .tabs a {
+    .tabs button {
         padding: 8px 15px;
-        text-decoration: none;
-        color: #888;
+        border: none;
+        background: none;
         font-size: 14px;
+        cursor: pointer;
+        color: #888;
+        transition: color 0.3s, background 0.3s;
     }
-    .tabs a.active {
+    .tabs button.active {
         font-weight: bold;
         color: #007bff;
         border-bottom: 2px solid #007bff;
+    }
+    .tabs button:hover {
+        color: #0056b3;
+        background: #e9f5ff;
+        border-radius: 4px;
     }
     p {
         font-size: 14px;
         color: #333;
         margin-bottom: 15px;
     }
-    .input-group {
+    .input-wow {
         display: flex;
         justify-content: space-between;
         margin-bottom: 15px;
@@ -72,13 +79,6 @@
         border-radius: 4px;
         padding: 5px;
         background: #f9f9f9;
-    }
-    .input-box {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        margin-bottom: 15px;
     }
     input[type="text"] {
         flex: 1;
@@ -117,36 +117,36 @@
         font-weight: bold;
     }
 </style>
-
 </head>
 <body>
 
 <header>
-    <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
+	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
-
-<main class="d-flex flex-column align-items-center">
+	
+<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="find-wrapper">
         <div class="tabs">
-            <a href="${pageContext.request.contextPath}/member/idFind" class="active">아이디찾기</a>
-            <a href="${pageContext.request.contextPath}/member/pwdFind">비밀번호재설정</a>
+            <button class="active" onclick="location.href='${pageContext.request.contextPath}/member/idFind'">아이디찾기</button>
+            <button onclick="location.href='${pageContext.request.contextPath}/member/pwdFind'">비밀번호재설정</button>
         </div>
         
         <p>회원정보에 등록한 휴대전화를 입력해주세요.</p>
         
-        <div class="input-group">
+        <div class="input-wow">
             <input type="text" placeholder="휴대전화번호" />
             <button class="btn-check">확인</button>
         </div>
         
         <button class="btn-code">인증코드 받기</button>
         
-        <p class="help-text">회원가입 시 입력한 정보가 기억나지 않는다면? <a href="#">고객센터 문의하기</a></p>
+        <p class="help-text">회원가입 시 입력한 정보가 기억나지 않는다면?</p>
+		<p class="help-text"><a href="#">고객센터 문의하기</a></p>
     </div>
 </main>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
-    <jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
+	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
 </footer>
 
 <jsp:include page="/WEB-INF/views/layout/footerResources.jsp"/>
