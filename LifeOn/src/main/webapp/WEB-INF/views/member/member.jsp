@@ -131,8 +131,8 @@ window.addEventListener('DOMContentLoaded', () => {
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 	
-<main>
-	<div class="container">
+<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
+	<div class="container" style="display: flex; justify-content: space-around;">
 		<div class="body-container">	
 			<div class="body-title d-flex justify-content-between align-items-center">
 			    <h3><i class="bi bi-person-square"></i> ${mode=="account"?"회원가입":"정보수정"} </h3>

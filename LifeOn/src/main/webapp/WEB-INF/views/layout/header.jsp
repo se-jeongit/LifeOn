@@ -86,7 +86,7 @@
 			<c:choose>
 				<c:when test="${empty sessionScope.member}">
 					<div class="p-2">
-						<a href="javascript:dialogLogin()" style="text-decoration: none;">로그인</a>
+						<a href="javascript:dialogLogin()"  style="text-decoration: none;">로그인</a>
 					</div>
 					<div class="p-2">
 						<a href="<c:url value='/member/join'/>" style="text-decoration: none;">회원가입</a>
@@ -166,8 +166,11 @@
 			$('button, input, select, textarea').each(function(){
 				$(this).blur();
 			});
+
+			
 		});
 	});
+		
 </script>
 
 <div class="modal fade" id="loginModal" tabindex="-1"
