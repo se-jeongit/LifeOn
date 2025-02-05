@@ -75,6 +75,11 @@
 	font-weight: 600;
 }
 
+.active_menu, .active_menu:focus, .active_menu:hover {
+	color: #006AFF;
+	font-weight: 600;
+}
+
 .iconUpdate {
 	color: #FFF;
 }

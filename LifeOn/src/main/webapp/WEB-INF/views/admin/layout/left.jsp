@@ -2,6 +2,43 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<script type="text/javascript">
+// 메뉴 활성화
+$(function(){
+    var url = window.location.pathname;
+    var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
+    
+    try {
+        $('nav ul>li>a').each(function() {
+            if (urlRegExp.test(this.href.replace(/\/$/, ''))) {
+                $(this).addClass('active_menu');
+                return false;
+            }
+        });
+        if ($('nav ul>li>a').hasClass('active_menu')) return false;
+
+        var parent = url.replace(/\/$/, '').substring(0, url.replace(/\/$/, '').lastIndexOf('/'));
+        if (!parent) parent = '/';
+        var urlParentRegExp = new RegExp(parent);
+        
+        $('nav ul>li>a').each(function() {
+            if ($(this).attr('href') === '#' || ! $(this).attr('href').trim()) return true;
+
+            var phref = this.href.replace(/\/$/, '').substring(0, this.href.replace(/\/$/, '').lastIndexOf('/'));
+
+            if (urlParentRegExp.test(phref)) {
+                $(this).addClass('active_menu');
+                return false;
+            }
+        });
+        
+        if($('nav ul>li>a').hasClass('active_menu')) return false;
+        
+    }catch(e) {
+    }
+});
+</script>
+
 <nav class="vertical_nav">
 	<ul id="js-menu" class="menu">
 		<li class="menu--item" style="height: 380px; padding: 25px; background: #006AFF;">

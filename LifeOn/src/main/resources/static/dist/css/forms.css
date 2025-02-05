@@ -46,6 +46,11 @@
 	border: solid 1px #999;
 }
 
+.btn-active, .btn-active:focus, .btn-active:hover {
+	color: #006AFF;
+	font-weight: 600;
+}
+
 /* form */
 .form-control {
 	border: 1px solid #999; border-radius: 4px; background-color: #fff;
