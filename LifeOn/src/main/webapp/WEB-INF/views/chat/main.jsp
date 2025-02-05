@@ -31,6 +31,11 @@
         color: #007bff;  
 }
 
+.chat-msg-container { display: flex; flex-direction:column; height: 310px; overflow-y: scroll; }
+.chat-connection-list { height: 355px; overflow-y: scroll; }
+.chat-connection-list span { display: block; cursor: pointer; margin-bottom: 3px; }
+.chat-connection-list span:hover { color: #0d6efd }
+
 </style>
 
 
@@ -49,17 +54,30 @@
 			</h3>	
 		</div>
 		
-		<div class="body-main">
+		<div class="body-head">
 			<div class="tab">
 				<a href="${pageContext.request.contextPath}/help">자주묻는질문</a>
 				<a class="active" href="${pageContext.request.contextPath}/chat">1:1채팅상담</a>
 			</div>
-			
-			<div>
-				<h2> 채팅창 </h2>
-			</div>
-			
 		</div>
+			
+		<div class="body-main content-frame">
+			<div class="row">
+				<div class="col-8">
+					<p class="form-control-plaintext fs-6"><i class="bi bi-chevron-double-right"></i> 채팅 메시지</p>
+					<div class="border p-3 chat-msg-container"></div>
+					<div class="mt-2">
+						<input type="text" id="chatMsg" class="form-control"
+							placeholder="채팅 메세지를 입력하세요..">
+					</div>
+				</div>
+				<div class="col-4">
+					<p class="form-control-plaintext fs-6"><i class="bi bi-chevron-double-right"></i> 접속자 리스트 </p>
+					<div class="border p-3 chat-connection-list"></div> 
+				</div>
+			</div>		
+		</div>
+			
     </div>
 </main>
 
