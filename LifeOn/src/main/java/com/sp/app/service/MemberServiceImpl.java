@@ -1,6 +1,8 @@
 package com.sp.app.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sp.app.mapper.MemberMapper;
 import com.sp.app.model.Member;
@@ -26,5 +28,32 @@ public class MemberServiceImpl implements MemberService{
 		
 		return dto;
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	@Override
+	public void insertMember(Member dto) throws Exception {
+		try {
+			mapper.insertMember(dto);
+			mapper.insertMemberDetail(dto);
+			
+		} catch (Exception e) {
+			log.info("insertMember : " , e);
+			throw e;
+		}
+		
+	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
