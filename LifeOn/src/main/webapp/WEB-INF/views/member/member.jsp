@@ -19,6 +19,8 @@
 <script type="text/javascript">
 function memberOk() {
 	const f = document.memberForm;
+	
+	/*
 	let str;
 
 	str = f.userId.value;
@@ -90,7 +92,7 @@ function memberOk() {
         f.email2.focus();
         return;
     }
-
+	*/
     f.action = '${pageContext.request.contextPath}/member/join';
     f.submit();
 }
@@ -144,11 +146,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 				<form name="memberForm" method="post">
 					<div class="row mb-3">
-						<label class="col-sm-2 col-form-label" for="userId">아이디</label>
+						<label class="col-sm-2 col-form-label" for="id">아이디</label>
 						<div class="col-sm-10 wrap-userId">
 							<div class="row">
 								<div class="col-6 pe-1">
-									<input type="text" name="userId" id="userId" class="form-control" value="${dto.userId}" 
+									<input type="text" name="id" id="id" class="form-control" value="${dto.id}" 
 											${mode=="update" ? "readonly ":""}
 											placeholder="아이디">
 								</div>
@@ -165,11 +167,11 @@ window.addEventListener('DOMContentLoaded', () => {
 					</div>
 				 
 					<div class="row mb-3">
-						<label class="col-sm-2 col-form-label" for="userPwd">패스워드</label>
+						<label class="col-sm-2 col-form-label" for="pwd">패스워드</label>
 						<div class="col-sm-10">
 				        	<div class="row">
 				        		<div class="col-6">
-				            		<input type="password" name="userPwd" id="userPwd" class="form-control" autocomplete="off" placeholder="패스워드">
+				            		<input type="password" name="pwd" id="pwd" class="form-control" autocomplete="off" placeholder="패스워드">
 				        		</div>
 				        	</div>
 				            <small class="form-control-plaintext">패스워드는 5~10자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.</small>
@@ -177,11 +179,11 @@ window.addEventListener('DOMContentLoaded', () => {
 				    </div>
 				    
 				    <div class="row mb-3">
-				        <label class="col-sm-2 col-form-label" for="userPwd2">패스워드 확인</label>
+				        <label class="col-sm-2 col-form-label" for="pwd2">패스워드 확인</label>
 				        <div class="col-sm-10">
 				        	<div class="row">
 				        		<div class="col-6">
-				            		<input type="password" name="userPwd2" id="userPwd2" class="form-control" autocomplete="off" placeholder="패스워드 확인">
+				            		<input type="password" name="pwd2" id="pwd2" class="form-control" autocomplete="off" placeholder="패스워드 확인">
 				        		</div>
 				        	</div>
 				            <small class="form-control-plaintext">패스워드를 한번 더 입력해주세요.</small>
@@ -189,11 +191,11 @@ window.addEventListener('DOMContentLoaded', () => {
 				    </div>
 				 
 				    <div class="row mb-3">
-				        <label class="col-sm-2 col-form-label" for="userName">이름</label>
+				        <label class="col-sm-2 col-form-label" for="name">이름</label>
 				        <div class="col-sm-10">
 				        	<div class="row">
 				        		<div class="col-6">
-				            		<input type="text" name="userName" id="userName" class="form-control" value="${dto.userName}" 
+				            		<input type="text" name="name" id="name" class="form-control" value="${dto.name}" 
 				            			${mode=="update" ? "readonly ":""}
 				            			placeholder="이름">
 				        		</div>
@@ -202,7 +204,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				    </div>
 				    
 				    <div class="row mb-3">
-				        <label class="col-sm-2 col-form-label" for="userName">닉네임</label>
+				        <label class="col-sm-2 col-form-label" for="nickName">닉네임</label>
 				        <div class="col-sm-10">
 				        	<div class="row">
 				        		<div class="col-6">
@@ -301,10 +303,10 @@ window.addEventListener('DOMContentLoaded', () => {
 				    </div>
 				
 				    <div class="row mb-3">
-				        <label class="col-sm-2 col-form-label" for="zip">우편번호</label>
+				        <label class="col-sm-2 col-form-label" for="post">우편번호</label>
 				        <div class="col-sm-5">
 				       		<div class="input-group">
-				           		<input type="text" name="zip" id="zip" class="form-control" placeholder="우편번호" value="${dto.zip}" readonly>
+				           		<input type="text" name="post" id="post" class="form-control" placeholder="우편번호" value="${dto.post}" readonly>
 			           			<button class="btn btn-light" type="button" style="margin-left: 3px;" onclick="daumPostcode();">우편번호 검색</button>
 				           	</div>
 						</div>
@@ -391,7 +393,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('zip').value = data.zonecode; //5자리 새우편번호 사용
+                document.getElementById('post').value = data.zonecode; //5자리 새우편번호 사용
                 document.getElementById('addr1').value = fullAddr;
 
                 // 커서를 상세주소 필드로 이동한다.

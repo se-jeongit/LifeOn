@@ -7,4 +7,15 @@
 		FROM member
 		WHERE id = #{id} AND enabled != 0
 	</select>
+	
+	<insert id="insertMember" parameterType="com.sp.app.model.Member">
+		INSERT INTO member(num, id, pwd, nickname, block, reg_date, mod_date, grade, enabled)
+		VALUES (member_seq.NEXTVAL, #{id}, #{pwd}, #{nickName}, 0, SYSDATE, SYSDATE, 0, 1)
+	</insert>
+	
+	<insert id="insertMemberDetail" parameterType="com.sp.app.model.Member">
+		INSERT INTO member_detail(num, name, gender, birth, email1, email2, tel1, tel2, tel3, addr1, addr2, post)
+		VALUES (member_seq.CURRVAL, #{name}, #{gender}, #{birth}, #{email1}, #{email2}, #{tel1}, #{tel2}, #{tel3},
+			#{addr1}, #{addr2}, #{post})
+	</insert>
 </mapper>

@@ -3,14 +3,17 @@ package com.sp.app.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sp.app.model.Member;
 import com.sp.app.model.SessionInfo;
 import com.sp.app.service.MemberService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +88,47 @@ public class MemberController {
 		
 		return "member/member";
 	}
+	
+	@PostMapping("join")
+	public String memberSubmit(Member dto,
+			final RedirectAttributes reAttr,
+			Model model,
+			HttpServletRequest req) {
+		try {
+			service.insertMember(dto);
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append(dto.getName() + "님의 회원 가입이 정상적으로 처리되었습니다.<br>");
+			sb.append("메인화면으로 이동하여 로그인 하시기 바랍니다.<br>");			
+			
+			reAttr.addFlashAttribute("message", sb.toString());
+			reAttr.addFlashAttribute("title", "회원 가입");
+
+			return "redirect:/member/complete";			
+			
+		} catch (Exception e) {
+			model.addAttribute("mode", "account");
+			model.addAttribute("message", "회원가입이 실패했습니다.");
+		}
+		
+		
+		
+		return "member/member";
+	}
+	
+	@GetMapping("complete")
+	public String complete(@ModelAttribute("message") String message) throws Exception {
+
+		// 컴플릿 페이지(complete.jsp)의 출력되는 message와 title는 RedirectAttributes 값이다.
+		// F5를 눌러 새로 고침을 하면 null이 된다.
+
+		if (message == null || message.length() == 0) { // F5를 누른 경우
+			return "redirect:/";
+		}
+
+		return "member/complete";
+	}	
+	
 	
 	//아이디찾기
 	@GetMapping("idFind")
