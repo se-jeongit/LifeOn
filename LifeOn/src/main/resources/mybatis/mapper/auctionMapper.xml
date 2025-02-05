@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sp.app.mapper.AuctionMapper">
+
+    <sql id="category-search">
+        <choose>
+            <when test="searchType == 'true'">
+                ( INSTR(subject, #{kwd}) &gt; 0
+                OR INSTR(content, #{kwd}) &gt; 0 ) OR
+                ( TO_CHAR(reg_date, 'YYYY-MM-DD') = #{kwd}
+                OR TO_CHAR(reg_date, 'YYYYMMDD') = #{kwd} )OR
+                ( INSTR(category, #{kwd}) &gt; 0 )
+            </when>
+        </choose>
+    </sql>
+
+    <!-- 글 개수 -->
+    <select id="findByAllCategoryBig" parameterType="map" resultType="com.sp.app.auction.vo.CategoryBig">
+        SELECT CBN,CBC
+        FROM CATEGORY_BIG
+    </select>
+
+    <select id="findByAllCategorySmall" parameterType="map" resultType="com.sp.app.auction.vo.CategorySmall">
+        SELECT CSN,CSC
+        FROM CATEGORY_SMALL
+        WHERE CBN = #{cbn}
+    </select>
+
+</mapper>
