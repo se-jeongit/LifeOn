@@ -32,25 +32,25 @@
 		WHERE id = #{id} 
 	</select>
 	
-	<update id="updateMember">
+	<update id="updateMember" parameterType="com.sp.app.model.Member">
 		UPDATE member SET pwd = #{pwd}, mod_date = SYSDATE
-		WHERE id = #{id}
+		WHERE num = #{num}
 	</update>
 	
-	<update id="updateMemberDetail">
+	<update id="updateMemberDetail" parameterType="com.sp.app.model.Member">
 		UPDATE member_detail SET email1 = #{email1}, email2 = #{email2}, tel1=#{tel1}, tel2=#{tel2}, tel3=#{tel3},
 			birth = #{birth}, addr1 = #{addr1}, addr2 = #{addr2}, post = #{post}
-		WHERE id = #{id} 
+		WHERE num = #{num}
 	</update>
 	
-	<delete id="deleteMember">
+	<delete id="deleteMember" parameterType="map">
 		DELETE FROM member
 		WHERE id = #{id};
 	</delete>
 	
-	<delete id="deleteMemberDetail">
+	<delete id="deleteMemberDetail" parameterType="map">
 		DELETE FROM member_detail
-		WHERE id = #{id};
+		WHERE num = #{num};
 	</delete>
 	
 	
