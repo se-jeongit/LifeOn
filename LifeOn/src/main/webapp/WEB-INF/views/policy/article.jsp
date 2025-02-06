@@ -11,6 +11,27 @@
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 
+<style type="text/css">
+.body-title{
+	width: 80%;
+	max-width: 900px;
+	margin : auto;
+	margin-top: 40px;
+}
+
+.board-article{
+	width: 80%;
+	max-width: 900px;
+	margin : auto;
+}
+
+.table-borderless{
+	width: 80%;
+	max-width: 900px;
+	margin : auto;
+}
+
+</style>
 </head>
 <body>
 
@@ -20,7 +41,76 @@
 	
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="container">
-		템플릿
+		<div class="body-container">
+			<div class="body-title">
+				<h3>
+					<i class="bi bi-app"></i> 정책정보
+				</h3>
+			</div>
+			
+			<div class="body-main">
+				<table class="table board-article">
+					<thead>	
+						<tr>
+							<td colspan="2" align="center">${dto.subject}</td> 
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr>
+							<td width="50%">이름</td>
+							<td align="right">등록 | 조회</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" valign="top" height="200">내용</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" class="text-center p-3">
+								<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="좋아요">
+									<i class="bi bi-suit-heart"></i>&nbsp;&nbsp;
+										<span id="boardLikeCount">좋아요</span>
+								</button>
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2">
+								<p class="boarder text-secondary my-1 p-2">
+									<i class="bi bi-folder2-open"></i>
+										<a href=""></a>
+								</p>
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2">이전글 : 
+								<a href=""></a>
+							</td>
+						</tr>
+						
+							<tr>
+							<td colspan="2">다음글 : 
+								<a href=""></a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<table class="table table-borderless mb-2">
+					<tr>
+						<td width="50%">
+							<button type="button" class="btn">수정</button>
+							<button type="button" class="btn">삭제</button>
+						</td>
+						<td class="text-end">
+							<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/policy/list';">리스트</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
     </div>
 </main>
 

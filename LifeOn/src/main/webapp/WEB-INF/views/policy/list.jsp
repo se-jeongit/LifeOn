@@ -86,7 +86,7 @@
 								<td>번호</td>
 								<td class="left">
 									<div class="text-wrap">
-										<a href="" class="text-reset">주제</a>
+										<a href="${pageContext.request.contextPath}/policy/article" class="text-reset">주제</a>
 									</div>
 								</td>
 								<td>작성자</td>

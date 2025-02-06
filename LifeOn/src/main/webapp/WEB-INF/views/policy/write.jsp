@@ -88,7 +88,7 @@ td[scope="row"] {
 							<td class="text-center">
 								<button type="button" class="btn">수정<i class="bi bi-check2"></i></button>
 								<button type="reset" class="btn">다시 입력</button>
-								<button type="button" class="btn">등록</button>
+								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/policy/list';"><i class="bi bi-x"></i>등록</button>
 							</td>
 						</tr>
 					</table>
