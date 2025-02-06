@@ -1,5 +1,8 @@
 package com.sp.app.service;
 
+import java.util.Map;
+import java.util.Objects;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,17 @@ public class MemberServiceImpl implements MemberService{
 		return dto;
 	}
 	
+	
+	@Override
+	public void updateLastLogin(String id) throws Exception {
+		try {
+			mapper.updateLastLogin(id);
+		} catch (Exception e) {
+			log.info("updateLastLogin : ", e);
+			throw e;
+		}
+	}
+	
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
 	@Override
 	public void insertMember(Member dto) throws Exception {
@@ -42,6 +56,46 @@ public class MemberServiceImpl implements MemberService{
 		}
 		
 	}
+
+	@Override
+	public Member findById(String id) {
+		Member dto = null;
+		
+		try {
+			// 객체 = Objects.requireNonNull(객체)
+			//  : 파라미터로 입력된 값이 null 이면 NullPointerException을 발생하고,
+			//    그렇지 않다면 입력값을 그대로 반환
+			dto = Objects.requireNonNull(mapper.findById(id));			
+			
+		} catch (NullPointerException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (Exception e) {
+			log.info("findById : ", e);
+		}
+		
+		return dto;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	@Override
+	public void updateMember(Member dto) throws Exception {
+		try {
+			mapper.updateMember(dto);
+			mapper.updateMemberDetail(dto);
+		} catch (Exception e) {
+			log.info("updateMember : ", e);
+			
+			throw e;
+		}
+		
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	@Override
+	public void deleteMember(Map<String, Object> map) throws Exception {
+		
+	}
+
 
 	
 	

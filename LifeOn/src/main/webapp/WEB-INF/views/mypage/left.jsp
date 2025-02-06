@@ -50,7 +50,7 @@ $(function(){
 				<p style="font-size: 18px; font-weight: 600; margin: 0px;">큐티 님</p>
     			<p style="margin-bottom: 30px; font-size: 16px;">
     				안녕하세요!&emsp;
-    				<a class="iconUpdate" href="" title="정보수정"><i class="bi bi-pencil-square"></i></a>
+    				<a class="iconUpdate" href="<c:url value='/member/pwd'/>" title="정보수정"><i class="bi bi-pencil-square"></i></a>
     			</p>
 				<span>최근접속일자</span><br>
 				<span style="font-size: 11px;">2025-01-23 16:02:34</span>

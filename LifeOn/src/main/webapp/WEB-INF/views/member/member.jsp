@@ -14,6 +14,7 @@
 .body-container {
 	max-width: 800px;
 }
+
 </style>
 
 <script type="text/javascript">
@@ -93,7 +94,7 @@ function memberOk() {
         return;
     }
 	*/
-    f.action = '${pageContext.request.contextPath}/member/join';
+    f.action = '${pageContext.request.contextPath}/member/${mode}';
     f.submit();
 }
 
@@ -118,6 +119,10 @@ function userIdCheck() {
 
 }
 
+function nickNameCheck() {
+	// 닉네임 중복 검사
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 	const dateELS = document.querySelectorAll('form input[type=date]');
 	dateELS.forEach( inputEL => inputEL.addEventListener('keydown', e => e.preventDefault()) );
@@ -135,15 +140,10 @@ window.addEventListener('DOMContentLoaded', () => {
 	<div class="container" style="display: flex; justify-content: space-around;">
 		<div class="body-container">	
 			<div class="body-title d-flex justify-content-between align-items-center">
-			    <h3><i class="bi bi-person-square"></i> ${mode=="account"?"회원가입":"정보수정"} </h3>
-			    <img alt="로그인 로그" src="/dist/images/logo.png" style="max-width: 150px; height: auto;">
+			    <h3><i class="bi bi-person-square"></i> ${mode=="join"?"회원가입":"정보수정"} </h3>
 			</div>
-		    <div class="alert alert-info" role="alert">
-		        <i class="bi bi-person-check-fill"></i> Life On 회원이 되시면 회원님만의 유익한 정보를 만날수 있습니다.
-		    </div>
-	    			
+    		<hr>
 			<div class="body-main">
-
 				<form name="memberForm" method="post">
 					<div class="row mb-3">
 						<label class="col-sm-2 col-form-label" for="id">아이디</label>
@@ -155,12 +155,12 @@ window.addEventListener('DOMContentLoaded', () => {
 											placeholder="아이디">
 								</div>
 								<div class="col-3 ps-1">
-									<c:if test="${mode=='account'}">
+									<c:if test="${mode=='join'}">
 										<button type="button" class="btn btn-light" onclick="userIdCheck();">아이디중복검사</button>
 									</c:if>
 								</div>
 							</div>
-							<c:if test="${mode=='account'}">
+							<c:if test="${mode=='join'}">
 								<small class="form-control-plaintext help-block">아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.</small>
 							</c:if>
 						</div>
@@ -212,6 +212,11 @@ window.addEventListener('DOMContentLoaded', () => {
 				            			${mode=="update" ? "readonly ":""}
 				            			placeholder="닉네임">
 				        		</div>
+				        		<div class="col-3 ps-1">
+									<c:if test="${mode=='join'}">
+										<button type="button" class="btn btn-light" onclick="nickNameCheck();">닉네임중복검사</button>
+									</c:if>
+								</div>
 				        	</div>
 				        </div>
 				    </div>
@@ -267,19 +272,6 @@ window.addEventListener('DOMContentLoaded', () => {
 							</div>		
 					        </div>
 				    </div>
-				    
-				    <!--  
-				    <div class="row mb-3">
-				        <label class="col-sm-2 col-form-label">메일 수신</label>
-				        <div class="col-sm-10">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="checkbox" name="receiveEmail" id="receiveEmail" 
-									value="1" ${empty dto || dto.receiveEmail == 1 ? "checked":""}>
-								<label class="form-check-label" for="receiveEmail">동의</label>
-							</div>			        
-				        </div>
-				    </div>
-					-->
 					
 				    <div class="row mb-3">
 				        <label class="col-sm-2 col-form-label" for="tel1">전화번호</label>
@@ -324,7 +316,7 @@ window.addEventListener('DOMContentLoaded', () => {
 						</div>
 				    </div>
 			
-					<c:if test="${mode=='account'}">
+					<c:if test="${mode=='join'}">
 					    <div class="row mb-3">
 					        <label class="col-sm-2 col-form-label" for="agree">약관 동의</label>
 							<div class="col-sm-8" style="padding-top: 5px;">
@@ -342,8 +334,8 @@ window.addEventListener('DOMContentLoaded', () => {
 				     
 				    <div class="row mb-3">
 				        <div class="text-center">
-				            <button type="button" name="sendButton" class="btn btn-primary" onclick="memberOk();"> ${mode=="account"?"회원가입":"정보수정"} <i class="bi bi-check2"></i></button>
-				            <button type="button" class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/';"> ${mode=="account"?"가입취소":"수정취소"} <i class="bi bi-x"></i></button>
+				            <button type="button" name="sendButton" class="btn btn-primary" onclick="memberOk();"> ${mode=="join"?"회원가입":"정보수정"} <i class="bi bi-check2"></i></button>
+				            <button type="button" class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/';"> ${mode=="join"?"가입취소":"수정취소"} <i class="bi bi-x"></i></button>
 							<input type="hidden" name="userIdValid" id="userIdValid" value="false">
 				        </div>
 				    </div>
@@ -358,7 +350,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	</div>
 </main>
 
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+
+<!-- <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script> -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     function daumPostcode() {
         new daum.Postcode({
@@ -403,6 +397,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 </script>
 
+ 
+
+
+ 
 
 <footer>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

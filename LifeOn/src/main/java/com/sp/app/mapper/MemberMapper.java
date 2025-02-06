@@ -11,7 +11,7 @@ import com.sp.app.model.Member;
 public interface MemberMapper {
 	public Member loginMember(String id);
 	
-	//public void updateLastLogin(String id) throws SQLException;
+	public void updateLastLogin(String id) throws SQLException;
 	
 	public void insertMember(Member dto) throws SQLException;
 	public void insertMemberDetail(Member dto) throws SQLException;

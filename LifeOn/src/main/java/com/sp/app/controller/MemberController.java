@@ -1,5 +1,7 @@
 package com.sp.app.controller;
 
+import java.util.Objects;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,7 +86,7 @@ public class MemberController {
 	//회원가입
 	@GetMapping("join")
 	public String memberForm(Model model) {
-		model.addAttribute("mode", "account");
+		model.addAttribute("mode", "join");
 		
 		return "member/member";
 	}
@@ -107,7 +109,7 @@ public class MemberController {
 			return "redirect:/member/complete";			
 			
 		} catch (Exception e) {
-			model.addAttribute("mode", "account");
+			model.addAttribute("mode", "join");
 			model.addAttribute("message", "회원가입이 실패했습니다.");
 		}
 		
@@ -116,6 +118,7 @@ public class MemberController {
 		return "member/member";
 	}
 	
+	//성공했을경우
 	@GetMapping("complete")
 	public String complete(@ModelAttribute("message") String message) throws Exception {
 
@@ -128,6 +131,80 @@ public class MemberController {
 
 		return "member/complete";
 	}	
+	
+	@GetMapping("pwd")
+	public String pwdForm(@RequestParam(name="retire", required = false) String retire,
+			Model model) {
+		if(retire == null) {
+			model.addAttribute("mode", "update"); //정보수정
+		} else {
+			model.addAttribute("mode", "retire"); //회원탈퇴
+		}
+		
+		return "member/pwd";
+	}
+	
+	@PostMapping("pwd")
+	public String pwdSubmit(@RequestParam(name = "pwd") String pwd,
+			@RequestParam(name = "mode") String mode,
+			final RedirectAttributes reAttr,
+			Model model,
+			HttpSession session) {
+		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		try {
+			Member dto = Objects.requireNonNull(service.findById(info.getId()));
+			
+			if(! dto.getPwd().equals(pwd)) { // 패스워드 일치하지 않을경우 !! 횟수제한처리할거면 여기서
+				model.addAttribute(mode, "mode");
+				model.addAttribute("message", "패스워드가 일치하지 않습니다.");
+				return "member/pwd";
+			}
+			
+			if(mode.equals("delete")) { //회원탈퇴 처리
+				
+			}
+			
+			//회원정보수정
+			model.addAttribute("dto", dto);
+			model.addAttribute("mode", "update");
+			return "member/member";			
+		
+		} catch (NullPointerException e) {
+			session.invalidate();
+		} catch (Exception e) {
+		}
+		
+		return "redirect:/";
+	}
+	
+	//회원정보수정
+	@PostMapping("update")
+	public String updateSubmit(Member dto,
+			final RedirectAttributes reAttr,
+			Model model) {
+		StringBuilder sb = new StringBuilder();
+		try {
+			service.updateMember(dto);
+			
+			sb.append(dto.getId() + "님의 회원정보가 정상적으로 변경되었습니다.<br>");
+			sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
+			
+		} catch (Exception e) {
+			sb.append(dto.getName() + "님의 회원정보 변경이 실패했습니다.<br>");
+			sb.append("잠시후 다시 변경 하시기 바랍니다.<br>");			
+		}
+
+		return "redirect:/member/complete";
+	}
+	
+	
+	
+	
+	//아이디 중복검사
+	
+	//닉네임 중복검사
+	
 	
 	
 	//아이디찾기
@@ -142,11 +219,13 @@ public class MemberController {
 		return "member/pwdFind";
 	}
 	
-	
+	//아이디찾기성공
 	@GetMapping("idFindComplete")
 	public String idFindComplete() {
 		return "member/idFindComplete";
 	}
+	
+	//비밀번호재설정
 	@GetMapping("pwdSet")
 	public String pwdSet() {
 		return "member/pwdSet";

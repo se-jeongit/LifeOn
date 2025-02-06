@@ -12,10 +12,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 
 <style>
-    body {
-        background-color: #f8f9fa;
-    }
-
     main {
         padding-top: 120px; /* 헤더와 겹치지 않도록 충분한 간격 확보 */
     }

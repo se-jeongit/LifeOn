@@ -10,11 +10,6 @@
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 	<style>
-    body {
-        background: #f8f9fa;
-        margin: 0;
-        padding: 0;
-    }
     header {
         position: relative;
         z-index: 1000;
