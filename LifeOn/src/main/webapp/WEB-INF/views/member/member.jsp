@@ -146,6 +146,9 @@ window.addEventListener('DOMContentLoaded', () => {
 			<div class="body-main">
 				<form name="memberForm" method="post">
 					<div class="row mb-3">
+						<input type="hidden" name="num" value="${dto.num}">
+					</div>
+					<div class="row mb-3">
 						<label class="col-sm-2 col-form-label" for="id">아이디</label>
 						<div class="col-sm-10 wrap-userId">
 							<div class="row">
@@ -208,7 +211,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				        <div class="col-sm-10">
 				        	<div class="row">
 				        		<div class="col-6">
-				            		<input type="text" name="nickName" id="nickName" class="form-control" value="" 
+				            		<input type="text" name="nickName" id="nickName" class="form-control" value="${dto.nickName}" 
 				            			${mode=="update" ? "readonly ":""}
 				            			placeholder="닉네임">
 				        		</div>

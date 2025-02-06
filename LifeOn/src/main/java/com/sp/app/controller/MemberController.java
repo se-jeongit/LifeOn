@@ -26,7 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/member/*")
 public class MemberController {
 	private final MemberService service;
-	/* -로그인창은 모달로 처리
+	
+	/* 초기 로그인은 모달로 처리할거다.
 	@GetMapping("login")
 	public String login() {
 		return "member/login";
@@ -42,7 +43,7 @@ public class MemberController {
 		Member dto = service.loginMember(id);
 		if(dto == null || !pwd.equals(dto.getPwd())) {
 			model.addAttribute("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
-			return "redirect:/"; //모달로 처리하니까 생각 다시해봐
+			return "member/login"; //모달로 처리하니까 생각 다시해봐
 		}
 		
 		/* 빌더로 정보 저장 하는 경우
@@ -169,6 +170,9 @@ public class MemberController {
 			//회원정보수정
 			model.addAttribute("dto", dto);
 			model.addAttribute("mode", "update");
+			
+			System.out.println("Updating member with num: " + dto.getNum());
+
 			return "member/member";			
 		
 		} catch (NullPointerException e) {
@@ -186,6 +190,8 @@ public class MemberController {
 			Model model) {
 		StringBuilder sb = new StringBuilder();
 		try {
+			
+			System.out.println("Updating member with num: " + dto.getNum());
 			service.updateMember(dto);
 			
 			sb.append(dto.getId() + "님의 회원정보가 정상적으로 변경되었습니다.<br>");
@@ -195,7 +201,9 @@ public class MemberController {
 			sb.append(dto.getName() + "님의 회원정보 변경이 실패했습니다.<br>");
 			sb.append("잠시후 다시 변경 하시기 바랍니다.<br>");			
 		}
-
+		
+		reAttr.addFlashAttribute("title", "회원 정보 수정");
+		reAttr.addFlashAttribute("message", sb.toString());
 		return "redirect:/member/complete";
 	}
 	
