@@ -1,7 +1,6 @@
-package com.sp.app.auction.response;
+package com.sp.app.auction.response.category;
 
 import com.sp.app.auction.vo.CategoryBig;
-import com.sp.app.auction.vo.CategorySmall;
 import lombok.Getter;
 import lombok.Setter;
 

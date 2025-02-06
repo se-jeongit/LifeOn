@@ -35,16 +35,7 @@
         </div>
         <div class="container">
             <h3 style="padding-top: 30px; padding-left: 120px">경매장</h3>
-            <div style="border: 2px solid #e9ecef; padding: 10px; margin: 10px auto; width: 1000px;">
-                <div id="category-container">
-                    <ul id="main-category" style="display: flex; list-style: none; padding: 0;">
-                        <c:forEach var="category" items="${category.categoryList}">
-                            <li style="margin-right: 20px; cursor: pointer;"
-                                onclick="toggleSubCategory(${category.cbn},'big','${category.cbc}')">${category.cbc}</li>
-                        </c:forEach>
-                    </ul>
-                </div>
-            </div>
+            <jsp:include page="/WEB-INF/views/auction/auction_main_content.jsp"/>
         </div>
     </div>
 </main>
@@ -58,182 +49,87 @@
 </body>
 </html>
 
+
+
 <script !src="">
-    function toggleSubCategory(cbn,categoryType, categoryName) {
-        let url = '${pageContext.request.contextPath}/auction/category';
 
-        if (categoryType === 'small') {
-            let params = {
-                cbn : cbn,
-                categoryType: "big",
-                pageNo: 0,
-                searchType: '',
-                searchTerm: ''
-            };
+    function toggleSubCategory(cbn, categoryType, categoryName) {
+        const url = `${pageContext.request.contextPath}/auction/category`;
+        const params = {
+            cbn: cbn,
+            categoryType: categoryType === 'small' ? 'big' : categoryType === 'big' ? 'small' : 'final',
+            categoryName: categoryName || '',
+            searchType: '',
+            searchTerm: ''
+        };
 
-            const fn = function (data) {
-                addNewContent(data);
-            }
+        const fn = function (data) {
+            console.log(data);
+            addNewContent(data);
+        };
 
-            ajaxRequest(url, 'post', params, 'json', fn);
-
-        } else if (categoryType === 'big') {
-            let params = {
-                cbn : cbn,
-                categoryType: "small",
-                pageNo: 0,
-                categoryName: '',
-                searchType: '',
-                searchTerm: ''
-            };
-
-            const fn = function (data) {
-                console.log(data);
-                addNewContent(data);
-            }
-
-            ajaxRequest(url, 'post', params, 'json', fn);
-        }
-
+        ajaxRequest(url, 'post', params, 'json', fn);
     }
 
     function addNewContent(data) {
         const categoryContainer = document.getElementById('category-container');
+        const mainCategoryList = document.createElement('ul');
+        if (data.categoryType === 'small' || data.categoryType === 'big') {
+            mainCategoryList.id = 'main-category';
+            mainCategoryList.style.display = 'flex';
+            mainCategoryList.style.listStyle = 'none';
+            mainCategoryList.style.padding = '0';
+        }
 
-        categoryContainer.innerHTML = '';
 
-        if (data.categoryType === 'small' || data.categoryType === 'final') {
+
+        if (data.categoryType === 'small') {
+            categoryContainer.innerHTML = '';
+
             const backButton = document.createElement('span');
-            backButton.textContent = '←';
+            backButton.textContent = '←         ' + data.categoryName;
             backButton.style.cursor = 'pointer';
             backButton.onclick = () => toggleSubCategory(0, 'small');
             categoryContainer.appendChild(backButton);
-        }
 
-        const mainCategoryList = document.createElement('ul');
-        mainCategoryList.id = 'main-category';
-        mainCategoryList.style.display = 'flex';
-        mainCategoryList.style.listStyle = 'none';
-        mainCategoryList.style.padding = '0';
+            extracted(data);
 
-        if (data.categoryType === 'small') {
-            data.categoryList.forEach(category => {
-                const listItem = document.createElement('li');
-                listItem.style.marginRight = '20px';
-                listItem.style.cursor = 'pointer';
-                listItem.textContent = category.csc;
-                listItem.onclick = () => toggleSubCategory(category.cbn,'final', category.csc);
-                mainCategoryList.appendChild(listItem);
-            });
         }else if (data.categoryType === 'big') {
-            data.categoryList.forEach(category => {
-                const listItem = document.createElement('li');
-                listItem.style.marginRight = '20px';
-                listItem.style.cursor = 'pointer';
-                listItem.textContent = category.cbc;
-                listItem.onclick = () => toggleSubCategory(category.cbn,'big', category.cbc);
-                mainCategoryList.appendChild(listItem);
-            });
+            categoryContainer.innerHTML = '';
+            extracted(data);
+
         }else if (data.categoryType === 'final') {
-            //TODO 소분류 클릭하여 클릭한 소분류 띄우기
-            data.categoryList.forEach(category => {
-                const listItem = document.createElement('li');
-                listItem.style.marginRight = '20px';
-                listItem.style.cursor = 'pointer';
-                listItem.textContent = category.csc;
-                listItem.onclick = () => toggleSubCategory(category.cbn,'small', category.csc);
-                mainCategoryList.appendChild(listItem);
+            const listItems = categoryContainer.querySelectorAll('li');
+            listItems.forEach(item => {
+                if (item.textContent === data.categoryName) {
+                    item.style.color = '#006AFF';
+                    item.style.fontWeight = 'bold';
+                } else {
+                    item.style.color = '';
+                    item.style.fontWeight = '';
+                }
             });
+
         }
-
-
         categoryContainer.appendChild(mainCategoryList);
     }
 
-</script>
+    // TODO 웹에서의 실행상태 미확인(코드 미완성일수 있음)
+    function extracted(data) {
+        let content = data.categoryType === 'small' ? 'csc' : 'cbc';
+        let type  = data.categoryType === 'small' ? 'final' : 'big';
+
+        data.categoryList.forEach(category => {
+            const listItem = document.createElement('li');
+            listItem.style.marginRight = '20px';
+            listItem.style.cursor = 'pointer';
+            listItem.textContent = category.csc;
+            listItem.onclick = () => toggleSubCategory(category.cbn, type, category[content]);
+            mainCategoryList.appendChild(listItem);
+        });
 
 
-<%--
-<script>
-    let currentMainCategory = null;
-    let currentSubCategory = null;
-
-    function toggleSubCategory(id, isMainCategory = false) {
-        if (isMainCategory) {
-
-            if (currentMainCategory !== id) {
-                document.querySelectorAll('.sub-category').forEach(function (el) {
-                    el.style.display = 'none';
-                });
-                currentMainCategory = id;
-                currentSubCategory = null;
-            }
-        } else {
-            if (currentSubCategory !== id) {
-                if (currentSubCategory) {
-                    document.querySelectorAll(`#${currentSubCategory}.sub-category`).forEach(function (el) {
-                        el.style.display = 'none';
-                    });
-                }
-                currentSubCategory = id;
-            }
-        }
-
-        let el = document.getElementById(id);
-        if (el.style.display === 'none' || el.style.display === '') {
-            el.style.display = 'block';
-        } else {
-            el.style.display = 'none';
-        }
     }
+
 </script>
 
---%>
-<%--
-<script>
-    let currentMainCategory = null;
-    let currentSubCategory = null;
-
-    function toggleSubCategory(id, isMainCategory = false) {
-        if (isMainCategory) {
-            // 다른 상위 카테고리가 클릭되면 모든 하위 카테고리를 숨깁니다.
-            if (currentMainCategory !== id) {
-                document.querySelectorAll('.sub-category').forEach(function(el) {
-                    el.style.display = 'none';
-                });
-                currentMainCategory = id;
-                currentSubCategory = null;
-            }
-        } else {
-            // 다른 하위 카테고리가 클릭되면 해당 하위 카테고리의 하위만 숨깁니다.
-            if (currentSubCategory !== id) {
-                if (currentSubCategory) {
-                    document.querySelectorAll(`#${currentSubCategory} .sub-category`).forEach(function(el) {
-                        el.style.display = 'none';
-                    });
-                }
-                currentSubCategory = id;
-            }
-        }
-
-        // 선택된 하위 카테고리 또는 하위 하위 카테고리를 토글합니다.
-        let el = document.getElementById(id);
-        if (el.style.display === 'none' || el.style.display === '') {
-            el.style.display = 'block';
-        } else {
-            el.style.display = 'none';
-        }
-    }
-</script>
-
-                    <c:if test="${smallCategory} != null">
-                        <ul id="sub-category-${category.csn}" class="sub-category" style="display: none;">
-                            <c:forEach var="subCategory" items="${category.subCategoryList}">
-                                <li style="cursor: pointer"
-                                    onclick="toggleSubCategory('sub-sub-category-${subCategory.cbn}', false)">${subCategory.cbc}</li>
-                            </c:forEach>
-                        </ul>
-                    </c:if>
-
-
---%>
