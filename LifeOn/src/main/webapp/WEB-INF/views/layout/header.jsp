@@ -105,7 +105,7 @@
 					
 					<form name="profileForm" method="post" enctype="multipart/form-data">
 						<div class="p-2 profile">
-							<a href="<c:url value='/member/mypage'/>">
+							<a href="<c:url value='/mypage'/>">
 								<img src="#"  class="profileImage" name="profileImage" id="profileImage" alt="프로필">
 							</a>
 						</div>	

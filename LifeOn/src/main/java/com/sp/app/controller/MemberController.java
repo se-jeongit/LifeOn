@@ -143,5 +143,14 @@ public class MemberController {
 	}
 	
 	
+	@GetMapping("idFindComplete")
+	public String idFindComplete() {
+		return "member/idFindComplete";
+	}
+	@GetMapping("pwdSet")
+	public String pwdSet() {
+		return "member/pwdSet";
+	}
+	
 	
 }

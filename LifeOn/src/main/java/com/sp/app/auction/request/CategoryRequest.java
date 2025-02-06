@@ -11,7 +11,6 @@ public class CategoryRequest {
     private long cbn;
     private String categoryType;
     private String categoryName;
-    private int pageNo;
     private String searchType;
     private String searchTerm;
 
