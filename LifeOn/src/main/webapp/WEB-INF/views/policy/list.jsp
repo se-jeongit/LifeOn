@@ -18,7 +18,7 @@
 	width: 80%;
 	max-width: 900px; /* 최대 크기 설정 (예: 900px) */
 	margin : auto;
-    margin-top: 50px;  /* 가운데 정렬 */
+    margin-top: 40px;  /* 가운데 정렬 */
 }
 
 .board-list {
@@ -125,7 +125,7 @@
 							</form>
 						</div>
 						<div class="col text-end">
-							<button type="button" class="btn btn-light">글올리기</button>
+							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/policy/write';">글올리기</button>
 						</div>
 					</div>
 				</div>
