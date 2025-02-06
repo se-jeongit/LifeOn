@@ -52,11 +52,11 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav flex-nowrap">
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="#">홈</a>
+					<a class="nav-link" aria-current="page" href="/">홈</a>
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" href="<c:url value='/'/>">라운지</a>
+					<a class="nav-link" href="<c:url value='/lounge/room'/>">라운지</a>
 				</li>
 
 				<li class="nav-item">
