@@ -15,7 +15,10 @@
 
 <style type="text/css">
 .body-title {
-	margin-top: 70px;
+	width: 80%;
+	max-width: 900px; /* 최대 크기 설정 (예: 900px) */
+	margin : auto;
+    margin-top: 50px;  /* 가운데 정렬 */
 }
 
 .board-list {
@@ -34,6 +37,13 @@
         text-overflow: ellipsis;
     }
 }
+
+.board-list-footer{
+	width: 80%;
+	max-width: 900px; /* 최대 크기 설정 (예: 900px) */
+    margin: auto;  /* 가운데 정렬 */
+}
+
 </style>
 
 </head>
@@ -86,8 +96,39 @@
 							</tr>
 						</tbody>
 					</table>
+					
+					<div class="page-navigation">
+					 123
+					</div>
+					
+					<div class= "row board-list-footer">
+						<div class="col">
+							<button type="button" class="btn btn-light" title="새로고침"><i class="bi bi-arrow-counterclockwise"></i></button>
+						</div>
+						<div class="col-6 text-center">
+							<form class="row" name="searchForm">
+								<div class="col-auto p-1">
+									<select name="schType" class="form-select">
+										<option value="all">제목+내용</option>
+										<option value="userName">작성자</option>
+										<option value="reg_date">등록일</option>
+										<option value="subject">제목</option>
+										<option value="content">내용</option>
+									</select>
+								</div>
+								<div class="col-auto p-1">
+									<input type="text" name="kwd" class="form-control">
+								</div>
+								<div class="col-auto p-1">
+									<button type="button" class="btn btn-light"><i class="bi bi-search"></i></button>
+								</div>
+							</form>
+						</div>
+						<div class="col text-end">
+							<button type="button" class="btn btn-light">글올리기</button>
+						</div>
+					</div>
 				</div>
-
 			</div>
 		</div>
 	</main>
