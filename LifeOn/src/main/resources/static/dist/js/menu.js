@@ -19,13 +19,19 @@ $(function(){
 $(function(){
     var url = window.location.pathname;
     var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
-    
+
 	$('nav .navbar-collapse>ul>li>a').each(function() {
-		if (urlRegExp.test(this.href.replace(/\/$/, ''))) {
+		var filterUrl = url.split('/')[1];
+		
+		if (this.href.includes(filterUrl)) {
+			$(this).addClass('active');
+			return false;
+		} else if (urlRegExp.test(this.href.replace(/\/$/, ''))) {
 			$(this).addClass('active');
 			return false;
 		}
 	});
+	
 	if($('nav .navbar-collapse>ul>li>a').hasClass("active")) return false;
 	
 	$('nav .navbar-collapse>ul>li a').each(function() {
@@ -56,6 +62,7 @@ $(function(){
 			} else {
 				$(this).closest(".dropdown").closest(".dropdown").children("a").eq(0).addClass('active');
 			}
+
 			return false;
 		}
 	});

@@ -26,7 +26,7 @@ textarea:focus, input:focus { outline: none; }
 .navbar {
 	background-color: #FFF;
 	font-weight: 500;
-	font-size: 0.875rem;
+	font-size: 0.925rem;
 	line-height: 0.2rem;
 	box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.05);
 }

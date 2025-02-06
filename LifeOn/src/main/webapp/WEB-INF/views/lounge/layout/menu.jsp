@@ -9,16 +9,17 @@
 	justify-content: flex-start;
 	
 	margin-top: 66px;
-	height: 60px;
-	color: #222;
+	height: 46px;
+	font-size: 13px;
+	color: #333;
 	border-top: 1px solid #D9D9D9;
 	border-bottom: 1px solid #D9D9D9;
 }
-.nav-link {
-	color: #222;
+.sub-link {
+	color: #333;
 }
 
-.nav-link:hover, .nav-link.active {
+.sub-link:hover, .sub-link.active {
 	color: #006AFF;
 	text-decoration: none;
 }
@@ -31,19 +32,19 @@ $(function(){
     var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
 
     try {
-        $('nav .nav-link').each(function() {
+        $('.sub-link').each(function() {
             if (urlRegExp.test(this.href.replace(/\/$/, ''))) {
                 $(this).addClass('active');
                 return false;
             }
         });
 
-        if (!$('nav .nav-link').hasClass('active')) {
+        if (!$('.sub-link').hasClass('active')) {
             var parent = url.replace(/\/$/, '').substring(0, url.replace(/\/$/, '').lastIndexOf('/'));
             if (!parent) parent = '/';
             var urlParentRegExp = new RegExp(parent);
             
-            $('nav .nav-link').each(function() {
+            $('.sub-link').each(function() {
                 if ($(this).attr('href') === '#' || !$(this).attr('href').trim()) return true;
                 var phref = this.href.replace(/\/$/, '').substring(0, this.href.replace(/\/$/, '').lastIndexOf('/'));
                 if (urlParentRegExp.test(phref)) {
@@ -57,8 +58,8 @@ $(function(){
         console.error(e);
     }
 
-    $('nav .nav-link').on('click', function() {
-        $('nav .nav-link').removeClass('active');
+    $('.sub-link').on('click', function() {
+        $('.sub-link').removeClass('active');
         $(this).addClass('active');
     });
 });
@@ -66,9 +67,9 @@ $(function(){
 
 <div class="nav-scroller">
 	<nav class="container nav" aria-label="navigation">
-		<a class="nav-link" aria-current="page" href="<c:url value='room'/>">인테리어</a>
-		<a class="nav-link" href="<c:url value='recipe'/>">자취요리</a>
-		<a class="nav-link" href="<c:url value='tip'/>">생활팁</a>
-		<a class="nav-link" href="<c:url value='daily'/>">일상</a>
+		<a class="nav-link sub-link" aria-current="page" href="<c:url value='room'/>">인테리어</a>
+		<a class="nav-link sub-link" href="<c:url value='recipe'/>">자취요리</a>
+		<a class="nav-link sub-link" href="<c:url value='tip'/>">생활팁</a>
+		<a class="nav-link sub-link" href="<c:url value='daily'/>">일상</a>
 	</nav>
 </div>
