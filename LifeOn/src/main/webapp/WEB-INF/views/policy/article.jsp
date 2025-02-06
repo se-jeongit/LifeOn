@@ -31,6 +31,16 @@
 	margin : auto;
 }
 
+.form-header{
+	width: 80%;
+	max-width: 900px;
+	margin : auto;
+}
+
+.bold {
+	color : #006AFF;
+}
+
 </style>
 </head>
 <body>
@@ -76,15 +86,6 @@
 						</tr>
 						
 						<tr>
-							<td colspan="2">
-								<p class="boarder text-secondary my-1 p-2">
-									<i class="bi bi-folder2-open"></i>
-										<a href=""></a>
-								</p>
-							</td>
-						</tr>
-						
-						<tr>
 							<td colspan="2">이전글 : 
 								<a href=""></a>
 							</td>
@@ -109,10 +110,37 @@
 						</td>
 					</tr>
 				</table>
+				
+				<div class="reply">
+					<form name="replyForm" method="post">
+						<div class="form-header">
+							<span class="bold">댓글</span>
+							<span> - 타인을 비방하거나 개인정보를 유출하는 글의 게시를 삼가해 주세요.</span>
+						</div>
+						
+						<table class="table table-borderless reply-form">
+							<tr>
+								<td><textarea class="form-control" name="content"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td align="right">
+									<button type="button" class="btn btn-light btnSendReply" onclick="location.href='${pageContext.request.contextPath}/policy/listReply';">댓글등록</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div id="listReply"></div>
+				</div>
 			</div>
 		</div>
     </div>
 </main>
+
+<script type="text/javascript">
+
+</script>
+
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

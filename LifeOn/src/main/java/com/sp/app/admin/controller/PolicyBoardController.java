@@ -35,4 +35,9 @@ public class PolicyBoardController {
 	public String article() throws Exception{
 		return "policy/article";
 	}
+	
+	@GetMapping("listReply")
+	public String listReply() throws Exception {
+		return "policy/listReply";
+	}
 }
