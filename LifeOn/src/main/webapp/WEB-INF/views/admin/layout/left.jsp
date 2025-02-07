@@ -64,7 +64,7 @@ $(function(){
 		</li>
 	
 		<li class="menu--item">
-	        <a href="<c:url value='/admin' />" class="menu--link" title="회원관리">
+	        <a href="<c:url value='/admin/memberManage/main' />" class="menu--link" title="회원관리">
 				<span class="menu--label">회원관리</span>
 			</a>
 		</li>
