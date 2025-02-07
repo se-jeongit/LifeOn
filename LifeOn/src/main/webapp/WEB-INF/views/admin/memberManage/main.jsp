@@ -11,6 +11,7 @@
 <jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp" />
 
 <style type="text/css">
+ 
 .body-title{
 	margin-bottom : 20px;
 }
@@ -21,7 +22,7 @@
 }
 
 .left {
-	font-size : 20px;
+	font-size : 15px;
 	display : flex;
 	gap : 20px;
 	margin-bottom : 20px;
@@ -41,6 +42,17 @@
 	color : white;
 }
 
+.table th, .table td{
+	text-align: center;
+	vertical-align: middle;
+}
+
+.table td button {
+	display : flex;
+	justify-content: center;
+	align-items: center;
+	margin:0 auto;
+}
 
 </style>
 
@@ -51,8 +63,8 @@
 
 	<main>
 		<jsp:include page="/WEB-INF/views/admin/layout/left.jsp" />
-		<div class="wrapper">
-			<div class="body-constainer">
+		<div class="wrapper" style="display: flex; justify-content: center;">
+			<div class="body-container" style="width: 900px;">
 				<div class="body-title">
 					<h3>
 						<i class="bi bi-app"></i> 회원관리
@@ -94,7 +106,7 @@
 								<td> admin </td>
 								<td> 관리자 </td>
 								<td> 관리자 </td>
-								<td><i class="fa-circle"></i></td>
+								<td><i class="bi bi-circle"></i></td>
 								<td> 2023-07-21 16:00:00</td>
 								<td><button class="btn">정보수정</button>
 							</tr>
