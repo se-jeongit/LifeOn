@@ -40,7 +40,7 @@
 	
 		<!-- 로고 이미지 -->
 		<a class="navbar-brand" href="<c:url value='/'/>">
-			<img src="${pageContext.request.contextPath}/dist/images/logo.png" alt="logo" style="width: 100px; height: 40px; object-fit: cover;">
+			<img src="${pageContext.request.contextPath}/dist/images/logo.png" alt="logo" style="width: 100px; height: 40px;">
 		</a>
 		
 		<!-- 네비게이션 토글 -->

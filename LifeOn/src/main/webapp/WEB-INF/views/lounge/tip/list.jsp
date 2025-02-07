@@ -11,6 +11,120 @@
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 
+<style type="text/css">
+/* 검색 옵션 스타일 */
+.selectSearch {
+    width: 200px;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* 검색 상자 스타일 */
+.searchBox {
+    width: 300px;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-left: 15px;
+}
+
+/* 글쓰기 버튼 */
+.btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* 글리스트 스타일 */
+.tip-list {
+    margin-top: 30px;
+}
+
+.tip-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.tip-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목 스타일 */
+.tip-subject {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* 내용 스타일 */
+.tip_content {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* 게시물 정보 스타일 */
+.tip__info {
+    font-size: 12px;
+    color: #777;
+}
+
+.tip__info i {
+    margin-right: 5px;
+    color: #888;
+}
+
+.tip__info span {
+    margin-right: 10px;
+}
+
+/* 페이지네이션 */
+.page-navigation {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.page-navigation a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    margin: 0 5px;
+    font-size: 14px;
+    border: 1px solid #007bff;
+    transition: background-color 0.3s ease;
+}
+
+.page-navigation a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.page-navigation .disabled {
+    color: #ccc;
+    pointer-events: none;
+}
+</style>
+
 </head>
 <body>
 
@@ -19,108 +133,54 @@
 	<jsp:include page="/WEB-INF/views/lounge/layout/menu.jsp"/>
 </header>
 	
-<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
+<main class="d-flex flex-column min-vh-100 align-items-center">
     <div class="container">
-	
-	
-	
-    <div class="page-title light-background">
-      <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">생활팁</h1>
-	            <!-- Search Widget -->
-            <div class="search-widget widget-item">
-
-              <h3 class="widget-title">Search</h3>
-              <form action="">
-                <input type="text">
-                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-              </form>
-
-            </div><!--/Search Widget -->
-
-            <!-- Categories Widget -->
-            <div class="categories-widget widget-item">
-
-              <h3 class="widget-title">Categories</h3>
-              <ul class="mt-3">
-                <li><a href="#">General <span>(25)</span></a></li>
-                <li><a href="#">Lifestyle <span>(12)</span></a></li>
-                <li><a href="#">Travel <span>(5)</span></a></li>
-                <li><a href="#">Design <span>(22)</span></a></li>
-                <li><a href="#">Creative <span>(8)</span></a></li>
-                <li><a href="#">Educaion <span>(14)</span></a></li>
-              </ul>
-
-            </div><!--/Categories Widget -->
-      </div>
-    </div>
-
-    <div class="container">
-
-         <section id="blog-posts" class="blog-posts section">
-
-                <div class="col-lg-12">
-                  <article>
-
-                    <div class="post-img">
-                      <img src="" alt="" class="img-fluid">
-                    </div>
-
-                    <h2 class="title">
-                      <a href="#">Dolorum optio tempore voluptas dignissimos cumque fuga qui quibusdam quia</a>
-                    </h2>
-
-                    <div class="meta-top">
-                      <ul>
-                        <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">John Doe</a></li>
-                        <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2022-01-01">Jan 1, 2022</time></a></li>
-                        <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="blog-details.html">12 Comments</a></li>
-                      </ul>
-                    </div>
-
-                    <div class="content">
-                      <p>
-                        Similique neque nam consequuntur ad non maxime aliquam quas. Quibusdam animi praesentium. Aliquam et laboriosam eius aut nostrum quidem aliquid dicta.
-                        Et eveniet enim. Qui velit est ea dolorem doloremque deleniti aperiam unde soluta. Est cum et quod quos aut ut et sit sunt. Voluptate porro consequatur assumenda perferendis dolore.
-                      </p>
-
-                      <div class="read-more">
-                        <a href="blog-details.html">Read More</a>
-                      </div>
-                    </div>
-
-                  </article>
-                </div><!-- End post list item -->
-
-
-          </section><!-- /Blog Posts Section -->
-
-          <!-- Blog Pagination Section -->
-          <section id="blog-pagination" class="blog-pagination section">
-
-            <div class="container">
-              <div class="d-flex justify-content-center">
-                <ul>
-                  <li><a href="#"><i class="bi bi-chevron-left"></i></a></li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#" class="active">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li>...</li>
-                  <li><a href="#">10</a></li>
-                  <li><a href="#"><i class="bi bi-chevron-right"></i></a></li>
-                </ul>
-              </div>
-            </div>
-
-          </section><!-- /Blog Pagination Section -->
-
-        </div>
-
-
-
-      </div>
-    	</div>
+	    <div class="nav">
+	    생활의 도움을 받아볼까?
+		</div>
+		
+		<div class="topGroup">
+			<!-- 검색옵션 -->
+		    <select class="selectSearch">
+		      <option value="recent" selected>최신순</option>
+		      <option value="comment" >댓글많은순</option>
+		      <option value="recommend" >즐겨찾기순</option>
+		    </select>
+			<!-- 검색상자 -->
+			<input type="search" class="searchBox">
+			<!-- 글쓰기 버튼 -->
+		   	<button class="btn">글쓰기</button>
+		</div>
+		   
+		   <!-- 글리스트 -->
+		   <div class="tip-list">
+		  		<div class="tip-container" onclick="location.href='<c:url value='room'/>'">
+				<h3 class="tip-subject">
+				  제목입니다.
+				</h3>
+			        
+		        <p class="tip_content">
+		        	내용입니다....
+		        </p>
+			        
+				<p class='tip__info'>
+					<span class='tip_userName'>관리자</span>
+					<span>&nbsp;·&nbsp;</span>
+					<span>19시간 전</span>
+					<span>&emsp;&emsp;&emsp;</span>
+					<i class="bi bi-bookmark"></i>
+					<span>1&nbsp;&nbsp;</span>
+					<i class="bi bi-eye"></i>
+					<span>1&nbsp;&nbsp;</span>
+					<i class="bi bi-chat-dots"></i>
+					<span>1&nbsp;&nbsp;</span>
+				</p>
+			</div>
+		</div>
+		
+		<div class="page-navigation">
+			${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+		</div>
 		
     </div>
 </main>
