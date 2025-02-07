@@ -21,41 +21,55 @@
 function memberOk() {
 	const f = document.memberForm;
 	
-	/*
+	
 	let str;
 
-	str = f.userId.value;
+	str = f.id.value;
 	if( !/^[a-z][a-z0-9_]{4,9}$/i.test(str) ) { 
 		alert('아이디를 다시 입력 하세요. ');
-		f.userId.focus();
+		f.id.focus();
 		return;
 	}
 
 
-	str = f.userPwd.value;
-	if( !/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(str) ) { 
+	str = f.pwd.value;
+	if( !/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{8,15}$/i.test(str) ) { 
 		alert('패스워드를 다시 입력 하세요. ');
-		f.userPwd.focus();
+		f.pwd.focus();
 		return;
 	}
 
-	if( str !== f.userPwd2.value ) {
+	if( str !== f.pwd2.value ) {
         alert('패스워드가 일치하지 않습니다. ');
-        f.userPwd.focus();
+        f.pwd.focus();
         return;
 	}
 	
-    str = f.userName.value;
+    str = f.name.value;
     if( !/^[가-힣]{2,5}$/.test(str) ) {
         alert('이름을 다시 입력하세요. ');
-        f.userName.focus();
+        f.name.focus();
         return;
     }
-
+	
+    str = f.nickName.value;
+    if ( !str ){
+    	alert('닉네임을 입력하세요.')
+    	f.nickName.focus();
+    	return;
+    }
+    
     str = f.birth.value;
     if( !str ) {
         alert('생년월일를 입력하세요. ');
         f.birth.focus();
+        return;
+    }
+    
+    str = f.gender.value;
+    if( !str ) {
+        alert('성별을 선택하세요. ');
+        f.gender.focus();
         return;
     }
     
@@ -93,7 +107,22 @@ function memberOk() {
         f.email2.focus();
         return;
     }
-	*/
+    
+    str = f.post.value.trim();
+    if( !str ) {
+        alert('우편번호를 입력하세요. ');
+        f.post.focus();
+        return;
+    }  
+    
+    str = f.addr2.value.trim();
+    if( !str ) {
+        alert('상세주소를 입력하세요.');
+        f.addr2.focus();
+        return;
+    }     
+    
+	
     f.action = '${pageContext.request.contextPath}/member/${mode}';
     f.submit();
 }
@@ -114,13 +143,68 @@ function changeEmail() {
     }
 }
 
-function userIdCheck() {
+function idCheck() {
 	// 아이디 중복 검사
+	let id = $('#id').val();
 
+	if(!/^[a-z][a-z0-9_]{4,9}$/i.test(id)) { 
+		let str = '아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.';
+		$('#id').focus();
+		$('.wrap-id').find('.help-block').html(str);
+		return;
+	}
+	
+	let url = '${pageContext.request.contextPath}/member/idCheck';
+	
+	// AJAX:POST-JSON
+	$.post(url, {id:id}, function(data){
+		let passed = data.passed;
+
+		if(passed === 'true') {
+			let str = '<span style="color:blue; font-weight: bold;">' + id + '</span> 아이디는 사용가능 합니다.';
+			$('.wrap-id').find('.help-block').html(str);
+			$('#idValid').val('true');
+		} else {
+			let str = '<span style="color:red; font-weight: bold;">' + id + '</span> 아이디는 사용할수 없습니다.';
+			$('.wrap-id').find('.help-block').html(str);
+			$('#id').val('');
+			$('#idValid').val('false');
+			$('#id').focus();
+		}
+	}, 'json');
+	
 }
-
 function nickNameCheck() {
 	// 닉네임 중복 검사
+	
+	let nickName = $('#nickName').val();
+
+	if(!nickName) { 
+		let str = '닉네임을 입력하세요';
+		$('#nickName').focus();
+		$('.wrap-nickName').find('.help-block').html(str);
+		return;
+	}
+	
+	let url = '${pageContext.request.contextPath}/member/nickNameCheck';
+	
+	// AJAX:POST-JSON
+	$.post(url, {nickName:nickName}, function(data){
+		let passed = data.passed;
+
+		if(passed === 'true') {
+			let str = '<span style="color:blue; font-weight: bold;">' + nickName + '</span> 닉네임은 사용가능 합니다.';
+			$('.wrap-nickName').find('.help-block').html(str);
+			$('#nickNameValid').val('true');
+		} else {
+			let str = '<span style="color:red; font-weight: bold;">' + nickName + '</span> 닉네임은 사용할수 없습니다.';
+			$('.wrap-nickName').find('.help-block').html(str);
+			$('#id').val('');
+			$('#nickNameValid').val('false');
+			$('#nickName').focus();
+		}
+	}, 'json');	
+	
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -141,16 +225,20 @@ window.addEventListener('DOMContentLoaded', () => {
 		<div class="body-container">	
 			<div class="body-title d-flex justify-content-between align-items-center">
 			    <h3><i class="bi bi-person-square"></i> ${mode=="join"?"회원가입":"정보수정"} </h3>
+			    <button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/';"> <i class="bi bi-box-arrow-right" style="font-size: 20px;" title="나가기"></i></button>
 			</div>
-    		<hr>
+
+			<hr>
 			<div class="body-main">
 				<form name="memberForm" method="post">
 					<div class="row mb-3">
+						<c:if test="${mode=='update'}">
 						<input type="hidden" name="num" value="${dto.num}">
+						</c:if>
 					</div>
 					<div class="row mb-3">
 						<label class="col-sm-2 col-form-label" for="id">아이디</label>
-						<div class="col-sm-10 wrap-userId">
+						<div class="col-sm-10 wrap-id">
 							<div class="row">
 								<div class="col-6 pe-1">
 									<input type="text" name="id" id="id" class="form-control" value="${dto.id}" 
@@ -159,7 +247,7 @@ window.addEventListener('DOMContentLoaded', () => {
 								</div>
 								<div class="col-3 ps-1">
 									<c:if test="${mode=='join'}">
-										<button type="button" class="btn btn-light" onclick="userIdCheck();">아이디중복검사</button>
+										<button type="button" class="btn btn-light" onclick="idCheck();">아이디중복검사</button>
 									</c:if>
 								</div>
 							</div>
@@ -177,7 +265,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				            		<input type="password" name="pwd" id="pwd" class="form-control" autocomplete="off" placeholder="패스워드">
 				        		</div>
 				        	</div>
-				            <small class="form-control-plaintext">패스워드는 5~10자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.</small>
+				            <small class="form-control-plaintext">패스워드는 8~15자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.</small>
 				        </div>
 				    </div>
 				    
@@ -199,7 +287,6 @@ window.addEventListener('DOMContentLoaded', () => {
 				        	<div class="row">
 				        		<div class="col-6">
 				            		<input type="text" name="name" id="name" class="form-control" value="${dto.name}" 
-				            			${mode=="update" ? "readonly ":""}
 				            			placeholder="이름">
 				        		</div>
 				        	</div>
@@ -208,9 +295,9 @@ window.addEventListener('DOMContentLoaded', () => {
 				    
 				    <div class="row mb-3">
 				        <label class="col-sm-2 col-form-label" for="nickName">닉네임</label>
-				        <div class="col-sm-10">
+				        <div class="col-sm-10 wrap-nickName">
 				        	<div class="row">
-				        		<div class="col-6">
+				        		<div class="col-6 pe-1">
 				            		<input type="text" name="nickName" id="nickName" class="form-control" value="${dto.nickName}" 
 				            			${mode=="update" ? "readonly ":""}
 				            			placeholder="닉네임">
@@ -218,6 +305,11 @@ window.addEventListener('DOMContentLoaded', () => {
 				        		<div class="col-3 ps-1">
 									<c:if test="${mode=='join'}">
 										<button type="button" class="btn btn-light" onclick="nickNameCheck();">닉네임중복검사</button>
+									</c:if>
+								</div>
+								<div>
+									<c:if test="${mode=='join'}">
+										<small class="form-control-plaintext help-block"></small>
 									</c:if>
 								</div>
 				        	</div>
@@ -229,9 +321,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				        <div class="col-sm-10">
 				        	<div class="row">
 				        		<div class="col-6">
-				            		<input type="date" name="birth" id="birth" class="form-control" value="${dto.birth}"
-				            			${mode=="update" ? "readonly ":""}
-				            			placeholder="생년월일">
+				            		<input type="date" name="birth" id="birth" class="form-control" value="${dto.birth}" placeholder="생년월일">
 				        		</div>
 				        	</div>
 				            <small class="form-control-plaintext">생년월일은 2000-01-01 형식으로 입력 합니다.</small>
@@ -243,7 +333,7 @@ window.addEventListener('DOMContentLoaded', () => {
 					    <div class="col-sm-10">
 					        <div class="row">
 					            <div class="col-6">
-					                <select class="form-select" name="gender" id="gender" ${mode == "update" ? "disabled" : ""}>
+					                <select class="form-select" name="gender" id="gender">
 					                    <option value="" disabled selected>성별 선택</option>
 					                    <option value="남자" ${dto.gender == "남자" ? "selected" : ""}>남자</option>
 					                    <option value="여자" ${dto.gender == "여자" ? "selected" : ""}>여자</option>
@@ -338,8 +428,11 @@ window.addEventListener('DOMContentLoaded', () => {
 				    <div class="row mb-3">
 				        <div class="text-center">
 				            <button type="button" name="sendButton" class="btn btn-primary" onclick="memberOk();"> ${mode=="join"?"회원가입":"정보수정"} <i class="bi bi-check2"></i></button>
-				            <button type="button" class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/';"> ${mode=="join"?"가입취소":"수정취소"} <i class="bi bi-x"></i></button>
-							<input type="hidden" name="userIdValid" id="userIdValid" value="false">
+				            <c:if test="${mode=='update'}">
+				            <button type="button" class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/';">회원탈퇴 <i class="bi bi-x"></i> </button>
+							</c:if>
+							<input type="hidden" name="idValid" id="idValid" value="false">
+							<input type="hidden" name="nickNameValid" id="nickNameValid" value="false">
 				        </div>
 				    </div>
 				

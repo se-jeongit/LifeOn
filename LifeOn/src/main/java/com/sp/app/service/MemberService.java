@@ -10,7 +10,8 @@ public interface MemberService {
 	public void insertMember(Member dto) throws Exception;
 	public void updateLastLogin(String id) throws Exception;
 
-	public Member findById(String id);
+	public Member findById(String id);	
+	public Member findByNickName(String id);
 	
 	public void updateMember(Member dto) throws Exception;
 	public void deleteMember(Map<String, Object> map) throws Exception;

@@ -14,8 +14,8 @@
 	</update>
 
 	<insert id="insertMember" parameterType="com.sp.app.model.Member">
-		INSERT INTO member(num, id, pwd, nickname, block, reg_date, mod_date, grade, enabled)
-		VALUES (member_seq.NEXTVAL, #{id}, #{pwd}, #{nickName}, 0, SYSDATE, SYSDATE, 0, 1)
+		INSERT INTO member(num, id, pwd, nickname, block, reg_date, mod_date, grade, enabled, last_login)
+		VALUES (member_seq.NEXTVAL, #{id}, #{pwd}, #{nickName}, 0, SYSDATE, SYSDATE, 0, 1, SYSDATE)
 	</insert>
 	
 	<insert id="insertMemberDetail" parameterType="com.sp.app.model.Member">
@@ -31,6 +31,14 @@
 		LEFT OUTER JOIN member_detail md ON m.num = md.num
 		WHERE id = #{id} 
 	</select>
+
+	<select id="findByNickName" parameterType="String" resultType="com.sp.app.model.Member">
+		SELECT m.num, id, pwd, nickname, block, grade, enabled, reg_date, mod_date, last_login,
+			name, gender, TO_CHAR(birth, 'YYYY-MM-DD') birth, email1, email2, tel1, tel2, tel3, addr1, addr2, post
+		FROM member m
+		LEFT OUTER JOIN member_detail md ON m.num = md.num
+		WHERE nickName = #{nickName} 
+	</select>
 	
 	<update id="updateMember" parameterType="com.sp.app.model.Member">
 		UPDATE member SET pwd = #{pwd}, mod_date = SYSDATE
@@ -38,8 +46,8 @@
 	</update>
 	
 	<update id="updateMemberDetail" parameterType="com.sp.app.model.Member">
-		UPDATE member_detail SET email1 = #{email1}, email2 = #{email2}, tel1=#{tel1}, tel2=#{tel2}, tel3=#{tel3},
-			birth = #{birth}, addr1 = #{addr1}, addr2 = #{addr2}, post = #{post}
+		UPDATE member_detail SET name = #{name}, gender = #{gender}, email1 = #{email1}, email2 = #{email2}, tel1=#{tel1}, tel2=#{tel2}, tel3=#{tel3},
+			birth = TO_DATE(#{birth}, 'YYYY-MM-DD'), addr1 = #{addr1}, addr2 = #{addr2}, post = #{post}
 		WHERE num = #{num}
 	</update>
 	

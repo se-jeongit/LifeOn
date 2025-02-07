@@ -1,5 +1,7 @@
 package com.sp.app.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sp.app.model.Member;
@@ -208,12 +211,45 @@ public class MemberController {
 	}
 	
 	
-	
-	
 	//아이디 중복검사
+	@ResponseBody
+	@PostMapping("idCheck")
+	public Map<String, ?> idCheck(@RequestParam(name="id") String id) throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		
+		String p = "false";
+		try {
+			Member dto = service.findById(id);
+			if(dto == null) {
+				p = "true";
+			}
+		} catch (Exception e) {
+		}
+		
+		model.put("passed", p);
+		
+		return model;
+	}
 	
 	//닉네임 중복검사
-	
+	@ResponseBody
+	@PostMapping("nickNameCheck")
+	public Map<String, ?> nickNameCheck(@RequestParam(name="nickName") String nickName) throws Exception{
+		Map<String, Object> model = new HashMap<>();
+		
+		String p = "false";
+		try {
+			Member dto = service.findByNickName(nickName);
+			if(dto == null) {
+				p = "true";
+			}
+		} catch (Exception e) {
+		}
+		
+		model.put("passed", p);
+		
+		return model;
+	}
 	
 	
 	//아이디찾기

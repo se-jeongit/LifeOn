@@ -24,6 +24,7 @@ public interface MemberMapper {
 	public void updateMemberDetail(Member dto) throws SQLException;
 	
 	public Member findById(String id);
+	public Member findByNickName(String nickName);
 	
 	public void deleteMember(Map<String, Object> map) throws SQLException;
 	public void deleteMemberDetail(Map<String, Object> map) throws SQLException;

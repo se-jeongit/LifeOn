@@ -75,6 +75,24 @@ public class MemberServiceImpl implements MemberService{
 		
 		return dto;
 	}
+	
+	
+	@Override
+	public Member findByNickName(String nickName) {
+		Member dto = null;
+		
+		try {
+			dto = Objects.requireNonNull(mapper.findByNickName(nickName));
+		
+		} catch (NullPointerException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (Exception e) {
+			log.info("findByNickName : ", e);
+		}
+		
+		
+		return dto;
+	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
 	@Override
@@ -95,6 +113,8 @@ public class MemberServiceImpl implements MemberService{
 	public void deleteMember(Map<String, Object> map) throws Exception {
 		
 	}
+
+
 
 
 	
