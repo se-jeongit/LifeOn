@@ -82,7 +82,7 @@ $(function(){
 		</li>
 	
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="상품관리">
+	        <a href="<c:url value='/admin/productManage/list'/>" class="menu--link" title="상품관리">
 				<span class="menu--label">상품관리</span>
 			</a>
 		</li>
