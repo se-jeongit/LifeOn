@@ -64,19 +64,19 @@ $(function(){
 		</li>
 	
 		<li class="menu--item">
-	        <a href="<c:url value='/admin/memberManage/main' />" class="menu--link" title="회원관리">
+	        <a href="<c:url value='/admin/memberManage/main'/>" class="menu--link" title="회원관리">
 				<span class="menu--label">회원관리</span>
 			</a>
 		</li>
 	
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="신고관리">
+	        <a href="<c:url value='/admin/complaintManage/list'/>" class="menu--link" title="신고관리">
 				<span class="menu--label">신고관리</span>
 			</a>
 		</li>
 		
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="게시글관리">
+	       <a href="<c:url value='/admin/boardManage/list'/>" class="menu--link" title="게시글관리">
 				<span class="menu--label">게시글관리</span>
 			</a>
 		</li>
