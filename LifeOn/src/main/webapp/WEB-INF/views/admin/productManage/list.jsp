@@ -92,6 +92,9 @@
 	border: 1px solid #006AFF;
 }
 
+.favoriteBtn button:hover {
+	background-color:#338CFF;
+}
 
 </style>
 
