@@ -29,12 +29,6 @@
 }
 
 
-
-.btn{
-	background-color: white;
-	color : black;
-}
-
 .product-info{
 	display: flex;
     align-items: center; /* 이미지와 텍스트를 같은 높이로 정렬 */

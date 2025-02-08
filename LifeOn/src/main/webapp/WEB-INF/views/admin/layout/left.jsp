@@ -88,7 +88,7 @@ $(function(){
 		</li>
 	
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="고객문의">
+	        <a href="<c:url value='/admin/memberQna/list'/>" class="menu--link" title="고객문의">
 				<span class="menu--label">고객문의</span>
 			</a>
 		</li>
