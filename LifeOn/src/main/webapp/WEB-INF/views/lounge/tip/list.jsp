@@ -29,8 +29,9 @@
 	align-items: center;
 }
 
-.search_right {
-	width: 300px;
+.leftBox {
+	width: 200px;
+	height: 500px;
     padding: 30px;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
@@ -49,7 +50,7 @@
 }
 
 .tip_container {
-	width: 700px;
+	width: 800px;
     padding: 30px;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
@@ -73,11 +74,19 @@
 .tip_content {
     color: #333;
     margin-bottom: 30px;
+    display: inline-block;
+  	width: 100%;
+ 	white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
 }
 
 .tip_info {
 	margin: 0;
 	color: #777;
+	
+	display: flex;
+	justify-content: flex-end;
 }
 
 
@@ -92,22 +101,31 @@
 </header>
 	
 <main class="d-flex flex-column min-vh-100 align-items-center">
+	<!-- 배너 -->
     <div class="body-title">
     	생활의 도움을 받아볼까?
 	</div>
 	
-    <div class="body-container">
-		<aside class="search_right">
-			<!-- 검색옵션 -->
-		    <select class="selectSearch">
-		      <option value="recent" selected>최신순</option>
-		      <option value="comment" >댓글많은순</option>
-		      <option value="recommend" >즐겨찾기순</option>
-		    </select>
-			<!-- 검색상자 -->
-			<input type="search" class="searchBox">
-			<!-- 글쓰기 버튼 -->
-		   	<button class="btn">글쓰기</button>
+	<!-- 상단메뉴 -->
+	<div class="search-container" style="width: 100% display: flex; justify-content: flex-end;">
+	
+		<!-- 검색옵션 -->
+	    <select class="selectSearch">
+	      <option value="recent" selected>최신순</option>
+	      <option value="comment" >댓글많은순</option>
+	      <option value="recommend" >즐겨찾기순</option>
+	    </select>
+    
+		<!-- 검색상자 -->
+		<input type="search" class="searchBox">
+		
+		<!-- 글쓰기 버튼 -->
+	   	<button class="btn">글쓰기</button>
+	</div>
+	
+	<div class="body-container">
+	
+		<aside class="leftBox">
 		</aside>
 		   
 		<!-- 글리스트 -->
@@ -118,7 +136,7 @@
 			</h3>
 		        
 	        <p class="tip_content">
-	        	내용입니다....
+	        	내용입니다.
 	        </p>
 		        
 			<p class='tip_info'>

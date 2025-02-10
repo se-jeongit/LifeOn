@@ -76,7 +76,7 @@
 		<div class="d-flex justify-content-end" style="align-items: center;">
 			<!-- 검색창 -->
 			<form name="headerSearchForm">
-				<div class="input-group input-group-sm py-2" style="flex-wrap: nowrap;">
+				<div class="input-group input-group-sm py-2 pe-2" style="flex-wrap: nowrap;">
 					<input type="text" name="searchWord" style="height: 30px; border: 2px solid #006AFF; border-right: none; border-top-left-radius: 7px; border-bottom-left-radius: 7px; padding: 7px; padding: 7px; font-size: 12px;" placeholder="검색어를 입력하세요" aria-describedby="basic-addon1" value="${searchWord}">
 					<span class="input-group-text" style="height: 30px; background: #FFF; border: 2px solid #006AFF; border-left: none; border-top-right-radius: 7px; border-bottom-right-radius: 7px; padding: 7px; cursor: pointer;" id="basic-addon1" onclick="searchHeader();"><i class="bi bi-search"></i></span>
 					<input type="hidden" name="searchField" value="all">
