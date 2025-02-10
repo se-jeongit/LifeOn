@@ -12,117 +12,75 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 
 <style type="text/css">
-/* 검색 옵션 스타일 */
-.selectSearch {
-    width: 200px;
-    padding: 8px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+.body-container {
+	display: flex;
+	flex-wrap: wrap;
 }
 
-/* 검색 상자 스타일 */
-.searchBox {
-    width: 300px;
-    padding: 8px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    margin-left: 15px;
+.body-title {
+	width: 100%;
+	height: 100px;
+	background: #222;
+	color: #FFF;
+	margin-bottom: 30px;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-/* 글쓰기 버튼 */
-.btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
-/* 글리스트 스타일 */
-.tip-list {
-    margin-top: 30px;
-}
-
-.tip-container {
-    background-color: #f9f9f9;
-    padding: 20px;
+.search_right {
+	width: 300px;
+    padding: 30px;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
-    margin-bottom: 15px;
+    margin: 20px;
+}
+.selectSearch {
+
+}
+
+.searchBox {
+
+}
+
+.tip_list {
+	margin: 20px;
+}
+
+.tip_container {
+	width: 700px;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
 }
 
-.tip-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+.tip_container:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* 제목 스타일 */
-.tip-subject {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
+.tip_subject {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 30px;
 }
 
-/* 내용 스타일 */
 .tip_content {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 10px;
+    color: #333;
+    margin-bottom: 30px;
 }
 
-/* 게시물 정보 스타일 */
-.tip__info {
-    font-size: 12px;
-    color: #777;
+.tip_info {
+	margin: 0;
+	color: #777;
 }
 
-.tip__info i {
-    margin-right: 5px;
-    color: #888;
-}
 
-.tip__info span {
-    margin-right: 10px;
-}
-
-/* 페이지네이션 */
-.page-navigation {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.page-navigation a {
-    color: #007bff;
-    text-decoration: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    margin: 0 5px;
-    font-size: 14px;
-    border: 1px solid #007bff;
-    transition: background-color 0.3s ease;
-}
-
-.page-navigation a:hover {
-    background-color: #007bff;
-    color: white;
-}
-
-.page-navigation .disabled {
-    color: #ccc;
-    pointer-events: none;
-}
 </style>
 
 </head>
@@ -134,12 +92,12 @@
 </header>
 	
 <main class="d-flex flex-column min-vh-100 align-items-center">
-    <div class="container">
-	    <div class="nav">
-	    생활의 도움을 받아볼까?
-		</div>
-		
-		<div class="topGroup">
+    <div class="body-title">
+    	생활의 도움을 받아볼까?
+	</div>
+	
+    <div class="body-container">
+		<aside class="search_right">
 			<!-- 검색옵션 -->
 		    <select class="selectSearch">
 		      <option value="recent" selected>최신순</option>
@@ -150,31 +108,31 @@
 			<input type="search" class="searchBox">
 			<!-- 글쓰기 버튼 -->
 		   	<button class="btn">글쓰기</button>
-		</div>
+		</aside>
 		   
-		   <!-- 글리스트 -->
-		   <div class="tip-list">
-		  		<div class="tip-container" onclick="location.href='<c:url value='room'/>'">
-				<h3 class="tip-subject">
-				  제목입니다.
-				</h3>
-			        
-		        <p class="tip_content">
-		        	내용입니다....
-		        </p>
-			        
-				<p class='tip__info'>
-					<span class='tip_userName'>관리자</span>
-					<span>&nbsp;·&nbsp;</span>
-					<span>19시간 전</span>
-					<span>&emsp;&emsp;&emsp;</span>
-					<i class="bi bi-bookmark"></i>
-					<span>1&nbsp;&nbsp;</span>
-					<i class="bi bi-eye"></i>
-					<span>1&nbsp;&nbsp;</span>
-					<i class="bi bi-chat-dots"></i>
-					<span>1&nbsp;&nbsp;</span>
-				</p>
+		<!-- 글리스트 -->
+		<div class="tip_list">
+	  		<div class="tip_container" onclick="location.href='<c:url value='room'/>'">
+			<h3 class="tip_subject">
+			  제목입니다.
+			</h3>
+		        
+	        <p class="tip_content">
+	        	내용입니다....
+	        </p>
+		        
+			<p class='tip_info'>
+				<span class='tip_userName'>관리자</span>
+				<span>&nbsp;·&nbsp;</span>
+				<span>19시간 전</span>
+				<span>&emsp;&emsp;&emsp;</span>
+				<i class="bi bi-bookmark"></i>
+				<span>1&nbsp;&nbsp;</span>
+				<i class="bi bi-eye"></i>
+				<span>1&nbsp;&nbsp;</span>
+				<i class="bi bi-chat-dots"></i>
+				<span>1&nbsp;&nbsp;</span>
+			</p>
 			</div>
 		</div>
 		
