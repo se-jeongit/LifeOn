@@ -429,7 +429,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				        <div class="text-center">
 				            <button type="button" name="sendButton" class="btn btn-primary" onclick="memberOk();"> ${mode=="join"?"회원가입":"정보수정"} <i class="bi bi-check2"></i></button>
 				            <c:if test="${mode=='update'}">
-				            <button type="button" class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/';">회원탈퇴 <i class="bi bi-x"></i> </button>
+				            <button type="button" class="btn btn-danger" onclick="location.href='${pageContext.request.contextPath}/member/pwd?mode=retire';">회원탈퇴 <i class="bi bi-x"></i> </button>
 							</c:if>
 							<input type="hidden" name="idValid" id="idValid" value="false">
 							<input type="hidden" name="nickNameValid" id="nickNameValid" value="false">

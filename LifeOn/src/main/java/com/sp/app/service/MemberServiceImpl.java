@@ -111,7 +111,13 @@ public class MemberServiceImpl implements MemberService{
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
 	@Override
 	public void deleteMember(Map<String, Object> map) throws Exception {
-		
+		try {
+			mapper.deleteMemberDetail(map);
+			mapper.deleteMember(map);
+		} catch (Exception e) {
+			log.info("deleteMember : ", e);
+			throw e;
+		}
 	}
 
 

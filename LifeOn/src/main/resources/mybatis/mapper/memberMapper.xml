@@ -53,12 +53,12 @@
 	
 	<delete id="deleteMember" parameterType="map">
 		DELETE FROM member
-		WHERE id = #{id};
+		WHERE num = #{num}
 	</delete>
 	
 	<delete id="deleteMemberDetail" parameterType="map">
 		DELETE FROM member_detail
-		WHERE num = #{num};
+		WHERE num = #{num}
 	</delete>
 	
 	

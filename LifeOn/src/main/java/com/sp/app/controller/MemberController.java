@@ -138,9 +138,9 @@ public class MemberController {
 	}	
 	
 	@GetMapping("pwd")
-	public String pwdForm(@RequestParam(name="retire", required = false) String retire,
+	public String pwdForm(@RequestParam(name="mode", required = false) String mode,
 			Model model) {
-		if(retire == null) {
+		if(mode == null) {
 			model.addAttribute("mode", "update"); //정보수정
 		} else {
 			model.addAttribute("mode", "retire"); //회원탈퇴
@@ -166,8 +166,24 @@ public class MemberController {
 				return "member/pwd";
 			}
 			
-			if(mode.equals("delete")) { //회원탈퇴 처리
+			if(mode.equals("retire")) { //회원탈퇴 처리
 				
+				//그 회원관련 게시판 등 자료 삭제 처리 보류
+				
+				Map<String, Object> map = new HashMap<>();
+				map.put("num", info.getNum());
+				service.deleteMember(map);
+				session.removeAttribute("member");
+				session.invalidate();
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append(dto.getId() + "님의 회원 탈퇴 처리가 정상적으로 처리되었습니다.<br>");
+				sb.append("메인화면으로 이동 하시기 바랍니다.<br>");
+
+				reAttr.addFlashAttribute("title", "회원 탈퇴");
+				reAttr.addFlashAttribute("message", sb.toString());
+
+				return "redirect:/member/complete";					
 			}
 			
 			//회원정보수정
