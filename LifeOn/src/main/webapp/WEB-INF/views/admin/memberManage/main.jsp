@@ -37,6 +37,16 @@
 	color: #006AFF;
 }
 
+.nav-link{
+	border-color : white;
+	color :black;
+}
+
+.nav-link.active{
+	border-color : white;
+	color:#006AFF;
+}
+
 .btn{
 	background-color: #006AFF;
 	color : white;
@@ -59,7 +69,10 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/views/admin/layout/header.jsp" />
+
+	<header class="container-fluid header-top fixed-top px-4">
+		<jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
+	</header>
 
 	<main>
 		<jsp:include page="/WEB-INF/views/admin/layout/left.jsp" />
@@ -74,9 +87,9 @@
 				<div class="body-main">
 					<div class="body-middle">
 						<div class="left">
-							<button class="nav-link">전체</button>
-							<button class="nav-link">회원</button>
-							<button class="nav-link">관리자</button>					
+							<button class="nav-link navA">전체</button>
+							<button class="nav-link navB">회원</button>
+							<button class="nav-link navC">관리자</button>					
 						</div>
 						
 						<div class="right">
@@ -108,7 +121,7 @@
 								<td> 관리자 </td>
 								<td><i class="bi bi-circle"></i></td>
 								<td> 2023-07-21 16:00:00</td>
-								<td><button class="btn">정보수정</button>
+								<td><button class="btn">정보수정</button></td>
 							</tr>
 						</tbody>
 					</table>
@@ -116,6 +129,28 @@
 			</div>
 		</div>
 	</main>
+	
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function() {
+		const buttons = document.querySelectorAll(".left .nav-link");
+		const defaultBtn = document.querySelector(".navA");
+		
+		if(defaultBtn) {
+			defaultBtn.classList.add("active");
+		}
+		
+		buttons.forEach((button) => {
+			button.addEventListener("click", (event) => {
+				const targetBtn = event.target.closest(".nav-link");
+				if(!targetBtn) return;
+				
+				buttons.forEach((btn) => btn.classList.remove("active"));
+				targetBtn.classList.add("active");
+			});
+		});
+	});
+	
+	</script>
 
 	<jsp:include page="/WEB-INF/views/admin/layout/footer.jsp" />
 

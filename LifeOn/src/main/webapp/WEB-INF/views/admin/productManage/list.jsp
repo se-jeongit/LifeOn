@@ -38,6 +38,16 @@
 	display : block;
 }
 
+.btn{
+	border-color : white;
+	color :black;
+}
+
+.btn.active{
+	border-color : white;
+	color:#006AFF;
+}
+
 
 .table th, .table td{
 	text-align: center;
@@ -95,7 +105,9 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/views/admin/layout/header.jsp" />
+	<header class="container-fluid header-top fixed-top px-4">
+		<jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
+	</header>
 
 	<main>
 		<jsp:include page="/WEB-INF/views/admin/layout/left.jsp" />
@@ -177,21 +189,15 @@
 		
 		if(defaultBtn) {
 			defaultBtn.classList.add("active");
-			defaultBtn.style.borderColor = "white";
-			defaultBtn.style.color = "#006AFF";
 		}
 		
 		buttons.forEach((button) => {
-			button.addEventListener("click", function() {
-				buttons.forEach(btn => {
-					btn.classList.remove("active");
-					btn.style.borderColor = "white";
-					btn.style.color = "black";
-				});
+			button.addEventListener("click", (event) => {
+				const targetBtn = event.target.closest(".btn");
+				if(!targetBtn) return;
 				
-				this.classList.add("active");
-				this.style.borderColor = "white";
-				this.style.color = "#006AFF";
+				buttons.forEach((btn) => btn.classList.remove("active"));
+				targetBtn.classList.add("active");
 			});
 		});
 	});

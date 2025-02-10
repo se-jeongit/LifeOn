@@ -52,7 +52,9 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/views/admin/layout/header.jsp" />
+	<header class="container-fluid header-top fixed-top px-4">
+		<jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
+	</header>
 
 	<main>
 		<jsp:include page="/WEB-INF/views/admin/layout/left.jsp" />
