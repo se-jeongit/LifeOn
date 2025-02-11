@@ -38,11 +38,13 @@ box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
 
 <header>
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
-	<jsp:include page="/WEB-INF/views/lounge/layout/menu.jsp"/>
+	<jsp:include page="/WEB-INF/views/lounge2/layout/menu.jsp"/>
 </header>
 	
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="container">
+		<button class="btn" onclick="location.href='<c:url value='/lounge/room/write'/>'">글쓰기</button>
+		            
 		 <!-- property area -->
 			<div class="row">
 			    <div class="proerty-th">
@@ -61,9 +63,6 @@ box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
 			                        <span class="pull-left2">좋아요</span>
 			                        <span class="proerty-price pull-right">작성일</span>
 			                        <span class="proerty-price pull-right2">조회수</span>
-			                    </div>
-			                    <div>
-			                    	<button class="btn">글쓰기</button>
 			                    </div>
 			                </div>
 			            </div>

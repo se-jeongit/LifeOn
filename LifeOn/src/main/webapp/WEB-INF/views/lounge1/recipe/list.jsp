@@ -16,7 +16,7 @@
 
 <header>
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
-	<jsp:include page="/WEB-INF/views/lounge/layout/menu.jsp"/>
+	<jsp:include page="/WEB-INF/views/lounge2/layout/menu.jsp"/>
 </header>
 	
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
