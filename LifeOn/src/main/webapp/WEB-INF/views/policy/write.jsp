@@ -46,7 +46,7 @@ td[scope="row"] {
 			</div>
 			
 			<div class="body-main">
-				<form name="boardForm" method="post">
+				<form name="boardForm" action="${pageContext.request.contextPath}/policy/write" method="post" enctype="multipart/form-data">
 					<table class="table mt-3 write-form">
 						<tr>
 							<td class="col-sm-2" scope="row">제 목</td>
@@ -58,12 +58,12 @@ td[scope="row"] {
 						<tr>
 							<td class="col-sm-2" scope="row"> 작성자명 </td>
 							<td>
-								<p class="form-control-plaintext"></p>
+								<p class="form-control-plaintext">${sessionScope.member != null ? sessionScope.member.nickName : ''}</p>
 							</td>
 						</tr>
 						
 						<tr>
-							<td class="col=sm-2" scope="row">내 용</td>
+							<td class="col-sm-2" scope="row">내 용</td>
 							<td>
 								<textarea name="content" class="form-control"></textarea>
 							</td>
@@ -79,7 +79,7 @@ td[scope="row"] {
 						<tr>
 							<td class="col-sm-2" scope="row">첨부된파일</td>
 							<td>
-								<p class="form-control-plaintext">&nbsp;
+								<p class="form-control-plaintext">&nbsp;</p>
 							</td>
 						</tr>
 					</table>
@@ -87,7 +87,7 @@ td[scope="row"] {
 						<tr>
 							<td class="text-center">
 								<button type="reset" class="btn">다시 입력</button>
-								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/policy/list';"><i class="bi bi-x"></i>등록</button>
+								<button type="submit" class="btn"><i class="bi bi-x"></i>등록</button>
 							</td>
 						</tr>
 					</table>
