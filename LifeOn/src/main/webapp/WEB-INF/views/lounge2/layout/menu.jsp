@@ -10,7 +10,6 @@
 	
 	margin-top: 66px;
 	height: 46px;
-	font-size: 13px;
 	color: #333;
 	border-top: 1px solid #D9D9D9;
 	border-bottom: 1px solid #D9D9D9;
