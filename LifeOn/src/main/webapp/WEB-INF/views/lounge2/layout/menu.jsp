@@ -67,9 +67,9 @@ $(function(){
 
 <div class="nav-scroller">
 	<nav class="container nav" aria-label="navigation">
-		<a class="nav-link sub-link" aria-current="page" href="<c:url value='room'/>">인테리어</a>
-		<a class="nav-link sub-link" href="<c:url value='recipe'/>">자취요리</a>
-		<a class="nav-link sub-link" href="<c:url value='tip'/>">생활팁</a>
-		<a class="nav-link sub-link" href="<c:url value='daily'/>">일상</a>
+		<a class="nav-link sub-link" aria-current="page" href="<c:url value='/lounge1/room'/>">인테리어</a>
+		<a class="nav-link sub-link" href="<c:url value='/lounge1/recipe'/>">자취요리</a>
+		<a class="nav-link sub-link" href="<c:url value='/lounge2/tip'/>">생활팁</a>
+		<a class="nav-link sub-link" href="<c:url value='/lounge2/daily'/>">일상</a>
 	</nav>
 </div>

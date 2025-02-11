@@ -16,12 +16,12 @@
 
 <header>
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
-	<jsp:include page="/WEB-INF/views/lounge/layout/menu.jsp"/>
+	<jsp:include page="/WEB-INF/views/lounge2/layout/menu.jsp"/>
 </header>
 	
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="container">
-		자유게시판
+		요리레시피 게시판 입니다.
     </div>
 </main>
 

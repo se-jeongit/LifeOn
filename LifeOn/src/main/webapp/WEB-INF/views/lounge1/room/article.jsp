@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
@@ -6,26 +6,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LifeOn</title>
+<title>spring</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
+
+<style type="text/css">
+.body-container {
+	max-width: 800px;
+}
+
+.board-article img { max-width: 100%; }
+</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/boot-board.css" type="text/css">
 
 </head>
 <body>
 
 <header>
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
-	<jsp:include page="/WEB-INF/views/lounge/layout/menu.jsp"/>
 </header>
 	
-<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
-    <div class="container">
-		요리레시피 게시판 입니다.
-    </div>
+<main>
+	<div class="container">
+		<div class="body-container">	
+			<div class="body-title">
+				<h3><i class="bi bi-app"></i> 게시판 </h3>
+</div>
+</div>
+</div>
 </main>
-
-<footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
+<footer>
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
 </footer>
 

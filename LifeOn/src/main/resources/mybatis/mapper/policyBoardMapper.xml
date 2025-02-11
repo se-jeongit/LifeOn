@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sp.app.mapper.PolicyBoardMapper">
+
+	<!-- NULL을 허용한 컬럼은 jdbcType을 명시해야 한다. -->
+	<insert id="insertPolicy"
+		parameterType="com.sp.app.model.PolicyBoard">
+		<selectKey keyProperty="psnum" resultType="long"
+			order="BEFORE">
+			SELECT policy_board_seq.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO policy_board (psnum, num, subject, content, reg_date,
+		hitCount)
+		VALUES (#{psnum}, #{num}, #{subject}, #{content}, SYSDATE, 0)
+	</insert>
+
+	<sql id="where-list">
+		<choose>
+			<when test="schType == 'all'">
+				( INSTR(subject, #{kwd}) &gt; 0
+					OR DBMS_LOB.INSTR(content, #{kwd}) &gt; 0 )
+			</when>
+			<when test="schType == 'reg_date'">
+				( TO_CHAR(reg_date, 'YYYY-MM-DD') = #{kwd}
+			    	OR TO_CHAR(reg_date, 'YYYYMMDD') = #{kwd} )
+			</when>
+			<when test="schType == 'content'">
+				DBMS_LOB.INSTR(content, #{kwd}) &gt; 0
+			</when>
+			<otherwise>
+				INSTR(${schType}, #{kwd}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+
+	<insert id="insertPolicyFile"
+		parameterType="com.sp.app.model.PolicyBoardFile">
+		<selectKey keyProperty="fnum" resultType="long" order="BEFORE">
+			SELECT policy_board_file_seq.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO policy_board_file (fnum, psnum, ssfname, cpfname)
+		VALUES (#{fnum}, #{psnum}, #{ssfname}, #{cpfname})
+	</insert>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(psnum), 0)
+		FROM policy_board b
+		JOIN member m ON b.num = m.num
+			<where>
+				<if test="kwd !=null and kwd != ''">
+					<include refid="where-list"/>
+				</if>
+			</where>
+	</select>
+	
+	<select id="listPolicy" parameterType="map" resultType="com.sp.app.model.PolicyBoard">
+		SELECT b.psnum, b.subject, TO_CHAR(b.reg_date, 'yyyy-mm-dd') AS reg_date, b.hitcount, 
+		(SELECT m.nickname FROM member m WHERE m.num=b.num) AS nickname, 
+		(SELECT f.cpfname FROM policy_board_file f WHERE f.psnum=b.psnum) AS cpfname
+		FROM policy_board b 
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="where-list"/>
+			</if>
+		</where>
+		ORDER BY b.psnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+</mapper>

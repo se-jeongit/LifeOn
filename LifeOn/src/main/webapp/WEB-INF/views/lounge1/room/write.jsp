@@ -51,7 +51,7 @@ td[scope="row"] {
 						<tr>
 							<td class="col-sm-2" scope="row">제 목</td>
 							<td>
-								<input type="text" name="subject" maxlength="100" class="form-control">
+								<input type="text" name="subject" maxlength="100" class="form-control" value="${dto.subject}">
 							</td>
 						</tr>
 						
@@ -87,7 +87,7 @@ td[scope="row"] {
 						<tr>
 							<td class="text-center">
 								<button type="reset" class="btn">다시 입력</button>
-								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge/room/list';"><i class="bi bi-x"></i>등록</button>
+								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/room/list';"><i class="bi bi-x"></i>등록</button>
 							</td>
 						</tr>
 					</table>
