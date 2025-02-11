@@ -91,7 +91,7 @@
 									<td>${board.psnum}</td>
 									<td class="left">
 										<div class="text-wrap">
-											<a href="${pageContext.request.contextPath}/policy/article">${board.subject}</a>
+											<a href="${pageContext.request.contextPath}/policy/article?psnum=${board.psnum}">${board.subject}</a>
 										</div>
 									</td>
 									<td>${board.nickname}</td>
