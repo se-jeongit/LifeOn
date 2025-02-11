@@ -43,7 +43,7 @@ box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
 	
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="container">
-		<button class="btn" onclick="location.href='<c:url value='/lounge/room/write'/>'">글쓰기</button>
+		<button class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/room/write';">글쓰기</button>
 		            
 		 <!-- property area -->
 			<div class="row">

@@ -1,6 +1,7 @@
 package com.sp.app.lounge.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,8 +27,16 @@ public class PhotoBoardController {
 	public String recipeList() {
 		return "lounge1/recipe/list";
 	}
+	
+	@GetMapping("write")
+	public String writeForm(Model model) throws Exception {
+		model.addAttribute("mode", "write");
+		return "lounge1/room/write";
+	}
+}
+	/*
 	@GetMapping("room/write")
-	public String writeForm(PhotoBoard dto,
+	public String writeSubmit(PhotoBoard dto,
 			HttpSession session) throws Exception {
 		
 		try {
@@ -36,6 +45,7 @@ public class PhotoBoardController {
 			log.info("writeSubmit : ", e);
 		}
 		
-		return "redirect:lounge1/room/list";
+		return "redirect:/lounge1/room/list";
 	}
 }
+*/
