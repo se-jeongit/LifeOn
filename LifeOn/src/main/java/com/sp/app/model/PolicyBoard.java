@@ -22,5 +22,6 @@ public class PolicyBoard {
 	private String originalFilename;
 	private MultipartFile selectFile; // <input type='file' name='selectFile' ..
 	
-	
+	private String nickname;
+	private String cpfname;
 }
