@@ -15,33 +15,23 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping(value = "/lounge/*")
+@RequestMapping(value = "/lounge2/*")
 public class FreeBoardController {
-	
-	@GetMapping("room")
-	public String roomList() {
-		return "lounge/room/list";
-	}
-	
-	@GetMapping("recipe")
-	public String recipeList() {
-		return "lounge/recipe/list";
-	}
 	
 	@GetMapping("tip")
 	public String tipList() throws Exception {
-		return "lounge/tip/list";
+		return "lounge2/tip/list";
 	}
 	
 	@GetMapping("daily")
 	public String dailyList() throws Exception {
-		return "lounge/daily/list";
+		return "lounge2/daily/list";
 	}
 	
 	@GetMapping("tip/write")
 	public String writeForm(Model model) throws Exception {
 		model.addAttribute("mode", "write");
-		return "lounge/tip/write";
+		return "lounge2/tip/write";
 	}
 	
 	@PostMapping("tip/write")
@@ -54,6 +44,6 @@ public class FreeBoardController {
 			log.info("writeSubmit : ", e);
 		}
 		
-		return "redirect:lounge/tip/list";
+		return "redirect:lounge2/tip/list";
 	}
 }
