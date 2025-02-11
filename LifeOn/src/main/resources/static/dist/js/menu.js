@@ -21,7 +21,7 @@ $(function(){
     var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
 
 	$('nav .navbar-collapse>ul>li>a').each(function() {
-		var filterUrl = url.split('/')[1];
+		var filterUrl = url.split('/')[1].substring(0, 6);
 		
 		if (this.href.includes(filterUrl)) {
 			$(this).addClass('active');
