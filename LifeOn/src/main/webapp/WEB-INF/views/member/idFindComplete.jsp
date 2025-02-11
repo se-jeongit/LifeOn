@@ -66,7 +66,7 @@
 	
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 120px;">
     <div class="card p-4 text-center shadow-sm">
-        <p class="mb-3">회원님의 아이디는 <strong>home**</strong>입니다.</p>
+        <p class="mb-3">회원님의 아이디는 <strong>${id}</strong>입니다.</p>
         <div class="btn-container">
             <button class="btn btn-primary" onclick="location.href='${pageContext.request.contextPath}/'">홈으로</button>
             <button class="btn btn-primary" onclick="location.href='${pageContext.request.contextPath}/member/pwdFind'">비밀번호 재설정</button>

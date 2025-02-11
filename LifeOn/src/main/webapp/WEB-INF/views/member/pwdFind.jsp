@@ -77,14 +77,6 @@
         background: transparent;
         outline: none;
     }
-    .btn-check {
-        padding: 10px 15px;
-        border: none;
-        background: #007bff;
-        color: white;
-        border-radius: 4px;
-        cursor: pointer;
-    }
     .btn-code {
         width: 100%;
         padding: 12px;
@@ -129,7 +121,7 @@
         <p>회원정보에 등록한 휴대전화를 입력해주세요.</p>
         <div class="input-wow">
             <input type="text" placeholder="휴대전화번호" />
-            <button class="btn-check">확인</button>
+            <button class="btn-code">확인</button>
         </div>
         
         <button class="btn-code">인증코드 받기</button>

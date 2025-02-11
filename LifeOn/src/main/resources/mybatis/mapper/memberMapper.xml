@@ -62,4 +62,12 @@
 	</delete>
 	
 	
+	<select id="findByTel" parameterType="String" resultType="com.sp.app.model.Member">
+		SELECT m.num, id, pwd, nickname, tel1, tel2, tel3
+		FROM member m
+		LEFT OUTER JOIN member_detail md ON m.num = md.num 
+		WHERE tel1 = #{tel1} AND tel2 = #{tel2} AND tel3 = #{tel3}
+	</select>
+	
+	
 </mapper>

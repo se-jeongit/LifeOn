@@ -1,12 +1,18 @@
 package com.sp.app.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Service
 public class CoolSmsService {
-	//private final DefaultMessageService messageService; api설정해야 사용가능
+	private final DefaultMessageService messageService; 
 	
-	/*@Value("${coolsms.sender}")
+	@Value("${coolsms.sender}")
 	private String senderNumber;
 	
 	public CoolSmsService(@Value("${coolsms.api-key}") String apiKey,
@@ -26,5 +32,5 @@ public class CoolSmsService {
 			// 예외 처리 로직
 		}	
 	}
-	*/
+	
 }

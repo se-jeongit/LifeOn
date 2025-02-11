@@ -3,6 +3,8 @@ package com.sp.app.service;
 import java.util.Map;
 import java.util.Objects;
 
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +16,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor //생성자 만든거당
 @Slf4j
 public class MemberServiceImpl implements MemberService{
 	private final MemberMapper mapper;
+	private final CoolSmsService coolSmsService;
 	
 	@Override
 	public Member loginMember(String id) {
@@ -118,6 +121,25 @@ public class MemberServiceImpl implements MemberService{
 			log.info("deleteMember : ", e);
 			throw e;
 		}
+	}
+
+
+	@Override
+	public Member findByTel(@Param("tel1") String tel1, @Param("tel2") String tel2, @Param("tel3") String tel3) {
+		
+		Member dto = null;	
+		
+		try {
+
+			dto = Objects.requireNonNull(mapper.findByTel(tel1, tel2, tel3));			
+			
+		} catch (NullPointerException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
+		} catch (Exception e) {
+			log.info("findByTel : ", e);
+		}
+		
+		return dto;
 	}
 
 

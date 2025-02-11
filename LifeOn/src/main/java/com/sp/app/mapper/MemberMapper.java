@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.sp.app.model.Member;
 
@@ -28,5 +29,8 @@ public interface MemberMapper {
 	
 	public void deleteMember(Map<String, Object> map) throws SQLException;
 	public void deleteMemberDetail(Map<String, Object> map) throws SQLException;
+	
+	public Member findByTel( @Param("tel1") String tel1, @Param("tel2") String tel2, @Param("tel3") String tel3 ); //매개변수 2개 이상일 경우에는 @Param 붙여야됨
+	
 
 }

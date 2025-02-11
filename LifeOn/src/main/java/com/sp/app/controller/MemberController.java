@@ -1,8 +1,10 @@
 package com.sp.app.controller;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sp.app.model.Member;
 import com.sp.app.model.SessionInfo;
+import com.sp.app.service.CoolSmsService;
 import com.sp.app.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/member/*")
 public class MemberController {
 	private final MemberService service;
+	private final CoolSmsService coolSmsService;
+	
 	
 	/* 초기 로그인은 모달로 처리할거다.
 	@GetMapping("login")
@@ -270,9 +275,99 @@ public class MemberController {
 	
 	//아이디찾기
 	@GetMapping("idFind")
-	public String idFind() {
+	public String idFindForm() {
 		return "member/idFind";
 	}
+	
+	@ResponseBody
+	@PostMapping("idFind")
+	public Map<String, ?> idFindSubmit(@RequestParam(name= "tel") String tel) throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		String p = "true";
+		try {
+			String tel1 = tel.substring(0, 3);
+	        String tel2 = tel.substring(3, 7);
+	        String tel3 = tel.substring(7);
+			Member dto = service.findByTel(tel1, tel2, tel3);
+			if(dto == null) {
+				p = "false";
+			}
+		} catch (Exception e) {
+		}
+		
+		model.put("telchecked", p);
+		
+		return model;
+	}
+	
+	//인증번호 전송 api
+	@ResponseBody
+	@PostMapping("sendAuthCode")
+	public Map<String, Object> sendAuthCode(@RequestParam(value ="tel") String tel, HttpSession session){
+		Map<String, Object> model = new HashMap<>();
+		
+		Random random = new Random();
+		String authCode  = String.format("%06d", random.nextInt(1000000));
+		
+		try {
+			session.setAttribute("tel", tel);
+
+			
+			String message = "[LifeOn]인증번호 : " + authCode  + "(5분 내 입력)";
+			coolSmsService.sendSms(tel, message);
+			
+			session.setAttribute("authCode", authCode );
+			session.setAttribute("authExpireTime", LocalDateTime.now().plusMinutes(5));
+			
+			model.put("success", true);
+			model.put("message", "인증번호가 전송되었습니다");
+			
+		} catch (Exception e) {
+			model.put("success", false);
+			model.put("message", "인증번호 전송에 실패했습니다.");
+		}
+		
+		return model;
+	}
+	
+	@ResponseBody
+	@PostMapping("verifyAuthCode")
+	public String verifyAuthCode(@RequestParam(value = "authCode") String authCode, HttpSession session, RedirectAttributes redirectAttributes) {
+	    String storedAuthCode = (String) session.getAttribute("authCode");
+	    LocalDateTime expireTime = (LocalDateTime) session.getAttribute("authExpireTime");
+
+	    // 세션에서 전화번호 가져오기 (번호 확인 시 저장)
+	    String tel1 = (String) session.getAttribute("tel1");
+	    String tel2 = (String) session.getAttribute("tel2");
+	    String tel3 = (String) session.getAttribute("tel3");
+
+	    if (storedAuthCode == null || expireTime == null || LocalDateTime.now().isAfter(expireTime)) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "인증번호가 만료되었습니다.");
+	        return "redirect:/member/idFind"; // 인증 실패 시 다시 입력 페이지로 이동
+	    } else if (!storedAuthCode.equals(authCode)) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "인증번호가 올바르지 않습니다.");
+	        return "redirect:/member/idFind"; // 인증 실패 시 다시 입력 페이지로 이동
+	    } else {
+	        session.removeAttribute("authCode"); // 인증 후 세션에서 인증번호 삭제
+	        session.removeAttribute("authExpireTime");
+
+	        // ✅ 기존 findByTel() 메서드를 활용하여 ID 조회
+	        Member user = service.findByTel(tel1, tel2, tel3);
+
+	        if (user == null) {
+	            redirectAttributes.addFlashAttribute("errorMessage", "등록된 계정을 찾을 수 없습니다.");
+	            return "redirect:/member/idFind";
+	        }
+
+	        // ✅ 사용자 ID를 `redirectAttributes`에 저장하여 `idFindComplete.jsp`에서 사용
+	        redirectAttributes.addFlashAttribute("id", user.getId());
+	        return "redirect:/member/idFindComplete"; // 인증 성공 후 ID 표시 페이지로 이동
+	    }
+	}
+	
+	
+	
+	
 	
 	//비밀번호찾기
 	@GetMapping("pwdFind")
