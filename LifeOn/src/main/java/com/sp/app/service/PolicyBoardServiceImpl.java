@@ -78,5 +78,29 @@ public class PolicyBoardServiceImpl implements PolicyBoardService{
 		}
 		return result;
 	}
+
+	@Override
+	public void updateHitCount(long num) throws Exception {
+		try {
+			mapper.updateHitCount(num);
+			
+		} catch (Exception e) {
+			log.info("updateHitCount : ", e);
+			throw e;
+			
+		}
+		
+	}
+
+	@Override
+	public PolicyBoard findById(long num) throws Exception {
+		PolicyBoard dto = null;
+		try {
+			dto = mapper.findById(num);
+		} catch (Exception e) {
+			log.info("findById: ", e);
+		}
+		return dto;
+	}
 	
 }

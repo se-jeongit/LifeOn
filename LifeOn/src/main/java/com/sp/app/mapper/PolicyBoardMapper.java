@@ -15,4 +15,8 @@ public interface PolicyBoardMapper {
 	public void insertPolicyFile(PolicyBoardFile fdto);
 	public int dataCount(Map<String, Object> map);
 	public List<PolicyBoard> listPolicy(Map<String, Object> map);
+	
+	
+	public void updateHitCount(long num) throws SQLException;
+	public PolicyBoard findById(Long num);
 }

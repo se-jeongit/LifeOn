@@ -67,4 +67,20 @@
 		ORDER BY b.psnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
-</mapper>
+	
+	<update id="updateHitCount" parameterType="Long">
+		UPDATE policy_board SET hitcount = hitcount + 1
+		WHERE psnum=#{num}
+	</update>
+	
+	<select id="findById" parameterType="Long" resultType="com.sp.app.model.PolicyBoard">
+		SELECT b.psnum, b.num, b.subject, b.content, TO_CHAR(b.reg_date, 'YYYY-MM-DD') AS reg_date,
+		b.hitcount, m.nickname, f.ssfname, f.cpfname
+		FROM policy_board b
+		JOIN member m ON b.num = m.num
+		LEFT JOIN policy_board_file f ON b.psnum = f.psnum
+		WHERE b.psnum = #{num}
+	</select>
+	
+	
+	</mapper>

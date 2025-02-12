@@ -24,4 +24,5 @@ public class PolicyBoard {
 	
 	private String nickname;
 	private String cpfname;
+	private String ssfname;
 }

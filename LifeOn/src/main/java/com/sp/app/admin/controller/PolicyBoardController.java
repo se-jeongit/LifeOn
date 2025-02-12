@@ -5,10 +5,12 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -141,9 +143,43 @@ public class PolicyBoardController {
 		return "redirect:/policy/list";
 	}
 	
-	@GetMapping("article")
-	public String article() throws Exception{
-		return "policy/article";
+	@GetMapping("article/{psnum}")
+	public String article(
+			@PathVariable("psnum") long num,
+			@RequestParam(name = "page") String page,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
+			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+			Model model,
+			HttpSession session) throws Exception{
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			if(! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd="
+						+ URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			service.updateHitCount(num);
+			
+			PolicyBoard dto = Objects.requireNonNull(service.findById(num));
+			
+			model.addAttribute("dto", dto);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("schType", schType);
+			map.put("kwd", kwd);
+			map.put("num", num);
+			
+		
+			return "policy/article";
+			
+		} catch (Exception e) {
+			log.info("article : ", e);
+		}
+		
+		return "redirect:/policy/list?" + query;
 	}
 	
 	@GetMapping("listReply")

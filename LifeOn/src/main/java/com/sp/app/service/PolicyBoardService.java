@@ -9,4 +9,8 @@ public interface PolicyBoardService {
 	public void insertPolicy(PolicyBoard dto, String uploadPath) throws Exception;
 	public List<PolicyBoard> listPolicy(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
+	
+	public void updateHitCount(long num) throws Exception;
+	
+	public PolicyBoard findById(long num) throws Exception;
 }
