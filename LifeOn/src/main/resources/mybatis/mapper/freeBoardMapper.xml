@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sp.app.lounge.mapper.FreeBoardMapper">
+	<insert id="insertBoard" parameterType="com.sp.app.lounge.model.FreeBoard">
+		INSERT INTO HYBRID_BOARD (psnum, num, subject, content, reg_date, blind, hitCount, ipaddr, bdtype)
+			VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, SYSDATE, 0, 0, #{ipaddr}, #{bdtype})
+	</insert>
+</mapper>
