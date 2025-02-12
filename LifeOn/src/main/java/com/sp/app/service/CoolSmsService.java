@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Service
@@ -27,8 +28,10 @@ public class CoolSmsService {
 		message.setText(text);
 		
 		try {
-			this.messageService.sendOne(new SingleMessageSendingRequest(message));
+			SingleMessageSentResponse response =  this.messageService.sendOne(new SingleMessageSendingRequest(message));
+			System.out.println("CoolSMS 응답: " + response);
 		} catch (Exception e) {
+			System.out.println("CoolSMS 전송 실패: " + e.getMessage());
 			// 예외 처리 로직
 		}	
 	}
