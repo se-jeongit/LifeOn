@@ -301,6 +301,7 @@ public class MemberController {
 		return model;
 	}
 	
+	
 	//인증번호 전송 api
 	@ResponseBody
 	@PostMapping("sendAuthCode")
@@ -334,9 +335,9 @@ public class MemberController {
 		return model;
 	}
 	
-	//인증번호 확인
-	@PostMapping("authCodeCheck")
-	public String authCodeCheck(@RequestParam("authCode") String inputCode, 
+	//인증번호 확인(아이디찾기)
+	@PostMapping("authCodeCheckId")
+	public String authCodeCheckId(@RequestParam("authCode") String inputCode, 
 			HttpSession session, 
 			RedirectAttributes redirectAttributes) {
 	    
@@ -369,19 +370,56 @@ public class MemberController {
 	    redirectAttributes.addFlashAttribute("message", "인증번호가 틀렸습니다. 처음부터 다시하세요");
 	    return "redirect:/member/idFind";
 	}
+		
+	//비밀번호찾기
+	@GetMapping("pwdFind")
+	public String pwdFind() {
+		return "member/pwdFind";
+	}
+	
+	//비밀번호 찾기 (아이디랑 번호 다 비교해봐야됨) -> 아이디 찾고 그 아이디의 번호랑 입력받은 번호가 같으면 같은사람!!
+	@ResponseBody
+	@PostMapping("pwdFind")
+	public Map<String, ?> pwdFindSubmit(@RequestParam(name = "id") String id,
+			@RequestParam(name = "tel") String tel ) throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		
+		String p = "false";
+		try {
+			Member dto = service.findById(id);
+			if(dto == null) {
+				p = "fuck"; //일치하는 아이디 없을때 처리할 로직
+			}
+			String tel1 = tel.substring(0,3);
+			String tel2 = tel.substring(3,7);
+			String tel3 = tel.substring(7);
+			
+			if(dto.getTel1().equals(tel1) && dto.getTel2().equals(tel2) && dto.getTel3().equals(tel3)) {
+				p = "true";
+			}
+			
+		} catch (Exception e) {
+		}
+		
+		model.put("checking", p);
+		
+		return model;
+	}
+	
+	//인증번호 확인(비밀번호찾기)
+	@PostMapping("authCodeCheckPwd")
+	public String authCodeCheckPwd(@RequestParam("authCode") String inputCode, 
+			HttpSession session, 
+			RedirectAttributes redirectAttributes) {
+		
+		return "";
+				
+	}
 	
 	//아이디찾기성공
 	@GetMapping("idFindComplete")
 	public String idFindComplete() {
 		return "member/idFindComplete";
-	}
-	
-	
-	
-	//비밀번호찾기
-	@GetMapping("pwdFind")
-	public String pwdFind() {
-		return "member/pwdFind";
 	}
 	
 	

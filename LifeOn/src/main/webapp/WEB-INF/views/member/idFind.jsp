@@ -241,7 +241,7 @@ function codeCheck() {
 	
 	}
 	
-    f.action = '${pageContext.request.contextPath}/member/authCodeCheck';
+    f.action = '${pageContext.request.contextPath}/member/authCodeCheckId';
     f.submit();
 }
 
@@ -268,7 +268,8 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
         
 	    <p>회원정보에 등록한 휴대전화를 입력해주세요.</p>
-	    <p>예) 01043214321와 같은 형식으로 입력하세요 </p>
+	    <p>예) 01043214321와 같은 형식으로 입력하세요</p>
+	    
 	    <c:if test="${not empty message}">
 	    	<p style="color: red; font-weight: bold;">${message}</p>
 	    </c:if> 
