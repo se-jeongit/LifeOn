@@ -35,14 +35,11 @@
 .text-wrap {
 	display: inline-flex;
 	max-width: 380px;
+	flex : 1;
 	/* 플렉스아이템이 자신의 컨테이너가 차지하는 공간을 맞추기 위해 크기를 키우거나 줄이는 방법 지정 */
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-.text-wrap > a {
-	flex : 1;
 }
 
 }
