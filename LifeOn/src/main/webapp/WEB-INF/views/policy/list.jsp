@@ -32,10 +32,16 @@
 	margin: auto; /* 가운데 정렬 */
 }
 
+.board-list-footer {
+	width: 80%;
+	max-width: 900px; /* 최대 크기 설정 (예: 900px) */
+	margin: auto;
+	margin-top: 40px; /* 가운데 정렬 */
+}
+
 .text-wrap {
 	display: inline-flex;
 	max-width: 380px;
-	flex : 1;
 	/* 플렉스아이템이 자신의 컨테이너가 차지하는 공간을 맞추기 위해 크기를 키우거나 줄이는 방법 지정 */
 	white-space: nowrap;
 	overflow: hidden;
