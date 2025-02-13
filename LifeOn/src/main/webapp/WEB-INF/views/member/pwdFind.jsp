@@ -161,16 +161,18 @@ function telOk(){
 	//AJAX:POST-JSON
 	$.post(url, {id:id, tel:tel}, function(data){
 		let checking = data.checking;
-		
+		let num = data.num;
 		if(checking === 'true'){
 			let str = '<span style="color:blue; font-weight: bold;">입력한 정보 확인 완료 되었습니다.</span>';
 			$('.wrap-tell').find('.help-block').html(str);
 			$('#telValid').val('true');
+			$('#member-num').val(num);
             $('#getAuthCodeBtn').removeAttr('disabled');
 		} else{
 			let str = '<span style="color:red; font-weight: bold;">일치하는 정보가 없습니다.</span>';
 			$('.wrap-tell').find('.help-block').html(str);
 			$('#telValid').val('false');
+			$('#member-num').val('0');
             $('#getAuthCodeBtn').prop('disabled', true)
 		}
 		
@@ -250,6 +252,9 @@ function codeCheck() {
             <button class="active" onclick="location.href='${pageContext.request.contextPath}/member/pwdFind'">비밀번호재설정</button>
         </div>
         
+       	<c:if test="${not empty message}">
+	    	<p style="color: red; font-weight: bold;">${message}</p>
+	    </c:if> 
         <form name="telForm" method="post">
 	        <p>아이디를 입력해주세요.</p>
 	        <div class="input-wow">
@@ -258,7 +263,9 @@ function codeCheck() {
 	        <p>회원정보에 등록한 휴대전화를 입력해주세요.</p>
 	        <div class="input-wow">
 	            <input type="text" name="tel" id="tel" placeholder="휴대전화번호" />
-	            <button type="button" class="btn-code" onclick="telOk();">확인</button>
+	            <button type="button" class="btn-code" onclick="telOk();">확인</button>   	
+        		<input type="hidden" name="num" id="member-num" value="0">
+	        
 	        </div>
 	        <div>
 		    	<small class="form-control-plaintext help-block"></small>

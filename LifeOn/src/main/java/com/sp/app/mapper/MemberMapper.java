@@ -17,7 +17,7 @@ public interface MemberMapper {
 	public void insertMember(Member dto) throws SQLException;
 	public void insertMemberDetail(Member dto) throws SQLException;
 	
-	//public void updateMemberEnabled(Map<String, Object> map) throws SQLException;
+	//public void updateMemberEnabled(Map<String, Object> map) throws SQLException; 시큐리티 안써서 필요없을듯.
 	
 	//public void updateMemberGrade(Map<String, Object> map) throws SQLException;
 	
@@ -32,5 +32,5 @@ public interface MemberMapper {
 	
 	public Member findByTel( @Param("tel1") String tel1, @Param("tel2") String tel2, @Param("tel3") String tel3 ); //매개변수 2개 이상일 경우에는 @Param 붙여야됨
 	
-
+	
 }

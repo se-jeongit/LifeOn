@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberServiceImpl implements MemberService{
 	private final MemberMapper mapper;
-	private final CoolSmsService coolSmsService;
 	
 	@Override
 	public Member loginMember(String id) {
@@ -111,6 +109,19 @@ public class MemberServiceImpl implements MemberService{
 		
 	}
 	
+	
+	@Override
+	public void updateMemberTel(Member dto) throws Exception {
+		try {
+			mapper.updateMember(dto);
+		} catch (Exception e) {
+			log.info("updateMemberTel : ", e);
+			throw e;
+		}
+		
+	}
+	
+	
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
 	@Override
 	public void deleteMember(Map<String, Object> map) throws Exception {
@@ -141,6 +152,9 @@ public class MemberServiceImpl implements MemberService{
 		
 		return dto;
 	}
+
+
+
 
 
 

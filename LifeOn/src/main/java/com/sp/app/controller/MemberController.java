@@ -274,33 +274,6 @@ public class MemberController {
 	}
 	
 	
-	//아이디찾기
-	@GetMapping("idFind")
-	public String idFindForm() {
-		return "member/idFind";
-	}
-	
-	@ResponseBody
-	@PostMapping("idFind")
-	public Map<String, ?> idFindSubmit(@RequestParam(name= "tel") String tel) throws Exception {
-		Map<String, Object> model = new HashMap<>();
-		String p = "false";
-		try {
-			String tel1 = tel.substring(0, 3);
-	        String tel2 = tel.substring(3, 7);
-	        String tel3 = tel.substring(7);
-			Member dto = service.findByTel(tel1, tel2, tel3);
-			if(dto != null) {
-				p = "true";
-			}
-		} catch (Exception e) {
-		}
-		
-		model.put("telchecked", p);
-		
-		return model;
-	}
-	
 	
 	//인증번호 전송 api
 	@ResponseBody
@@ -316,10 +289,11 @@ public class MemberController {
 			session.setAttribute("authCode", authCode );
 			LocalDateTime expireTime = LocalDateTime.now().plusMinutes(5);
 	        session.setAttribute("authExpireTime", expireTime);
+	        
 	        //자바스크립트에서 인식가능하게 utc 문자열?
 	        String formattedExpireTime = expireTime.atZone(ZoneId.systemDefault()).toInstant().toString(); 
 	        
-			String message = "[LifeOn]인증번호 : " + authCode  + "(5분 내 입력)";
+			String message = "[LifeOn]인증번호 : " + authCode;
 			coolSmsService.sendSms(tel, message);
 			
 			
@@ -331,6 +305,36 @@ public class MemberController {
 			model.put("success", false);
 			model.put("message", "인증번호 전송에 실패했습니다.");
 		}
+		
+		return model;
+	}
+
+	
+	
+	//아이디찾기
+	@GetMapping("idFind")
+	public String idFindForm() {
+		return "member/idFind";
+	}
+	
+	//아이디찾기 (휴대폰 번호 비교)
+	@ResponseBody
+	@PostMapping("idFind")
+	public Map<String, ?> idFindSubmit(@RequestParam(name= "tel") String tel) throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		String p = "false";
+		try {
+			String tel1 = tel.substring(0, 3);
+			String tel2 = tel.substring(3, 7);
+			String tel3 = tel.substring(7);
+			Member dto = service.findByTel(tel1, tel2, tel3);
+			if(dto != null) {
+				p = "true";
+			}
+		} catch (Exception e) {
+		}
+		
+		model.put("telchecked", p);
 		
 		return model;
 	}
@@ -370,7 +374,17 @@ public class MemberController {
 	    redirectAttributes.addFlashAttribute("message", "인증번호가 틀렸습니다. 처음부터 다시하세요");
 	    return "redirect:/member/idFind";
 	}
-		
+
+	//아이디찾기성공
+	@GetMapping("idFindComplete")
+	public String idFindComplete() {
+		return "member/idFindComplete";
+	}
+	
+	
+	
+	
+	
 	//비밀번호찾기
 	@GetMapping("pwdFind")
 	public String pwdFind() {
@@ -385,6 +399,7 @@ public class MemberController {
 		Map<String, Object> model = new HashMap<>();
 		
 		String p = "false";
+		long num = 0;
 		try {
 			Member dto = service.findById(id);
 			if(dto == null) {
@@ -396,38 +411,59 @@ public class MemberController {
 			
 			if(dto.getTel1().equals(tel1) && dto.getTel2().equals(tel2) && dto.getTel3().equals(tel3)) {
 				p = "true";
+				num = dto.getNum();
 			}
 			
 		} catch (Exception e) {
 		}
 		
 		model.put("checking", p);
-		
+		model.put("num", num); //나중에 비밀번호 재설정시 필요
 		return model;
 	}
-	
-	//인증번호 확인(비밀번호찾기)
+
+	//인증번호 확인(비밀번호재설정)
 	@PostMapping("authCodeCheckPwd")
-	public String authCodeCheckPwd(@RequestParam("authCode") String inputCode, 
-			HttpSession session, 
+	public String authCodeCheckPwd(@RequestParam(name = "authCode") String inputCode,
+			@RequestParam(name = "num") long num,
+			HttpSession session,
+			Model model,
 			RedirectAttributes redirectAttributes) {
 		
-		return "";
-				
-	}
-	
-	//아이디찾기성공
-	@GetMapping("idFindComplete")
-	public String idFindComplete() {
-		return "member/idFindComplete";
+		String code = (String) session.getAttribute("authCode");
+		LocalDateTime expireTime = (LocalDateTime) session.getAttribute("authExpireTime");
+		
+		if(code == null || expireTime == null || LocalDateTime.now().isAfter(expireTime)) {
+			redirectAttributes.addFlashAttribute("message","인증번호가 만료되었습니다. 다시 요청해주세요");
+			return "redirect:/member/pwdFind";
+		}
+		
+		//인증번호 검증(맞으면 pwdSet으로)
+		if(code.equals(inputCode)) {
+			model.addAttribute("num", num); 
+			return "member/pwdSet";
+		}
+		
+		redirectAttributes.addFlashAttribute("message", "인증번호가 틀렸습니다. 처음부터 다시하세요");
+		return "redirect:/member/pwdFind";
+		
 	}
 	
 	
 	//비밀번호재설정
-	@GetMapping("pwdSet")
-	public String pwdSet() {
-		return "member/pwdSet";
+	@PostMapping("pwdSet")
+	public String pwdSet(Member dto) {
+		
+		try {
+			service.updateMemberTel(dto);
+		} catch (Exception e) {
+		}
+		
+		return "member/pwdSetComplete";
 	}
 	
-	
+	@GetMapping("pwdSetComplete")
+	public String aa() {
+		return "member/pwdSetComplete";
+	}
 }
