@@ -2,8 +2,63 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sp.app.lounge.mapper.FreeBoardMapper">
+
 	<insert id="insertBoard" parameterType="com.sp.app.lounge.model.FreeBoard">
 		INSERT INTO HYBRID_BOARD (psnum, num, subject, content, reg_date, blind, hitCount, ipaddr, bdtype)
 			VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, SYSDATE, 0, 0, #{ipaddr}, #{bdtype})
 	</insert>
+	
+	<sql id="mySql">
+		<choose>
+			<when test="schType == 'all'">
+				(INSTR(subject, #{kwd}) &gt; 0
+			    	OR DBMS_LOB.INSTR(content, #{kwd}) &gt; 0 )
+			</when>
+			<when test="schType == 'reg_date'">
+				(TO_CHAR(reg_date, 'YYYY-MM-DD') = #{kwd}
+			    	OR TO_CHAR(reg_date, 'YYYYMMDD') = #{kwd})
+			</when>
+			<when test="schType == 'content'">
+				DBMS_LOB.INSTR(content, #{kwd}) &gt; 0
+			</when>
+			<otherwise>
+				INSTR(${schType}, #{kwd}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM HYBRID_BOARD hb
+		JOIN MEMBER m ON hb.num = m.num
+		<where>
+			<if test="kwd != null and kwd != '' ">
+				<include refid="mySql"/>
+			</if>
+			AND blind = 0
+		</where>
+	</select>
+	
+	<!-- NVL(replyCount, 0) replyCount -->
+	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
+		SELECT hb.psnum, m.num, m.id, nickname, subject, content, TO_CHAR(hb.reg_date, 'yyyy-mm-dd') as reg_date, blind,
+			hitCount
+		FROM HYBRID_BOARD hb
+		JOIN MEMBER m ON hb.num = m.num
+		LEFT OUTER JOIN (
+			SELECT rpnum, COUNT(*) replyCount, ps_num
+			FROM HYBRID_BOARD_REPLY
+			<!-- WHERE blind = 0 -->
+			GROUP BY rpnum, ps_num
+		) c ON hb.psnum = c.ps_num
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="mySql"/>
+			</if>
+			AND blind = 0
+		</where>
+		ORDER BY psnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+	
 </mapper>

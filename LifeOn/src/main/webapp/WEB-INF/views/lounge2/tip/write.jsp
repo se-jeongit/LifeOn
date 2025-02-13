@@ -30,7 +30,7 @@ function check() {
         return false;
     }
 
-    f.action = '${pageContext.request.contextPath}/tip/${mode}';
+    f.action = '${pageContext.request.contextPath}/lounge2/tip/${mode}';
     
     return true;
 }
@@ -109,7 +109,7 @@ nhn.husky.EZCreator.createInIFrame({
 	fCreator: 'createSEditor2',
 	fOnAppLoad: function(){
 		// 로딩 완료 후
-		oEditors.getById['ir1'].setDefaultFont('돋움', 12);
+		oEditors.getById['ir1'].setDefaultFont('굴림', 12);
 	},
 });
 

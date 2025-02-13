@@ -30,65 +30,54 @@
 		<div class="body-content">
 			<aside class="sidenav">
 				<div class="leftBox">
+					<p>❤️최신순❤️</p>
+					<p>❤️조회순❤️</p>
+					<p>❤️즐겨찾기순❤️</p>
 				</div>
 			</aside>
 			
 			<div class="main_content">
 				<!-- 상단메뉴 -->
-					<div class="main_menu">
-						<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px;">
-						   	<p style="margin: 0;">총 게시글 1개 (1 / 1 페이지)</p>
-					   	</div>
-						
-						<div style="display: flex; align-items: center;">
-							<div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
-								<!-- 검색옵션 -->
-							    <select class="input-group selectSearch">
-									<option value="all" selected>전체</option>
-									<option value="subjcet" >제목</option>
-									<option value="content" >내용</option>
-									<option value="nickname" >작성자</option>
-									<option value="reg_date" >등록일</option>
-							    </select>
-						    
-								<!-- 검색상자 -->
-								<input type="search" class="input-group searchBox">
-								
-								<!-- 검색버튼 -->
-							   	<button class="input-group btn mybtn">검색</button>
-							   	<button class="btn" onclick="location.href='<c:url value='tip/write'/>'">글쓰기</button>
-				   			</div>
-						</div>
+				<div class="main_menu">
+					<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px;">
+					   	<p style="margin: 0;">총 게시글 ${dataCount}개 (${page} / ${total_page} 페이지)</p>
+				   	</div>
+					
+					<div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
+						<button class="btn" onclick="location.href='<c:url value='tip/write'/>'">글쓰기</button>
 					</div>
+				</div>
 				
-					<!-- 글리스트 -->
-					<div class="tip_list">
-				  		<div class="tip_container" onclick="location.href='<c:url value='${articleUrl}/${dto.num}?${query}'/>'">
-							<h4 class="tip_subject">
-							 	${dto.subject}
-							</h4>
-						        
-					        <p class="tip_content">
-								${dto.content}
-					        </p>
-						        
-							<div class='tip_info'>
-								<div>
-									<span class='tip_userName'>관리자</span>
-									<span>&nbsp;·&nbsp;</span>
-									<span>19시간 전</span>
-								</div>
-								<div>
-									<i class="tip_icon bi bi-bookmark"></i>
-									<span>1&nbsp;&nbsp;</span>
-									<i class="tip_icon bi bi-eye"></i>
-									<span>1&nbsp;&nbsp;</span>
-									<i class="tip_icon bi bi-chat-dots"></i>
-									<span>1&nbsp;&nbsp;</span>
-								</div>
+				<!-- 글리스트 -->
+				<c:forEach var="dto" items="${list}" varStatus="status">
+				<div class="tip_list">
+			  		<div class="tip_container" onclick="location.href='<c:url value='${articleUrl}/${dto.num}?${query}'/>'">
+						<h4 class="tip_subject">
+						 	${dto.subject}
+						</h4>
+					        
+				        <div class="tip_content">
+							${dto.content}
+				        </div>
+					        
+						<div class='tip_info'>
+							<div>
+								<span class='tip_userName'>${dto.nickname}</span>
+								<span>&nbsp;·&nbsp;</span>
+								<span>${dto.reg_date}</span>
+							</div>
+							<div>
+								<i class="tip_icon bi bi-bookmark"></i>
+								<span>${boardLikeCount}&nbsp;&nbsp;</span>
+								<i class="tip_icon bi bi-eye"></i>
+								<span>${hitCount}&nbsp;&nbsp;</span>
+								<i class="tip_icon bi bi-chat-dots"></i>
+								<span>${replyCount}&nbsp;&nbsp;</span>
 							</div>
 						</div>
 					</div>
+				</div>
+				</c:forEach>
 
 				<div class="page-navigation">
 					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
@@ -98,10 +87,15 @@
 			
 			<aside class="sidebar">
 				<div class="rightBox">
-					<p>❤️최신순❤️</p>
-					<p>❤️조회순❤️</p>
-					<p>❤️즐겨찾기순❤️</p>
+					<p>❤️검색순위❤️</p>
 					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
+				</div>
+				<div style="display: flex; align-items: center; margin: 0 20px;">
+					<!-- 검색상자 -->
+					<input type="search" class="input-group searchBox">
+					
+					<!-- 검색버튼 -->
+				   	<button class="input-group btn mybtn">검색</button>
 				</div>
 			</aside>
 		</div>

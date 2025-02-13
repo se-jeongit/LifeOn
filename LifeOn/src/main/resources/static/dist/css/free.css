@@ -44,6 +44,7 @@
 	
 	display: flex;
 	justify-content: flex-end;
+	flex-wrap: wrap;
 }
 
 .main_content {
@@ -64,6 +65,8 @@
 	
 	display: flex;
 	justify-content: flex-start;
+	flex-wrap: wrap;
+	flex-direction: column;
 }
 
 .rightBox {
@@ -87,13 +90,6 @@
 	margin: 80px 20px 20px 20px;
 }
 
-.selectSearch {
-	width: 100px;
-	padding: 7px 10px;
-	border: 1px solid #e0e0e0;
- 	border-radius: 4px;
-}
-
 .searchBox {
 	width: 150px;
 	padding: 5px 10px;
@@ -101,7 +97,6 @@
 	border-right: none;
 	border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
-	margin-left: 3px;
 }
 
 .tip_list {
@@ -157,7 +152,7 @@
 }
 
 .mybtn {
-	width: 60px;
+	width: 50px;
 	border: 1px solid #e0e0e0;
 	border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -169,4 +164,38 @@
 	border: 1px solid #e0e0e0;
 	border-radius: 40px;
 	margin-right: 3px;
+}
+
+/* 페이징 */
+.page-navigation .pagination {
+    background-color: #FFF;
+}
+
+.page-navigation .pagination .page-item {
+    border: none;
+    margin: 2px;
+}
+
+.page-navigation .pagination .page-link {
+    border: none;
+    background-color: #FFF;
+    color: #222;
+}
+
+.page-navigation .pagination .page-item.active .page-link {
+	height: 10px;
+	border: 1px solid #222;
+	border-radius: 50px;
+    background-color: #006AFF;
+    color: #FFF;
+}
+
+.page-link:hover {
+    text-decoration: none;
+    border-radius: 50px;
+    background: #006AFF;
+}
+
+.page-navigation .pagination .page-link:focus {
+    box-shadow: none;
 }

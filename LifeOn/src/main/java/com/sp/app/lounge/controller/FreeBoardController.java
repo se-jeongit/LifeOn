@@ -56,7 +56,7 @@ public class FreeBoardController {
 			HttpServletRequest req) throws Exception {
 		
 		try {
-			int size = 10;
+			int size = 5;
 			int total_page = 0;
 			int dataCount = 0;
 			
@@ -121,12 +121,15 @@ public class FreeBoardController {
 	
 	@PostMapping("tip/write")
 	public String writeSubmit(FreeBoard dto,
-			HttpSession session) throws Exception {
+			HttpSession session,HttpServletRequest req) throws Exception {
 		
 		try {
 			SessionInfo info = (SessionInfo)session.getAttribute("member");
 			
-			dto.setId(info.getId());
+			dto.setNum(info.getNum());
+			dto.setNickname(info.getNickName());
+			dto.setIpaddr(req.getRemoteAddr());
+			dto.setBdtype("tip");
 			
 			service.insertBoard(dto, uploadPath);
 			
@@ -134,6 +137,6 @@ public class FreeBoardController {
 			log.info("writeSubmit : ", e);
 		}
 		
-		return "redirect:lounge2/tip/list";
+		return "redirect:/lounge2/tip";
 	}
 }
