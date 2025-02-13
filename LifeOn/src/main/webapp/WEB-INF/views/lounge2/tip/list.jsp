@@ -59,7 +59,7 @@
 				        <div class="tip_content">
 							${dto.content}
 				        </div>
-					        
+				        
 						<div class='tip_info'>
 							<div>
 								<span class='tip_userName'>${dto.nickname}</span>

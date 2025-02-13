@@ -76,9 +76,6 @@
 	border-radius: 8px;
 	border: 1px solid #e0e0e0;
 	margin: 80px 20px 20px 20px;
-	
-	position: sticky;
-    top: 150px;
 }
 
 .leftBox {
@@ -88,6 +85,9 @@
 	border-radius: 8px;
 	border: 1px solid #e0e0e0;
 	margin: 80px 20px 20px 20px;
+	
+	position: sticky;
+    top: 150px;
 }
 
 .searchBox {
@@ -183,8 +183,6 @@
 }
 
 .page-navigation .pagination .page-item.active .page-link {
-	height: 10px;
-	border: 1px solid #222;
 	border-radius: 50px;
     background-color: #006AFF;
     color: #FFF;
@@ -192,8 +190,6 @@
 
 .page-link:hover {
     text-decoration: none;
-    border-radius: 50px;
-    background: #006AFF;
 }
 
 .page-navigation .pagination .page-link:focus {

@@ -81,8 +81,8 @@ public class FreeBoardController {
 			
 			String cp = req.getContextPath();
 			String query = "page=" + current_page;
-			String listUrl = cp + "lounge2/tip/list";
-			String articleUrl = cp + "lounge2/tip/article";
+			String listUrl = cp + "tip";
+			String articleUrl = cp + "tip/article";
 			
 			if (! kwd.isBlank()) {
 				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
