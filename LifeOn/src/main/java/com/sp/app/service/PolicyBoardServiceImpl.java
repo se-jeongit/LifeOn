@@ -102,5 +102,80 @@ public class PolicyBoardServiceImpl implements PolicyBoardService{
 		}
 		return dto;
 	}
+
+	@Override
+	public PolicyBoard findByPrev(Map<String, Object> map) {
+		PolicyBoard dto = null;
+		
+		try {
+			dto = mapper.findByPrev(map);
+		} catch (Exception e) {
+			log.info("findByPrev : ", e);
+		}
+		return dto;
+	}
+
+	@Override
+	public PolicyBoard findByNext(Map<String, Object> map) {
+		PolicyBoard dto = null;
+		
+		try {
+			dto = mapper.findByNext(map);
+			
+		} catch (Exception e) {
+			log.info("findByNext : ", e);
+		}
+		return dto;
+	}
+
+	@Override
+	public void deletePolicy(long num, String uploadPath, String Id, int grade) throws Exception {
+		try {
+			PolicyBoard dto = findById(num);
+			
+			if(dto == null) {
+				return;
+			}
+			
+			deleteUploadFile(uploadPath, dto.getSaveFilename());
+			
+			mapper.deletePolicy(num);
+		} catch (Exception e) {
+
+		}
+		
+	}
+
+	@Override
+	public boolean deleteUploadFile(String uploadPath, String filename) {
+		
+		return storageService.deleteFile(uploadPath, filename);
+	}
+	
+	@Transactional
+	@Override
+	public void updatePolicy(PolicyBoard dto, PolicyBoardFile dtos, String uploadPath) throws Exception {
+		try {
+			if(dto.getSelectFile() != null && ! dto.getSelectFile().isEmpty()) {
+				if(!dto.getSaveFilename().isBlank()) {
+					deleteUploadFile(uploadPath, dto.getSaveFilename());
+				}
+				
+				String savaFilename = storageService.uploadFileToServer(dto.getSelectFile(), uploadPath);
+				dto.setSaveFilename(savaFilename);
+				dto.setOriginalFilename(dto.getSelectFile().getOriginalFilename());
+
+				mapper.updatePolicyBoardFile(dtos);
+			}
+			
+			mapper.updatePolicyBoard(dto);
+			
+		} catch (Exception e) {
+			log.info("updatePolicy : ", e);
+			
+			throw e; 
+		}
+		
+	}
 	
 }

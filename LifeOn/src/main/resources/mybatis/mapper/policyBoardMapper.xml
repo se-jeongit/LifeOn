@@ -82,5 +82,45 @@
 		WHERE b.psnum = #{num}
 	</select>
 	
+	<select id="findByPrev" parameterType="map" resultType="com.sp.app.model.PolicyBoard">
+		SELECT psnum, subject
+		FROM policy_board
+		<where>
+			<if test="kwd !=null and kwd != '' ">
+				<include refid = "where-list"/>
+			</if>
+			AND (psnum &gt; #{num})
+		</where>
+		ORDER BY psnum ASC
+		FETCH FIRST 1 ROWS ONLY
+	</select>	
+	
+	<select id="findByNext" parameterType="map" resultType="com.sp.app.model.PolicyBoard">
+		SELECT psnum, subject
+		FROM policy_board
+		<where>
+			<if test="kwd !=null and kwd != ''" >
+				<include refid = "where-list"/>
+			</if>
+			AND (psnum &lt; #{num})
+		</where>
+		ORDER BY psnum ASC
+		FETCH FIRST 1 ROWS ONLY
+	</select>	
+	
+	<update id="updatePolicyBoard" parameterType="com.sp.app.model.PolicyBoard">
+		UPDATE policy_board SET subject=#{subject}, content=#{content}
+		WHERE psnum = #{num}
+	</update>
+	
+	<update id="updatePolicyBoardFile" parameterType="com.sp.app.model.PolicyBoard">
+		UPDATE policy_board_file SET ssfname=#{saveFilename, jdbcType=VARCHAR}, cpfname=#{originalfilename, jdbcType=VARCHAR}
+		WHERE fnum = #{num}
+	</update>
+	
+	<delete id="deletePolicy" parameterType="Long">
+		DELETE FROM policy_board
+		WHERE psnum=#{num}
+	</delete>
 	
 	</mapper>

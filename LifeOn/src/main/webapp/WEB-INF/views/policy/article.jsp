@@ -95,12 +95,18 @@
 							</tr>
 
 							<tr>
-								<td colspan="2">이전글 : <a href=""></a>
+								<td colspan="2">이전글 : 
+									<c:if test="${not empty prevDto}">
+										<a href="${pageContext.request.contextPath}/policy/article/${prevDto.psnum}?${query}">${prevDto.subject}</a>
+									</c:if>
 								</td>
 							</tr>
 
 							<tr>
-								<td colspan="2">다음글 : <a href=""></a>
+								<td colspan="2">다음글 :
+									<c:if test="${not empty nextDto}">
+									 	<a href="${pageContext.request.contextPath}/policy/article/${nextDto.psnum}?${query}">${nextDto.subject}</a>
+									</c:if>
 								</td>
 							</tr>
 						</tbody>
@@ -109,8 +115,8 @@
 					<table class="table table-borderless mb-2">
 						<tr>
 							<td width="50%">
-								<button type="button" class="btn">수정</button>
-								<button type="button" class="btn">삭제</button>
+								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/policy/update?psnum=${dto.psnum}&page=${page}';">수정</button>
+								<button type="button" class="btn" onclick="deleteOk();">삭제</button>
 							</td>
 							<td class="text-end">
 								<button type="button" class="btn"
@@ -147,7 +153,14 @@
 	</main>
 
 	<script type="text/javascript">
-		
+		function deleteOk() {
+			if(confirm('게시글을 삭제하시겠습니까?')) {
+				let qs = 'psnum=${dto.psnum}&${query}';
+				let url = '${pageContext.request.contextPath}/policy/delete?'
+						+ qs;
+				location.href = url;
+			}
+		}
 	</script>
 
 

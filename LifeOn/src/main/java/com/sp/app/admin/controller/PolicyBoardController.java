@@ -19,6 +19,7 @@ import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.model.PolicyBoard;
+import com.sp.app.model.PolicyBoardFile;
 import com.sp.app.model.SessionInfo;
 import com.sp.app.service.PolicyBoardService;
 
@@ -172,14 +173,111 @@ public class PolicyBoardController {
 			map.put("kwd", kwd);
 			map.put("num", num);
 			
-		
+			PolicyBoard prevDto = service.findByPrev(map);
+			PolicyBoard nextDto = service.findByNext(map);
+			
+			model.addAttribute("prevDto", prevDto);
+			model.addAttribute("nextDto", nextDto);
+			model.addAttribute("page", page);
+			model.addAttribute("query", query);
+			
 			return "policy/article";
 			
+		} catch (NullPointerException e) {
 		} catch (Exception e) {
 			log.info("article : ", e);
 		}
 		
 		return "redirect:/policy/list?" + query;
+	}
+	@GetMapping("deleteFile")
+	public String deleteFile(@RequestParam(name = "fnum") long num, 
+			@RequestParam(name="page") String page, 
+			HttpSession session) {
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			PolicyBoard dto = Objects.requireNonNull(service.findById(num));
+			
+			if(info.getNum() != dto.getPsnum()) {
+				return "redirect:/policy/list?page=" + page;
+			}
+			if(dto.getSaveFilename() != null) {
+				service.deleteUploadFile(uploadPath, dto.getSaveFilename());
+				
+				dto.setSaveFilename("");
+				dto.setOriginalFilename("");
+			}
+			return "redirect:/policy/list";
+		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("deleteFile : ", e);
+		}
+		return "redirect:/policy/list?page=" + page;
+	}
+	
+	@GetMapping("delete")
+	public String deletePolicy(@RequestParam(name="psnum") long num,
+			@RequestParam(name="schType", defaultValue = "all") String schType,
+			@RequestParam(name="kwd", defaultValue = "") String kwd,
+			@RequestParam(name="page") String page, 
+			HttpSession session) {
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd=URLDecoder.decode(kwd, "utf-8");
+			if(! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd="
+						+ URLEncoder.encode(kwd, "utf-8");
+			}
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			service.deletePolicy(num, uploadPath, info.getId(), info.getGrade());
+		} catch (Exception e) {
+
+		}
+		return "redirect:/policy/list?" + query;
+	}
+	
+	@GetMapping("update")
+	public String updateForm(
+			@RequestParam(name="psnum") long num,
+			@RequestParam(name="page") String page,
+			Model model,
+			HttpSession session) throws Exception {
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			PolicyBoard dto = Objects.requireNonNull(service.findById(num));
+			
+			if(info.getNum() != dto.getPsnum()) {
+				return "redirect:/policy/list?page=" + page;
+			}
+			
+			model.addAttribute("dto", dto);
+			model.addAttribute("page", page);
+			model.addAttribute("mode", "update");
+			
+			return "policy/write";
+			
+		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("updateForm : ", e);
+		}
+		return "redirect:/policy/list?page=" + page;
+		
+	}
+	
+	@PostMapping("update")
+	public String updateSubmit(PolicyBoard dto, PolicyBoardFile dtos,
+			@RequestParam(name="page") String page) {
+		
+		try {
+			service.updatePolicy(dto, dtos, uploadPath);
+		} catch (Exception e) {
+			log.info("updateSubmit:" , e);
+		}
+		
+		return "redirect:/policy/list?page=" + page;
 	}
 	
 	@GetMapping("listReply")

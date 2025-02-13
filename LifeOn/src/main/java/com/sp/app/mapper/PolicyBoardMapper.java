@@ -12,6 +12,11 @@ import com.sp.app.model.PolicyBoardFile;
 @Mapper
 public interface PolicyBoardMapper {
 	public void insertPolicy(PolicyBoard dto) throws SQLException;
+	public void updatePolicyBoard(PolicyBoard dto) throws SQLException;
+	public void updatePolicyBoardFile(PolicyBoardFile dto) throws SQLException;
+	
+	public void deletePolicy(long num) throws SQLException;
+	
 	public void insertPolicyFile(PolicyBoardFile fdto);
 	public int dataCount(Map<String, Object> map);
 	public List<PolicyBoard> listPolicy(Map<String, Object> map);
@@ -19,4 +24,6 @@ public interface PolicyBoardMapper {
 	
 	public void updateHitCount(long num) throws SQLException;
 	public PolicyBoard findById(Long num);
+	public PolicyBoard findByPrev(Map<String, Object> map);
+	public PolicyBoard findByNext(Map<String, Object> map);
 }
