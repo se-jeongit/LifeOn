@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sp.app.mapper.LoungeMapper">
+<mapper namespace="com.sp.app.lounge.mapper.PhotoBoardMapper">
 
 	<insert id="insertBoard" parameterType="com.sp.app.lounge.model.PhotoBoard">
-		INSERT INTO hybrid_board(psnum, num, subject, content, 
+		INSERT INTO hybrid_board(psnum, num, subject, content, bdtype 
 			ssfname, cpfname, hitCount, reg_date, blind)
-		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content},
+		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{content}
 			#{ssfname, jdbcType=VARCHAR}, 
 			#{cpfname, jdbcType=VARCHAR},
 			0, SYSDATE, 0)

@@ -6,10 +6,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LifeOn</title>
+<title>
+    <c:choose>
+        <c:when test="${mode == 'write'}">글 작성</c:when>
+        <c:otherwise>글 수정</c:otherwise>
+    </c:choose>
+</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/board.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/boot-board.css" type="text/css">
 
 <style type="text/css">
 .body-title{
@@ -41,12 +48,16 @@ td[scope="row"] {
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="container">
 		<div class="body-container">
-			<div class="body-title">
-				<h3><i class="bi bi-app"></i> 인테리어 </h3>
+		  <div class="body-title">
+			<i class="bi bi-app"></i> 
+			<c:choose>
+				<c:when test="${bdtype == 'room'}">인테리어</c:when> 
+				<c:when test="${bdtype == 'recipe'}">자취 레시피</c:when> 
+			</c:choose>
 			</div>
 			
 			<div class="body-main">
-				<form name="boardForm" method="post">
+				<form name="boardForm" method="post" enctype="multipart/form-data">
 					<table class="table mt-3 write-form">
 						<tr>
 							<td class="col-sm-2" scope="row">제 목</td>
@@ -58,14 +69,14 @@ td[scope="row"] {
 						<tr>
 							<td class="col-sm-2" scope="row"> 작성자명 </td>
 							<td>
-								<p class="form-control-plaintext"></p>
+								<p class="form-control-plaintext">${sessionScope.member.nickName}</p>
 							</td>
 						</tr>
 						
 						<tr>
 							<td class="col=sm-2" scope="row">내 용</td>
 							<td>
-								<textarea name="content" class="form-control"></textarea>
+								<textarea name="content" class="form-control">${dto.content}</textarea>
 							</td>
 						</tr>
 						
@@ -87,7 +98,7 @@ td[scope="row"] {
 						<tr>
 							<td class="text-center">
 								<button type="reset" class="btn">다시 입력</button>
-								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/room/list';"><i class="bi bi-x"></i>등록</button>
+								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/list';"><i class="bi bi-x"></i>등록</button>
 							</td>
 						</tr>
 					</table>
