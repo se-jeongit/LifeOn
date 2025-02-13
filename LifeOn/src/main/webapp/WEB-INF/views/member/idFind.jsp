@@ -195,25 +195,56 @@ function requestAuthCode() {
         if (data.success) {
             alert("인증번호가 발송되었습니다.");
             $('#authWrapper').slideDown(); // 인증 UI 표시
+            
+            startCountdown(data.expireTime);
         } else {
             alert(data.message);
         }
     }, 'json');
 }
 
-function verifyCode() {
-    let inputCode = $('#authCode').val();
-    let url = '${pageContext.request.contextPath}/member/verifyAuthCode';
+function startCountdown(expireTime) {
+    let expireDate = Date.parse(expireTime); 
+    let countdownElement = document.getElementById("countdown");
 
-    $.post(url, { authCode: inputCode }, function (data) {
-        if (data.success) {
-            alert("인증이 완료되었습니다.");
-            window.location.href = data.redirectUrl; // 인증 성공 시 페이지 이동
+
+    let interval = setInterval(function () {
+        let now = Number(new Date().getTime());
+        let timeRemaining = expireDate - now;
+
+        if (timeRemaining <= 0) {
+            clearInterval(interval);
+            countdownElement.innerText = "인증시간이 만료되었습니다.";
         } else {
-            alert(data.message);
+            let minutes = Math.floor(timeRemaining / 60000);
+            let seconds = Math.floor((timeRemaining % 60000) / 1000);
+
+            countdownElement.innerText = "남은 시간: " + minutes + "분 " + seconds + "초";
         }
-    }, 'json');
+    }, 1000);
 }
+
+
+
+
+
+
+
+function codeCheck() {
+	const f = document.telForm;
+	
+	let str = f.authCode.value;
+	if(!str){
+		alert("인증번호를 입력하세요!");
+        f.authCode.focus();
+        return;
+	
+	}
+	
+    f.action = '${pageContext.request.contextPath}/member/authCodeCheckId';
+    f.submit();
+}
+
 
 window.addEventListener('DOMContentLoaded', () => {
 	const dateELS = document.querySelectorAll('form input[type=date]');
@@ -230,39 +261,43 @@ window.addEventListener('DOMContentLoaded', () => {
 </header>
 	
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
-    <form name="telForm" method="post">
     <div class="find-wrapper wrap-tel" >
         <div class="tabs">
             <button class="active" onclick="location.href='${pageContext.request.contextPath}/member/idFind'">아이디찾기</button>
             <button onclick="location.href='${pageContext.request.contextPath}/member/pwdFind'">비밀번호재설정</button>
         </div>
         
-        <p>회원정보에 등록한 휴대전화를 입력해주세요.</p>
-        
-        <div class="input-wow">
-        	<input type="text" name="tel" id="tel" placeholder="휴대전화번호" />
-     	    <button type="button" class="btn-code" onclick="telOk();">확인</button>
-        </div>
-        <div>
-        	<small class="form-control-plaintext help-block"></small>
-        </div>
-        <button type="button" id="getAuthCodeBtn" class="btn-code" onclick="requestAuthCode();" disabled> 인증코드 받기 </button>
-        
-            <div class="auth-wrapper" id="authWrapper" style="display: none;">
-                <h3>휴대폰 인증하기</h3>
-                <div class="input-groupid">
-                    <input type="text" id="authCode" class="form-control" placeholder="인증번호 입력">
-                </div>
-                <button class="btn-code" onclick="verifyCode()">확인</button>
-            </div>
-        
-        
-        
+	    <p>회원정보에 등록한 휴대전화를 입력해주세요.</p>
+	    <p>예) 01043214321와 같은 형식으로 입력하세요</p>
+	    
+	    <c:if test="${not empty message}">
+	    	<p style="color: red; font-weight: bold;">${message}</p>
+	    </c:if> 
+	
+	    <form name="telForm" method="post">
+	        <div class="input-wow">
+	        	<input type="text" name="tel" id="tel" placeholder="휴대전화번호" />
+	     	    <button type="button" class="btn-code" onclick="telOk();">확인</button>
+	        </div>
+	        <div>
+	        	<small class="form-control-plaintext help-block"></small>
+	        </div>
+	        <button type="button" id="getAuthCodeBtn" class="btn-code" onclick="requestAuthCode();" disabled> 인증코드 받기 </button>
+	        
+	            <div class="auth-wrapper" id="authWrapper" style="display: none;">
+	                <h3>휴대폰 인증하기</h3>
+	                <div class="input-groupid">
+	                    <input type="text" name="authCode" id="authCode" class="form-control" placeholder="인증번호 입력">
+	                </div>
+	                <button type="button" class="btn-code" onclick="codeCheck();">확인</button>
+	            </div>
+	            <p id="countdown" style="color: red; font-weight: bold;"></p>
+			<input type="hidden" name="telValid" id="telValid" value="false">
+    	</form>
+            
         <p class="help-text">회원가입 시 입력한 정보가 기억나지 않는다면?</p>
 		<p class="help-text"><a href="#">고객센터 문의하기</a></p>
-		<input type="hidden" name="telValid" id="telValid" value="false">
     </div>
-    </form>
  
        
 </main>

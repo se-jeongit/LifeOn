@@ -15,7 +15,9 @@ public interface MemberService {
 	
 	public void updateMember(Member dto) throws Exception;
 	public void deleteMember(Map<String, Object> map) throws Exception;
-
+	
+	public void updateMemberTel(Member dto) throws Exception;
+	
 	public Member findByTel(String tel1, String tel2, String tel3);
 	
 }

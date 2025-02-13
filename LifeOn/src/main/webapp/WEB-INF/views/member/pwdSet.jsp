@@ -65,6 +65,31 @@
         background-color: #0056b3;
     }
 </style>
+
+<script type="text/javascript">
+function pwdOk(){
+	const f = document.pwdForm;
+	
+	let str = f.pwd.value;
+	if( !/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{8,15}$/i.test(str) ) { 
+		alert('패스워드를 다시 입력 하세요. ');
+		f.pwd.focus();
+		return;
+	}
+	
+	if( str !== f.pwd2.value){
+		alert('패스워드가 일치하지 않습니다.');
+		f.pwd.focus();
+		return;
+	}
+	
+	f.action = '${pageContext.request.contextPath}/member/pwdSet';
+	f.submit();
+	
+}
+</script>
+
+
 </head>
 <body>
 
@@ -82,20 +107,21 @@
                 <ul class="m-0 ps-3">
                     <li>8자 ~ 15자 길이로 만들어주세요.</li>
                     <li>하나 이상의 숫자나 특수문자가 포함되어야 합니다.</li>
-                    <li>3개 이상의 연속/ 동일한 문자, 숫자는 사용할 수 없습니다.</li>
                 </ul>
             </div>
 
-            <form>
+            <form name="pwdForm" method="post">
+            	<input type="hidden" name="num" value="${num}">
+      
                 <div class="mb-3">
-                    <label for="newPassword" class="form-label">비밀번호</label>
-                    <input type="password" class="form-control" id="newPassword" placeholder="비밀번호 입력">
+                    <label for="pwd" class="form-label">새 비밀번호</label>
+                    <input type="password" class="form-control" name="pwd" id="pwd" placeholder="비밀번호 입력">
                 </div>
                 <div class="mb-3">
-                    <label for="confirmPassword" class="form-label">비밀번호 확인</label>
-                    <input type="password" class="form-control" id="confirmPassword" placeholder="비밀번호 확인">
+                    <label for="pwd2" class="form-label">새 비밀번호 확인</label>
+                    <input type="password" class="form-control" name="pwd2" id="pwd2" placeholder="비밀번호 확인">
                 </div>
-                <button type="submit" class="btn btn-primary w-100">변경하기</button>
+                <button type="button" class="btn btn-primary w-100" onclick="pwdOk();">변경하기</button>
             </form>
         </div>
     </div>
