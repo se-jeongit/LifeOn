@@ -47,8 +47,9 @@ public class MemberController {
 	@PostMapping("login")
 	public String loginSubmit(@RequestParam(name = "id") String id,
 			@RequestParam(name = "pwd") String pwd,
-			Model model, HttpSession session) {
+			Model model, HttpSession session) throws Exception {
 		
+		service.updateLastLogin(id);
 		Member dto = service.loginMember(id);
 		if(dto == null || !pwd.equals(dto.getPwd())) {
 			model.addAttribute("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
@@ -68,6 +69,8 @@ public class MemberController {
 		info.setNickName(dto.getNickName());
 		info.setGrade(dto.getGrade());
 		info.setNum(dto.getNum());
+		info.setLast_login(dto.getLast_login());
+
 		
 		session.setMaxInactiveInterval(60 * 60); // 세션 유지시간 60분
 		

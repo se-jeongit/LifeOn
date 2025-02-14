@@ -17,4 +17,5 @@ public class SessionInfo {
 	private String id;
 	private String nickName;
 	private int grade;
+	private String last_login;
 }
