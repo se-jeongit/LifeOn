@@ -68,11 +68,11 @@
 							</div>
 							<div>
 								<i class="tip_icon bi bi-bookmark"></i>
-								<span>${boardLikeCount}&nbsp;&nbsp;</span>
+								<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
 								<i class="tip_icon bi bi-eye"></i>
-								<span>${hitCount}&nbsp;&nbsp;</span>
+								<span>${dto.hitCount}&nbsp;&nbsp;</span>
 								<i class="tip_icon bi bi-chat-dots"></i>
-								<span>${replyCount}&nbsp;&nbsp;</span>
+								<span>${dto.replyCount}&nbsp;&nbsp;</span>
 							</div>
 						</div>
 					</div>

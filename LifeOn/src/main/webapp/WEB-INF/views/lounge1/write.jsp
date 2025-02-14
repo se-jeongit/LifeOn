@@ -53,7 +53,7 @@ function check() {
         return false;
     }
 
-    f.action =  '${pageContext.request.contextPath}/lounge1/write/' + bdtype;
+    f.action =  '${pageContext.request.contextPath}/lounge1/${bdtype}/write';
     
     return true;
 }
@@ -145,7 +145,7 @@ function check() {
 						</tr>
 					</table>
 				</form>
-			</div>v
+			</div>
 		</div>
     </div>
 </main>

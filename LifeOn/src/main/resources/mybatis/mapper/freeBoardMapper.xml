@@ -39,7 +39,6 @@
 		</where>
 	</select>
 	
-	<!-- NVL(replyCount, 0) replyCount -->
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
 		SELECT hb.psnum, m.num, m.id, nickname, subject, content, TO_CHAR(hb.reg_date, 'yyyy-mm-dd') as reg_date, blind,
 			hitCount
@@ -62,8 +61,7 @@
 	</select>
 	
 	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, blind,
-			NVL(boardLikeCount, 0) boardLikeCount
+		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, blind
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
 		<!--

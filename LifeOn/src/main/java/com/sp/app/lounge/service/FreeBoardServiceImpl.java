@@ -98,7 +98,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		FreeBoard dto = null;
 		
 		try {
-			dto = mapper.findByPrev(map);
+			// dto = mapper.findByPrev(map);
 		} catch (Exception e) {
 			log.info("findByPrev : ", e);
 		}
@@ -111,7 +111,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		FreeBoard dto = null;
 		
 		try {
-			dto = mapper.findByNext(map);
+			// dto = mapper.findByNext(map);
 		} catch (Exception e) {
 			log.info("findByNext : ", e);
 		}

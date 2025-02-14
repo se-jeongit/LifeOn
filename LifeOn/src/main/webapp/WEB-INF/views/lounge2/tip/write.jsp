@@ -109,7 +109,7 @@ nhn.husky.EZCreator.createInIFrame({
 	fCreator: 'createSEditor2',
 	fOnAppLoad: function(){
 		// 로딩 완료 후
-		oEditors.getById['ir1'].setDefaultFont('굴림', 12);
+		oEditors.getById['ir1'].setDefaultFont('돋음', 12);
 	},
 });
 

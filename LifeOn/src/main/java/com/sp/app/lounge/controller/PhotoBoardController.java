@@ -56,7 +56,7 @@ public class PhotoBoardController {
 		return "lounge1/list";
 	}
 	
-	@GetMapping("write/{bdtype}")
+	@GetMapping("{bdtype}/write")
 	public String writeForm(@PathVariable(name = "bdtype") String bdtype, Model model) throws Exception {
 		/*
 		// 로그인 확인
@@ -74,7 +74,7 @@ public class PhotoBoardController {
 		return "lounge1/write"; // 글쓰기 폼 페이지 반환
 	}
 
-	@PostMapping("write/{bdtype}")
+	@PostMapping("{bdtype}/write")
 	public String writeSubmit(@PathVariable(name = "bdtype") String bdtype, PhotoBoard dto,
 			HttpSession session, HttpServletRequest req) throws Exception {
 		
