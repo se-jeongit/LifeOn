@@ -18,7 +18,7 @@
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 	
-<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
+<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 84px;">
     <div class="container">
 		<p> 메인 페이지 입니다. </p>
     </div>

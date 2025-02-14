@@ -19,7 +19,7 @@
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 	
-<main class="d-flex flex-column min-vh-100" style="padding-top: 66px;">
+<main class="d-flex flex-column min-vh-100" style="padding-top: 84px;">
 	<jsp:include page="/WEB-INF/views/mypage/left.jsp"/>
     <div class="wrapper">
    	<!-- 메뉴 토글 사용 시 -->

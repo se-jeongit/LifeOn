@@ -8,8 +8,8 @@
 	align-items: center;
 	justify-content: flex-start;
 	
-	margin-top: 66px;
-	height: 46px;
+	margin-top: 84px;
+	height: 60px;
 	color: #333;
 	border-top: 1px solid #D9D9D9;
 	border-bottom: 1px solid #D9D9D9;

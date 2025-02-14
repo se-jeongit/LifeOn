@@ -51,7 +51,7 @@
 				<!-- 글리스트 -->
 				<c:forEach var="dto" items="${list}" varStatus="status">
 				<div class="tip_list">
-			  		<div class="tip_container" onclick="location.href='<c:url value='${articleUrl}/${dto.num}?${query}'/>'">
+			  		<div class="tip_container" onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'">
 						<h4 class="tip_subject">
 						 	${dto.subject}
 						</h4>

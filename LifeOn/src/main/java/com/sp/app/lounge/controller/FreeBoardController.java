@@ -142,9 +142,9 @@ public class FreeBoardController {
 		return "redirect:/lounge2/tip";
 	}
 	
-	@GetMapping("article/{psnum}")
+	@GetMapping("article/{num}")
 	public String article(
-			@PathVariable("psnum") long num,
+			@PathVariable(name = "num") long num,
 			@RequestParam(name = "page") String page,
 			@RequestParam(name = "schType", defaultValue = "all") String schType,
 			@RequestParam(name = "kwd", defaultValue = "") String kwd,
@@ -169,7 +169,7 @@ public class FreeBoardController {
 			Map<String, Object> map = new HashMap<>();
 			map.put("schType", schType);
 			map.put("kwd", kwd);
-			map.put("psnum", num);
+			map.put("num", num);
 			
 			FreeBoard prevDto = service.findByPrev(map);
 			FreeBoard nextDto = service.findByNext(map);

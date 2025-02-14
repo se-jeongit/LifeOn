@@ -77,8 +77,8 @@
 			<!-- 검색창 -->
 			<form name="headerSearchForm">
 				<div class="input-group input-group-sm py-2 pe-2" style="flex-wrap: nowrap;">
-					<input type="text" name="searchWord" style="height: 30px; border: 2px solid #006AFF; border-right: none; border-top-left-radius: 7px; border-bottom-left-radius: 7px; padding: 7px; padding: 7px; font-size: 12px;" placeholder="검색어를 입력하세요" aria-describedby="basic-addon1" value="${searchWord}">
-					<span class="input-group-text" style="height: 30px; background: #FFF; border: 2px solid #006AFF; border-left: none; border-top-right-radius: 7px; border-bottom-right-radius: 7px; padding: 7px; cursor: pointer;" id="basic-addon1" onclick="searchHeader();"><i class="bi bi-search"></i></span>
+					<input type="text" name="searchWord" style="height: 40px; border: 2px solid #006AFF; border-right: none; border-top-left-radius: 7px; border-bottom-left-radius: 7px; padding: 7px; padding: 7px; font-size: 12px;" placeholder="검색어를 입력하세요" aria-describedby="basic-addon1" value="${searchWord}">
+					<span class="input-group-text" style="height: 40px; background: #FFF; border: 2px solid #006AFF; border-left: none; border-top-right-radius: 7px; border-bottom-right-radius: 7px; padding: 7px; cursor: pointer;" id="basic-addon1" onclick="searchHeader();"><i class="bi bi-search" style="font-size: 16px; padding-top: 3px;"></i></span>
 					<input type="hidden" name="searchField" value="all">
 				</div>
 			</form>
@@ -96,15 +96,15 @@
 					</div>	
 				</c:when>
 				<c:otherwise>
-					<div class="p-2">
-						<a href="<c:url value='/'/>" title="즐겨찾기"><i class="bi bi-bookmark" style="font-size: 22px;"></i></a>
+					<div class="px-2 py-1" style="height: 40px;">
+						<a href="<c:url value='/'/>" title="즐겨찾기"><i class="bi bi-bookmark" style="font-size: 28px;"></i></a>
 					</div>	
-					<div class="p-2">
-						<a href="<c:url value='/'/>" title="관심상품"><i class="bi bi-heart" style="font-size: 22px;"></i></a>
+					<div class="px-2 py-1" style="height: 40px;">
+						<a href="<c:url value='/'/>" title="관심상품"><i class="bi bi-heart" style="font-size: 28px;"></i></a>
 					</div>
 					
 					<form name="profileForm" method="post" enctype="multipart/form-data">
-						<div class="profile" style="margin: 5px; width: 30px; height: 30px; border-radius: 70%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+						<div class="profile" style="margin: 5px; width: 40px; height: 40px; border-radius: 70%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
 							<a href="<c:url value='/mypage'/>">
 								<img src="${pageContext.request.contextPath}/dist/images/profile.png" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
 							</a>
@@ -119,8 +119,8 @@
 					</div>	
 								
 					<c:if test="${sessionScope.member.grade >= 1}">
-						<div class="p-2">
-							<a href="<c:url value='/admin'/>" title="관리자페이지"><i class="bi bi-gear" style="font-size: 22px;"></i></a>
+						<div class="px-2 py-1" style="height: 40px;">
+							<a href="<c:url value='/admin'/>" title="관리자페이지"><i class="bi bi-gear" style="font-size: 28px;"></i></a>
 						</div>					
 					</c:if>
 				</c:otherwise>
