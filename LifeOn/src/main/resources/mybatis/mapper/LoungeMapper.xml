@@ -4,13 +4,11 @@
 <mapper namespace="com.sp.app.lounge.mapper.PhotoBoardMapper">
 
 	<insert id="insertBoard" parameterType="com.sp.app.lounge.model.PhotoBoard">
-		INSERT INTO hybrid_board(psnum, num, subject, content, bdtype 
-			ssfname, cpfname, hitCount, reg_date, blind)
-		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{content}
-			#{ssfname, jdbcType=VARCHAR}, 
-			#{cpfname, jdbcType=VARCHAR},
-			0, SYSDATE, 0)
+		INSERT INTO hybrid_board(psnum, num, subject, content, bdtype, hitCount, ipaddr, reg_date, blind)
+		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{bdtype}, 0, #{ipaddr}, SYSDATE, 0)
 	</insert>
+	
+	
 	
 	
 </mapper>

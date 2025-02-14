@@ -6,12 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>
-    <c:choose>
-        <c:when test="${mode == 'write'}">글 작성</c:when>
-        <c:otherwise>글 수정</c:otherwise>
-    </c:choose>
-</title>
+
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
@@ -38,6 +33,39 @@ td[scope="row"] {
 	background-color:#FBFBFB;
 }
 </style>
+
+<script type="text/javascript">
+function check() {
+    const f = document.boardForm;
+    let str;
+	
+    str = f.subject.value.trim();
+    if( !str ) {
+        alert('제목을 입력하세요. ');
+        f.subject.focus();
+        return false;
+    }
+
+    str = f.content.value.trim();
+    if( !str || str === '<p><br></p>') {
+        alert('내용을 입력하세요. ');
+        f.content.focus();
+        return false;
+    }
+
+    f.action =  '${pageContext.request.contextPath}/lounge1/write/' + bdtype;
+    
+    return true;
+}
+</script>
+<!--  
+<c:if test="${empty sessionScope.member}">
+    <script type="text/javascript">
+        alert('로그인 후 이용해 주세요.');
+        location.href = '${pageContext.request.contextPath}/login';  // 로그인 페이지로 리디렉션
+    </script>
+</c:if>
+-->
 </head>
 <body>
 
@@ -57,7 +85,7 @@ td[scope="row"] {
 			</div>
 			
 			<div class="body-main">
-				<form name="boardForm" method="post" enctype="multipart/form-data">
+				<form name="boardForm" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/lounge1/write/${bdtype}">
 					<table class="table mt-3 write-form">
 						<tr>
 							<td class="col-sm-2" scope="row">제 목</td>
@@ -76,7 +104,7 @@ td[scope="row"] {
 						<tr>
 							<td class="col=sm-2" scope="row">내 용</td>
 							<td>
-								<textarea name="content" class="form-control">${dto.content}</textarea>
+								<textarea name="content" id="ir1" class="form-control">${dto.content}</textarea>
 							</td>
 						</tr>
 						
@@ -90,23 +118,79 @@ td[scope="row"] {
 						<tr>
 							<td class="col-sm-2" scope="row">첨부된파일</td>
 							<td>
-								<p class="form-control-plaintext">&nbsp;
+								<p class="form-control-plaintext">
+								<c:if test="${not empty dto.ssfname}">
+									<a href="javascript:deleteFile('${dto.num}')"><i class="bi bi-trash"></i></a>
+									${dto.cpfname}
+								</c:if>
+								&nbsp;
+								</p>
 							</td>
 						</tr>
 					</table>
 					<table class="table table-borderless">
 						<tr>
 							<td class="text-center">
-								<button type="reset" class="btn">다시 입력</button>
-								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/list';"><i class="bi bi-x"></i>등록</button>
+								<button type="button" class="btn btn-dark" onclick="submitContents(this.form);">${mode == "update" ? "수정완료" : "등록완료"}</button>
+								<button type="reset" class="btn btn-light">다시입력</button>
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/#';">${mode == "update" ? "수정취소" : "등록취소"}</button>
+							
+								<c:if test="${mode == 'update'}">
+									<input type="hidden" name="num" value="${dto.num}">
+									<input type="hidden" name="saveFilename" value="${dto.ssfname}">
+									<input type="hidden" name="originalFilename" value="${dto.cpfname}">
+									<input type="hidden" name="page" value="${page}">
+								</c:if>
 							</td>
 						</tr>
 					</table>
 				</form>
-			</div>
+			</div>v
 		</div>
     </div>
 </main>
+
+<c:if test="${mode == 'update'}">
+	<script type="text/javascript">
+		function deleteFile(num) {
+			if (! confirm('파일을 삭제 하시겠습니까?')) {
+				return;
+			}
+			
+			let url = '${pageContext.request.contextPath}/lounge/${bdtype}/deleteFile?num=' + num + '&page=${page}';
+			location.href = url;
+		}
+	</script>
+</c:if>
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript">
+var oEditors = [];
+nhn.husky.EZCreator.createInIFrame({
+	oAppRef: oEditors,
+	elPlaceHolder: 'ir1',
+	sSkinURI: '${pageContext.request.contextPath}/dist/vendor/se2/SmartEditor2Skin.html',
+	fCreator: 'createSEditor2',
+	fOnAppLoad: function(){
+		// 로딩 완료 후
+		oEditors.getById['ir1'].setDefaultFont('돋움', 12);
+	},
+});
+
+function submitContents(elClickedObj) {
+	 oEditors.getById['ir1'].exec('UPDATE_CONTENTS_FIELD', []);
+	 try {
+		if(! check()) {
+			return;
+		}
+		
+		elClickedObj.submit();
+		
+	} catch(e) {
+	}
+}
+</script>
+
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

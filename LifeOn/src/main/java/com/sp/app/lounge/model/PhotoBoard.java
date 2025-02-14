@@ -10,8 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class PhotoBoard {
-	private long psnum;
-    private String num;
+	private long psnum; // 글번호
+    private long num; // 회원번호
+    private String id; 
+    private String nickname; 
 	private String subject;
 	private String content;
 	private String ipaddr;
@@ -20,17 +22,11 @@ public class PhotoBoard {
 	private int blind;
 	private int hitCount;
 	private int boardLikeCount;
+	private int replyCount;
 	
 	private long fnum;
 	private String ssfname; // 서버 저장 파일명
 	private String cpfname; // 클라이언트가 올린 파일
 	private MultipartFile selectFile;
 	
-	private long rpnum;
-	private String rpcontent;
-	private String rpreg_date;
-	private int replyCount;
-	private int likeCount;
-	private int rpblind;
-	// 
 }

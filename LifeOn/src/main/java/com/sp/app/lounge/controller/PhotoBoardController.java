@@ -1,12 +1,25 @@
 package com.sp.app.lounge.controller;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import com.sp.app.common.MyUtil;
+import com.sp.app.common.PaginateUtil;
+import com.sp.app.common.StorageService;
+import com.sp.app.lounge.model.PhotoBoard;
+import com.sp.app.lounge.service.PhotoBoardService;
+import com.sp.app.model.SessionInfo;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,15 +28,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/lounge1/*")
 public class PhotoBoardController {
-	// private final PhotoBoardService service;
+	private final PhotoBoardService service;
+	private final StorageService storageService;
+	private final PaginateUtil paginateUtil;
+	private final MyUtil myUtil;
 	
-	/*
-	@GetMapping("/{bdtype}")
-	public String boardList(@PathVariable String bdtype, Model model) {
-	    model.addAttribute("bdtype", bdtype);  
-	    return "lounge1/" + bdtype + "/list";  
+	private String uploadPath;
+	
+	@PostConstruct
+	public void init() {
+		uploadPath = storageService.getRealPath("/uploadPath/tip");
 	}
-	*/
 	
 	@GetMapping("room")
 	public String roomList(Model model) {
@@ -43,32 +58,49 @@ public class PhotoBoardController {
 	
 	@GetMapping("write/{bdtype}")
 	public String writeForm(@PathVariable(name = "bdtype") String bdtype, Model model) throws Exception {
-		
+		/*
+		// 로그인 확인
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		if (info == null) {
+		// 로그인하지 않은 경우: 로그인 페이지로 리다이렉트
+		session.setAttribute("redirectUrl", "/lounge1/write/" + bdtype); // 리다이렉트할 URL을 세션에 저장
+		return "redirect:/member/login"; // 로그인 페이지로 리다이렉트
+		}
+	*/
+		// 로그인 상태라면 글쓰기 폼 열기
 		model.addAttribute("bdtype", bdtype);
 		model.addAttribute("mode", "write");
 		
-		return "lounge1/write";
+		return "lounge1/write"; // 글쓰기 폼 페이지 반환
 	}
-	
-	
-	/*
-	@GetMapping("room/write")
-	public String writeForm(Model model) throws Exception {
-		model.addAttribute("mode", "write");
-		return "lounge1/room/write";
-	}
-	
-	@GetMapping("room/write")
-	public String writeSubmit(PhotoBoard dto,
-			HttpSession session) throws Exception {
+
+	@PostMapping("write/{bdtype}")
+	public String writeSubmit(@PathVariable(name = "bdtype") String bdtype, PhotoBoard dto,
+			HttpSession session, HttpServletRequest req) throws Exception {
 		
-		try {
+			try {
+				
+		        SessionInfo info = (SessionInfo) session.getAttribute("member");
+		        /*
+		        if (info == null) {
+		            // 로그인하지 않으면 로그인 페이지로 리다이렉트
+		            session.setAttribute("redirectUrl", "/lounge1/write/" + bdtype); // 글쓰기 후 돌아올 페이지를 세션에 저장
+		            return "redirect:/member/login"; // 로그인 페이지로 리다이렉트
+		        }
+				*/
+				
+		    dto.setNum(info.getNum());
+			dto.setNickname(info.getNickName());
+			dto.setIpaddr(req.getRemoteAddr());
+			dto.setBdtype(bdtype);
+			
+			service.insertBoard(dto, uploadPath);
 			
 		} catch (Exception e) {
 			log.info("writeSubmit : ", e);
 		}
 		
-		return "redirect:/lounge1/room/list";
+		return "redirect:/lounge1/" + bdtype;
 	}
-	*/
+
 }
