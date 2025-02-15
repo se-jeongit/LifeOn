@@ -12,17 +12,14 @@ import lombok.Setter;
 public class PolicyBoard {
 
 	private long psnum;
-	private long num; 
 	private String subject;
 	private String content;
 	private String reg_date;
 	private int hitcount;
+	private String userId;
 	
-	private String saveFilename;
-	private String originalFilename;
-	private MultipartFile selectFile; // <input type='file' name='selectFile' ..
-	
-	private String nickname;
-	private String cpfname;
-	private String ssfname;
+	private String savefilename;
+	private String originalfilename;
+	private int block;
+	private MultipartFile selectFile;
 }

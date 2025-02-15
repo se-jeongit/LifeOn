@@ -64,23 +64,18 @@
 					<table class="table board-article">
 						<thead>
 							<tr>
-								<td colspan="2" align="center">${dto.subject}</td>
+								<td colspan="2" align="center">제목</td>
 							</tr>
 						</thead>
 
 						<tbody>
 							<tr>
-								<td width="50%">이름 : ${dto.nickname}</td>
-								<td align="right">${dto.reg_date} | ${dto.hitcount}</td>
+								<td width="50%">이름</td>
+								<td align="right">등록일 | 조회수</td>
 							</tr>
 
 							<tr>
-								<td colspan="2" valign="top" height="200">${dto.content}<br />
-									<c:if test="${not empty dto.ssfname}">
-										<img src="${pageContext.request.contextPath}/uploads/policy/${dto.ssfname}"
-											alt="${dto.cpfname}"
-											style="max-width: 100%; height: auto;" />
-									</c:if>
+								<td colspan="2" valign="top" height="200">내용<br/>
 								</td>
 							</tr>
 
@@ -95,18 +90,12 @@
 							</tr>
 
 							<tr>
-								<td colspan="2">이전글 : 
-									<c:if test="${not empty prevDto}">
-										<a href="${pageContext.request.contextPath}/policy/article/${prevDto.psnum}?${query}">${prevDto.subject}</a>
-									</c:if>
+								<td colspan="2">이전글
 								</td>
 							</tr>
 
 							<tr>
-								<td colspan="2">다음글 :
-									<c:if test="${not empty nextDto}">
-									 	<a href="${pageContext.request.contextPath}/policy/article/${nextDto.psnum}?${query}">${nextDto.subject}</a>
-									</c:if>
+								<td colspan="2">다음글
 								</td>
 							</tr>
 						</tbody>
@@ -115,8 +104,8 @@
 					<table class="table table-borderless mb-2">
 						<tr>
 							<td width="50%">
-								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/policy/update?psnum=${dto.psnum}&page=${page}';">수정</button>
-								<button type="button" class="btn" onclick="deleteOk();">삭제</button>
+								<button type="button" class="btn">수정</button>
+								<button type="button" class="btn">삭제</button>
 							</td>
 							<td class="text-end">
 								<button type="button" class="btn"
@@ -153,14 +142,7 @@
 	</main>
 
 	<script type="text/javascript">
-		function deleteOk() {
-			if(confirm('게시글을 삭제하시겠습니까?')) {
-				let qs = 'psnum=${dto.psnum}&${query}';
-				let url = '${pageContext.request.contextPath}/policy/delete?'
-						+ qs;
-				location.href = url;
-			}
-		}
+		
 	</script>
 
 

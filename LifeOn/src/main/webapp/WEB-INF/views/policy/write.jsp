@@ -55,63 +55,50 @@ td[scope="row"] {
 						<table class="table mt-3 write-form">
 							<tr>
 								<td class="col-sm-2" scope="row">제 목</td>
-								<td><input type="text" name="subject" maxlength="100"
-									class="form-control"></td>
+								<td><input type="text" name="subject" maxlength="100" class="form-control">
+								</td>
 							</tr>
 
 							<tr>
 								<td class="col-sm-2" scope="row">작성자명</td>
 								<td>
-									<p class="form-control-plaintext">${sessionScope.member != null ? sessionScope.member.nickName : ''}</p>
+									<p class="form-control-plaintext">${sessionScope.member.nickName}</p>
 								</td>
 							</tr>
 
 							<tr>
 								<td class="col-sm-2" scope="row">내 용</td>
-								<td><textarea name="content" class="form-control"></textarea>
+								<td><textarea name="content" class="form-control">${dto.content}</textarea>
 								</td>
 							</tr>
-
 							<tr>
-								<td class="col-sm-2" scope="row">첨 부</td>
-								<td><input type="file" name="selectFile"
-									class="form-control"></td>
+								<td class="col-sm-2" scope="row">첨부</td>
+								<td>
+									<input type="file" name="selectFile" class= "form-control">
+								</td>
 							</tr>
-							<c:if test="${mode == 'update'}">
-								<tr>
-									<td class="col-sm-2" scope="row">첨부된파일</td>
-									<td>
-										<p class="form-control-plaintext">
-											<c:if test="${not empty dtos.ssfname}">
-												<a href="javascript:deleteFile('${dtos.psnum}')"><i
-													class="bi bi-trash"></i></a>
-									${dtos.cpfname}
-								</c:if>
-											&nbsp;
-										</p>
-									</td>
-								</tr>
-							</c:if>
+						
+						<tr>
+							<td class="col-sm-2" scope="row">첨부된파일</td>
+							<td>
+								<p class="form-control-plaintext">
+									<a href=""><i class="bi bi-trash"></i></a>
+							</td>
+						</tr>
+						
 						</table>
+						
+						
 						<table class="table table-borderless">
 							<tr>
 								<td class="text-center">
-									<button type="button" class="btn"
-										onclick="submitContents(this.form);">${mode=="update" ? "수정완료" : "등록완료" }&nbsp;<i
-											class="bi bi-check2"></i>
-									</button>
 									<button type="reset" class="btn">다시 입력</button>
-									<button type="submit" class="btn"
-										onclick="location.href='${pageContext.request.contextPath}/policy/list';">${mode=="update" ? "수정취소" : "등록취소"}&nbsp;<i
-											class="bi bi-x"></i>등록
+									<button type="button" class="btn"
+										onclick="location.href='${pageContext.request.contextPath}/policy/list';">등록취소&nbsp;<i
+											class="bi bi-x"></i>
 									</button>
-									
-									 <c:if test="${mode == 'update'}">
-										<input type="hidden" name="num" value="${dto.num}">
-										<input type="hidden" name="saveFilename" value="${dtos.ssfname}">
-										<input type="hidden" name="originalFilename" value="${dtos.cpfname}">
-										<input type="hidden" name="page" value="${page}">
-									</c:if>
+									<button type="button" class="btn">등록완료<i class="bi bi-check2"></i>
+									</button>
 								</td>
 							</tr>
 						</table>
@@ -120,6 +107,12 @@ td[scope="row"] {
 			</div>
 		</div>
 	</main>
+	
+	
+
+	<script type="text/javascript">
+	
+	</script>
 
 	<footer class="mt-auto py-2 text-center w-100"
 		style="left: 0px; bottom: 0px; background: #F7F9FA;">

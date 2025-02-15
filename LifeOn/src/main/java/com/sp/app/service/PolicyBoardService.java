@@ -1,24 +1,9 @@
 package com.sp.app.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.sp.app.model.PolicyBoard;
-import com.sp.app.model.PolicyBoardFile;
 
 public interface PolicyBoardService {
-	public void insertPolicy(PolicyBoard dto, String uploadPath) throws Exception;
-	public void deletePolicy(long num, String uploadPath, String Id, int grade) throws Exception;
-	public void updatePolicy(PolicyBoard dto, PolicyBoardFile dtos, String uploadPath) throws Exception;
-	
-	public List<PolicyBoard> listPolicy(Map<String, Object> map);
-	public int dataCount(Map<String, Object> map);
+	public void insertBoard(PolicyBoard dto, String uploadPath) throws Exception;
 	
 	
-	public void updateHitCount(long num) throws Exception;
-	public PolicyBoard findById(long num) throws Exception;
-	public PolicyBoard findByPrev(Map<String, Object> map);
-	public PolicyBoard findByNext(Map<String, Object> map);
-	
-	public boolean deleteUploadFile(String uploadPath, String filename);
 }

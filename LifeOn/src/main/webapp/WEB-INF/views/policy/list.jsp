@@ -76,7 +76,7 @@
 				<div class="body-main">
 					<div class="row board-list-header">
 						<div class="col-auto me-auto dataCount"></div>
-							${dataCount}건
+							00건
 						<div class="col-auto">&nbsp;</div>
 					</div>
 
@@ -93,18 +93,18 @@
 						</thead>
 
 						<tbody>
-							<c:forEach var="board" items="${list}" varStatus="status">
+							<c:forEach var="dto" items="${list}" varStatus="status">
 								<tr>
-									<td>${board.psnum}</td>
+									<td>번호</td>
 									<td class="left">
 										<div class="text-wrap">
-											<a href="${pageContext.request.contextPath}/policy/article/${board.psnum}?page=${page}">${board.subject}</a>
+											<a href="${pageContext.request.contextPath}/policy/article/${board.psnum}?page=${page}">제목</a>
 										</div>
 									</td>
-									<td>${board.nickname}</td>
-									<td>${board.reg_date}</td>
-									<td>${board.hitcount}</td>
-									<td>${board.cpfname}</td>
+									<td>닉네임</td>
+									<td>등록일</td>
+									<td>조회수</td>
+									<td>파일</td>
 								</tr>
 							</c:forEach>
 						</tbody>
