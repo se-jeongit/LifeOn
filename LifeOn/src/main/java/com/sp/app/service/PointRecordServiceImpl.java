@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PointRecordServiceImpl implements PointRecordService {
 
-	private PointRecordMapper mapper;
+	private final PointRecordMapper mapper;
 	
 	@Override
 	public List<PointRecord> listPoint(Map<String, Object> map) {
