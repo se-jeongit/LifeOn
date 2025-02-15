@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PolicyBoardServiceImpl implements PolicyBoardService{
 	private final PolicyBoardMapper mapper;
-	private StorageService storageService;
+	private final StorageService storageService;
 	
 	@Override
 	public void insertBoard(PolicyBoard dto, String uploadPath) throws Exception {

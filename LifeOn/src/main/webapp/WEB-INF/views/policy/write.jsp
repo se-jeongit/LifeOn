@@ -68,7 +68,7 @@ td[scope="row"] {
 
 							<tr>
 								<td class="col-sm-2" scope="row">내 용</td>
-								<td><textarea name="content" class="form-control">${dto.content}</textarea>
+								<td><textarea name="content" id="ir1" class="form-control" style="width:99%; height:300px;">${dto.content}</textarea>
 								</td>
 							</tr>
 							<tr>
@@ -97,7 +97,7 @@ td[scope="row"] {
 										onclick="location.href='${pageContext.request.contextPath}/policy/list';">등록취소&nbsp;<i
 											class="bi bi-x"></i>
 									</button>
-									<button type="button" class="btn">등록완료<i class="bi bi-check2"></i>
+									<button type="button" class="btn" onclick="submitForm();">${mode=="update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></i>
 									</button>
 								</td>
 							</tr>
@@ -109,9 +109,11 @@ td[scope="row"] {
 	</main>
 	
 	
-
+	<script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 	<script type="text/javascript">
-	
+	function submitForm() {
+	    document.boardForm.submit();
+	}
 	</script>
 
 	<footer class="mt-auto py-2 text-center w-100"
