@@ -8,6 +8,78 @@
 		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{bdtype}, 0, #{ipaddr}, SYSDATE, 0)
 	</insert>
 	
+	<sql id="where-list">
+		<choose>
+			<when test="schType == 'all'">
+				(INSTR(subject, #{kwd}) &gt; 0
+			    	OR DBMS_LOB.INSTR(content, #{kwd}) &gt; 0 )
+			</when>
+			<when test="schType == 'reg_date'">
+				(TO_CHAR(reg_date, 'YYYY-MM-DD') = #{kwd}
+			    	OR TO_CHAR(reg_date, 'YYYYMMDD') = #{kwd})
+			</when>
+			<when test="schType == 'content'">
+				DBMS_LOB.INSTR(content, #{kwd}) &gt; 0
+			</when>
+			<otherwise>
+				INSTR(${schType}, #{kwd}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM HYBRID_BOARD hb
+		JOIN MEMBER m ON hb.num = m.num
+		<where>
+			<if test="kwd != null and kwd != '' ">
+				<include refid="where-list"/>
+			</if>
+			AND blind = 0
+		</where>
+	</select>
+	
+	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
+		SELECT hb.psnum, m.num, m.id, nickname, subject, content, TO_CHAR(hb.reg_date, 'yyyy-mm-dd') as reg_date, blind,
+			hitCount
+		FROM HYBRID_BOARD hb
+		JOIN MEMBER m ON hb.num = m.num
+		LEFT OUTER JOIN (
+			SELECT rpnum, COUNT(*) replyCount, ps_num
+			FROM HYBRID_BOARD_REPLY
+			<!-- WHERE blind = 0 -->
+			GROUP BY rpnum, ps_num
+		) c ON hb.psnum = c.ps_num
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="mySql"/>
+			</if>
+			AND blind = 0
+		</where>
+		ORDER BY psnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+	
+	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.FreeBoard">
+		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, blind
+		FROM HYBRID_BOARD hb
+		JOIN MEMBER m ON hb.num = m.num
+		<!--
+		LEFT OUTER JOIN (
+			SELECT num, COUNT(*) boardLikeCount
+			FROM bbsLike
+			WHERE num = #{num}
+			GROUP BY num
+		) bc ON b.num = bc.num
+		-->
+		WHERE hb.psnum = #{psnum} AND blind = 0
+	</select>
+	
+	<update id="updateHitCount" parameterType="Long">
+		UPDATE HYBRID_BOARD SET hitCount = hitCount + 1
+		WHERE psnum = #{psnum}
+	</update>
+	
 	
 	
 	

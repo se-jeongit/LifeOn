@@ -57,12 +57,12 @@ box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
 			                        </a>
 			                    </div>
 			                    <div class="item-entry overflow">
-			                        <h5><a href="property-1.html">제목</a></h5>
+			                        <h5><a href="property-1.html">${dto.subject}</a></h5>
 			                        <div class="dot-hr"></div>
-			                        <span class="pull-left">닉네임</span>
-			                        <span class="pull-left2">좋아요</span>
-			                        <span class="proerty-price pull-right">작성일</span>
-			                        <span class="proerty-price pull-right2">조회수</span>
+			                        <span class="pull-left">${dto.nickname}</span>
+			                        <span class="pull-left2">${dto.boardLikeCount}</span>
+			                        <span class="proerty-price pull-right">${dto.reg_date}</span>
+			                        <span class="proerty-price pull-right2">${dto.hitCount}&nbsp;&nbsp;</span>
 			                    </div>
 			                </div>
 			            </div>
