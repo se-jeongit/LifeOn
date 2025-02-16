@@ -39,7 +39,7 @@
 		</where>
 	</select>
 	
-	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
+	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.PhotoBoard">
 		SELECT hb.psnum, m.num, m.id, nickname, subject, content, TO_CHAR(hb.reg_date, 'yyyy-mm-dd') as reg_date, blind,
 			hitCount
 		FROM HYBRID_BOARD hb
@@ -60,7 +60,7 @@
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 	
-	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.FreeBoard">
+	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.PhotoBoard">
 		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, blind
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
