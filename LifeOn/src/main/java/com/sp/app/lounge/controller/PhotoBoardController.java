@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
-import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.lounge.service.PhotoBoardService;
 import com.sp.app.model.SessionInfo;
