@@ -54,11 +54,13 @@
 	</select>
 	
 	<select id="totalPoint" parameterType="Long" resultType="Integer">
-		SELECT pretp 
-		FROM point_record 
-		WHERE num = #{num} 
-		ORDER BY prnum DESC 
-		FETCH FIRST 1 ROWS ONLY
+		SELECT NVL((
+		    SELECT pretp 
+		    FROM point_record 
+		    WHERE num = #{num} 
+		    ORDER BY prnum DESC 
+		    FETCH FIRST 1 ROWS ONLY
+		), 0) FROM DUAL
 	</select>
 	
 	

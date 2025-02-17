@@ -87,7 +87,7 @@
         <div class="sejin-container">
             <div class="sejin-title">포인트 내역</div>
             <div class="sejin-point-box">
-                <div>나의 포인트 <strong>${totalPoint}</strong></div>
+                <div>나의 포인트 <strong>${totalPoint == 0 ? 0 : totalPoint}</strong></div>
                 <button class="btn btn-primary btn-sm">충전하기</button>
             </div>
             <form class="row" name="searchForm">
@@ -132,7 +132,7 @@
                 </table>
             </div>
             <div class="page-navigation">
-					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+					${dataCount == 0 ? "포인트 내역이 없습니다" : paging}
 			</div>
         </div>
     </div>
