@@ -11,4 +11,5 @@ import com.sp.app.model.PointRecord;
 public interface PointRecordMapper {
 	public int dataCount(Map<String, Object> map);
 	public List<PointRecord> listPoint(Map<String, Object> map);
+	public int totalPoint(long num);
 }

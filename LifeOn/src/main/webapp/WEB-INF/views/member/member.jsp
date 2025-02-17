@@ -220,7 +220,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	</header>
 
 	<main class="d-flex flex-column min-vh-100 align-items-center"
-		style="padding-top: 66px;">
+		style="padding-top: 90px;">
 		<div class="container"
 			style="display: flex; justify-content: space-around;">
 			<div class="body-container">
@@ -238,7 +238,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 				<hr>
 				<div class="body-main">
-					<form name="memberForm" method="post">
+					<form name="memberForm" method="post" enctype="multipart/form-data">
 						<div class="row mb-3">
 							<c:if test="${mode=='update'}">
 								<input type="hidden" name="num" value="${dto.num}">
@@ -328,6 +328,21 @@ window.addEventListener('DOMContentLoaded', () => {
 									</div>
 								</div>
 							</div>
+						</div>
+
+
+
+						<!-- 프로필 이미지 업로드 -->
+						<div class="row mb-3">
+						    <label class="col-sm-2 col-form-label" for="profileImageFile">프로필 이미지</label>
+						    <div class="col-sm-10">
+						        <div class="row">
+						            <div class="col-6">
+						                <input type="file" name="profileImageFile" id="profileImageFile" class="form-control">
+						            </div>
+						        </div>
+						        <small class="form-control-plaintext">선택 안할 시, 자동으로 기본이미지로 설정됩니다.</small>
+						    </div>
 						</div>
 
 						<div class="row mb-3">

@@ -1,5 +1,7 @@
 package com.sp.app.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,9 +19,12 @@ public class Member {
 	private int block;
 	private String reg_date;
 	private String mod_date;
-	private String last_login; //마지막접속때문에 추가 디비엔 아직 반영안함. 세션정보로 처리할수도 있을거 같아서 
+	private String last_login; 
 	private int grade;
 	private int enabled;
+	private String profile_image;
+	private MultipartFile profileImageFile;
+	
 	
 	//회원상세테이블
 	private String name;

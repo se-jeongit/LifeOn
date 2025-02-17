@@ -105,8 +105,8 @@
 					
 					<form name="profileForm" method="post" enctype="multipart/form-data">
 						<div class="profile" style="margin: 5px; width: 40px; height: 40px; border-radius: 70%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-							<a href="<c:url value='point/mypage'/>">
-								<img src="${pageContext.request.contextPath}/dist/images/profile.png" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+							<a href="${pageContext.request.contextPath}/point/mypage">
+								<img src="${pageContext.request.contextPath}${sessionScope.member.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
 							</a>
 						</div>	
 					</form>

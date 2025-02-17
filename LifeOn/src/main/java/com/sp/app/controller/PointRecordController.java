@@ -40,16 +40,18 @@ public class PointRecordController {
 			int size = 10;
 			int total_page = 0;
 			int dataCount = 0;
-			
+			int totalPoint = 0;
 			Map<String, Object> map = new HashMap<>();
 			map.put("schType", schType);
 			
 			SessionInfo member = (SessionInfo) session.getAttribute("member");
 			map.put("num", member.getNum());
 			
+			totalPoint = service.totalPoint(member.getNum());
 			dataCount = service.dataCount(map);
 			total_page = paginateUtil.pageCount(dataCount, size);
 			current_page = Math.min(current_page, total_page);
+			
 			
 			int offset = (current_page - 1) * size;
 			if(offset < 0) offset = 0;
@@ -67,8 +69,10 @@ public class PointRecordController {
 				query += "&" + qs;
 			}
 			
-			List<PointRecord> list = service.listPoint(map); //내림차순으로 가져오니까 list[0] 잔여포인트가 = 총포인트로 사용가능하다!!
+			List<PointRecord> list = service.listPoint(map); 
 			String paging = paginateUtil.paging(current_page, total_page, listUrl);
+			
+			model.addAttribute("totalPoint", totalPoint);
 			
 			model.addAttribute("list", list);
 			model.addAttribute("dataCount", dataCount);

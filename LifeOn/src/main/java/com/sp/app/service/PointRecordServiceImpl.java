@@ -32,7 +32,20 @@ public class PointRecordServiceImpl implements PointRecordService {
 	}
 	
 	
+	@Override
+	public int totalPoint(long num) {
+		int tpoint = 0;
+		
+		try {
+			tpoint = mapper.totalPoint(num);
+		} catch (Exception e) {
+			log.info("totalPoint : ", e);
+		}
+		
+		return tpoint;
+	}
 
+	
 	@Override
 	public int dataCount(Map<String, Object> map) {
 		int result = 0;
@@ -45,5 +58,8 @@ public class PointRecordServiceImpl implements PointRecordService {
 		
 		return result;
 	}
+
+
+
 
 }
