@@ -44,6 +44,7 @@ public class PhotoBoardController {
 		uploadPath = storageService.getRealPath("/uploadPath/tip");
 	}
 	
+	/*
 	@GetMapping("room")
 	public String roomList(Model model) {
 		
@@ -59,6 +60,7 @@ public class PhotoBoardController {
 		
 		return "lounge1/list";
 	}
+	*/
 	
 	@GetMapping("{bdtype}/write")
 	public String writeForm(@PathVariable(name = "bdtype") String bdtype, Model model) throws Exception {
@@ -107,15 +109,16 @@ public class PhotoBoardController {
 		return "redirect:/lounge1/" + bdtype;
 	}
 	
-	@GetMapping("{bdtype}/list")
-	public String list(@RequestParam(name = "page", defaultValue = "1") int current_page,
+	@GetMapping("{bdtype}")
+	public String list(@PathVariable(name = "bdtype") String bdtype,
+			@RequestParam(name = "page", defaultValue = "1") int current_page,
 			@RequestParam(name = "schType", defaultValue = "all") String schType,
 			@RequestParam(name = "kwd", defaultValue = "") String kwd,
 			Model model,
 			HttpServletRequest req) throws Exception {
 		
 		try {
-			int size = 10;
+			int size = 12;
 			int total_page = 0;
 			int dataCount = 0;
 			
@@ -124,6 +127,7 @@ public class PhotoBoardController {
 			Map<String, Object> map = new HashMap<>();
 			map.put("schType", schType);
 			map.put("kwd", kwd);
+			map.put("bdtype", bdtype);
 			
 			dataCount = service.dataCount(map);
 			total_page = paginateUtil.pageCount(dataCount, size);
@@ -140,8 +144,8 @@ public class PhotoBoardController {
 			
 			String cp = req.getContextPath();
 			String query = "page=" + current_page;
-			String listUrl = cp + "tip/";
-			String articleUrl = cp + "tip/article";
+			String listUrl = cp + "/" + bdtype + "/"; 
+			String articleUrl = cp + "/" + bdtype + "/article";
 			
 			if (! kwd.isBlank()) {
 				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
@@ -153,7 +157,6 @@ public class PhotoBoardController {
 			String paging = paginateUtil.paging(current_page, total_page, listUrl);
 			
 			model.addAttribute("list", list);
-			
 			model.addAttribute("dataCount", dataCount);
 			model.addAttribute("size", size);
 			model.addAttribute("page", current_page);
@@ -169,7 +172,7 @@ public class PhotoBoardController {
 			log.info("list : ", e);
 		}
 		
-		return "lounge1/{bdtype}/list";
+		return "lounge1/list";
 	}
 
 }
