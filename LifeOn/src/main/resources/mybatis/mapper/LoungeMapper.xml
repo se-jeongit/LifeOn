@@ -8,7 +8,7 @@
 		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{bdtype}, 0, #{ipaddr}, SYSDATE, 0)
 	</insert>
 	
-	<sql id="where-list">
+	<sql id="mySql">
 		<choose>
 			<when test="schType == 'all'">
 				(INSTR(subject, #{kwd}) &gt; 0
@@ -33,7 +33,7 @@
 		JOIN MEMBER m ON hb.num = m.num
 		<where>
 			<if test="kwd != null and kwd != '' ">
-				<include refid="where-list"/>
+				<include refid="mySql"/>
 			</if>
 			AND blind = 0
 		</where>
