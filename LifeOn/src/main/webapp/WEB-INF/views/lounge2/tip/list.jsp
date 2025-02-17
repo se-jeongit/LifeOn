@@ -49,35 +49,45 @@
 				</div>
 				
 				<!-- 글리스트 -->
-				<c:forEach var="dto" items="${list}" varStatus="status">
-				<div class="tip_list">
-			  		<div class="tip_container" onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'">
-						<h4 class="tip_subject">
-						 	${dto.subject}
-						</h4>
-					        
-				        <div class="tip_content">
-							${dto.content}
-				        </div>
-				        
-						<div class='tip_info'>
-							<div>
-								<span class='tip_userName'>${dto.nickname}</span>
-								<span>&nbsp;·&nbsp;</span>
-								<span>${dto.reg_date}</span>
-							</div>
-							<div>
-								<i class="tip_icon bi bi-bookmark"></i>
-								<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
-								<i class="tip_icon bi bi-eye"></i>
-								<span>${dto.hitCount}&nbsp;&nbsp;</span>
-								<i class="tip_icon bi bi-chat-dots"></i>
-								<span>${dto.replyCount}&nbsp;&nbsp;</span>
-							</div>
+				<div style="display: flex; flex-direction: column;">
+					<c:forEach var="dto" items="${list}" varStatus="status">
+					<div class="mx-3">
+				  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'">
+							<table class="table table-hover m-0">
+								<tbody>
+								 	<tr>
+								 		<td>
+										 	<h4 class="tip_subject">
+											 	${dto.subject}
+											</h4>
+	
+										 	<div class="tip_content">
+												${dto.content}
+									        </div>
+									        <div style="display: flex; justify-content: space-between;">
+												<div>
+													<span class='tip_userName'>${dto.nickname}</span>
+													<span>&nbsp;·&nbsp;</span>
+													<span>${dto.reg_date}</span>
+												</div>
+												<div>
+													<i class="tip_icon bi bi-bookmark"></i>
+													<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
+													<i class="tip_icon bi bi-eye"></i>
+													<span>${dto.hitCount}&nbsp;&nbsp;</span>
+													<i class="tip_icon bi bi-chat-dots"></i>
+													<span>${dto.replyCount}&nbsp;&nbsp;</span>
+												</div>
+											</div>
+										</td>
+							        </tr>
+	
+								</tbody>
+							</table>
 						</div>
 					</div>
+					</c:forEach>
 				</div>
-				</c:forEach>
 
 				<div class="page-navigation">
 					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}

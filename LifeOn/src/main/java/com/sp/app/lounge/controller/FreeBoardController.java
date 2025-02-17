@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.lounge.model.FreeBoard;
@@ -35,7 +36,7 @@ public class FreeBoardController {
 	private final FreeBoardService service;
 	private final StorageService storageService;
 	private final PaginateUtil paginateUtil;
-	// private final MyUtil myUtil;
+	private final MyUtil myUtil;
 	
 	@GetMapping("daily")
 	public String dailyList() throws Exception {
@@ -82,7 +83,7 @@ public class FreeBoardController {
 			
 			String cp = req.getContextPath();
 			String query = "page=" + current_page;
-			String listUrl = cp + "tip/";
+			String listUrl = cp + "tip";
 			String articleUrl = cp + "tip/article";
 			
 			if (! kwd.isBlank()) {
@@ -162,8 +163,7 @@ public class FreeBoardController {
 			
 			FreeBoard dto = Objects.requireNonNull(service.findById(num));
 			
-			// 엔터를 <Br>로 // 스마트에디터 사용 중
-			// dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("schType", schType);
