@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
+import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.lounge.service.PhotoBoardService;
 import com.sp.app.model.SessionInfo;
@@ -144,8 +146,8 @@ public class PhotoBoardController {
 			
 			String cp = req.getContextPath();
 			String query = "page=" + current_page;
-			String listUrl = cp + "/" + bdtype + "/"; 
-			String articleUrl = cp + "/" + bdtype + "/article";
+			String listUrl = cp + "/lounge1/" + bdtype; 
+			String articleUrl = cp + "/lounge1/" + bdtype + "/article/{psnum}";
 			
 			if (! kwd.isBlank()) {
 				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
@@ -173,6 +175,63 @@ public class PhotoBoardController {
 		}
 		
 		return "lounge1/list";
+	}
+	
+	@GetMapping("{bdtype}/article/{psnum}")
+	public String article(@PathVariable(name = "bdtype") String bdtype,
+			@PathVariable(name = "psnum") long num,
+			@RequestParam(name = "page") String page,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
+			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+			Model model,
+			HttpSession session) throws Exception {
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			if (! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			service.updateHitCount(num);
+			
+			PhotoBoard dto = Objects.requireNonNull(service.findById(num));
+			
+			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("schType", schType);
+			map.put("kwd", kwd);
+			map.put("bdtype", bdtype);
+			map.put("psnum", num);
+			
+			PhotoBoard prevDto = service.findByPrev(map);
+			PhotoBoard nextDto = service.findByNext(map);
+			/*
+			 SessionInfo info = (SessionInfo) session.getAttribute("member");
+			 map.put("nickname", info.getNickName());
+			 boolean ismemberLiked = service.isMemberBoardLiked(map);
+			*/
+			
+			model.addAttribute("bdtype", bdtype); 
+			model.addAttribute("dto", dto);
+			model.addAttribute("prevDto", prevDto);
+			model.addAttribute("nextDto", nextDto);
+			
+			// model.addAttribute("ismemberLiked", ismemberLiked);
+
+			model.addAttribute("query", query);
+			model.addAttribute("page", page);
+			
+			return "lounge1/{bdtype}/article";
+			
+		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("article : ", e);
+		}
+		
+		return "redirect:/lounge1/" + bdtype + "/article/" + num + "?" + query;
 	}
 
 }

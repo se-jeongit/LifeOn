@@ -29,4 +29,11 @@ public class PhotoBoard {
 	private String cpfname; // 클라이언트가 올린 파일
 	private MultipartFile selectFile;
 	
+	private long rpnum; 
+	private String rpcontent; 
+	private String rpreg_date; 
+	private int rpblind; // 0: Default, 1: 블라인드처리
+	
+	private int replyLike; 
+	
 }

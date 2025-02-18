@@ -65,7 +65,7 @@ box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
 			    <div class="proerty-th">
 				<c:forEach var="dto" items="${list}" varStatus="status">
 			  	<div class="phlist">
-				<div class="box-two proerty-item" onclick="location.href='${pageContext.request.contextPath}/${bdtype}/article?${query}&psnum=${dto.psnum}'">
+				<div class="box-two proerty-item" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/article/${dto.psnum}?${query}'">
 						<h4 class="ph_subject">
 						 	${dto.subject}
 						</h4>
