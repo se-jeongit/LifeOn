@@ -3,6 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/photo.css" type="text/css">
+
     <style>
         .main-container {
             width: 100%;
@@ -88,6 +91,9 @@
             <div id="auction-main-prize">
                 <jsp:include page="/WEB-INF/views/auction/auction_main_prize.jsp"/>
             </div>
+        </div>
+        <div class="page-navigation">
+            ${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
         </div>
     </div>
 </main>

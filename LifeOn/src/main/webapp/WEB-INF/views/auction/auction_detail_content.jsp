@@ -7,8 +7,13 @@
         padding: 0;
     }
 
-    .detail-img-prize {
+    .detail-thumbnail-prize {
         width: 500px;
+        height: 400px;
+    }
+
+    .detail-img-prize {
+        width: 800px;
         height: 400px;
     }
 
@@ -59,7 +64,7 @@
 </style>
 
 <div style="display: flex; padding-top: 5px; margin: 10px auto; width: 1130px;">
-    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="detail-img-prize">
+    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="detail-thumbnail-prize">
     <div style="margin-left: 70px;">
         <div style="display: flex;">
             <p style="font-size: 35px; font-weight: 600; width: 330px">${prize.prName} </p>
@@ -114,12 +119,36 @@
                 <button class="btn-click">${prize.prStatus == '마감' ? '종료' : prize.prStatus == '진행중' ? '입찰' : '진행전'}</button>
                 </span>
             </div>
-
         </div>
     </div>
 </div>
 
 <div style="padding-top: 5px; margin: 10px auto; width: 1130px;">
+    <hr style="border: 1px solid black;">
+
+    <div style="padding-top: 30px;">
+        <div style="">
+            <h2 style="color: #6E6E6E">상품소개</h2>
+            <p style="font-size: 18px;">
+                ${prize.prContent}
+            </p>
+        </div>
+
+        <div style="padding-top: 100px;">
+            <h2 style="color: #6E6E6E">상품이미지</h2>
+            <div style=" text-align: center;">
+                <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="detail-img-prize" style="margin: 0 auto;">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div style="padding-top: 55px; padding-bottom: 55px; margin: 10px auto; width: 1130px;">
+    <hr style="border: 1px solid black;">
+    <div style="height: 100px">
+
+    </div>
     <hr style="border: 1px solid black;">
 </div>
 

@@ -6,6 +6,7 @@ import com.sp.app.auction.response.category.BigCategoryResponse;
 import com.sp.app.auction.response.prize.PrizeDetailRep;
 import com.sp.app.auction.service.AuctionService;
 import com.sp.app.common.PaginateUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,15 +30,35 @@ public class AuctionController {
     private final PaginateUtil paginateUtil;
 
     @GetMapping("")
-    public ModelAndView moveMain(){
-
+    public ModelAndView moveMain(HttpServletRequest req){
         ModelAndView mav = new ModelAndView("auction/auction_main");
+        try {
 
-        AllCategoryResponse allCategory = auctionService.findByAllCategory();
-        allCategory.setPrizeList(auctionService.findByAllPrize());
-        allCategory.setCategoryType("all");
+            int size = 12;
+            int total_page = 0;
+            int dataCount = 0;
 
-        mav.addObject("category", allCategory);
+            Map<String, Object> paginationMap = calculatePagination(new HashMap<>(), size, 1, req, "auction");
+
+
+            AllCategoryResponse allCategory = auctionService.findByAllCategory();
+            allCategory.setPrizeList(auctionService.findByAllPrize());
+            allCategory.setCategoryType("all");
+
+            mav.addObject("dataCount", paginationMap.get("dataCount"));
+            mav.addObject("paging", paginationMap.get("paging"));
+            mav.addObject("current_page", paginationMap.get("current_page"));
+            mav.addObject("size", paginationMap.get("size"));
+            mav.addObject("category", allCategory);
+
+
+
+
+        }catch (Exception e) {
+            log.error("error", e);
+        }
+
+
 
         return mav;
     }
@@ -50,7 +71,8 @@ public class AuctionController {
                                      @RequestParam(value = "categoryName", required = false, defaultValue = "") String categoryName,
                                         @RequestParam(value = "searchType", required = false, defaultValue = "") String searchType,
                                         @RequestParam(value = "searchTerm", required = false, defaultValue = "") String searchTerm,
-                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                     HttpServletRequest req) {
         ModelAndView mav = new ModelAndView("auction/auction_main");
         Map<String, Object> map = new HashMap<>();
         int size = 12;
@@ -70,7 +92,7 @@ public class AuctionController {
 
                 if (categoryType.equals("big")) {
                     map.put("cbn", cbn);
-                    Map<String, Object> paginationMap = calculatePagination(map, size, page);
+                    Map<String, Object> paginationMap = calculatePagination(map, size, page,req,"auction/category");
                     map.putAll(paginationMap);
                     BigCategoryResponse categories = auctionService.findByAllCategoryBig(map);
                     if (categoryName.equals("전체")) {
@@ -81,9 +103,13 @@ public class AuctionController {
                 } else if (categoryType.equals("small")) {
                     map.put("cbn", cbn);
                     map.put("csc", categoryName);
-                    Map<String, Object> paginationMap = calculatePagination(map, size, page);
+                    Map<String, Object> paginationMap = calculatePagination(map, size, page,req,"auction/category");
                     map.putAll(paginationMap);
                     BigCategoryResponse categories = auctionService.findByAllCategoryBig(map);
+                    mav.addObject("dataCount", paginationMap.get("dataCount"));
+                    mav.addObject("paging", paginationMap.get("paging"));
+                    mav.addObject("current_page", paginationMap.get("current_page"));
+                    mav.addObject("size", paginationMap.get("size"));
                     return mav.addObject("category", setCategoryResponse(categories, "small", categoryBName,categoryName, (int) cbn));
                 }
 
@@ -117,7 +143,7 @@ public class AuctionController {
 
 
 
-    private Map<String, Object> calculatePagination(Map<String, Object> map, int size, int current_page) {
+    private Map<String, Object> calculatePagination(Map<String, Object> map, int size, int current_page,HttpServletRequest req,String url) {
         Map<String, Object> paginationMap = new HashMap<>();
         int total_page = 0;
         int dataCount = auctionService.dataCount(map);
@@ -130,13 +156,25 @@ public class AuctionController {
         int offset = (current_page - 1) * size;
         if (offset < 0) offset = 0;
 
+        String cp = req.getContextPath();
+        String query = "page=" + current_page;
+        String listUrl = cp + "/" + url + "/";
+
+        String paging = paginateUtil.paging(current_page, total_page, listUrl);
+
         paginationMap.put("offset", offset);
         paginationMap.put("size", size);
+        paginationMap.put("paging", paging);
+        paginationMap.put("dataCount", dataCount);
         paginationMap.put("current_page", current_page);
         paginationMap.put("total_page", total_page);
 
         return paginationMap;
     }
+
+
+
+
 
     private <T> T setCategoryResponse(T categoryResponse, String categoryType,String categoryBigName ,String categoryName, int cbn) {
         if (categoryResponse instanceof AllCategoryResponse) {

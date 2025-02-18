@@ -204,7 +204,7 @@
                                     <p class="price1">낙찰가</p>
                                 </c:if>
                                 <p class="price2">
-                                    <fmt:formatNumber value="${out.price}" type="currency" currencySymbol="₩"/>
+                                    <fmt:formatNumber value="${out.price}" type="currency" currencySymbol="₩"/>원
                                     <span class="situation">${out.prStatus}</span>
                                 </p>
                                 <p class="last-line">
