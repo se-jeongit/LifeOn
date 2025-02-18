@@ -1,6 +1,6 @@
 package com.sp.app.auction.response.category;
 
-import com.sp.app.auction.vo.CategorySmall;
+import com.sp.app.auction.response.prize.PrizeRep;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,12 +8,13 @@ import java.util.List;
 
 @Getter
 @Setter
-public class FinalCategoryRep {
+public class SmallCategoryRep {
     private long cbn;
     private long csn;
-    private List<CategorySmall> categoryList;
     private String categoryType;
+    private String categoryBigName;
     private String categoryName;
+    private List<List<PrizeRep>> prizeList;
 
 
 

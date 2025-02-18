@@ -68,6 +68,6 @@ $(function(){
 	<nav class="container nav" aria-label="navigation">
 		<a class="nav-link sub-link" aria-current="page" href="<c:url value='/market/together/main'/>">공동구매</a>
 		<a class="nav-link sub-link" href="<c:url value='/'/>">물품대여</a>
-		<a class="nav-link sub-link" href="<c:url value='/'/>">경매장</a>
+		<a class="nav-link sub-link" href="<c:url value='/auction'/>">경매장</a>
 	</nav>
 </div>

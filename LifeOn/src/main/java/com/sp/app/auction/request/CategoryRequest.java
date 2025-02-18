@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CategoryRequest {
     private long cbn;
+    private int current_page = 1;
     private String categoryType;
     private String categoryName;
     private String searchType;

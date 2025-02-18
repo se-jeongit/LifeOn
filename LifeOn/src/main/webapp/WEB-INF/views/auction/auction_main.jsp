@@ -12,11 +12,31 @@
         .resent {
             padding-top: 50px;
             position: fixed;
-            top: 66px;
+            top: 160px;
             right: 40px;
             z-index: 1000;
         }
+
     </style>
+
+    <style>
+
+        .category-text {
+            margin-left: 5px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .main-category {
+            font-size: 18px;
+            display: flex;
+            list-style: none;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+        }
+    </style>
+
+
     <title>LifeOn</title>
 
     <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
@@ -26,16 +46,48 @@
 
 <header>
     <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
+    <jsp:include page="/WEB-INF/views/market/layout/menu.jsp"/>
 </header>
 
-<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
+<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 10px;">
     <div class="main-container">
         <div class="resent">
             <jsp:include page="/WEB-INF/views/layout/rmaket.jsp"/>
         </div>
         <div class="container">
             <h3 style="padding-top: 30px; padding-left: 120px">경매장</h3>
-            <jsp:include page="/WEB-INF/views/auction/auction_main_content.jsp"/>
+            <div style="border: 2px solid #e9ecef; padding: 0; margin: 5px auto; width: 1000px;">
+                <div id="category-container">
+                    <c:if test="${category.categoryType != 'all'}">
+                                <span style="font-size: 18px; cursor: pointer; position: relative; bottom: -5px;"
+                                      onClick="toggleAllCategory()">
+                                    ←&nbsp;&nbsp;${category.categoryBigName}
+                        </span>
+                    </c:if>
+                    <ul id="main-category" class="main-category">
+                        <c:if test="${category.categoryType eq 'all'}">
+                            <c:forEach var="category" items="${category.categoryList}">
+                                <li class="category-text"
+                                    onclick="toggleBigCategory(${category.cbn},'big','${category.cbc}','${category.cbc}')">${category.cbc}</li>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${category.categoryType eq 'big' || category.categoryType eq 'small'}">
+                            <li class="category-text"
+                                onclick="toggleSmallCategory(${category.cbn},'big','${category.categoryBigName}','전체')"
+                                style="${param.categoryName eq '전체' || param.categoryType eq 'big' ? 'color: #006AFF' : ''}">전체
+                            </li>
+                            <c:forEach var="categoryBig" items="${category.categoryList}">
+                                <li class="category-text"
+                                    onclick="toggleSmallCategory(${category.cbn},'small','${category.categoryBigName}','${categoryBig.csc}')"
+                                    style="${category.categoryType eq 'small' && (categoryBig.csc eq param.categoryName || param.categoryName eq '전체') ? 'color: #006AFF' : ''}">${categoryBig.csc}</li>
+                            </c:forEach>
+                        </c:if>
+                    </ul>
+                </div>
+            </div>
+            <div id="auction-main-prize">
+                <jsp:include page="/WEB-INF/views/auction/auction_main_prize.jsp"/>
+            </div>
         </div>
     </div>
 </main>
@@ -50,86 +102,50 @@
 </html>
 
 
-
 <script !src="">
 
-    function toggleSubCategory(cbn, categoryType, categoryName) {
-        const url = `${pageContext.request.contextPath}/auction/category`;
-        const params = {
-            cbn: cbn,
-            categoryType: categoryType === 'small' ? 'big' : categoryType === 'big' ? 'small' : 'final',
-            categoryName: categoryName || '',
-            searchType: '',
-            searchTerm: ''
-        };
+    function toggleAllCategory() {
+        let url = `${pageContext.request.contextPath}/auction`;
 
-        const fn = function (data) {
-            console.log(data);
-            addNewContent(data);
-        };
-
-        ajaxRequest(url, 'post', params, 'json', fn);
+        location.href = url;
     }
 
-    function addNewContent(data) {
-        const categoryContainer = document.getElementById('category-container');
-        const mainCategoryList = document.createElement('ul');
-        if (data.categoryType === 'small' || data.categoryType === 'big') {
-            mainCategoryList.id = 'main-category';
-            mainCategoryList.style.display = 'flex';
-            mainCategoryList.style.listStyle = 'none';
-            mainCategoryList.style.padding = '0';
-        }
+    function toggleBigCategory(cbn, categoryType, BCategoryName, categoryName,) {
+        let url = `${pageContext.request.contextPath}/auction`;
 
+        let rCategoryType = encodeURIComponent(categoryType);
+        let rCategoryName = encodeURIComponent(categoryName);
 
+        let searchType = '';
+        let searchTerm = '';
+        let page = 1;
 
-        if (data.categoryType === 'small') {
-            categoryContainer.innerHTML = '';
-
-            const backButton = document.createElement('span');
-            backButton.textContent = '←         ' + data.categoryName;
-            backButton.style.cursor = 'pointer';
-            backButton.onclick = () => toggleSubCategory(0, 'small');
-            categoryContainer.appendChild(backButton);
-
-            extracted(data);
-
-        }else if (data.categoryType === 'big') {
-            categoryContainer.innerHTML = '';
-            extracted(data);
-
-        }else if (data.categoryType === 'final') {
-            const listItems = categoryContainer.querySelectorAll('li');
-            listItems.forEach(item => {
-                if (item.textContent === data.categoryName) {
-                    item.style.color = '#006AFF';
-                    item.style.fontWeight = 'bold';
-                } else {
-                    item.style.color = '';
-                    item.style.fontWeight = '';
-                }
-            });
-
-        }
-        categoryContainer.appendChild(mainCategoryList);
-    }
-
-    // TODO 웹에서의 실행상태 미확인(코드 미완성일수 있음)
-    function extracted(data) {
-        let content = data.categoryType === 'small' ? 'csc' : 'cbc';
-        let type  = data.categoryType === 'small' ? 'final' : 'big';
-
-        data.categoryList.forEach(category => {
-            const listItem = document.createElement('li');
-            listItem.style.marginRight = '20px';
-            listItem.style.cursor = 'pointer';
-            listItem.textContent = category.csc;
-            listItem.onclick = () => toggleSubCategory(category.cbn, type, category[content]);
-            mainCategoryList.appendChild(listItem);
-        });
+        location.href = url + '/category?cbn=' + cbn + '&categoryType=' + rCategoryType + '&categoryName=' + rCategoryName + '&searchType=' + searchType + '&searchTerm=' + searchTerm + '&page=' + page;
 
 
     }
+
+
+    function toggleSmallCategory(cbn, categoryType, BCategoryName, categoryName,) {
+        let url = `${pageContext.request.contextPath}/auction`;
+
+        let rCategoryType = encodeURIComponent(categoryType);
+        let rCategoryName = encodeURIComponent(categoryName);
+
+        let searchType = '';
+        let searchTerm = '';
+        let page = 1;
+
+        let BigCategoryName = encodeURIComponent(BCategoryName);
+        location.href = url + '/category?cbn=' + cbn + '&categoryType=' + rCategoryType + '&categoryBName=' + BigCategoryName + '&categoryName=' + rCategoryName + '&searchType=' + searchType + '&searchTerm=' + searchTerm + '&page=' + page;
+
+
+    }
+
 
 </script>
+
+
+
+
 

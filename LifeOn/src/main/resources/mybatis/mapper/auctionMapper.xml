@@ -15,16 +15,122 @@
         </choose>
     </sql>
 
+    <sql id="category-prize-search">
+        <choose>
+            <when test="categoryType == 'big'">
+                p.PTYPE = '경매' AND CB.CBN = #{cbn}
+            </when>
+            <when test="categoryType == 'small'">
+                p.PTYPE = '경매' AND CS.CSC = #{csc}
+            </when>
+        </choose>
+    </sql>
+
     <!-- 글 개수 -->
     <select id="findByAllCategoryBig" parameterType="map" resultType="com.sp.app.auction.vo.CategoryBig">
-        SELECT CBN,CBC
+        SELECT CBN, CBC
         FROM CATEGORY_BIG
     </select>
 
     <select id="findByAllCategorySmall" parameterType="map" resultType="com.sp.app.auction.vo.CategorySmall">
-        SELECT CSN,CSC
-        FROM CATEGORY_SMALL
+        SELECT CSN, CSC, CBN
+        FROM CATEGORY_SMALL CS
         WHERE CBN = #{cbn}
     </select>
+
+
+    <select id="findByAllPrize" parameterType="map" resultType="com.sp.app.auction.response.prize.PrizeRep">
+        SELECT p.PNUM,
+               PPH      as thumbnail,
+               PNAME    as prName,
+               PASD     AS stDate,
+               PAED     AS edDate,
+               LP       AS price,
+               PAS      as prStatus,
+               NICKNAME as sellerName,
+               pat      as tradeType,
+               fp       as finalP,
+               CS.CSN   as smallNum,
+               CB.CBN   as bigNum
+        FROM PRODUCT p
+                 JOIN MEMBER M on M.NUM = p.NUM
+                 JOIN PRODUCT_AUCTION PA on p.PNUM = PA.PNUM
+                 JOIN CATEGORY_SMALL CS on CS.CSN = p.CSN
+                 JOIN CATEGORY_BIG CB on CB.CBN = CS.CBN
+        WHERE PTYPE = '경매'
+    </select>
+
+
+    <select id="findByPrize" parameterType="map" resultType="com.sp.app.auction.response.prize.PrizeDetailRep">
+        SELECT p.PNUM,
+               PPH      as thumbnail,
+               PNAME    as prName,
+               PASD     AS stDate,
+               PAED     AS edDate,
+               PARD    AS upToDate,
+               LP       AS price,
+               PAS      as prStatus,
+               NICKNAME as sellerName,
+               pat      as tradeType,
+               fp       as finalP,
+               CS.CSN   as smallNum,
+               CB.CBN   as bigNum,
+               p.PCT    as prContent
+        FROM PRODUCT p
+                 JOIN MEMBER M on M.NUM = p.NUM
+                 JOIN PRODUCT_AUCTION PA on p.PNUM = PA.PNUM
+                 JOIN CATEGORY_SMALL CS on CS.CSN = p.CSN
+                 JOIN CATEGORY_BIG CB on CB.CBN = CS.CBN
+        WHERE PTYPE = '경매'
+          AND p.PNUM = #{pnum}
+    </select>
+
+    <select id="findByPrizeImg" parameterType="map" resultType="java.lang.String">
+        SELECT ppp as prImgList
+        FROM PRODUCT_PICTURE
+        WHERE PNUM = #{pnum}
+    </select>
+
+
+    <select id="findByBigCategory" parameterType="map" resultType="com.sp.app.auction.response.prize.PrizeRep">
+        SELECT p.PNUM, PPH as thumbnail, PNAME as prName,
+        PASD AS stDate, PAED AS edDate, LP AS price, PAS as prStatus,
+        NICKNAME as sellerName, pat as tradeType, fp as finalP,
+        CS.CSN as smallNum, CB.CBN as bigNum
+        FROM PRODUCT p
+        JOIN MEMBER M on M.NUM = p.NUM
+        JOIN PRODUCT_AUCTION PA on p.PNUM = PA.PNUM
+        JOIN CATEGORY_SMALL CS on CS.CSN = p.CSN
+        JOIN CATEGORY_BIG CB on CB.CBN = CS.CBN
+        <where>
+            <if test="categoryType != null and categoryType != ''">
+                <include refid="category-prize-search"/>
+            </if>
+        </where>
+        ORDER BY p.PNUM
+        OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+    </select>
+
+    <select id="dataCount" resultType="int" parameterType="map">
+        SELECT NVL(COUNT(*), 0)
+        FROM PRODUCT p
+        JOIN MEMBER M on M.NUM = p.NUM
+        JOIN PRODUCT_AUCTION PA on p.PNUM = PA.PNUM
+        JOIN CATEGORY_SMALL CS on CS.CSN = p.CSN
+        JOIN CATEGORY_BIG CB on CB.CBN = CS.CBN
+        <where>
+            <if test="categoryType != null and categoryType != ''">
+                <include refid="category-prize-search"/>
+            </if>
+        </where>
+    </select>
+
+
+    <!--    <where>-->
+    <!--        <if test="kwd!=null and kwd !='' ">-->
+    <!--            <include refid="where-list"/>-->
+    <!--        </if>-->
+    <!--    </where>-->
+
 
 </mapper>

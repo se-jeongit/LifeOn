@@ -11,5 +11,11 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/jquery/js/jquery.min.js"></script>
 
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/jquery/js/jquery.plugin.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/jquery/js/jquery.plugin.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/jquery/js/jquery.countdown.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/jquery/js/jquery.countdown-ko.js"></script>
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/dist/js/util-jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/dist/js/menu.js"></script>
