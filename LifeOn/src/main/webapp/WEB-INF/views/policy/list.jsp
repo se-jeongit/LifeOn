@@ -95,28 +95,32 @@
 						<tbody>
 							<c:forEach var="dto" items="${list}" varStatus="status">
 								<tr>
-									<td>번호</td>
+									<td>${dataCount - (page-1) * size - status.index}</td>
 									<td class="left">
 										<div class="text-wrap">
-											<a href="${pageContext.request.contextPath}/policy/article/${board.psnum}?page=${page}">제목</a>
+											<a href="${pageContext.request.contextPath}/policy/article/${dto.psnum}?${query}" class="text-reset">${dto.subject}</a>
 										</div>
 									</td>
-									<td>닉네임</td>
-									<td>등록일</td>
-									<td>조회수</td>
-									<td>파일</td>
+									<td>${dto.nickname}</td>
+									<td>${dto.reg_date}</td>
+									<td>${dto.hitcount}</td>
+									<td>
+										<c:if test="${not empty dto.savefilename}">
+											<a href="${pageContext.request.contextPath}/policy/download?psnum=${dto.psnum}" class="text-reset"><i class="bi bi-file-arrow-down"></i></a>
+										</c:if>
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
 
 					<div class="page-navigation">
-						${paging}
+						${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
 					</div>
 
 					<div class="row board-list-footer">
 						<div class="col">
-							<button type="button" class="btn btn-light" title="새로고침">
+							<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/policy/list';" title="새로고침">
 								<i class="bi bi-arrow-counterclockwise"></i>
 							</button>
 						</div>
@@ -124,18 +128,18 @@
 							<form class="row" name="searchForm">
 								<div class="col-auto p-1">
 									<select name="schType" class="form-select">
-										<option value="all">제목+내용</option>
-										<option value="userName">작성자</option>
-										<option value="reg_date">등록일</option>
-										<option value="subject">제목</option>
-										<option value="content">내용</option>
+										<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
+										<option value="userName" ${schType=="nickname"?"selected":""}>작성자</option>
+										<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
+										<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
+										<option value="content" ${schType=="content"?"selected":""}>내용</option>
 									</select>
 								</div>
 								<div class="col-auto p-1">
-									<input type="text" name="kwd" class="form-control">
+									<input type="text" name="kwd" value="${kwd}" class="form-control">
 								</div>
 								<div class="col-auto p-1">
-									<button type="button" class="btn btn-light">
+									<button type="button" class="btn btn-light" onclick="searchList()">
 										<i class="bi bi-search"></i>
 									</button>
 								</div>
@@ -150,6 +154,34 @@
 			</div>
 		</div>
 	</main>
+	
+	<script type="text/javascript">
+	window.addEventListener('load', () => {
+		const inputEL = document.querySelector('form input[name=kwd]');
+		inputEL.addEventListener('keydown', function (evt) {
+			if(evt.key === 'Enter') {
+				evt.preventDefault();
+				
+				searchList();
+			}
+		});
+	});
+	
+	function searchList() {
+		const f = document.searchForm;
+		if(! f.kwd.value.trim()) {
+			return;
+		}
+		
+		const formData = new FormData(f);
+		let requestParams = new URLSearchParams(formData).toString();
+		
+		let url = '${pageContext.request.contextPath}/policy/list';
+		location.href = url + '?' + requestParams;
+	}
+	
+	
+	</script>
 
 	<footer class="mt-auto py-2 text-center w-100"
 		style="left: 0px; bottom: 0px; background: #F7F9FA;">

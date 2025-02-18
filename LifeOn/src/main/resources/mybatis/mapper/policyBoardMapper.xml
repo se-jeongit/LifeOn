@@ -8,6 +8,103 @@
 	VALUES (policy_board_seq.NEXTVAL, #{subject}, #{content}, SYSDATE, 0, #{savefilename, jdbcType=VARCHAR}, #{originalfilename, jdbcType=VARCHAR}, 0, #{userId})
 	</insert>
 
+	<sql id="where-list">
+		<choose>
+			<when test="schType == 'all'">
+				( INSTR(subject, #{kwd}) &gt; 0
+			    	OR DBMS_LOB.INSTR(content, #{kwd}) &gt; 0 )
+			</when>
+			<when test="schType == 'reg_date'">
+				( TO_CHAR(reg_date, 'YYYY-MM-DD') = #{kwd}
+			    	OR TO_CHAR(reg_date, 'YYYYMMDD') = #{kwd} )
+			</when>
+			<when test="schType == 'content'">
+				DBMS_LOB.INSTR(content, #{kwd}) &gt; 0
+			</when>
+			<otherwise>
+				INSTR(${schType}, #{kwd}) &gt; 0
+			</otherwise>
+		</choose>
+	  </sql>
+	  
+	  <select id="dataCount" parameterType="map" resultType="Integer">
+	  SELECT NVL(COUNT(b.psnum), 0)
+	  FROM policy_board b
+	  JOIN member m ON b.userId = m.id
+	  	<where>
+      		<if test="kwd !=null and kwd != ''">
+      			<include refid="where-list"/>
+      		</if>
+      		AND b.block = 0 
+      	</where>
+	  </select>
+	  
+	  <select id="listBoard" parameterType="map" resultType="com.sp.app.model.PolicyBoard">
+	  	SELECT b.psnum, b.subject, b.content, b.reg_date, b.hitcount, b.savefilename, b.originalfilename, b.block, m.nickname
+		FROM policy_board b
+		JOIN member m ON b.userId = m.id	  
+		<where>
+     		<if test="kwd != null and kwd != ''">
+     			<include refid="where-list"/>
+     		</if>
+     		AND b.block = 0
+     	</where>
+     	ORDER BY b.psnum DESC
+     	OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	  </select> 
 	
-	
+	  <select id="findById" parameterType="long" resultType="com.sp.app.model.PolicyBoard">
+	  	SELECT b.psnum, b.subject, b.content, b.hitcount, b.reg_date, b.savefilename, b.originalfilename, b.block, m.nickname, b.userId
+	  	FROM policy_board b
+	  	JOIN member m ON b.userId = m.id
+	  	WHERE b.psnum = #{num} AND b.block = 0
+	  </select>
+	  
+	  <select id="findByPrev" parameterType="map" resultType="com.sp.app.model.PolicyBoard">
+	  		SELECT b.psnum, b.subject
+      		FROM policy_board b
+      		JOIN member m ON b.userId = m.id
+      	<where>
+      		<if test="kwd != null and kwd != '' ">
+      			<include refid = "where-list"/>
+      		</if>
+      		AND (b.psnum &gt; #{psnum})
+      		AND b.block = 0
+      	</where>
+      	ORDER BY b.psnum ASC
+      	FETCH FIRST 1 ROWS ONLY 
+	  </select>
+	  
+	  <select id="findByNext" parameterType="map" resultType="com.sp.app.model.PolicyBoard">
+	  	SELECT b.psnum, b.subject
+      	FROM policy_board b
+      	JOIN member m ON b.userId = m.id
+      	<where>
+      		<if test="kwd != null and kwd != '' ">
+      			<include refid = "where-list"/>
+      		</if>
+      		AND (b.psnum &lt; #{psnum})
+      		AND b.block = 0
+      	</where>
+      	ORDER BY b.psnum DESC
+      	FETCH FIRST 1 ROWS ONLY
+	  </select>
+	  
+	   <update id="updateHitCount" parameterType="Long">
+      	UPDATE policy_board SET hitcount=hitcount + 1
+      	WHERE psnum=#{psnum}
+      </update>
+      
+      <update id="updateBoard" parameterType="com.sp.app.model.PolicyBoard">
+      	UPDATE policy_board SET subject=#{subject}, content=#{content},
+      	savefilename = #{savefilename, jdbcType=VARCHAR},
+      	originalfilename = #{originalfilename, jdbcType=VARCHAR}
+      	WHERE psnum = #{psnum}
+      </update>
+      
+        <delete id="deleteBoard" parameterType="Long">
+      		DELETE FROM policy_board
+      		WHERE psnum=#{psnum}
+      </delete>
+	  
 </mapper>

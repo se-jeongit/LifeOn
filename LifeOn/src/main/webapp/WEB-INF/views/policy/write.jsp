@@ -55,7 +55,7 @@ td[scope="row"] {
 						<table class="table mt-3 write-form">
 							<tr>
 								<td class="col-sm-2" scope="row">제 목</td>
-								<td><input type="text" name="subject" maxlength="100" class="form-control">
+								<td><input type="text" name="subject" maxlength="100" class="form-control" value="${dto.subject}">
 								</td>
 							</tr>
 
@@ -78,14 +78,18 @@ td[scope="row"] {
 								</td>
 							</tr>
 						
-						<tr>
-							<td class="col-sm-2" scope="row">첨부된파일</td>
-							<td>
-								<p class="form-control-plaintext">
-									<a href=""><i class="bi bi-trash"></i></a>
-							</td>
-						</tr>
-						
+							<c:if test="${mode=='update'}">
+								<tr>
+									<td class="col-sm-2" scope="row">첨부된파일</td>
+									<td>
+										<p class="form-control-plaintext">
+											<c:if test="${not empty dto.savefilename}">
+												<a href="javascript:deleteFile('${dto.psnum}')"><i class="bi bi-trash"></i></a>
+												${dto.originalfilename}
+											</c:if>
+									</td>
+								</tr>
+							</c:if>
 						</table>
 						
 						
@@ -97,8 +101,16 @@ td[scope="row"] {
 										onclick="location.href='${pageContext.request.contextPath}/policy/list';">등록취소&nbsp;<i
 											class="bi bi-x"></i>
 									</button>
-									<button type="button" class="btn" onclick="submitForm();">${mode=="update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></i>
+									<button type="button" class="btn" id="submitBtn" onclick="submitForm();">${mode=="update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></i>
 									</button>
+									
+									<c:if test="${mode == 'update'}">
+										<input type="hidden" name="psnum" value="${dto.psnum}">
+										<input type="hidden" name="savefilename" value="${dto.savefilename}">
+										<input type="hidden" name="originalfilename" value="${dto.originalfilename}">
+										<input type="hidden" name="page" value="${page}">
+									</c:if>	
+									
 								</td>
 							</tr>
 						</table>
@@ -107,12 +119,29 @@ td[scope="row"] {
 			</div>
 		</div>
 	</main>
+	<c:if test="${mode == 'update'}">
+	<script type="text/javascript">
+			function deleteFile(psnum) {
+				if(! confirm('파일을 삭제하시겠습니까?')) {
+					return;
+				}
+			
+				let url = '${pageContext.request.contextPath}/policy/deleteFile?psnum=' + psnum + '&page=${page}';
+				location.href = url;
+			}
+		</script>
+	</c:if>
+	
 	
 	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 	<script type="text/javascript">
 	function submitForm() {
-	    document.boardForm.submit();
+		const f = document.boardForm;
+
+		f.action='${pageContext.request.contextPath}/policy/${mode}';
+		
+	    f.submit();
 	}
 	</script>
 

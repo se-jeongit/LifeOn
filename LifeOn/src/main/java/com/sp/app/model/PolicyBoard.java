@@ -17,6 +17,7 @@ public class PolicyBoard {
 	private String reg_date;
 	private int hitcount;
 	private String userId;
+	private String nickname;
 	
 	private String savefilename;
 	private String originalfilename;
