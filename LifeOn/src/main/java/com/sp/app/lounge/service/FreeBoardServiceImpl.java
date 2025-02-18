@@ -1,15 +1,18 @@
 package com.sp.app.lounge.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.StorageService;
+import com.sp.app.exception.StorageException;
 import com.sp.app.lounge.mapper.FreeBoardMapper;
 import com.sp.app.lounge.model.FreeBoard;
-import com.sp.app.lounge.model.FreeReply;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +28,14 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public void insertBoard(FreeBoard dto, String uploadPath) throws Exception {
 		try {
-			if (! dto.getSelectFile().isEmpty()) {
-				String saveFilename = storageService.uploadFileToServer(dto.getSelectFile(), uploadPath);
-				String originalFilename = dto.getSelectFile().getOriginalFilename();
-				
-				dto.setSsfname(saveFilename);
-				dto.setCpfname(originalFilename);
-			}
+			long seq = mapper.FreeBoardSeq();
+			dto.setPsnum(seq);
 			
 			mapper.insertBoard(dto);
+			
+			if (! dto.getSelectFile().isEmpty()) {
+				insertFile(dto, uploadPath);
+			}
 			
 		} catch (Exception e) {
 			log.info("insertBoard : " + e);
@@ -122,17 +124,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public void updateBoard(FreeBoard dto, String uploadPath) throws Exception {
 		try {
-			if (dto.getSelectFile() != null && ! dto.getSelectFile().isEmpty()) {
-				if (! dto.getSsfname().isBlank()) {
-					deleteUploadFile(uploadPath, dto.getSsfname());
-				}
-				
-				String savaFilename = storageService.uploadFileToServer(dto.getSelectFile(), uploadPath);
-				dto.setSsfname(savaFilename);
-				dto.setCpfname(dto.getSelectFile().getOriginalFilename());
-			}
-			
 			mapper.updateBoard(dto);
+			
+			if (! dto.getSelectFile().isEmpty()) {
+				insertFile(dto, uploadPath);
+			}
 			
 		} catch (Exception e) {
 			log.info("updateBoard : ", e);
@@ -144,13 +140,21 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public void deleteBoard(long num, String uploadPath, String nickname, int grade) throws Exception {
 		try {
-			FreeBoard dto = findById(num);
+			List<FreeBoard> listFile = listFile(num);
+			if (listFile != null) {
+				for (FreeBoard dto : listFile)
+					deleteUploadFile(uploadPath, dto.getSsfname());
+			}
 			
+			FreeBoard dto = findById(num);
 			if (dto == null || (grade < 51 && ! dto.getNickname().equals(nickname))) {
 				return;
 			}
 			
-			deleteUploadFile(uploadPath, dto.getSsfname());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("field", "fnum");
+			map.put("psnum", num);
+			deleteFile(map);
 			
 			mapper.deleteBoard(num);
 			
@@ -162,8 +166,64 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	public List<FreeBoard> listFile(long num) {
+		List<FreeBoard> listFile =  null;
+		
+		try {
+			listFile = mapper.listFile(num);
+		} catch (Exception e) {
+			log.info("listFile : ", e);
+		}
+		return listFile;
+	}
+
+	@Override
+	public FreeBoard findByFileId(long fileNum) {
+		FreeBoard dto = null;
+		
+		try {
+			dto = mapper.findByFileId(fileNum);
+		} catch (Exception e) {
+			log.info("findByfileId : ", e);
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public void deleteFile(Map<String, Object> map) throws Exception {
+		try {
+			mapper.deleteFile(map);
+		} catch (Exception e) {
+			log.info("deleteFile : ", e);
+			
+			throw e;
+		}
+	}
+	
+	@Override
 	public boolean deleteUploadFile(String uploadPath, String filename) {
 		return storageService.deleteFile(uploadPath, filename);
+	}
+	
+	protected void insertFile(FreeBoard dto, String uploadPath) throws Exception {
+		for (MultipartFile mf : dto.getSelectFile()) {
+			try {
+				String saveFilename =  Objects.requireNonNull(storageService.uploadFileToServer(mf, uploadPath));
+
+				String originalFilename = mf.getOriginalFilename();
+
+				dto.setCpfname(originalFilename);
+				dto.setSsfname(saveFilename);
+
+				mapper.updateFile(dto);
+				
+			} catch (NullPointerException e) {
+			} catch (StorageException e) {
+			} catch (Exception e) {
+				throw e;
+			}
+		}
 	}
 
 	@Override
@@ -217,7 +277,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public void insertReply(FreeReply dto) throws Exception {
+	public void insertReply(FreeBoard dto) throws Exception {
 		try {
 			mapper.insertReply(dto);
 		} catch (Exception e) {
@@ -241,13 +301,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public List<FreeReply> listReply(Map<String, Object> map) {
-		List<FreeReply> list = null;
+	public List<FreeBoard> listReply(Map<String, Object> map) {
+		List<FreeBoard> list = null;
 		
 		try {
 			list = mapper.listReply(map);
 			
-			for (FreeReply dto : list) {
+			for (FreeBoard dto : list) {
 				dto.setRpcontent(myUtil.htmlSymbols(dto.getRpcontent()));
 				
 				map.put("rpnum", dto.getRpnum());

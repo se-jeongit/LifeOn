@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
+import com.sp.app.exception.StorageException;
 import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.service.FreeBoardService;
 import com.sp.app.model.SessionInfo;
@@ -72,7 +75,9 @@ public class FreeBoardController {
 			map.put("kwd", kwd);
 			
 			dataCount = service.dataCount(map);
-			total_page = paginateUtil.pageCount(dataCount, size);
+			if (dataCount != 0) {
+				total_page = paginateUtil.pageCount(dataCount, size);
+			}
 			
 			current_page = Math.min(current_page, total_page);
 			
@@ -177,6 +182,8 @@ public class FreeBoardController {
 			FreeBoard prevDto = service.findByPrev(map);
 			FreeBoard nextDto = service.findByNext(map);
 			
+			List<FreeBoard> listFile = service.listFile(num);
+			
 			// SessionInfo info = (SessionInfo) session.getAttribute("member");
 			// map.put("nickname", info.getNickName());
 			// boolean ismemberLiked = service.isMemberBoardLiked(map);
@@ -184,6 +191,7 @@ public class FreeBoardController {
 			model.addAttribute("dto", dto);
 			model.addAttribute("prevDto", prevDto);
 			model.addAttribute("nextDto", nextDto);
+			model.addAttribute("listFile", listFile);
 			
 			// model.addAttribute("ismemberLiked", ismemberLiked);
 
@@ -200,36 +208,85 @@ public class FreeBoardController {
 		return "redirect:/lounge2/tip?" + query;
 	}
 	
-	@GetMapping("tip/deleteFile")
-	public String deleteFile(@RequestParam(name = "psnum") long num,
+	@GetMapping("tip/update")
+	public String updateForm(
+			@RequestParam(name = "psnum") long num,
 			@RequestParam(name = "page") String page,
+			Model model,
 			HttpSession session) throws Exception {
 		
 		try {
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
 			FreeBoard dto = Objects.requireNonNull(service.findById(num));
 			
 			if (! info.getNickName().equals(dto.getNickname())) {
 				return "redirect:/lounge2/tip?page=" + page;
 			}
 			
-			if (dto.getSsfname() != null) {
-				service.deleteUploadFile(uploadPath, dto.getSsfname());
-				
-				dto.setSsfname("");
-				dto.setCpfname("");
-				
-				service.updateBoard(dto, uploadPath);
-			}
+			List<FreeBoard> listFile = service.listFile(num);
 			
-			return "redirect:/lounge2/tip/update?num=" + num + "&page=" + page;
+			model.addAttribute("dto", dto);
+			model.addAttribute("listFile", listFile);
+			model.addAttribute("page", page);
+			model.addAttribute("mode", "update");
+			
+			return "lounge2/tip/write";
 			
 		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("updateForm : ", e);
+		}
+		
+		return "redirect:/lounge2/tip/list?page=" + page;
+	}
+	
+	@PostMapping("tip/update")
+	public String updateSubmit(FreeBoard dto,
+			@RequestParam(name = "page") String page,
+			HttpSession session) throws Exception {
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			dto.setNum(info.getNum());
+			dto.setNickname(info.getNickName());
+			service.updateBoard(dto, uploadPath);
+			
+		} catch (Exception e) {
+			log.info("updateSubmit : ", e);
+		}
+		return "redirect:/lounge2/tip?page=" + page;
+	}
+	
+	@ResponseBody
+	@PostMapping("tip/deleteFile")
+	public Map<String, ?> deleteFile(@RequestParam(name = "fnum") long fileNum,
+			HttpSession session) throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "false";
+		
+		try {
+			FreeBoard dto = Objects.requireNonNull(service.findByFileId(fileNum));
+			
+			service.deleteUploadFile(uploadPath, dto.getSsfname());
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("field", "fnum");
+			map.put("psnum", fileNum);
+				
+			service.deleteFile(map);
+			
+			state = "true";
+			
+		} catch (NullPointerException e) {
+			log.info("deleteFile : ", e);
 		} catch (Exception e) {
 			log.info("deleteFile : ", e);
 		}
 		
-		return "redirect:/lounge2/tip/list?page=" + page;
+		model.put("state", state);
+		return model;
 	}
 	
 	@GetMapping("tip/delete")
@@ -258,17 +315,18 @@ public class FreeBoardController {
 		return "redirect:/lounge2/tip?" + query;
 	}
 	
-	@GetMapping("download")
+	@GetMapping("tip/download")
 	public ResponseEntity<?> download(
-			@RequestParam(name = "psnum") long num,
+			@RequestParam(name = "fnum") long fileNum,
 			HttpServletRequest req) throws Exception {
 		
 		try {
-			FreeBoard dto = Objects.requireNonNull(service.findById(num));
+			FreeBoard dto = Objects.requireNonNull(service.findByFileId(fileNum));
 			
 			return storageService.downloadFile(uploadPath, dto.getSsfname(), dto.getCpfname());
 			
-		} catch (NullPointerException e) {
+		} catch (NullPointerException | StorageException e) {
+			log.info("download : ", e);
 		} catch (Exception e) {
 			log.info("download : ", e);
 		}
@@ -286,51 +344,10 @@ public class FreeBoardController {
 		return "error/downloadFailure";
 	}
 	
-	/*
-	@GetMapping("update")
-	public String updateForm(
-			@RequestParam(name = "num") long num,
-			@RequestParam(name = "page") String page,
-			Model model,
-			HttpSession session) throws Exception {
-		try {
-			SessionInfo info = (SessionInfo) session.getAttribute("member");
-			
-			FreeBoard dto = Objects.requireNonNull(service.findById(num));
-			
-			if (! info.getNickName().equals(dto.getNickname())) {
-				return "redirect:/lounge2/tip?page=" + page;
-			}
-			
-			model.addAttribute("dto", dto);
-			model.addAttribute("page", page);
-			model.addAttribute("mode", "update");
-			
-			return "lounge2/tip/write";
-			
-		} catch (NullPointerException e) {
-		} catch (Exception e) {
-			log.info("updateForm : ", e);
-		}
-		
-		return "redirect:/lounge2/tip/list?page=" + page;
-	}
-	
-	@PostMapping("update")
-	public String updateSubmit(FreeBoard dto, @RequestParam(name = "page") String page) throws Exception {
-		try {
-			service.updateBoard(dto, uploadPath);
-		} catch (Exception e) {
-			log.info("updateSubmit : ", e);
-		}
-		return "redirect:/lounge2/tip?page=" + page;
-	}
-	
-	// 게시글 좋아요 추가 / 삭제 : AJAX - JSON
 	@ResponseBody
-	@PostMapping("insertBoardLike")
+	@PostMapping("tip/insertBoardLike")
 	public Map<String, ?> insertBoardLike(
-			@RequestParam(name = "num") long num,
+			@RequestParam(name = "psnum") long num,
 			@RequestParam(name = "memberLiked") boolean memberLiked,
 			HttpSession session) {
 		Map<String, Object> model = new HashMap<>();
@@ -342,13 +359,14 @@ public class FreeBoardController {
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
 			
 			Map<String, Object> map = new HashMap<>();
-			map.put("num", num);
+			map.put("psnum", num);
+			map.put("num", info.getNum());
 			map.put("nickname", info.getNickName());
 			
 			if (memberLiked) {
-				service.deleteBoardLike(map); // 좋아요 해제
+				service.deleteBoardLike(map);
 			} else {
-				service.insertBoardLike(map); // 좋아요 추가
+				service.insertBoardLike(map); 
 			}
 			
 			boardLikeCount = service.boardLikeCount(num);
@@ -364,8 +382,8 @@ public class FreeBoardController {
 		
 		return model;
 	}
-	
-	
+		
+	/*	
 	// 댓글 리스트 : AJAX - TEXT
 	@GetMapping("listReply")
 	public String listReply(

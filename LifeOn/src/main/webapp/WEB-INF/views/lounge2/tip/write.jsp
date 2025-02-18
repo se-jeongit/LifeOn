@@ -86,39 +86,23 @@ function check() {
 							<div class="filebox">
 								<input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly="readonly">
 							    <label for="file">파일선택</label> 
-							    <input type="file" id="file" name="selectFile">
+							    <input type="file" id="file" name="selectFile" multiple>
 							</div>
 							</td>
 						</tr>
 						
 						<c:if test="${mode == 'update'}">
-							<tr>
-								<td scope="row" style="vertical-align: middle;">첨부된파일</td>
-								<td>
-									<p class="free-control">
-										<c:if test="${not empty dto.ssfname}">
-											<a href="javascript:deleteFile('${dto.fnum}')"><i class="bi bi-trash"></i></a>
-											${dto.cpfname}
-										</c:if>
-										&nbsp;
-									</p>
-								</td>
-							</tr>
-						</c:if>
-						
-						<c:if test="${mode=='update'}">
-							<tr>
-								<td class="bg-light col-sm-2" scope="row">등록된파일</td>
-								<td> 
-									<div class="img-box">
-										<c:forEach var="dto" items="${list}">
-											<img src="${pageContext.request.contextPath}/uploads/tip/${dto.ssfname}"
-												class="delete-img"
-												data-fileNum="${dto.fnum}">
-										</c:forEach>
-									</div>
-								</td>
-							</tr>
+							<c:forEach var="vo" items="${listFile}">
+								<tr> 
+									<td scope="row" style="vertical-align: middle;">첨부된파일</td>
+									<td>
+										<p class="free-control">
+											<span class="delete-file" data-fileNum="${vo.fnum}"><i class="bi bi-trash"></i></span> 
+											${vo.cpfname}
+										</p>
+									</td>
+								  </tr>
+							</c:forEach>
 						</c:if>
 					</table>
 					
@@ -126,13 +110,11 @@ function check() {
 	 					<tr>
 							<td class="text-center">
 								<button type="button" class="btn" onclick="check();">${mode=='update'?'수정완료':'등록완료'}&nbsp;<i class="bi bi-check2"></i></button>
-								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
+								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip/article/${dto.psnum}?page=${page}';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
 
 								<c:if test="${mode == 'update'}">
 									<input type="hidden" name="num" value="${dto.num}">
 									<input type="hidden" name="psnum" value="${dto.psnum}">
-									<input type="hidden" name="saveFilename" value="${dto.ssfname}">
-									<input type="hidden" name="originalFilename" value="${dto.cpfname}">
 									<input type="hidden" name="page" value="${page}">
 								</c:if>
 							</td>
@@ -156,16 +138,24 @@ function check() {
 		</div>
 	</div>
 	
-	<c:if test="${mode == 'update'}">
+	<c:if test="${mode=='update'}">
 		<script type="text/javascript">
-			function deleteFile(fnum) {
-				if (! confirm('파일을 삭제 하시겠습니까?')) {
-					return;
+			$('.delete-file').click(function(){
+				if(! confirm('선택한 파일을 삭제 하시겠습니까 ? ')) {
+					return false;
 				}
 				
-				let url = '${pageContext.request.contextPath}/lounge2/tip/deleteFile?num=' + fnum + '&page=${page}';
-				location.href = url;
-			}
+				let $tr = $(this).closest('tr');
+				let fnum = $(this).attr('data-fileNum');
+				let url = '${pageContext.request.contextPath}/lounge2/tip/deleteFile';
+				
+				$.ajaxSetup({ beforeSend: function(e) { e.setRequestHeader('AJAX', true); } });
+				$.post(url, {fnum: fnum}, function(data){
+					$($tr).remove();
+				}, 'json').fail(function(jqXHR){
+					console.log(jqXHR.responseText);
+				});
+			});
 		</script>
 	</c:if>
 
@@ -197,10 +187,9 @@ function submitContents(elClickedObj) {
 	}
 }
 */
-
-$("#file").on('change',function(){
-	  var fileName = $("#file").val();
-	  $(".upload-name").val(fileName);
+$("#file").on('change', function() {
+    var fileCount = $("#file")[0].files.length;
+    $(".upload-name").val(fileCount + "개 파일 선택됨");
 });
 </script>
 </main>

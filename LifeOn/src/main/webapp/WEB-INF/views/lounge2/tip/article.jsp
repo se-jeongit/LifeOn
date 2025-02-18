@@ -50,11 +50,14 @@
 						
 						<tbody>
 							<tr>
-								<td width="50%">
+								<td width="30%">
 									작성자 : ${dto.nickname}
 								</td>
-								<td align="right">
-									${dto.reg_date} | 조회 ${dto.hitCount}
+								<td align="right" style="font-size: 12px; ">
+									<p style="margin: 0;">등록일 : ${dto.reg_date} | 조회 : ${dto.hitCount}</p>
+									<c:if test="${not empty dto.uddate}">
+									<p style="margin: 0;">최근수정일 : ${dto.uddate}</p>
+									</c:if>
 								</td>
 							</tr>
 							
@@ -63,21 +66,21 @@
 									${dto.content}
 								</td>
 							</tr>
-					
+							
 							<tr>
 								<td colspan="2" class="text-center p-3" style="border-bottom: none;">
-									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="좋아요"><i class="bi ${isMemberLiked ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'}"></i>&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span></button>
+									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기"><i class="bi bi-bookmark"${isMemberLiked ? 'bi-bookmark-fill' : 'bi-bookmark'}"></i>&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span></button>
 								</td>
 							</tr>
 					
 							<tr>
 								<td colspan="2">
-									<c:if test="${not empty dto.ssfname}">
+									<c:forEach var="vo" items="${listFile}" varStatus="status">
 										<p class="border text-secondary my-1 p-2">
 											<i class="bi bi-folder2-open"></i> 첨부파일 다운로드 : 
-											<a href="${pageContext.request.contextPath}/tip/download?num=${dto.psnum}">${dto.cpfname}</a>
-										</p>
-									</c:if>
+											<a href="${pageContext.request.contextPath}/lounge2/tip/download?fnum=${vo.fnum}">${vo.cpfname}</a>
+											</p>
+									</c:forEach>
 								</td>
 							</tr>
 							
@@ -105,12 +108,13 @@
 							</tr>
 						</tbody>
 					</table>
+					
 					<table class="table table-borderless">
 						<tr>
 							<td class="text-start">
 								<c:choose>
 									<c:when test="${sessionScope.member.nickName == dto.nickname}">
-										<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/tip/update?num=${dto.num}&page=${page}';">수정</button>
+										<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip/update?psnum=${dto.psnum}&page=${page}';">수정</button>
 									</c:when>
 									<c:otherwise>
 										<button type="button" class="btn btn-light" disabled>수정</button>
@@ -183,6 +187,166 @@
 		}
 	</script>
 </c:if>
+
+<script type="text/javascript">
+// 게시글 공감 여부
+$(function() {
+	$('.btnSendBoardLike').click(function() {
+		const $i = $(this).find('i');
+		let memberLiked = $i.hasClass('bi-bookmark-fill');
+		let msg = memberLiked ? '게시글 즐겨찾기를 취소하시겠습니까?' : '게시글 즐겨찾기를 하시겠습니까?';
+		
+		if (! confirm(msg)) {
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/lounge2/tip/insertBoardLike';
+		let num = '${dto.num}';
+		let params = {num: num, memberLiked: memberLiked};
+		
+		const fn = function(data) {
+			let state = data.state;
+			// alert(state);
+			
+			if (state === "true") {
+				if (userLiked) {
+					$i.removeClass('bi-bookmark-fill').addClass('bi-bookmark');
+				} else {
+					$i.removeClass('bi-bookmark').addClass('bi-bookmark-fill');
+				}
+				
+				let count = data.boardLikeCount;
+				$('#boardLikeCount').text(count);
+				
+			} else if (state == "liked") {
+				alert('게시글 공감은 한번만 가능합니다.');
+			} else {
+				alert('게시글 공감 여부 처리가 실패 했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+});
+
+// 댓글
+$(function() {
+	listPage(1);
+});
+
+// 댓글 리스트
+function listPage(page) {
+	let url = '${pageContext.request.contextPath}/lounge2/tip/listReply';
+	let num = '${dto.num}';
+	let params = {num: num, pageNo: page};
+	
+	const fn = function(data) {
+		$('#listReply').html(data);
+	};
+	
+	ajaxRequest(url, 'get', params, 'text', fn);
+}
+
+// 삭제, 신고메뉴
+$(function() {
+	$('.reply').on('click', '.reply-dropdown', function() {	
+		const $menu = $(this).next('.reply-menu');
+		
+		if ($menu.is(':visible')) {
+			$menu.fadeOut(100);
+		} else {
+			$('.reply-menu').hide();
+			$menu.fadeIn(100);
+			
+			let pos = $(this).offset();
+			$menu.offset({left:pos.left-70, top:pos.top+20});
+		}
+	});
+	
+	$('.reply').on('click', function(evt) {
+		if ($(evt.target.parentNode).hasClass('reply-dropdown')) {
+			return false;
+		}
+		
+		$('.reply-menu').hide();
+	});
+});
+
+// 댓글 삭제
+$(function() {
+	$('.reply').on('click', '.deleteReply', function() {	
+		if (! confirm('댓글을 삭제하시겠습니까?')) {
+			return false;
+		}
+		
+		let replyNum = $(this).attr('data-replyNum');
+		let page = $(this).attr('data-pageNo');
+		
+		let url = '${pageContext.request.contextPath}/lounge2/tip/deleteReply';
+		let params = {replyNum: replyNum, mode: 'reply'};
+		
+		const fn = function(data) {
+			listPage(page);
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);		
+	});
+});
+
+// 댓글 좋아요 / 싫어요
+$(function() {
+	// 댓글 좋아요 / 싫어요 등록
+	$('.reply').on('click', '.btnSendReplyLike', function() {	
+		const $btn = $(this);
+		let replyNum = $btn.attr('data-replyNum');
+		let replyLike = $btn.attr('data-replyLike');
+		let userLiked = $btn.parent('td').attr('data-userLiked');
+		
+		if (userLiked !== '-1') {
+			return false;
+		}
+		
+		let msg = '댓글이 마음에 들지 않습니까 ?';
+		if (replyLike === '1') {
+			msg = '댓글에 공감하십니까?';
+		}
+		
+		if (! confirm(msg)) {
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/lounge2/tip/insertReplyLike';
+		let params = {replyNum: replyNum, replyLike: replyLike};
+		
+		const fn = function(data) {
+			let state = data.state;
+			if (state === 'true') {
+				let likeCount = data.likeCount;
+				let disLikeCount = data.disLikeCount;
+				
+				$btn.parent('td').children().eq(0).find('span').html(likeCount);
+				$btn.parent('td').children().eq(1).find('span').html(disLikeCount);
+				
+				$btn.parent('td').attr('data-userLiked', replyLike);
+				if (replyLike === '1') {
+					$btn.css('color', '#00f');
+				} else {
+					$btn.css('color', '#f00');
+				}
+				
+			} else if (state === 'liked') {
+				alert('공감 여부는 한번만 가능합니다.');
+			} else {
+				alert('댓글 공감 여부 처리가 실패했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+});
+
+</script>
+
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
