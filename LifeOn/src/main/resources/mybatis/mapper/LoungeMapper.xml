@@ -60,18 +60,7 @@
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 	
-	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.PhotoBoard">
-		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, hb.blind, bdtype
-		FROM HYBRID_BOARD hb
-		JOIN MEMBER m ON hb.num = m.num
-		LEFT OUTER JOIN (
-			SELECT psnum, COUNT(*) boardLikeCount, num
-			FROM HYBRID_BOARD_FAV
-			WHERE num = #{num}
-			GROUP BY psnum, num
-			) c ON hb.num = c.num
-			WHERE hb.psnum = #{psnum, jdbcType=NUMERIC} AND blind = 0 AND bdtype = #{bdtype, jdbcType=VARCHAR2}
-	</select>
+
 	
 	<update id="updateHitCount" parameterType="Long">
 		UPDATE HYBRID_BOARD SET hitCount = hitCount + 1
