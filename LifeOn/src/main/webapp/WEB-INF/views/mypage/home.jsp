@@ -14,8 +14,8 @@
 <style>
     .sejin-container {
         max-width: 1300px;
-        margin: auto;
-        padding: 30px;
+        margin: 20px auto;
+        padding: 20px;
         background: white;
         border-radius: 12px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -87,24 +87,27 @@
         <div class="sejin-container">
             <div class="sejin-title">포인트 내역</div>
             <div class="sejin-point-box">
-                <div>나의 포인트 <strong>1,000P</strong></div>
+                <div>나의 포인트 <strong>${totalPoint == 0 ? 0 : totalPoint}</strong></div>
                 <button class="btn btn-primary btn-sm">충전하기</button>
             </div>
-            
-            <div class="sejin-filter">
-                <label for="sejin-filter-select">포인트 유형&emsp;:&emsp;</label>
-                <select id="sejin-filter-select" class="sejin-dropdown">
-                    <option value="all">전체</option>
-                    <option value="earn">적립</option>
-                    <option value="use">사용</option>
-                    <option value="expire">소멸</option>
-                </select>
-            </div>
-            
+            <form class="row" name="searchForm">
+	            <div class="sejin-filter">
+	                <label for="sejin-filter-select">포인트 유형&emsp;:&emsp;</label>
+	                <select id="sejin-filter-select" class="sejin-dropdown">
+	                    <option value="all"  ${schType=="all"?"selected":""}>전체</option>
+	                    <option value="earn"  ${schType=="earn"?"selected":""}>적립</option>
+	                    <option value="use"  ${schType=="use"?"selected":""}>사용</option>
+	                    <option value="expire"  ${schType=="expire"?"selected":""}>소멸</option>
+	                    <option value="charge"  ${schType=="charge"?"selected":""}>충전</option>
+	                </select>
+					<button type="button" class="btn btn-light" onclick="searchList()"> <i class="bi bi-search"></i> </button>
+	            </div>
+			</form>
             <div class="sejin-table-container">
                 <table class="sejin-table">
                     <thead>
                         <tr>
+                        	<th>번호</th>
                             <th>포인트유형</th>
                             <th>발생일자</th>
                             <th>발생내용</th>
@@ -120,19 +123,37 @@
                     			<td>${dto.pret}</td>
                     			<td>${dto.prepd}</td>
                     			<td>${dto.prec}</td>
+                    			<td>${dto.prevd}</td>
                     			<td>${dto.prep}</td>
-                    			<td>${dto.prept}</td>                   			
+                    			<td>${dto.pretp}</td>                   			
                     		</tr>
                     	</c:forEach>
                     </tbody>
                 </table>
             </div>
             <div class="page-navigation">
-					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+					${dataCount == 0 ? "포인트 내역이 없습니다" : paging}
 			</div>
         </div>
     </div>
 </main>
+
+<script type="text/javascript">
+
+function searchList(){
+	const f = document.searchForm;
+	
+	const schType = f.querySelector("#sejin-filter-select").value;
+	
+	let requestParams = new URLSearchParams();
+	requestParams.append("schType", schType);
+	
+	let url = '${pageContext.request.contextPath}/point/mypage';
+	location.href = url + '?' + requestParams.toString();
+	
+}
+
+</script>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

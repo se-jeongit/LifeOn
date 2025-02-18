@@ -15,7 +15,7 @@ public interface FreeBoardService {
 	public FreeBoard findByPrev(Map<String, Object> map);
 	public FreeBoard findByNext(Map<String, Object> map);
 	public void updateBoard(FreeBoard dto, String uploadPath) throws Exception;
-	public void deleteBoard(long num, String uploadPath, String id, int grade) throws Exception;
+	public void deleteBoard(long num, String uploadPath, String nickname, int grade) throws Exception;
 
 	public boolean deleteUploadFile(String uploadPath, String filename);
 	

@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping(value = "/together/*")
+@RequestMapping(value = "/market/together/*")
 public class TogetherController {
 	@GetMapping("main")
 	public String wow() {
-		return "together/main";
+		return "market/together/main";
 	}
 }

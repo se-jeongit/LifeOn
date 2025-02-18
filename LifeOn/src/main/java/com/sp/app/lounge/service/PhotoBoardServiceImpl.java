@@ -46,26 +46,53 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 
 	@Override
 	public List<PhotoBoard> listBoard(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+		List<PhotoBoard> list = null;
+
+		try {
+			list = mapper.listBoard(map);
+			
+		} catch (Exception e) {
+			log.info("listBoard : ", e);
+		}
+
+		return list;
 	}
 
 	@Override
 	public int dataCount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+
+		try {
+			result = mapper.dataCount(map);
+			
+		} catch (Exception e) {
+			log.info("dataCount : ", e);
+		}
+
+		return result;
 	}
 
 	@Override
 	public PhotoBoard findById(long num) {
-		// TODO Auto-generated method stub
-		return null;
+		PhotoBoard dto = null;
+		
+		try {
+			dto = mapper.findById(num);
+			
+		} catch (Exception e) {
+			log.info("findById : ", e);
+		}
+		return dto;
 	}
 
 	@Override
 	public void updateHitCount(long num) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			mapper.updateHitCount(num);
+		} catch (Exception e) {
+			log.info("updateHitCount : ", e);
+			
+		}
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.sp.app.controller;
 
+import java.sql.Struct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class PointRecordController {
 	
 	@GetMapping("mypage")
 	public String handlePoint(@RequestParam(name = "page", defaultValue = "1") int current_page,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
 			Model model,
 			HttpSession session,
 			HttpServletRequest req) throws Exception {
@@ -38,15 +40,18 @@ public class PointRecordController {
 			int size = 10;
 			int total_page = 0;
 			int dataCount = 0;
-			
+			int totalPoint = 0;
 			Map<String, Object> map = new HashMap<>();
+			map.put("schType", schType);
 			
 			SessionInfo member = (SessionInfo) session.getAttribute("member");
 			map.put("num", member.getNum());
 			
+			totalPoint = service.totalPoint(member.getNum());
 			dataCount = service.dataCount(map);
 			total_page = paginateUtil.pageCount(dataCount, size);
 			current_page = Math.min(current_page, total_page);
+			
 			
 			int offset = (current_page - 1) * size;
 			if(offset < 0) offset = 0;
@@ -56,9 +61,18 @@ public class PointRecordController {
 			
 			String cp = req.getContextPath();
 			String listUrl = cp + "/point/mypage";
+			String query = "page=" + current_page;
 			
-			List<PointRecord> list = service.listPoint(map);
+			if(schType.length() != 0) {
+				String qs = "schType=" + schType;
+				listUrl += "?" +qs;
+				query += "&" + qs;
+			}
+			
+			List<PointRecord> list = service.listPoint(map); 
 			String paging = paginateUtil.paging(current_page, total_page, listUrl);
+			
+			model.addAttribute("totalPoint", totalPoint);
 			
 			model.addAttribute("list", list);
 			model.addAttribute("dataCount", dataCount);
@@ -67,6 +81,8 @@ public class PointRecordController {
 			model.addAttribute("total_page", total_page);
 			model.addAttribute("paging", paging);
 			
+			model.addAttribute("schType", schType);
+			model.addAttribute("query", query);
 			
 		} catch (Exception e) {
 			log.info("list : ", e);

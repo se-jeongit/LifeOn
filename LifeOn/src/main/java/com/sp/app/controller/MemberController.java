@@ -1,11 +1,13 @@
 package com.sp.app.controller;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sp.app.model.Member;
@@ -36,13 +39,13 @@ public class MemberController {
 	private final CoolSmsService coolSmsService;
 	
 	
-	/* 초기 로그인은 모달로 처리할거다.
+
 	@GetMapping("login")
 	public String login() {
 		return "member/login";
 				
 	}
-	*/
+
 	
 	@PostMapping("login")
 	public String loginSubmit(@RequestParam(name = "id") String id,
@@ -70,8 +73,8 @@ public class MemberController {
 		info.setGrade(dto.getGrade());
 		info.setNum(dto.getNum());
 		info.setLast_login(dto.getLast_login());
-
-		
+		info.setProfile_image(dto.getProfile_image());
+	
 		session.setMaxInactiveInterval(60 * 60); // 세션 유지시간 60분
 		
 		session.setAttribute("member", info);
@@ -106,12 +109,37 @@ public class MemberController {
 	}
 	
 	@PostMapping("join")
-	public String memberSubmit(Member dto,
+	public String memberSubmit(@RequestParam(value = "profileImageFile", required = false) MultipartFile file,
+			Member dto,
 			final RedirectAttributes reAttr,
 			Model model,
 			HttpServletRequest req) {
 		try {
+			String profileImagePath = null;
+			
+			if (file != null && !file.isEmpty()) {
+	
+			    String uploadDir = new File("src/main/resources/static/dist/images/").getAbsolutePath();
+			    File dir = new File(uploadDir);
+			    if (!dir.exists()) dir.mkdirs(); // 디렉토리 없으면 생성
+
+			    // 파일중복없애자
+			    String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+			    File saveFile = new File(uploadDir, fileName);
+			    file.transferTo(saveFile);
+
+			    profileImagePath = "/dist/images/" + fileName;
+			}
+
+			dto.setProfile_image((profileImagePath != null) ? profileImagePath : "/dist/images/basicpro.png");
+
+	        
+	        System.out.println("파일 업로드 완료 - 저장된 경로: " + profileImagePath);
+	        System.out.println("DTO에 저장된 profile_image: " + dto.getProfile_image());
+	        
 			service.insertMember(dto);
+			
+			
 			
 			StringBuilder sb = new StringBuilder();
 			sb.append(dto.getName() + "님의 회원 가입이 정상적으로 처리되었습니다.<br>");
@@ -213,13 +241,43 @@ public class MemberController {
 	
 	//회원정보수정
 	@PostMapping("update")
-	public String updateSubmit(Member dto,
+	public String updateSubmit(@RequestParam(value = "profileImageFile", required = false) MultipartFile file,
+			Member dto,
 			final RedirectAttributes reAttr,
 			Model model) {
+		
 		StringBuilder sb = new StringBuilder();
 		try {
 			
-			System.out.println("Updating member with num: " + dto.getNum());
+	        String existingProfileImage = dto.getProfile_image();
+
+	        // 파일 선택시
+	        if (file != null && !file.isEmpty()) {
+	
+	            if (existingProfileImage != null && !existingProfileImage.equals("/dist/images/basicpro.png")) {
+	                String existingFilePath = "src/main/resources/static" + existingProfileImage;
+	                File existingFile = new File(existingFilePath);
+	                if (existingFile.exists()) {
+	                    existingFile.delete();  // 기존 파일 삭제
+	                }
+	            }
+
+	            // 새 이미지 저장
+	            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+	            String uploadDir = new File("src/main/resources/static/dist/images/").getAbsolutePath();
+
+
+	            File saveFile = new File(uploadDir, fileName);
+	            file.transferTo(saveFile);  // 파일 업로드
+
+	            dto.setProfile_image("/dist/images/" + fileName);  // 새 이미지 경로 설정
+	        } else {
+	            // 파일이 없으면 기존 경로 그대로 사용
+	            if (existingProfileImage == null || existingProfileImage.equals("/dist/images/basicpro.png")) {
+	                dto.setProfile_image("/dist/images/basicpro.png");
+	            }
+	        }
+	        
 			service.updateMember(dto);
 			
 			sb.append(dto.getId() + "님의 회원정보가 정상적으로 변경되었습니다.<br>");
@@ -227,7 +285,9 @@ public class MemberController {
 			
 		} catch (Exception e) {
 			sb.append(dto.getName() + "님의 회원정보 변경이 실패했습니다.<br>");
-			sb.append("잠시후 다시 변경 하시기 바랍니다.<br>");			
+			sb.append("잠시후 다시 변경 하시기 바랍니다.<br>");
+			sb.append("오류 메시지: " + e.getMessage() + "<br>"); // 예외 메시지 출력
+			e.printStackTrace();
 		}
 		
 		reAttr.addFlashAttribute("title", "회원 정보 수정");

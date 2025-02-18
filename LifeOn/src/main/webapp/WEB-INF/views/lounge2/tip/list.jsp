@@ -12,6 +12,34 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
 
+<script type="text/javascript">
+function elapsedText(date) {
+	const seconds = 1;
+	const minute = seconds * 60;
+	const hour = minute * 60;
+	const day = hour * 24;
+	
+	var today = new Date();
+	var elapsedTime = Math.trunc((today.getTime() - date.getTime()) / 1000);
+	
+	var elapsedText = "";
+	if (elapsedTime < seconds) {
+		elapsedText = "방금 전";
+	} else if (elapsedTime < minute) {
+		elapsedText = elapsedTime + "초 전";
+	} else if (elapsedTime < hour) {
+		elapsedText = Math.trunc(elapsedTime / minute) + "분 전";
+	} else if (elapsedTime < day) {
+		elapsedText = Math.trunc(elapsedTime / hour) + "시간 전";
+	} else if (elapsedTime < (day * 3)) {
+		elapsedText = Math.trunc(elapsedTime / day) + "일 전";
+	} else {
+		elapsedText = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate().toString().padStart(2, '0');
+	}
+	
+	return elapsedText;
+}
+</script>
 </head>
 <body>
 
@@ -33,6 +61,7 @@
 					<p>❤️최신순❤️</p>
 					<p>❤️조회순❤️</p>
 					<p>❤️즐겨찾기순❤️</p>
+					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
 				</div>
 			</aside>
 			
@@ -49,35 +78,55 @@
 				</div>
 				
 				<!-- 글리스트 -->
-				<c:forEach var="dto" items="${list}" varStatus="status">
-				<div class="tip_list">
-			  		<div class="tip_container" onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'">
-						<h4 class="tip_subject">
-						 	${dto.subject}
-						</h4>
-					        
-				        <div class="tip_content">
-							${dto.content}
-				        </div>
-				        
-						<div class='tip_info'>
-							<div>
-								<span class='tip_userName'>${dto.nickname}</span>
-								<span>&nbsp;·&nbsp;</span>
-								<span>${dto.reg_date}</span>
-							</div>
-							<div>
-								<i class="tip_icon bi bi-bookmark"></i>
-								<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
-								<i class="tip_icon bi bi-eye"></i>
-								<span>${dto.hitCount}&nbsp;&nbsp;</span>
-								<i class="tip_icon bi bi-chat-dots"></i>
-								<span>${dto.replyCount}&nbsp;&nbsp;</span>
-							</div>
+				<div>
+					<c:forEach var="dto" items="${list}" varStatus="status">
+					<div class="mx-3">
+				  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'">
+							<table class="table table-hover m-0">
+								<tbody>
+								 	<tr>
+								 		<td>
+										 	<h4 class="tip_subject">
+											 	${dto.subject}
+											</h4>
+	
+										 	<div class="tip_content">
+												${dto.content}
+									        </div>
+									        <div style="display: flex; justify-content: space-between;">
+												<div>
+													<span class='tip_userName'>${dto.nickname}</span>
+													<span>&nbsp;·&nbsp;</span>
+													
+                                    				<span id="result-${dto.psnum}"></span>
+				                                    <script type="text/javascript">
+				                                    	document.addEventListener("DOMContentLoaded", function() {
+				                                            const dateStr = "${dto.reg_date}".trim();
+				                                            const date = new Date(dateStr);
+				                                            const id = "result-${dto.psnum}";
+
+				                                        	document.getElementById(id).innerText = elapsedText(date);
+				                                    	});
+				                                    </script>
+												</div>
+												<div>
+													<i class="tip_icon bi bi-bookmark"></i>
+													<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
+													<i class="tip_icon bi bi-eye"></i>
+													<span>${dto.hitCount}&nbsp;&nbsp;</span>
+													<i class="tip_icon bi bi-chat-dots"></i>
+													<span>${dto.replyCount}&nbsp;&nbsp;</span>
+												</div>
+											</div>
+										</td>
+							        </tr>
+	
+								</tbody>
+							</table>
 						</div>
 					</div>
+					</c:forEach>
 				</div>
-				</c:forEach>
 
 				<div class="page-navigation">
 					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
@@ -88,7 +137,6 @@
 			<aside class="sidebar">
 				<div class="rightBox">
 					<p>❤️검색순위❤️</p>
-					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
 				</div>
 				<div style="display: flex; align-items: center; margin: 0 20px;">
 					<!-- 검색상자 -->
