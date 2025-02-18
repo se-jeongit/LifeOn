@@ -18,4 +18,16 @@ public class ProductManageController {
 
 		return "admin/productManage/list";
 	}
+	
+	@GetMapping("stock")
+	public String stockManage() throws Exception {
+
+		return "admin/productManage/stock";
+	}
+	
+	@GetMapping("register")
+	public String register() throws Exception {
+
+		return "admin/productManage/register";
+	}
 }

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
@@ -6,206 +6,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>spring</title>
+<title>LifeOn - 상품관리</title>
 
-<jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp" />
-
-<style type="text/css">
- 
-.body-title{
-	margin-bottom : 20px;
-}
-.body-middle{
-	display : flex;
-	align-items: center;
-	justify-content:space-between;
-}
-
-.left {
-	font-size : 15px;
-	display : flex;
-	gap : 20px;
-	margin-bottom : 20px;
-}
-
-
-.product-info{
-	display: flex;
-    align-items: center; /* 이미지와 텍스트를 같은 높이로 정렬 */
-}
-
-.product-img{
-	display : block;
-}
-
-.btn{
-	border-color : white;
-	color :black;
-}
-
-.btn.active{
-	border-color : white;
-	color:#006AFF;
-}
-
-
-.table th, .table td{
-	text-align: center;
-	vertical-align: middle;
-}
-
-.table td button {
-	display : flex;
-	justify-content: center;
-	align-items: center;
-	margin:0 auto;
-}
-
-.orderwatch {
-	background-color: white;
-	border: 1px solid black;
-	padding : 2px;
-}
-
-.comment-info {
-	text-align: center;
-}
-
-.btntype {
-	display: flex;
-}
-
-.btntype button {
-	padding: 5px;
-	background-color: #333; /* 진한 회색 */
-    color: white; /* 글씨는 흰색으로 가독성 높이기 */
-}
-
-.btntype button:hover {
-    background-color: #666; /* 마우스 오버 시 색상 변경 */
-}
-
-.body-footer {
-	text-align : right;
-}
-
-.favoriteBtn button{
-	padding : 5px;
-	color : white;
-	background-color: #006AFF;
-	border: 1px solid #006AFF;
-}
-
-.favoriteBtn button:hover {
-	background-color:#338CFF;
-}
-
+<jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp"/>
+<style>
+    .wrapper {
+        display: flex;
+    }
+    .container {
+        flex-grow: 1;
+        padding: 20px;
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+    .table th {
+        background-color: #f4f4f4;
+    }
+    .btn {
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .btn-edit {
+        background-color: #007bff;
+        color: white;
+    }
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+    .btn-order {
+        background-color: #28a745;
+        color: white;
+    }
+    .sidebar {
+        width: 250px;
+        background: #007bff;
+        color: white;
+        padding: 20px;
+    }
+    .status-tabs {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .status-tabs a {
+        text-decoration: none;
+        color: black;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+    .status-tabs a.active {
+        background-color: #007bff;
+        color: white;
+    }
+    h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
 </style>
-
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tabs = document.querySelectorAll(".status-tabs a");
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function(e) {
+                e.preventDefault();
+                tabs.forEach(t => t.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+    });
+</script>
 </head>
 <body>
 
-	<header class="container-fluid header-top fixed-top px-4">
-		<jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
-	</header>
+<header class="container-fluid header-top fixed-top px-4">
+    <jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
+</header>
+    
+<main class="wrapper">
+    <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
+    <div class="container">
+        <h2>상품목록</h2>
+        
+        <div class="status-tabs">
+            <a href="#" class="active">전체</a>
+            <a href="#">진행중</a>
+            <a href="#">구매성공</a>
+            <a href="#">구매실패</a>
+        </div>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>공구기간</th>
+                    <th>상품명</th>
+                    <th>목표수량</th>
+                    <th>판매수량</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>196</td>
+                    <td>진행중<br>2017-11-15</td>
+                    <td>
+                        <img src="${pageContext.request.contextPath}/dist/images/profile.png" alt="상품 이미지" style="width:100px; height:100px;">
+                        나이키 운동화<br>
+                        판매가격 : 1,000원
+                    </td>
+                    <td>10개</td>
+                    <td>0개</td>
+                    <td>
+                        등록일 : 2016-07-28<br>
+                        종료일 : 2017-11-15<br>
+                        <button class="btn btn-order">주문보기</button>
+                        <button class="btn btn-edit">수정</button>
+                        <button class="btn btn-delete">삭제</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>[공동구매실패]</td>
+                    <td>
+                        <img src="${pageContext.request.contextPath}/dist/images/profile.png" alt="이미지 준비중" style="width:100px; height:100px;">
+                        test<br>
+                        판매가격 : 8,000원
+                    </td>
+                    <td>1개</td>
+                    <td>0개</td>
+                    <td>
+                        등록일 : 2011-03-01<br>
+                        종료일 : 2016-12-29<br>
+                        <button class="btn btn-order">주문보기</button>
+                        <button class="btn btn-edit">수정</button>
+                        <button class="btn btn-delete">삭제</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">신규상품등록</button>
+    </div>
+</main>
 
-	<main>
-		<jsp:include page="/WEB-INF/views/admin/layout/left.jsp" />
-		<div class="wrapper" style="display: flex; justify-content: center;">
-			<div class="body-container" style="width: 900px;">
-				<div class="body-title">
-					<h3>
-						<i class="bi bi-app"></i> 상품관리
-					</h3>
-				</div>
+<footer>
+    <jsp:include page="/WEB-INF/views/admin/layout/footer.jsp"/>
+</footer>
 
-				<div class="body-main">
-					<div class="body-middle">
-						<div class="left">
-							<button class="btn BtnA"> 전체 </button>
-							<button class="btn BtnB"> 진행중 </button>
-							<button class="btn BtnC"> 구매성공 </button>
-							<button class="btn BtnD"> 구매실패</button>										
-						</div>		    
-					</div>
-					
-					<table class="table table-hover board-list">
-						<thead class="table-light">
-							<tr>
-								<th width="70">번호</th>
-								<th width="120">공구기간</th>
-								<th>상품명</th>
-								<th width="100">목표수량</th>								
-								<th width="100">판매수량</th>	
-								<th width="160">비고</th>																
-							</tr>
-						</thead>
-						
-						<tbody>
-							<tr>
-								<td> 136 </td>
-								<td>
-									<div>진행중</div>
-									<div> 2024-05-06 ~ 2024-06-06 </div>
-								<td>
-									<div class="product-info">
-										<img src="#" class="product-img" width="50" height="50">
-										<div>나이키 운동화 <br> 판매가격 : 1000원</div>
-									</div>
-								</td>
-								<td> 10개</td>
-								<td>
-									<div class="sell-info">
-										<div>0개</div>
-										<div><button class="orderwatch">주문보기</button></div>
-									</div>
-								</td>
-								<td>
-									<div class="comment-info">
-										<div> 등록일 : 2017-07-28 </div>
-										<div> 종료일 : 2017-08-28 </div>
-										<div class="btntype">
-											<button> 수정</button>
-											<button> 삭제</button>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="body-footer">
-						<div class="favoriteBtn">
-							<button>관심상품등록</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</main>
-	<script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", function () {
-		const buttons = document.querySelectorAll(".left .btn");
-		const defaultBtn = document.querySelector(".BtnA");
-		
-		if(defaultBtn) {
-			defaultBtn.classList.add("active");
-		}
-		
-		buttons.forEach((button) => {
-			button.addEventListener("click", (event) => {
-				const targetBtn = event.target.closest(".btn");
-				if(!targetBtn) return;
-				
-				buttons.forEach((btn) => btn.classList.remove("active"));
-				targetBtn.classList.add("active");
-			});
-		});
-	});
-	
-	</script>
-
-	<jsp:include page="/WEB-INF/views/admin/layout/footer.jsp" />
-
-	<jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp" />
+<jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
 </body>
 </html>

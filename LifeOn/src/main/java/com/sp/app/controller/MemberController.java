@@ -113,24 +113,27 @@ public class MemberController {
 			Member dto,
 			final RedirectAttributes reAttr,
 			Model model,
-			HttpServletRequest req) {
+			HttpServletRequest req,
+			HttpSession session) {
 		try {
 			String profileImagePath = null;
 			
 			if (file != null && !file.isEmpty()) {
 	
-			    String uploadDir = new File("src/main/resources/static/dist/images/").getAbsolutePath();
+			    String uploadDir = session.getServletContext().getRealPath("/uploads/profile");
 			    File dir = new File(uploadDir);
 			    if (!dir.exists()) dir.mkdirs(); // 디렉토리 없으면 생성
 
 			    // 파일중복없애자
-			    String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+			    String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			    String fileName = UUID.randomUUID().toString() + System.currentTimeMillis()+extension;
 			    File saveFile = new File(uploadDir, fileName);
 			    file.transferTo(saveFile);
 
-			    profileImagePath = "/dist/images/" + fileName;
+			    profileImagePath = "/uploads/profile/" + fileName;
 			}
 
+			
 			dto.setProfile_image((profileImagePath != null) ? profileImagePath : "/dist/images/basicpro.png");
 
 	        
@@ -244,39 +247,36 @@ public class MemberController {
 	public String updateSubmit(@RequestParam(value = "profileImageFile", required = false) MultipartFile file,
 			Member dto,
 			final RedirectAttributes reAttr,
-			Model model) {
+			Model model,
+			HttpSession session) {
 		
 		StringBuilder sb = new StringBuilder();
 		try {
 			
-	        String existingProfileImage = dto.getProfile_image();
-
-	        // 파일 선택시
+	        String profileImagePath = dto.getProfile_image();
+	        String uploadDir = session.getServletContext().getRealPath("/uploads/profile");
+	        
+	        // 기존 파일 존재시
 	        if (file != null && !file.isEmpty()) {
 	
-	            if (existingProfileImage != null && !existingProfileImage.equals("/dist/images/basicpro.png")) {
-	                String existingFilePath = "src/main/resources/static" + existingProfileImage;
-	                File existingFile = new File(existingFilePath);
+	            if (profileImagePath != null && !profileImagePath.equals("/dist/images/basicpro.png")) {
+	                File existingFile = new File(session.getServletContext().getRealPath(profileImagePath));
+
 	                if (existingFile.exists()) {
 	                    existingFile.delete();  // 기존 파일 삭제
 	                }
 	            }
 
-	            // 새 이미지 저장
-	            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-	            String uploadDir = new File("src/main/resources/static/dist/images/").getAbsolutePath();
-
-
+	            // 새 이미지 저장 271줄이 확장자 가져오는거임
+	            String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+	            String fileName = UUID.randomUUID().toString() + System.currentTimeMillis() + extension;
 	            File saveFile = new File(uploadDir, fileName);
 	            file.transferTo(saveFile);  // 파일 업로드
 
-	            dto.setProfile_image("/dist/images/" + fileName);  // 새 이미지 경로 설정
-	        } else {
-	            // 파일이 없으면 기존 경로 그대로 사용
-	            if (existingProfileImage == null || existingProfileImage.equals("/dist/images/basicpro.png")) {
-	                dto.setProfile_image("/dist/images/basicpro.png");
-	            }
-	        }
+	            profileImagePath = "/uploads/profile/" + fileName;
+	        } 
+	        
+	        dto.setProfile_image((profileImagePath != null) ? profileImagePath : "/dist/images/basicpro.png");
 	        
 			service.updateMember(dto);
 			
