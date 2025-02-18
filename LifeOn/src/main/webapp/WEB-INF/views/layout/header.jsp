@@ -60,7 +60,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="<c:url value='/'/>">마켓</a>
+					<a class="nav-link" href="<c:url value='/market/together/main'/>">마켓</a>
 				</li>
 
 				<li class="nav-item">
