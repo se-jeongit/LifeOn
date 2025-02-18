@@ -44,7 +44,7 @@
 	</select>
 	
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT hb.psnum, m.num, m.id, nickname, subject, content, TO_CHAR(hb.reg_date, 'yyyy-mm-dd') as reg_date, hb.blind, bdtype, ssfname, cpfname,
+		SELECT hb.psnum, m.num, m.id, nickname, subject, content, hb.reg_date, hb.blind, bdtype, ssfname, cpfname,
 			hitCount, NVL(replyCount, 0) replyCount
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
@@ -83,5 +83,38 @@
 		UPDATE HYBRID_BOARD SET hitCount = hitCount + 1
 		WHERE psnum = #{psnum}
 	</update>
+	
+	<select id="findByPrev" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
+		SELECT hb.psnum, subject
+		FROM HYBRID_BOARD hb
+		JOIN MEMBER m ON hb.num = m.num
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="searchSql"/>
+			</if>
+		</where>
+		WHERE hb.psnum &gt; #{psnum, jdbcType=NUMERIC} AND blind = 0 AND bdtype = 'tip'
+		ORDER BY psnum ASC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<select id="findByNext" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
+		SELECT hb.psnum, subject
+		FROM HYBRID_BOARD hb
+		JOIN MEMBER m ON hb.num = m.num
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="searchSql"/>
+			</if>
+		</where>
+		WHERE hb.psnum &lt; #{psnum, jdbcType=NUMERIC} AND blind = 0 AND bdtype = 'tip'
+		ORDER BY psnum DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<delete id="deleteBoard" parameterType="Long">
+		DELETE FROM HYBRID_BOARD
+		WHERE psnum = #{psnum}
+	</delete>
 	
 </mapper>

@@ -1,5 +1,6 @@
 package com.sp.app.lounge.controller;
 
+import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -129,6 +132,7 @@ public class FreeBoardController {
 			SessionInfo info = (SessionInfo)session.getAttribute("member");
 			
 			dto.setNum(info.getNum());
+			dto.setId(info.getId());
 			dto.setNickname(info.getNickName());
 			dto.setIpaddr(req.getRemoteAddr());
 			dto.setBdtype("tip");
@@ -168,18 +172,18 @@ public class FreeBoardController {
 			Map<String, Object> map = new HashMap<>();
 			map.put("schType", schType);
 			map.put("kwd", kwd);
-			map.put("num", num);
+			map.put("psnum", num);
 			
-			// FreeBoard prevDto = service.findByPrev(map);
-			// FreeBoard nextDto = service.findByNext(map);
+			FreeBoard prevDto = service.findByPrev(map);
+			FreeBoard nextDto = service.findByNext(map);
 			
 			// SessionInfo info = (SessionInfo) session.getAttribute("member");
 			// map.put("nickname", info.getNickName());
 			// boolean ismemberLiked = service.isMemberBoardLiked(map);
 			
 			model.addAttribute("dto", dto);
-			// model.addAttribute("prevDto", prevDto);
-			// model.addAttribute("nextDto", nextDto);
+			model.addAttribute("prevDto", prevDto);
+			model.addAttribute("nextDto", nextDto);
 			
 			// model.addAttribute("ismemberLiked", ismemberLiked);
 
@@ -194,6 +198,92 @@ public class FreeBoardController {
 		}
 		
 		return "redirect:/lounge2/tip?" + query;
+	}
+	
+	@GetMapping("tip/deleteFile")
+	public String deleteFile(@RequestParam(name = "psnum") long num,
+			@RequestParam(name = "page") String page,
+			HttpSession session) throws Exception {
+		
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			FreeBoard dto = Objects.requireNonNull(service.findById(num));
+			
+			if (! info.getNickName().equals(dto.getNickname())) {
+				return "redirect:/lounge2/tip?page=" + page;
+			}
+			
+			if (dto.getSsfname() != null) {
+				service.deleteUploadFile(uploadPath, dto.getSsfname());
+				
+				dto.setSsfname("");
+				dto.setCpfname("");
+				
+				service.updateBoard(dto, uploadPath);
+			}
+			
+			return "redirect:/lounge2/tip/update?num=" + num + "&page=" + page;
+			
+		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("deleteFile : ", e);
+		}
+		
+		return "redirect:/lounge2/tip/list?page=" + page;
+	}
+	
+	@GetMapping("tip/delete")
+	public String deleteBoard(@RequestParam(name = "psnum") long num,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
+			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+			@RequestParam(name = "page") String page,
+			HttpSession session) {
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			if (! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			service.deleteBoard(num, uploadPath, info.getNickName(), info.getGrade());
+			
+		} catch (Exception e) {
+			log.info("deleteBoard : ", e);
+		}
+		
+		return "redirect:/lounge2/tip?" + query;
+	}
+	
+	@GetMapping("download")
+	public ResponseEntity<?> download(
+			@RequestParam(name = "psnum") long num,
+			HttpServletRequest req) throws Exception {
+		
+		try {
+			FreeBoard dto = Objects.requireNonNull(service.findById(num));
+			
+			return storageService.downloadFile(uploadPath, dto.getSsfname(), dto.getCpfname());
+			
+		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("download : ", e);
+		}
+		
+		String url = req.getContextPath() + "/lounge2/tip/downloadFailed";
+		
+		return ResponseEntity
+				.status(HttpStatus.FOUND)
+				.location(URI.create(url))
+				.build();
+	}
+	
+	@GetMapping("tip/downloadFailed")
+	public String downloadFailed() {
+		return "error/downloadFailure";
 	}
 	
 	/*
@@ -234,94 +324,6 @@ public class FreeBoardController {
 			log.info("updateSubmit : ", e);
 		}
 		return "redirect:/lounge2/tip?page=" + page;
-	}
-	
-	@GetMapping("deleteFile")
-	public String deleteFile(@RequestParam(name = "num") long num,
-			@RequestParam(name = "page") String page,
-			HttpSession session) throws Exception {
-		
-		try {
-			SessionInfo info = (SessionInfo) session.getAttribute("member");
-			FreeBoard dto = Objects.requireNonNull(service.findById(num));
-			
-			if (! info.getNickName().equals(dto.getNickname())) {
-				return "redirect:/lounge2/tip?page=" + page;
-			}
-			
-			// 파일 삭제 및 테이블에서 파일 정보 지우기
-			if (dto.getSsfname() != null) {
-				service.deleteUploadFile(uploadPath, dto.getSsfname());
-				
-				dto.setSsfname("");
-				dto.setCpfname("");
-				
-				service.updateBoard(dto, uploadPath);
-			}
-			
-			return "redirect:/lounge2/tip/update?num=" + num + "&page=" + page;
-			
-		} catch (NullPointerException e) {
-		} catch (Exception e) {
-			log.info("deleteFile : ", e);
-		}
-		
-		return "redirect:/lounge2/tip/list?page=" + page;
-	}
-	
-	@GetMapping("delete")
-	public String deleteBoard(@RequestParam(name = "num") long num,
-			@RequestParam(name = "schType", defaultValue = "all") String schType,
-			@RequestParam(name = "kwd", defaultValue = "") String kwd,
-			@RequestParam(name = "page") String page,
-			HttpSession session) {
-		
-		String query = "page=" + page;
-		
-		try {
-			kwd = URLDecoder.decode(kwd, "utf-8");
-			if (! kwd.isBlank()) {
-				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
-			}
-			
-			SessionInfo info = (SessionInfo) session.getAttribute("member");
-			
-			service.deleteBoard(num, uploadPath, info.getNickName(), info.getGrade());
-			
-		} catch (Exception e) {
-			log.info("deleteBoard : ", e);
-		}
-		
-		return "redirect:/lounge2/tip?" + query;
-	}
-	
-	@GetMapping("download")
-	public ResponseEntity<?> download(
-			@RequestParam(name = "num") long num,
-			HttpServletRequest req) throws Exception {
-		
-		try {
-			FreeBoard dto = Objects.requireNonNull(service.findById(num));
-			
-			return storageService.downloadFile(uploadPath, dto.getSsfname(), dto.getCpfname());
-			
-		} catch (NullPointerException e) {
-		} catch (Exception e) {
-			log.info("download : ", e);
-		}
-		
-		// 다운로드 중 에러가 발생하면 에러 메시지 페이지로 리다이렉트
-		String url = req.getContextPath() + "/lounge2/tip/downloadFailed";
-		
-		return ResponseEntity
-				.status(HttpStatus.FOUND) // 302 상태 코드(리다이렉트)
-				.location(URI.create(url)) // 리다이렉트할 주소 설정
-				.build();
-	}
-	
-	@GetMapping("downloadFailed")
-	public String downloadFailed() {
-		return "error/downloadFailure";
 	}
 	
 	// 게시글 좋아요 추가 / 삭제 : AJAX - JSON

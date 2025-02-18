@@ -12,6 +12,34 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
 
+<script type="text/javascript">
+function elapsedText(date) {
+	const seconds = 1;
+	const minute = seconds * 60;
+	const hour = minute * 60;
+	const day = hour * 24;
+	
+	var today = new Date();
+	var elapsedTime = Math.trunc((today.getTime() - date.getTime()) / 1000);
+	
+	var elapsedText = "";
+	if (elapsedTime < seconds) {
+		elapsedText = "방금 전";
+	} else if (elapsedTime < minute) {
+		elapsedText = elapsedTime + "초 전";
+	} else if (elapsedTime < hour) {
+		elapsedText = Math.trunc(elapsedTime / minute) + "분 전";
+	} else if (elapsedTime < day) {
+		elapsedText = Math.trunc(elapsedTime / hour) + "시간 전";
+	} else if (elapsedTime < (day * 3)) {
+		elapsedText = Math.trunc(elapsedTime / day) + "일 전";
+	} else {
+		elapsedText = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate().toString().padStart(2, '0');
+	}
+	
+	return elapsedText;
+}
+</script>
 </head>
 <body>
 
@@ -33,6 +61,7 @@
 					<p>❤️최신순❤️</p>
 					<p>❤️조회순❤️</p>
 					<p>❤️즐겨찾기순❤️</p>
+					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
 				</div>
 			</aside>
 			
@@ -49,7 +78,7 @@
 				</div>
 				
 				<!-- 글리스트 -->
-				<div style="display: flex; flex-direction: column;">
+				<div>
 					<c:forEach var="dto" items="${list}" varStatus="status">
 					<div class="mx-3">
 				  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'">
@@ -68,7 +97,17 @@
 												<div>
 													<span class='tip_userName'>${dto.nickname}</span>
 													<span>&nbsp;·&nbsp;</span>
-													<span>${dto.reg_date}</span>
+													
+                                    				<span id="result-${dto.psnum}"></span>
+				                                    <script type="text/javascript">
+				                                    	document.addEventListener("DOMContentLoaded", function() {
+				                                            const dateStr = "${dto.reg_date}".trim();
+				                                            const date = new Date(dateStr);
+				                                            const id = "result-${dto.psnum}";
+
+				                                        	document.getElementById(id).innerText = elapsedText(date);
+				                                    	});
+				                                    </script>
 												</div>
 												<div>
 													<i class="tip_icon bi bi-bookmark"></i>
@@ -98,7 +137,6 @@
 			<aside class="sidebar">
 				<div class="rightBox">
 					<p>❤️검색순위❤️</p>
-					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
 				</div>
 				<div style="display: flex; align-items: center; margin: 0 20px;">
 					<!-- 검색상자 -->

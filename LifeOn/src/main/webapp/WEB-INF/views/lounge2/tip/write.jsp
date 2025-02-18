@@ -58,6 +58,7 @@ function check() {
 					<p>❤️최신순❤️</p>
 					<p>❤️조회순❤️</p>
 					<p>❤️즐겨찾기순❤️</p>
+					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
 				</div>
 			</aside>
 			
@@ -80,16 +81,34 @@ function check() {
 						</tr>
 						
 						<tr>
-							<td scope="row" style="vertical-align: middle;">이미지</td>
+							<td scope="row" style="vertical-align: middle;">첨부파일</td>
 							<td>
-								<div class="img-grid"><img class="item img-add rounded" src="${pageContext.request.contextPath}/dist/images/add_photo.png"></div>
-								<input type="file" name="selectFile" accept="image/*" multiple style="display: none;" class="free-control">
+							<div class="filebox">
+								<input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly="readonly">
+							    <label for="file">파일선택</label> 
+							    <input type="file" id="file" name="selectFile">
+							</div>
 							</td>
 						</tr>
 						
+						<c:if test="${mode == 'update'}">
+							<tr>
+								<td scope="row" style="vertical-align: middle;">첨부된파일</td>
+								<td>
+									<p class="free-control">
+										<c:if test="${not empty dto.ssfname}">
+											<a href="javascript:deleteFile('${dto.fnum}')"><i class="bi bi-trash"></i></a>
+											${dto.cpfname}
+										</c:if>
+										&nbsp;
+									</p>
+								</td>
+							</tr>
+						</c:if>
+						
 						<c:if test="${mode=='update'}">
 							<tr>
-								<td class="bg-light col-sm-2" scope="row">등록이미지</td>
+								<td class="bg-light col-sm-2" scope="row">등록된파일</td>
 								<td> 
 									<div class="img-box">
 										<c:forEach var="dto" items="${list}">
@@ -108,9 +127,12 @@ function check() {
 							<td class="text-center">
 								<button type="button" class="btn" onclick="check();">${mode=='update'?'수정완료':'등록완료'}&nbsp;<i class="bi bi-check2"></i></button>
 								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
-								<c:if test="${mode=='update'}">
+
+								<c:if test="${mode == 'update'}">
 									<input type="hidden" name="num" value="${dto.num}">
 									<input type="hidden" name="psnum" value="${dto.psnum}">
+									<input type="hidden" name="saveFilename" value="${dto.ssfname}">
+									<input type="hidden" name="originalFilename" value="${dto.cpfname}">
 									<input type="hidden" name="page" value="${page}">
 								</c:if>
 							</td>
@@ -122,7 +144,6 @@ function check() {
 			<aside class="sidebar">
 				<div class="rightBox">
 					<p>❤️검색순위❤️</p>
-					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
 				</div>
 				<div style="display: flex; align-items: center; margin: 0 20px;">
 					<!-- 검색상자 -->
@@ -134,104 +155,19 @@ function check() {
 			</aside>
 		</div>
 	</div>
-				
-	<c:if test="${mode=='update'}">
+	
+	<c:if test="${mode == 'update'}">
 		<script type="text/javascript">
-			$(function(){
-				$('.delete-img').click(function(){
-					if(! confirm('이미지를 삭제 하시겠습니까 ?')) {
-						return false;
-					}
-					
-					let $img = $(this);
-					let fileNum = $img.attr('data-fileNum');
-					let url = '${pageContext.request.contextPath}/lounge2/tip/deleteFile';
-	
-					$.ajaxSetup({ beforeSend: function(e) { e.setRequestHeader('AJAX', true); } });
-					$.post(url, {fileNum:fileNum}, function(data){
-						$img.remove();
-					}, 'json').fail(function(jqXHR){
-						console.log(jqXHR.responseText);
-					});
-	
-				});
-			});
+			function deleteFile(fnum) {
+				if (! confirm('파일을 삭제 하시겠습니까?')) {
+					return;
+				}
+				
+				let url = '${pageContext.request.contextPath}/lounge2/tip/deleteFile?num=' + fnum + '&page=${page}';
+				location.href = url;
+			}
 		</script>
 	</c:if>
-
-<script type="text/javascript">
-window.addEventListener('DOMContentLoaded', evt => {
-	var sel_files = [];
-	
-	const viewerEL = document.querySelector('.write-form .img-grid');
-	const imgAddEL = document.querySelector('.write-form .img-add');
-	const inputEL = document.querySelector('form[name=freeForm] input[name=selectFile]');
-	
-	imgAddEL.addEventListener('click', ev => {
-		inputEL.click();
-	});
-	
-	inputEL.addEventListener('change', ev => {
-		if(! ev.target.files) {
-			let dt = new DataTransfer();
-			for(let f of sel_files) {
-				dt.items.add(f);
-			}
-			document.freeForm.selectFile.files = dt.files;
-			
-	    	return;
-	    }
-		
-        for(let file of ev.target.files) {
-        	sel_files.push(file);
-        	
-        	let node = document.createElement('img');
-        	node.classList.add('item', 'img-item');
-        	node.setAttribute('data-filename', file.name);
-
-        	const reader = new FileReader();
-            reader.onload = e => {
-            	node.setAttribute('src', e.target.result);
-            };
-			reader.readAsDataURL(file);
-        	
-			viewerEL.appendChild(node);
-        }
-		
-		let dt = new DataTransfer();
-		for(let f of sel_files) {
-			dt.items.add(f);
-		}
-		
-		document.freeForm.selectFile.files = dt.files;		
-	});
-	
-	viewerEL.addEventListener('click', (e)=> {
-		if(e.target.matches('.img-item')) {
-			if(! confirm('선택한 파일을 삭제 하시겠습니까 ?')) {
-				return false;
-			}
-			
-			let filename = e.target.getAttribute('data-filename');
-			
-		    for(let i = 0; i < sel_files.length; i++) {
-		    	if(filename === sel_files[i].name){
-		    		sel_files.splice(i, 1);
-		    		break;
-				}
-		    }
-		
-			let dt = new DataTransfer();
-			for(let f of sel_files) {
-				dt.items.add(f);
-			}
-			document.freeForm.selectFile.files = dt.files;
-			
-			e.target.remove();
-		}
-	});	
-});
-</script>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript">
@@ -261,6 +197,11 @@ function submitContents(elClickedObj) {
 	}
 }
 */
+
+$("#file").on('change',function(){
+	  var fileName = $("#file").val();
+	  $(".upload-name").val(fileName);
+});
 </script>
 </main>
 

@@ -180,39 +180,6 @@
     box-shadow: none;
 }
 
-.img-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 50px);
-	grid-gap: 5px;
-}
-
-.img-grid .item {
-    object-fit: cover; /* 가로세로 비율은 유지하면서 컨테이너에 꽉 차도록 설정 */
-    width: 50px;
-    height: 50px;
-	cursor: pointer;
-	border: 1px solid #c2c2c2;
-	border-radius: 10px;
-}
-
-.img-box {
-	max-width: 600px;
-
-	box-sizing: border-box;
-	display: flex; /* 자손요소를 flexbox로 변경 */
-	flex-direction: row; /* 정방향 수평나열 */
-	flex-wrap: nowrap;
-	overflow-x: auto;
-}
-.img-box img {
-	width: 50px; height: 50px;
-	margin-right: 5px;
-	flex: 0 0 auto;
-	cursor: pointer;
-	border: 1px solid #c2c2c2;
-	border-radius: 10px;
-}
-
 .freeForm {
 	border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -231,4 +198,47 @@
     
     resize: none;
     min-height: calc(1.5em + .75rem + calc(var(--bs-border-width)* 2));
+}
+
+.filebox {
+	display: flex;
+}
+
+.filebox .upload-name {
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    color: #777;
+    cursor: default;
+}
+
+.filebox label {
+    display: inline-block;
+    padding: 10px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #006AFF;
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 4px;
+}
+
+.filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+.board-article {
+	text-align: left;
+	vertical-align: middle;
 }
