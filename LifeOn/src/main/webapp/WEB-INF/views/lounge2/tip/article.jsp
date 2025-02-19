@@ -33,7 +33,6 @@
 					<p>❤️최신순❤️</p>
 					<p>❤️조회순❤️</p>
 					<p>❤️즐겨찾기순❤️</p>
-					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
 				</div>
 			</aside>
 			
@@ -69,7 +68,10 @@
 							
 							<tr>
 								<td colspan="2" class="text-center p-3" style="border-bottom: none;">
-									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기"><i class="bi bi-bookmark"${isMemberLiked ? 'bi-bookmark-fill' : 'bi-bookmark'}"></i>&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span></button>
+									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기">
+										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill' : 'bi-bookmark'}"></i>
+										&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
+									</button>
 								</td>
 							</tr>
 					
@@ -117,7 +119,6 @@
 										<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip/update?psnum=${dto.psnum}&page=${page}';">수정</button>
 									</c:when>
 									<c:otherwise>
-										<button type="button" class="btn btn-light" disabled>수정</button>
 									</c:otherwise>
 								</c:choose>
 								
@@ -136,14 +137,14 @@
 					
 					<div class="reply">
 						<form name="replyForm" method="post">
-							<div class="form-header">
-								<span class="bold">댓글</span><span> - 타인을 비방하거나 개인정보를 유출하는 글의 게시를 삼가해 주세요.</span>
+							<div class="form-header" style="text-align: left; padding: 8px 15px;">
+								<span class="bold">댓글 ${dto.replyCount}</span>
 							</div>
 							
 							<table class="table table-borderless reply-form">
 								<tr>
 									<td>
-										<textarea class="free-control" name="content"></textarea>
+										<textarea class="free-control" name="rpcontent"></textarea>
 									</td>
 								</tr>
 								<tr>
@@ -153,7 +154,7 @@
 								 </tr>
 							</table>
 						</form>
-		
+						
 						<div id="listReply"></div>
 					</div>
 				</div>
@@ -189,7 +190,6 @@
 </c:if>
 
 <script type="text/javascript">
-// 게시글 공감 여부
 $(function() {
 	$('.btnSendBoardLike').click(function() {
 		const $i = $(this).find('i');
@@ -229,16 +229,14 @@ $(function() {
 	});
 });
 
-// 댓글
 $(function() {
 	listPage(1);
 });
 
-// 댓글 리스트
 function listPage(page) {
 	let url = '${pageContext.request.contextPath}/lounge2/tip/listReply';
-	let num = '${dto.num}';
-	let params = {num: num, pageNo: page};
+	let rpnum = '${dto.rpnum}';
+	let params = {rpnum: rpnum, pageNo: page};
 	
 	const fn = function(data) {
 		$('#listReply').html(data);
@@ -246,6 +244,38 @@ function listPage(page) {
 	
 	ajaxRequest(url, 'get', params, 'text', fn);
 }
+
+$(function(){
+	$('.btnSendReply').click(function(){
+		let rpnum = '${dto.rpnum}';
+		let psnum = '${dto.psnum}';
+		let num = '${dto.num}';
+		const $tb = $(this).closest('table');
+		
+		let rpcontent = $tb.find('textarea').val().trim();
+		if(! rpcontent) {
+			$tb.find('textarea').focus();
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/lounge2/tip/insertReply';
+		let params = {rpnum: rpnum, rpcontent: rpcontent, psnum: psnum, num: num};
+		
+		const fn = function(data) {
+			$tb.find('textarea').val('');
+			
+			let state = data.state;
+			if(state === 'true') {
+				listPage(1);
+			} else {
+				alert('댓글을 추가하지 못했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+		
+	});
+});
 
 // 삭제, 신고메뉴
 $(function() {
@@ -295,7 +325,6 @@ $(function() {
 
 // 댓글 좋아요 / 싫어요
 $(function() {
-	// 댓글 좋아요 / 싫어요 등록
 	$('.reply').on('click', '.btnSendReplyLike', function() {	
 		const $btn = $(this);
 		let replyNum = $btn.attr('data-replyNum');

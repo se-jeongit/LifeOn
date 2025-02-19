@@ -1,5 +1,6 @@
 package com.sp.app.lounge.controller;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -30,6 +31,7 @@ import com.sp.app.model.SessionInfo;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -184,16 +186,16 @@ public class FreeBoardController {
 			
 			List<FreeBoard> listFile = service.listFile(num);
 			
-			// SessionInfo info = (SessionInfo) session.getAttribute("member");
-			// map.put("nickname", info.getNickName());
-			// boolean ismemberLiked = service.isMemberBoardLiked(map);
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			map.put("num", info.getNum());
+			boolean isMemberLiked = service.isMemberBoardLiked(map);
 			
 			model.addAttribute("dto", dto);
 			model.addAttribute("prevDto", prevDto);
 			model.addAttribute("nextDto", nextDto);
 			model.addAttribute("listFile", listFile);
 			
-			// model.addAttribute("ismemberLiked", ismemberLiked);
+			model.addAttribute("isMemberLiked", isMemberLiked);
 
 			model.addAttribute("query", query);
 			model.addAttribute("page", page);
@@ -382,28 +384,43 @@ public class FreeBoardController {
 		
 		return model;
 	}
+	
+	@PostMapping("tip/insertReply")
+	@ResponseBody
+	public Map<String, Object> insertReply(FreeBoard dto, HttpSession session) {
+		Map<String, Object> model = new HashMap<>();
 		
-	/*	
-	// 댓글 리스트 : AJAX - TEXT
-	@GetMapping("listReply")
+		String state = "true";
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			dto.setNum(info.getNum());
+			dto.setPsnum(dto.getPsnum());
+			service.insertReply(dto);
+			
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
+		
+		return model;
+	}
+		
+	@GetMapping("tip/listReply")
 	public String listReply(
-			@RequestParam(name = "num") long num,
+			@RequestParam(name = "rpnum") long num,
 			@RequestParam(name = "pageNo", defaultValue = "1") int current_page,
 			Model model,
-			HttpServletResponse resp,
-			HttpSession session) throws Exception {
+			HttpServletResponse resp) throws Exception {
 		
 		try {
-			SessionInfo info = (SessionInfo) session.getAttribute("member");
-			
 			int size = 5;
 			int total_page = 0;
 			int dataCount = 0;
 			
 			Map<String, Object> map = new HashMap<>();
-			map.put("num", num);
-			map.put("grade", info.getGrade());
-			map.put("nickname", info.getNickName());
+			map.put("rpnum", num);
 			
 			dataCount = service.replyCount(map);
 			total_page = paginateUtil.pageCount(dataCount, size);
@@ -415,10 +432,8 @@ public class FreeBoardController {
 			map.put("offset", offset);
 			map.put("size", size);
 			
-			List<FreeReply> listReply = service.listReply(map);
+			List<FreeBoard> listReply = service.listReply(map);
 			
-			// 페이징 - 자바스크립트 함수 호출
-			// listPage : 페이지를 클릭하면 호출할 자바스크립트 함수명
 			String paging = paginateUtil.pagingMethod(current_page, total_page, "listPage");
 			
 			model.addAttribute("listReply", listReply);
@@ -434,12 +449,11 @@ public class FreeBoardController {
 			throw e;
 		}
 		
-		return "bbs/listReply";
+		return "lounge2/tip/listReply";
 	}
 	
-	// 댓글의 좋아요 / 싫어요 추가 : AJAX - JSON
 	@ResponseBody
-	@PostMapping("insertReplyLike")
+	@PostMapping("tip/insertReplyLike")
 	public Map<String, ?> insertReplyLike(
 			@RequestParam Map<String, Object> paramMap,
 			HttpSession session) {
@@ -453,7 +467,7 @@ public class FreeBoardController {
 		try {
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
 			
-			paramMap.put("userId", info.getNickName());
+			paramMap.put("num", info.getNum());
 			service.insertReplyLike(paramMap);
 			
 			// 좋아요 / 싫어요 개수
@@ -475,5 +489,4 @@ public class FreeBoardController {
 		
 		return model;
 	}
-	*/
 }

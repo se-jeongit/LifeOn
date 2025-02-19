@@ -61,7 +61,6 @@ function elapsedText(date) {
 					<p>❤️최신순❤️</p>
 					<p>❤️조회순❤️</p>
 					<p>❤️즐겨찾기순❤️</p>
-					<button type="button" class="btn top_btn" onclick="location.href='<c:url value=''/>'">TOP</button>
 				</div>
 			</aside>
 			
@@ -144,6 +143,9 @@ function elapsedText(date) {
 					
 					<!-- 검색버튼 -->
 				   	<button class="input-group btn mybtn">검색</button>
+				   	
+				   	<!-- 상단이동 버튼 -->
+				   	<%-- <button type="button" class="top_btn" onclick="location.href='<c:url value=''/>'">TOP</button> --%>
 				</div>
 			</aside>
 		</div>

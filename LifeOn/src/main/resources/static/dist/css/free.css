@@ -50,6 +50,8 @@
 .main_content {
 	width: 40%;
 	padding: 20px;
+	
+	display: inline-table;
 }
 
 .main_menu {
@@ -86,8 +88,8 @@
 	border: 1px solid #e0e0e0;
 	margin: 80px 20px 20px 20px;
 	
-	position: sticky;
-    top: 150px;
+	/* position: sticky;
+    top: 150px; */
 }
 
 .searchBox {
@@ -144,11 +146,20 @@
     border-bottom-right-radius: 4px;
 }
 
-.top_btn {
+/* .top_btn {
 	border: 1px solid #e0e0e0;
-	border-radius: 40px;
-	margin-right: 3px;
+	background: #fff;
+	padding: 5px;
+	margin-bottom: 50px;
+    margin-left: 160px;	
+    
+    position: fixed;
+    bottom: 10%;
 }
+
+.top_btn:hover {
+	background: #f7f7f7;
+} */
 
 /* 페이징 */
 .page-navigation .pagination {

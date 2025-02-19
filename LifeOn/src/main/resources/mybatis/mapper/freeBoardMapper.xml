@@ -81,15 +81,15 @@
 	</select>
 	
 	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, uddate, hb.blind, bdtype
+		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, uddate, hb.blind, bdtype, NVL(boardLikeCount, 0) boardLikeCount
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
 		LEFT OUTER JOIN (
-			SELECT num, COUNT(*) boardLikeCount
+			SELECT psnum, COUNT(*) boardLikeCount
 			FROM HYBRID_BOARD_FAV
-			WHERE num = #{num}
-			GROUP BY num
-		) c ON hb.num = c.num
+			WHERE psnum = #{psnum}
+			GROUP BY psnum
+		) c ON hb.psnum = c.psnum
 		WHERE hb.psnum = #{psnum} AND blind = 0 AND bdtype = 'tip'
 	</select>
 	
@@ -181,8 +181,8 @@
 	</select>
 	
 	<insert id="insertReply" parameterType="com.sp.app.lounge.model.FreeBoard">
-		INSERT INTO HYBRID_BOARD_REPLY(rpnum, rpcontent, rpreg_date, ps_num, rpblind)
-			VALUES (hybrid_board_reply_seq.NEXTVAL, #{rpcontent}, SYSDATE, #{psnum}, 0)
+		INSERT INTO HYBRID_BOARD_REPLY (rpnum, rpcontent, rpreg_date, ps_num, num, rpblind)
+			VALUES (hybrid_board_reply_seq.NEXTVAL, #{rpcontent}, SYSDATE, #{psnum}, #{num}, 0)
 	</insert>
 	
 	<select id="replyCount" parameterType="map" resultType="Integer">
@@ -192,14 +192,14 @@
 	</select>
 	
 	<select id="listReply" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT r.rpnum, r.num, m.nickname, r.rpcontent, r.rpreg_date, rpblind,
+		SELECT r.rpnum, r.rpcontent, r.rpreg_date, r.ps_num, rpblind, r.num, m.nickname,
 			NVL(likeCount, 0) likeCount,
 			NVL(disLikeCount, 0) disLikeCount
 		FROM HYBRID_BOARD_REPLY r
 		JOIN member m ON r.num = m.num
 		LEFT OUTER JOIN (
-			SELECT rpnum, COUNT(DECODE(replyLike, 1, 1)) likeCount,
-				COUNT(DECODE(replyLike, 0, 1)) disLikeCount
+			SELECT rpnum, COUNT(DECODE(rplike, 1, 1)) likeCount,
+				COUNT(DECODE(rplike, 0, 1)) disLikeCount
 			FROM HYBRID_BOARD_LIKE
 			GROUP BY rpnum
 		) c ON r.rpnum = c.rpnum
@@ -214,12 +214,12 @@
 	</delete>
 	
 	<insert id="insertReplyLike" parameterType="map">
-		INSERT INTO HYBRID_BOARD_LIKE (rpnum, num)
-			VALUES(#{rpnum}, #{num})
+		INSERT INTO HYBRID_BOARD_LIKE (rpnum, num, rplike)
+			VALUES(#{rpnum}, #{num} #{rplike})
 	</insert>
 	
 	<select id="replyLikeCount" parameterType="map" resultType="map">
-		SELECT COUNT(DECODE(rpnum, 1, 1)) likeCount, COUNT(DECODE(rpnum, 0, 1)) disLikeCount
+		SELECT COUNT(DECODE(rplike, 1, 1)) likeCount, COUNT(DECODE(rplike, 0, 1)) disLikeCount
 		FROM HYBRID_BOARD_LIKE
 		WHERE rpnum = #{rpnum}
 	</select>

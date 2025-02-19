@@ -43,8 +43,11 @@ public class FreeBoard {
 	private String rpcontent; // 댓글내용
 	private String rpreg_date; // 댓글등록일
 	private int rpblind; // 0: Default, 1: 블라인드처리
+	private int rplike; // 0: 싫어요, 1: 좋아요
 	
-	private int likeCount; // 댓글좋아요 FREE_BOARD_LIKE, HYBRID_BOARD_LIKE
+	// 댓글좋아요 FREE_BOARD_LIKE, HYBRID_BOARD_LIKE
+	private int likeCount;
+	private int disLikeCount;
 	
 	@Value("-1") // 초기값
 	private int memberLiked;
