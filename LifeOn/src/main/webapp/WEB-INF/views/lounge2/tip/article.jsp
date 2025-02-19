@@ -201,15 +201,15 @@ $(function() {
 		}
 		
 		let url = '${pageContext.request.contextPath}/lounge2/tip/insertBoardLike';
-		let num = '${dto.num}';
-		let params = {num: num, memberLiked: memberLiked};
+		let psnum = '${dto.psnum}';
+		let params = {psnum: psnum, memberLiked: memberLiked};
 		
 		const fn = function(data) {
 			let state = data.state;
 			// alert(state);
 			
 			if (state === "true") {
-				if (userLiked) {
+				if (memberLiked) {
 					$i.removeClass('bi-bookmark-fill').addClass('bi-bookmark');
 				} else {
 					$i.removeClass('bi-bookmark').addClass('bi-bookmark-fill');
