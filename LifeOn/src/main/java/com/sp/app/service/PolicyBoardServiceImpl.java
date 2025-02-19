@@ -155,4 +155,50 @@ public class PolicyBoardServiceImpl implements PolicyBoardService {
 		}
 	}
 
+	@Override
+	public void insertBoardLike(Map<String, Object> map) throws Exception {
+		try {
+			mapper.insertBoardLike(map);
+			
+		} catch (Exception e) {
+			log.info("insertBoardLike :", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public void deleteBoardLike(Map<String, Object> map) throws Exception {
+		try {
+			mapper.deleteBoardLike(map);
+		} catch (Exception e) {
+			log.info("deleteBoardLike : ", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public int boardLikeCount(long psnum) {
+		int result = 0;
+		try {
+			result = mapper.boardLikeCount(psnum);
+		} catch (Exception e) {
+			log.info("boardLikeCount :", e);
+		}
+		return result;
+	}
+
+	@Override
+	public boolean isUserBoardLiked(Map<String, Object> map) {
+		boolean result = false;
+		try {
+			PolicyBoard dto = mapper.userBoardLike(map);
+			if(dto != null) {
+				result = true;
+			}
+		} catch (Exception e) {
+			log.info("isUserBoardLiked : ", e);
+		}
+		return result;
+	}
+
 }

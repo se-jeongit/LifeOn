@@ -80,10 +80,8 @@
 
 							<tr>
 								<td colspan="2" class="text-center p-3">
-									<button type="button"
-										class="btn btn-outline-primary btnSendBoardLike" title="좋아요">
-										<i class="bi bi-suit-heart"></i>&nbsp;&nbsp; <span
-											id="boardLikeCount">좋아요</span>
+									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="좋아요">
+										<i class="bi ${isUserLiked ? 'bi-suit-heart-fill' : 'bi-suit-heart'}"></i>&nbsp;&nbsp; <span id="boardLikeCount">${dto.boardLikeCount}</span>
 									</button>
 								</td>
 							</tr>
@@ -162,7 +160,46 @@
 
 
 	<script type="text/javascript">
-		
+		$(function() {
+			$('.btnSendBoardLike').click(function(){
+				
+				const $i = $(this).find('i');
+				let userLiked = $i.hasClass('bi-suit-heart-fill');
+				let msg = userLiked ? '게시글 공감을 취소하시겠습니까 ?' : '게시글에 공감하시겠습니까?';
+				
+				if(! confirm(msg)) {
+					return false;
+				}
+				
+				let url = '${pageContext.request.contextPath}/policy/insertBoardLike';
+				let psnum = '${dto.psnum}';
+				let params = {psnum:psnum, userLiked:userLiked};
+				
+				const fn = function(data) {
+					let state = data.state;
+					
+					if(state === "true") {
+						if( userLiked ) {
+							$i.removeClass('bi-suit-heart-fill')
+								.addClass('bi-suit-heart');
+						} else {
+							$i.removeClass('bi-suit-heart')
+								.addClass('bi-suit-heart-fill');
+						}
+						
+						let count = data.boardLikeCount;
+						$('#boardLikeCount').text(count);
+					} else if(state === "liked") {
+						alert('게시글 공감은 한번만 가능합니다.')
+					} else {
+						alert('게시글 공감 여부 처리가 실패했습니다.')
+					}
+				};
+				
+				ajaxRequest(url, 'post', params, 'json', fn);
+			});
+		});	
+	
 	</script>
 
 

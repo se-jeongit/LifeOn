@@ -23,4 +23,6 @@ public class PolicyBoard {
 	private String originalfilename;
 	private int block;
 	private MultipartFile selectFile;
+	
+	private int boardLikeCount;
 }

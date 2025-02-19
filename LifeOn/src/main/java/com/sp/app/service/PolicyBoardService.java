@@ -19,4 +19,11 @@ public interface PolicyBoardService {
 	public boolean deleteUploadFile(String uploadPath, String filename);
 
 	public void deleteBoard(long num, String uploadPath, String id, int grade) throws Exception;
+
+	//게시글 좋아요
+	public void insertBoardLike(Map<String, Object> map) throws Exception;
+	public void deleteBoardLike(Map<String, Object> map) throws Exception;
+	public int boardLikeCount(long psnum);
+	public boolean isUserBoardLiked(Map<String, Object> map);
+
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
@@ -168,9 +170,15 @@ public class PolicyBoardController {
 			PolicyBoard prevDto = service.findByPrev(map);
 			PolicyBoard nextDto = service.findByNext(map);
 			
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			map.put("userId", info.getId());
+			boolean isUserLiked = service.isUserBoardLiked(map);
+			
 			model.addAttribute("dto", dto);
 			model.addAttribute("prevDto", prevDto);
 			model.addAttribute("nextDto", nextDto);
+			
+			model.addAttribute("isUserLiked", isUserLiked);
 			
 			
 			model.addAttribute("query", query);
@@ -309,6 +317,48 @@ public class PolicyBoardController {
 	@GetMapping("downloadFailed")
 	public String downloadFailed() {
 		return "error/downloadFailure";
+	}
+	
+	
+	//게시글 좋아요 추가/삭제 : AJAX-JSON
+	@ResponseBody
+	@PostMapping("insertBoardLike")
+	public Map<String, ?> insertBoardLike(
+			@RequestParam(name ="psnum") long psnum,
+			@RequestParam(name ="userLiked") boolean userLiked,
+			HttpSession session) {
+		
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		int boardLikeCount = 0;
+		
+		try {
+			SessionInfo info = 
+					(SessionInfo)session.getAttribute("member");
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("psnum", psnum);
+			map.put("userId", info.getId());
+			
+			if(userLiked) {
+				service.deleteBoardLike(map); // 좋아요 해제
+			} else {
+				service.insertBoardLike(map); // 좋아요 추가
+			}
+			
+			boardLikeCount = service.boardLikeCount(psnum);
+			
+		} catch (DuplicateKeyException e) {
+			state = "liked";
+		} catch(Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
+		model.put("boardLikeCount", boardLikeCount);
+		
+		return model;
 	}
 	
 	

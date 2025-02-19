@@ -54,10 +54,16 @@
 	  </select> 
 	
 	  <select id="findById" parameterType="long" resultType="com.sp.app.model.PolicyBoard">
-	  	SELECT b.psnum, b.subject, b.content, b.hitcount, b.reg_date, b.savefilename, b.originalfilename, b.block, m.nickname, b.userId
+	  	SELECT b.psnum, b.subject, b.content, b.hitcount, b.reg_date, b.savefilename, b.originalfilename, b.block, m.nickname, b.userId, NVL(boardLikeCount, 0) boardLikeCount
 	  	FROM policy_board b
 	  	JOIN member m ON b.userId = m.id
-	  	WHERE b.psnum = #{num} AND b.block = 0
+	  	LEFT OUTER JOIN (
+	  		SELECT psnum, COUNT(*) boardLikeCount
+	  		FROM policy_board_like
+	  		WHERE psnum = #{psnum}
+	  		GROUP BY psnum
+	  	) bc ON b.psnum = bc.psnum
+	  	WHERE b.psnum = #{psnum} AND b.block = 0
 	  </select>
 	  
 	  <select id="findByPrev" parameterType="map" resultType="com.sp.app.model.PolicyBoard">
@@ -106,5 +112,29 @@
       		DELETE FROM policy_board
       		WHERE psnum=#{psnum}
       </delete>
+      
+      <!-- 게시글 좋아요 -->
+      <insert id="insertBoardLike" parameterType="map">
+      		INSERT INTO policy_board_like(psnum, userId)
+      		VALUES (#{psnum}, #{userId})
+      </insert>
+      
+      <delete id="deleteBoardLike" parameterType="map">
+      		DELETE FROM policy_board_like
+      		WHERE psnum=#{psnum} AND userId=#{userId}
+      </delete>
+      
+      <select id="boardLikeCount" parameterType="Long" resultType="Integer">
+      		SELECT COUNT(*)
+      		FROM policy_board_like
+      		WHERE psnum = #{psnum}
+      </select>
+      
+      <select id="userBoardLike" parameterType="map" resultType="com.sp.app.model.PolicyBoard">
+      		SELECT psnum, userid
+      		FROM policy_board_like
+      		WHERE psnum = #{psnum} AND userId = #{userId}
+      </select>
+      
 	  
 </mapper>
