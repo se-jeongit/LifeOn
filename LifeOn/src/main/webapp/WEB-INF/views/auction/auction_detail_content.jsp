@@ -83,8 +83,8 @@
         margin: 15% auto; /* 화면 중앙에 위치 */
         padding: 20px;
         border: 1px solid #888;
-        width: 500px; /* 너비 */
-        height: 350px; /* 높이 */
+        width: 450px; /* 너비 */
+        height: 300px; /* 높이 */
     }
 
     .close {
@@ -155,7 +155,8 @@
             <div style="padding-top: 30px; display: flex; height: 100px">
                 <p style="font-size: 20px; font-weight: 500; padding-top: 20px">거래방법 : ${prize.tradeType}</p>
                 <span class="btn-modal">
-                <button class="btn-click" onclick="prizeAuction('${prize.prStatus == '마감' ? '종료' : prize.prStatus == '진행중' ? '입찰' : '진행전'}')">${prize.prStatus == '마감' ? '종료' : prize.prStatus == '진행중' ? '입찰' : '진행전'}</button>
+                <button class="btn-click"
+                        onclick="prizeAuction('${prize.prStatus == '마감' ? '종료' : prize.prStatus == '진행중' ? '입찰' : '진행전'}')">${prize.prStatus == '마감' ? '종료' : prize.prStatus == '진행중' ? '입찰' : '진행전'}</button>
                 </span>
             </div>
         </div>
@@ -176,7 +177,8 @@
         <div style="padding-top: 100px;">
             <h2 style="color: #6E6E6E">상품이미지</h2>
             <div style=" text-align: center;">
-                <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="detail-img-prize" style="margin: 0 auto;">
+                <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="detail-img-prize"
+                     style="margin: 0 auto;">
             </div>
         </div>
 
@@ -199,12 +201,36 @@
             <div style="text-align: center">
                 <p style="font-size: 25px">입찰창</p>
             </div>
-            <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="modal-thumbnail-prize">
+            <div style="display: flex">
+                <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지"
+                     class="modal-thumbnail-prize">
+                <div style="padding-left: 30px; text-align: right;">
+                    <p style="font-size: 20px;">${prize.prName} </p>
+                    <p style="font-size: 20px;">입찰가</p>
+                    <label style="font-size: 25px; padding-bottom: 5px">
+                        <input type="text" style="width: 150px; height: 40px; font-size: 20px; padding-left: 10px;">원
+                    </label>
+                    <p style="color: rgba(193,193,193,0.74);">
+                        입찰가는 현재 가격보다 <br>
+                        최소 100원이상 이어야 합니다.
+                    </p>
+                </div>
+            </div>
+
+            <div style="padding-top: 30px; text-align: center">
+                <button class="btn-click" style="width: 100px; height: 40px; font-size: 20px" onclick="bidding()">입찰
+                </button>
+                <button class="btn-click" style="width: 100px; height: 40px; font-size: 20px" onclick="closeModal()">
+                    취소
+                </button>
+            </div>
+
         </div>
     </div>
 </div>
 
 <script>
+
     $(function () {
         let stDate = '${prize.stDate}';
         let edDate = '${prize.edDate}';
@@ -230,18 +256,28 @@
     });
 
 
+    function closeModal() {
+        let modal = document.getElementById("auctionModal");
+
+        // 모든 input 요소 초기화
+        let inputs = modal.getElementsByTagName('input');
+        for (let input of inputs) {
+            input.value = '';
+        }
+
+        modal.style.display = "none";
+    }
+
     // 모달 창 제어 스크립트
     function prizeAuction(status) {
         let userId = "${userId}";
         if (status === '진행전') {
             alert('아직 경매가 시작되지 않았습니다.');
         } else if (status === '입찰') {
-            //TODO: 로그인 여부 확인 (다시 주석 풀어야함)
-            /*
             if (userId === 'none') {
                 alert('로그인 후 이용해주세요.');
                 return;
-            }*/
+            }
             // 모달 창 표시
             let modal = document.getElementById("auctionModal");
             modal.style.display = "block";
@@ -252,20 +288,55 @@
 
     // 모달 창 닫기
     let span = document.getElementsByClassName("close")[0];
-    span.onclick = function() {
-        let modal = document.getElementById("auctionModal");
-        modal.style.display = "none";
+    span.onclick = function () {
+        closeModal();
     }
 
     // 모달 창 외부 클릭 시 닫기
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         let modal = document.getElementById("auctionModal");
         if (event.target === modal) {
-            modal.style.display = "none";
+            closeModal();
         }
     }
 
 </script>
 
 
+<script !src="">
+    function bidding() {
+        let modal = document.getElementById("auctionModal");
+        let input = modal.querySelector('input');
+        let biddingMoney = input.value;
+        let money = ${prize.price} +100;
 
+        if (biddingMoney < money) {
+            alert('입찰가는 현재 가격보다 최소 100원 이상이어야 합니다.');
+            return;
+        }
+        if (confirm('입찰하시겠습니까?')) {
+            let url = "${pageContext.request.contextPath}/auction/bidding";
+
+            let data = {
+                prizeId: ${prize.pnum},
+                price: biddingMoney
+            };
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success: function (response) {
+                    alert(response);
+                    location.reload();
+                },
+                error: function (response) {
+                    alert('입찰에 실패했습니다.');
+                }
+            });
+
+        }
+
+    }
+
+</script>

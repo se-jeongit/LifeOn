@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface AuctionServiceInterface {
 
-    List<List<PrizeRep>> findByAllPrize();
+    String biddingMoney(Map<String, Object> map);
 
     AllCategoryResponse findByAllCategory(Map<String, Object> paginationMap);
 
@@ -18,7 +18,9 @@ public interface AuctionServiceInterface {
 
     PrizeDetailRep findByPrize(Map<String, Object> map);
 
+
     int dataCount(Map<String, Object> map);
 
-    void updatePrizeStatus(String status,long prId);
+    void updatePrizeStatus(Map<String, Object> map);
+    Long findByUserId(Map<String, Object> map);
 }

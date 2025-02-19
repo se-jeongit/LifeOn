@@ -22,29 +22,13 @@ public class AuctionService implements AuctionServiceInterface{
     private final AuctionMapper mapper;
     private final UpdateSchedule updateSchedule = new UpdateSchedule();
 
-
-    @Override
-    public List<List<PrizeRep>> findByAllPrize() {
-
-        //List<PrizeRep> prizeReps = mapper.findByAllPrize();
-
-        //return filterPrize(prizeReps);
-
-        return null;
-    }
-
-
     @Override
     public AllCategoryResponse findByAllCategory(Map<String, Object> paginationMap) {
 
         AllCategoryResponse categoryResponse = new AllCategoryResponse();
         categoryResponse.setCategoryList(Optional.ofNullable(mapper.findByAllCategoryBig()).orElse(Collections.emptyList()));
         List<PrizeRep> prizeReps = mapper.findByAllPrize(paginationMap);
-        for (PrizeRep prizeRep : prizeReps) {
-            prizeRep.setPrStatus(updatePrizeStatusMethod(
-                    prizeRep.getPrStatus(), prizeRep.getStDate(), prizeRep.getEdDate(),prizeRep.getPnum()
-            ));
-        }
+        categoryRepeat(paginationMap, prizeReps);
         categoryResponse.setPrizeList(filterPrize(prizeReps));
         return categoryResponse;
 
@@ -65,12 +49,7 @@ public class AuctionService implements AuctionServiceInterface{
         categoryResponse.setCategoryList(categorySmalls);
 
         List<PrizeRep> prizeReps = mapper.findByBigCategory(map);
-        for (PrizeRep prizeRep : prizeReps) {
-            prizeRep.setPrStatus(updatePrizeStatusMethod(
-                    prizeRep.getPrStatus(), prizeRep.getStDate(), prizeRep.getEdDate(),prizeRep.getPnum()
-            ));
-        }
-
+        categoryRepeat(map, prizeReps);
         categoryResponse.setPrizeList(filterPrize(prizeReps));
 
         return categoryResponse;
@@ -82,11 +61,8 @@ public class AuctionService implements AuctionServiceInterface{
         List<String> prizeImg = mapper.findByPrizeImg(map);
 
         PrizeDetailRep result = mapper.findByPrize(map);
-
-        result.setPrStatus(updatePrizeStatusMethod(
-                result.getPrStatus(), result.getStDate(), result.getEdDate(),result.getPnum()
-        ));
-
+        mapInToData(map, result.getPnum(), result.getStDate(), result.getEdDate(), result.getPrStatus(), result.getPrice());
+        result.setPrStatus(updatePrizeStatusMethod(map));
 
         result.setUpToDate(result.getUpToDate().substring(0, 16));
 
@@ -94,6 +70,26 @@ public class AuctionService implements AuctionServiceInterface{
 
 
         return result;
+    }
+
+    @Override
+    public String biddingMoney(Map<String, Object> map){
+        int priceCompare = mapper.findByPrize(map).getPrice();
+        int price = (int) map.get("price");
+        if (priceCompare > price) {
+            return "입찰금액이 현재금액보다 작습니다. 다시 입찰해주세요.";
+        }
+        Integer s = mapper.findByBidding(map);
+        map.put("price", price);
+        if (s == 0){
+            mapper.insertBidding(map);
+            mapper.updatePrizePrice(map);
+        } else {
+            mapper.updateBidding(map);
+            mapper.updatePrizePrice(map);
+        }
+
+        return "입찰에 성공하였습니다.";
     }
 
 
@@ -111,19 +107,18 @@ public class AuctionService implements AuctionServiceInterface{
         return result;
     }
 
-
-    // TODO : 리스트를 불러올때 상태값을 확인하여 상태값을 변경해주는 메소드 아직 미완성
     @Override
-    public void updatePrizeStatus(String status,long prId) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("status", status);
-        map.put("prId", prId);
-        mapper.updatePrizeStatus(map);
-
+    public void updatePrizeStatus(Map<String, Object> map) {
+        mapper.updateFinalPrizeStatus(map);
     }
 
+    // 가격 회원번호 상품번호 등을 받아서 입찰을 진행하는 메소드
+    @Override
+    public Long findByUserId(Map<String, Object> map) {
+        return mapper.findByUserId(map);
+    }
 
-    private List<List<PrizeRep>> filterPrize(List<PrizeRep> prizeReps) {
+    protected  List<List<PrizeRep>> filterPrize(List<PrizeRep> prizeReps) {
 
         List<PrizeRep> filter = new ArrayList<>();
 
@@ -145,16 +140,41 @@ public class AuctionService implements AuctionServiceInterface{
         return resultList;
     }
 
-    private String updatePrizeStatusMethod(String status, String stDate, String edDate,long prId) {
-        if (status.equals("진행전") && updateSchedule.updatePrize(stDate)) {
-            updatePrizeStatus("진행중", prId);
+    protected  void categoryRepeat(Map<String, Object> map, List<PrizeRep> prizeReps) {
+        for (PrizeRep prizeRep : prizeReps) {
+            mapInToData(map, prizeRep.getPnum(), prizeRep.getStDate(), prizeRep.getEdDate(), prizeRep.getPrStatus(), prizeRep.getPrice());
+            prizeRep.setPrStatus(updatePrizeStatusMethod(map));
+        }
+    }
+
+
+    protected  void mapInToData(Map<String, Object> map, long pnum, String stDate, String edDate, String prStatus, int price) {
+        map.put("pnum", pnum);
+        map.put("stDate", stDate);
+        map.put("edDate", edDate);
+        map.put("status", prStatus);
+        map.put("price", Integer.parseInt(String.valueOf(price))); // price를 숫자 형식으로 변환
+    }
+
+
+    protected  String updatePrizeStatusMethod(Map<String, Object> map) {
+        if (map.get("status").equals("진행전")
+                && updateSchedule.updatePrize(map.get("stDate").toString())) {
+            map.put("status", "진행중");
+            updatePrizeStatus(map);
             return "진행중";
-        } else if (status.equals("진행중") && updateSchedule.updatePrize(edDate)) {
-            updatePrizeStatus("마감", prId);
+        } else if (map.get("status").equals("진행중")
+                && updateSchedule.updatePrize(map.get("edDate").toString())) {
+            map.put("status", "마감");
+            map.put("userId",findByUserId(map));
+            updatePrizeStatus(map);
+            mapper.insertProductBiddingSuccess(map);
             return "마감";
         }
-        return status;
+        return map.get("status").toString();
     }
+
+
 
 
 }

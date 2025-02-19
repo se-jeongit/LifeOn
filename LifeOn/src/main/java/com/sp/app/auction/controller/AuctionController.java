@@ -27,6 +27,7 @@ public class AuctionController {
     private final AuctionService auctionService;
     private final PaginateUtil paginateUtil;
 
+    //TODO: 검색어 입력 처리동작 미완
     @GetMapping("")
     public ModelAndView moveMain(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                  HttpServletRequest req,
@@ -41,6 +42,7 @@ public class AuctionController {
 
             AllCategoryResponse allCategory = auctionService.findByAllCategory(paginationMap);
             allCategory.setCategoryType("all");
+
 
             String userId = (member != null) ? String.valueOf(member.getNum()) : "none";
             mav.addObject("userId", userId);
@@ -57,14 +59,14 @@ public class AuctionController {
         return mav;
     }
 
-    //TODO: 카테고리 검색어 입력시 처리동작 처리 미처리 상태
+    //TODO: 카테고리 검색어 입력시 처리동작 처리 미완
     @GetMapping("/category")
     public ModelAndView moveCategory(@RequestParam(value = "cbn", required = false, defaultValue = "0") long cbn,
                                      @RequestParam(value = "categoryType", required = false, defaultValue = "") String categoryType,
                                      @RequestParam(value = "categoryBName", required = false, defaultValue = "") String categoryBName,
                                      @RequestParam(value = "categoryName", required = false, defaultValue = "") String categoryName,
-                                        @RequestParam(value = "searchType", required = false, defaultValue = "") String searchType,
-                                        @RequestParam(value = "searchTerm", required = false, defaultValue = "") String searchTerm,
+                                     @RequestParam(value = "searchType", required = false, defaultValue = "") String searchType,
+                                     @RequestParam(value = "searchTerm", required = false, defaultValue = "") String searchTerm,
                                      @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                      HttpServletRequest req,
                                      HttpSession session) {
@@ -84,7 +86,7 @@ public class AuctionController {
             searchTerm = URLDecoder.decode(searchTerm, StandardCharsets.UTF_8);
 
             if (categoryType.equals("all")) {
-                Map<String, Object> paginationMap = calculatePagination(new HashMap<>(), size, 1, req, "auction");
+                Map<String, Object> paginationMap = calculatePagination(new HashMap<>(), size, page, req, "auction");
 
                 AllCategoryResponse categories = auctionService.findByAllCategory(paginationMap);
                 return mav.addObject("category", setCategoryResponse(categories, "all", null,null, 0));
@@ -138,7 +140,6 @@ public class AuctionController {
             SessionInfo member = (SessionInfo) session.getAttribute("member");
             String userId = (member != null) ? String.valueOf(member.getNum()) : "none";
             mav.addObject("userId", userId);
-
             map.put("pnum", pnum);
             PrizeDetailRep rep = auctionService.findByPrize(map);
             mav.addObject("prize", rep);
@@ -148,6 +149,28 @@ public class AuctionController {
         }
 
         return mav;
+    }
+
+    @PostMapping("/bidding")
+    public String biddingMoney(@RequestParam("prizeId") int pnum,
+                             @RequestParam("price") int price,
+                             HttpSession session) {
+        Map<String, Object> map = new HashMap<>();
+        String result = "";
+        try {
+            SessionInfo member = (SessionInfo) session.getAttribute("member");
+            String userId = (member != null) ? String.valueOf(member.getNum()) : "none";
+            map.put("pnum", pnum);
+            map.put("price", price);
+            map.put("userId", userId);
+
+            result = auctionService.biddingMoney(map);
+
+        }catch (Exception e) {
+            log.error("error", e);
+            return "입찰에 실패했습니다. 다시 시도해주세요.";
+        }
+        return result;
     }
 
 
