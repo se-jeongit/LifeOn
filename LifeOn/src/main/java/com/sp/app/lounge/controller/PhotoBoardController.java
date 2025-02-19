@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
-import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.lounge.service.PhotoBoardService;
 import com.sp.app.model.SessionInfo;
@@ -146,14 +146,13 @@ public class PhotoBoardController {
 			
 			String cp = req.getContextPath();
 			String query = "page=" + current_page;
-			String listUrl = cp + "/lounge1/" + bdtype; 
-			String articleUrl = cp + "/lounge1/" + bdtype + "/article/{psnum}";
-			
+			String listUrl = cp + "/lounge1/" +bdtype; 
+			String articleUrl = cp + "/lounge1/" + bdtype + "/article";
 			if (! kwd.isBlank()) {
 				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
 				
 				listUrl += "?" + qs;
-				articleUrl += "&" + qs;
+				query += "&" + qs;
 			}
 			
 			String paging = paginateUtil.paging(current_page, total_page, listUrl);
@@ -164,11 +163,11 @@ public class PhotoBoardController {
 			model.addAttribute("page", current_page);
 			model.addAttribute("total_page", total_page);
 			model.addAttribute("articleUrl", articleUrl);
+			model.addAttribute("query", query);
 			model.addAttribute("paging", paging);
 			
 			model.addAttribute("schType", schType);
 			model.addAttribute("kwd", kwd);
-			model.addAttribute("query", query);
 			
 		} catch (Exception e) {
 			log.info("list : ", e);
@@ -179,7 +178,7 @@ public class PhotoBoardController {
 	
 	@GetMapping("{bdtype}/article/{psnum}")
 	public String article(@PathVariable(name = "bdtype") String bdtype,
-			@PathVariable(name = "psnum") long num,
+			@PathVariable(name = "psnum") long psnum,
 			@RequestParam(name = "page") String page,
 			@RequestParam(name = "schType", defaultValue = "all") String schType,
 			@RequestParam(name = "kwd", defaultValue = "") String kwd,
@@ -194,17 +193,18 @@ public class PhotoBoardController {
 				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
 			}
 			
-			service.updateHitCount(num);
-			
-			PhotoBoard dto = Objects.requireNonNull(service.findById(num));
-			
-			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+			service.updateHitCount(psnum);
 			
 			Map<String, Object> map = new HashMap<>();
+			map.put("bdtype", bdtype);
+			map.put("psnum", psnum);
+			
+			PhotoBoard dto = Objects.requireNonNull(service.findById(map));
+			
+			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+
 			map.put("schType", schType);
 			map.put("kwd", kwd);
-			map.put("bdtype", bdtype);
-			map.put("psnum", num);
 			
 			PhotoBoard prevDto = service.findByPrev(map);
 			PhotoBoard nextDto = service.findByNext(map);
@@ -215,6 +215,7 @@ public class PhotoBoardController {
 			*/
 			
 			model.addAttribute("bdtype", bdtype); 
+			model.addAttribute("psnum", psnum); 
 			model.addAttribute("dto", dto);
 			model.addAttribute("prevDto", prevDto);
 			model.addAttribute("nextDto", nextDto);
@@ -224,14 +225,40 @@ public class PhotoBoardController {
 			model.addAttribute("query", query);
 			model.addAttribute("page", page);
 			
-			return "lounge1/{bdtype}/article";
+			return "lounge1/article";
 			
 		} catch (NullPointerException e) {
 		} catch (Exception e) {
 			log.info("article : ", e);
 		}
 		
-		return "redirect:/lounge1/" + bdtype + "/article/" + num + "?" + query;
+		return "redirect:/lounge1/" + bdtype + "?" + query;
 	}
-
+		
+	@GetMapping("{bdtype}/delete")
+	public String deleteBoard(@PathVariable(name = "bdtype") String bdtype,
+			@RequestParam(name = "psnum") long psnum,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
+			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+			@RequestParam(name = "page") String page,
+			HttpSession session) {
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			if (! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			service.deleteBoard(psnum, uploadPath, info.getNickName(), info.getGrade());
+			
+		} catch (Exception e) {
+			log.info("deleteBoard : ", e);
+		}
+		
+		return "redirect:/lounge1/" + bdtype + "?" + query;
+	}
 }

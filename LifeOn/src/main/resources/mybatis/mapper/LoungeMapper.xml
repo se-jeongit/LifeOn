@@ -60,17 +60,17 @@
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 	
-	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.PhotoBoard">
+	<select id="findById" parameterType="map" resultType="com.sp.app.lounge.model.PhotoBoard">
 		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, hb.blind, bdtype
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
 		LEFT OUTER JOIN (
-			SELECT psnum, COUNT(*) boardLikeCount, num
+			SELECT psnum, COUNT(*) boardLikeCount
 			FROM HYBRID_BOARD_FAV
-			WHERE num = #{num}
-			GROUP BY psnum, num
-			) c ON hb.num = c.num
-			WHERE hb.psnum = #{psnum, jdbcType=NUMERIC} AND blind = 0 AND bdtype = #{bdtype}
+			WHERE psnum = #{psnum}
+			GROUP BY psnum
+			) c ON hb.psnum = c.psnum
+			WHERE hb.psnum = #{psnum} AND blind = 0 AND bdtype = #{bdtype}
 	</select>
 	
 	<update id="updateHitCount" parameterType="Long">
@@ -78,7 +78,10 @@
 		WHERE psnum = #{psnum}
 	</update>
 	
-	
+	<delete id="deleteBoard" parameterType="Long">
+		DELETE FROM HYBRID_BOARD
+		WHERE psnum = #{psnum}
+	</delete>
 	
 	
 </mapper>

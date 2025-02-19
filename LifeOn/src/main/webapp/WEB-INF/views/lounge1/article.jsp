@@ -51,7 +51,9 @@
 							
 							<tr>
 								<td colspan="2" valign="top" height="200" style="border-bottom: none;">
-									${dto.content}
+									<div id = "content">
+									
+									</div>
 								</td>
 							</tr>
 					
@@ -165,12 +167,18 @@
 		function deleteOk() {
 			if (confirm('게시글을 삭제 하시겠습니까?')) {
 				let qs = 'psnum=${dto.psnum}&${query}';
-				let url = '${pageContext.request.contextPath}/lounge2/tip/delete?' + qs;
+				let url = '${pageContext.request.contextPath}/lounge1/${bdtype}/delete?' + qs;
 				location.href = url;
 			}
 		}
 	</script>
 </c:if>
+
+<script type="text/javascript">
+ document.addEventListener('DOMContentLoaded', function() {
+	 document.getElementById('content').innerHTML = "${dto.content}";
+ });
+</script>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

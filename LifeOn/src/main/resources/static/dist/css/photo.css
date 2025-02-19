@@ -91,3 +91,9 @@ h1, h2, h3, h4, h5, h6, p, a, b {
 .page-navigation .pagination .page-link:focus {
     box-shadow: none; 
 }
+
+.freeForm {
+	border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}

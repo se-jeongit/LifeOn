@@ -86,7 +86,7 @@
         <c:forEach var="dto" items="${list}" varStatus="status">
           <div class="photo-card">
             <div class="mx-3">
-              <div onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/article/${dto.psnum}?${query}'">
+              <div onclick="location.href='${articleUrl}/${dto.psnum}?${query}'">
                 <table class="table table-hover m-0">		
                   <img src="${pageContext.request.contextPath}/dist/images/roomt.jpg">
                   <h4 class="ph_subject">${dto.subject}</h4>

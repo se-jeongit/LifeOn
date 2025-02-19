@@ -1,5 +1,6 @@
 package com.sp.app.lounge.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -8,16 +9,21 @@ import com.sp.app.lounge.model.PhotoReply;
 
 public interface PhotoBoardService {
 	public void insertBoard(PhotoBoard dto, String uploadPath) throws Exception;
+	public void updateBoard(PhotoBoard dto, String uploadPath) throws Exception;
+	public void deleteBoard(long num, String uploadPath, String userId, int userLevel) throws Exception;
 	public List<PhotoBoard> listBoard(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
-	public PhotoBoard findById(long num);
+	public PhotoBoard findById(Map<String, Object> map);
 	public void updateHitCount(long num) throws Exception;
 	public PhotoBoard findByPrev(Map<String, Object> map);
 	public PhotoBoard findByNext(Map<String, Object> map);
-	public void updateBoard(PhotoBoard dto, String uploadPath) throws Exception;
-	public void deleteBoard(long num, String uploadPath, String userId, int userLevel) throws Exception;
-	public boolean deleteUploadFile(String uploadPath, String filename);
 	
+	public void updateFile(PhotoBoard dto) throws SQLException;
+	public List<PhotoBoard> listFile(long num);
+	public PhotoBoard findByFileId(long fileNum);
+	public void deleteFile(Map<String, Object> map) throws Exception;
+
+	public boolean deleteUploadFile(String uploadPath, String filename);
 	// 스크랩
 	public void BoardLike(Map<String, Object> map) throws Exception;
 	public void deleteBoardLike(Map<String, Object> map) throws Exception;

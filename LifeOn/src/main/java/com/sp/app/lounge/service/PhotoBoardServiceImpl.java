@@ -1,5 +1,6 @@
 package com.sp.app.lounge.service;
-
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,11 +74,11 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	}
 
 	@Override
-	public PhotoBoard findById(long num) {
+	public PhotoBoard findById(Map<String, Object> map) {
 		PhotoBoard dto = null;
 		
 		try {
-			dto = mapper.findById(num);
+			dto = mapper.findById(map);
 			
 		} catch (Exception e) {
 			log.info("findById : ", e);
@@ -115,16 +116,35 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 
 	@Override
 	public void deleteBoard(long num, String uploadPath, String userId, int userLevel) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("psnum", num);
+			deleteFile(map);
+			
+			PhotoBoard dto = findById(map);
+			
+			if(dto == null || (userLevel<51 && ! dto.getNickname().equals(userId))) {
+				return;
+			}
+			
+			deleteUploadFile(uploadPath, dto.getSsfname());
+			
+			mapper.deleteBoard(num);
+			
+		} catch (Exception e) {
+			log.info("deleteBoard : ", e);
+			
+			throw e;
+		}
 	}
-
+	
 	@Override
 	public boolean deleteUploadFile(String uploadPath, String filename) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		return storageService.deleteFile(uploadPath, filename);
 
+	}
+	
 	@Override
 	public void BoardLike(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
@@ -187,6 +207,36 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 
 	@Override
 	public void updateReplyShowHide(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<PhotoBoard> listFile(long num) {
+		List<PhotoBoard> listFile =  null;
+		
+		try {
+			listFile = mapper.listFile(num);
+		} catch (Exception e) {
+			log.info("listFile : ", e);
+		}
+		return listFile;
+	}
+
+	@Override
+	public PhotoBoard findByFileId(long fileNum) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteFile(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateFile(PhotoBoard dto) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}
