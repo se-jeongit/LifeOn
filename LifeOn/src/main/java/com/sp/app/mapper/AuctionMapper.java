@@ -17,7 +17,9 @@ public interface AuctionMapper {
 
     Integer dataCount(Map<String, Object> map);
 
-    List<PrizeRep> findByAllPrize();
+    void updatePrizeStatus(Map<String, Object> map);
+
+    List<PrizeRep> findByAllPrize(Map<String, Object> map);
     List<PrizeRep> findByBigCategory(Map<String, Object> map);
 
     List<CategoryBig> findByAllCategoryBig();

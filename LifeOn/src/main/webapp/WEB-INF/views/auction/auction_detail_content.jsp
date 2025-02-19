@@ -12,6 +12,11 @@
         height: 400px;
     }
 
+    .modal-thumbnail-prize {
+        width: 180px;
+        height: 120px;
+    }
+
     .detail-img-prize {
         width: 800px;
         height: 400px;
@@ -61,6 +66,43 @@
     }
 
 
+    /* 모달 창 스타일 */
+    .modal {
+        display: none; /* 기본적으로 숨김 */
+        position: fixed; /* 화면에 고정 */
+        z-index: 1; /* 다른 요소 위에 표시 */
+        left: 0;
+        top: 0;
+        width: 100%; /* 전체 화면 너비 */
+        height: 100%; /* 전체 화면 높이 */
+        overflow: auto; /* 스크롤 가능 */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 화면 중앙에 위치 */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 500px; /* 너비 */
+        height: 350px; /* 높이 */
+    }
+
+    .close {
+        color: #aaa;
+        position: absolute; /* 부모 요소 기준으로 절대 위치 */
+        top: 10px; /* 상단에서 10px 떨어짐 */
+        right: 10px; /* 우측에서 10px 떨어짐 */
+        font-size: 28px; /* &times; 크기에 맞게 조정 */
+        font-weight: bold;
+        line-height: 1; /* &times; 크기에 맞게 조정 */
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+    }
 </style>
 
 <div style="display: flex; padding-top: 5px; margin: 10px auto; width: 1130px;">
@@ -95,9 +137,6 @@
                                                                 currencySymbol="₩"/>원</p>
                     </c:if>
                 </div>
-                <div style=" padding-left : 200px; font-size: 40px; font-weight: 300">
-                    <p> ${prize.prStatus} </p>
-                </div>
             </div>
             <div class="head-main">
                 <c:if test="${prize.prStatus eq '진행전'}">
@@ -116,7 +155,7 @@
             <div style="padding-top: 30px; display: flex; height: 100px">
                 <p style="font-size: 20px; font-weight: 500; padding-top: 20px">거래방법 : ${prize.tradeType}</p>
                 <span class="btn-modal">
-                <button class="btn-click">${prize.prStatus == '마감' ? '종료' : prize.prStatus == '진행중' ? '입찰' : '진행전'}</button>
+                <button class="btn-click" onclick="prizeAuction('${prize.prStatus == '마감' ? '종료' : prize.prStatus == '진행중' ? '입찰' : '진행전'}')">${prize.prStatus == '마감' ? '종료' : prize.prStatus == '진행중' ? '입찰' : '진행전'}</button>
                 </span>
             </div>
         </div>
@@ -147,11 +186,23 @@
 <div style="padding-top: 55px; padding-bottom: 55px; margin: 10px auto; width: 1130px;">
     <hr style="border: 1px solid black;">
     <div style="height: 100px">
-
     </div>
     <hr style="border: 1px solid black;">
 </div>
 
+
+<!-- 모달 창 -->
+<div id="auctionModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div>
+            <div style="text-align: center">
+                <p style="font-size: 25px">입찰창</p>
+            </div>
+            <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="modal-thumbnail-prize">
+        </div>
+    </div>
+</div>
 
 <script>
     $(function () {
@@ -179,5 +230,42 @@
     });
 
 
+    // 모달 창 제어 스크립트
+    function prizeAuction(status) {
+        let userId = "${userId}";
+        if (status === '진행전') {
+            alert('아직 경매가 시작되지 않았습니다.');
+        } else if (status === '입찰') {
+            //TODO: 로그인 여부 확인 (다시 주석 풀어야함)
+            /*
+            if (userId === 'none') {
+                alert('로그인 후 이용해주세요.');
+                return;
+            }*/
+            // 모달 창 표시
+            let modal = document.getElementById("auctionModal");
+            modal.style.display = "block";
+        } else if (status === '종료') {
+            alert('경매가 종료되었습니다.');
+        }
+    }
+
+    // 모달 창 닫기
+    let span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        let modal = document.getElementById("auctionModal");
+        modal.style.display = "none";
+    }
+
+    // 모달 창 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        let modal = document.getElementById("auctionModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+
 </script>
+
+
 

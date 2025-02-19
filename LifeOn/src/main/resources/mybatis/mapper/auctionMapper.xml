@@ -36,6 +36,7 @@
         SELECT CSN, CSC, CBN
         FROM CATEGORY_SMALL CS
         WHERE CBN = #{cbn}
+
     </select>
 
 
@@ -58,6 +59,8 @@
                  JOIN CATEGORY_SMALL CS on CS.CSN = p.CSN
                  JOIN CATEGORY_BIG CB on CB.CBN = CS.CBN
         WHERE PTYPE = '경매'
+        ORDER BY p.PNUM
+        OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
     </select>
 
 
@@ -125,7 +128,11 @@
         </where>
     </select>
 
-
+    <update id="updatePrizeStatus" parameterType="map">
+        UPDATE PRODUCT_AUCTION
+        SET PAS = #{status}
+        WHERE PNUM = #{prId}
+    </update>
     <!--    <where>-->
     <!--        <if test="kwd!=null and kwd !='' ">-->
     <!--            <include refid="where-list"/>-->
