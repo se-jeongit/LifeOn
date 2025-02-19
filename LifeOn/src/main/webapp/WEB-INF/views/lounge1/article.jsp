@@ -12,6 +12,26 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
 
+<style type="text/css">
+.body-container {
+    width: 80%; /* 필요에 따라 조절 */
+    max-width: 1200px; /* 원하는 최대 크기 설정 */
+    margin: 0 auto; /* 좌우 여백을 동일하게 설정 */
+}
+
+#content img {
+    max-width: 100%; /* 부모 요소 크기를 넘지 않도록 */
+    height: auto; /* 비율 유지 */
+    display: block;
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+.freeForm {
+    min-height: 600px; /* 게시글 기본 높이 설정 */
+}
+
+</style>
+
 </head>
 <body>
 
@@ -22,10 +42,7 @@
 	
 <main class="min-vh-100">
 	<!-- 배너 -->
-    <div class="body-title">
-    	<h3 style="margin: 0px;"></h3>
-	</div>
-	
+    
 	<div class="body-container">
 			
 			<div class="main_content" style="margin-top: 60px;">
@@ -50,16 +67,20 @@
 							</tr>
 							
 							<tr>
-								<td colspan="2" valign="top" height="200" style="border-bottom: none;">
-									<div id = "content">
-									
-									</div>
-								</td>
+    							<td colspan="2" valign="top" height="200" style="border-bottom: none;">
+							        <div id="content">
+							            <c:out value="${dto.content}" escapeXml="false"/>
+							        </div>
+							    </td>
 							</tr>
-					
+
+				
 							<tr>
 								<td colspan="2" class="text-center p-3" style="border-bottom: none;">
-									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="좋아요"><i class="bi ${isMemberLiked ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'}"></i>&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span></button>
+									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기">
+										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill' : 'bi-bookmark'}"></i>
+										&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
+									</button>
 								</td>
 							</tr>
 					
@@ -73,7 +94,7 @@
 									</c:if>
 								</td>
 							</tr>
-							
+							<!--  -
 							<tr>
 								<td colspan="2">
 									이전글 :
@@ -96,6 +117,7 @@
 									</c:if>
 								</td>
 							</tr>
+							-->
 						</tbody>
 					</table>
 					<table class="table table-borderless">
@@ -125,14 +147,14 @@
 					
 					<div class="reply">
 						<form name="replyForm" method="post">
-							<div class="form-header">
-								<span class="bold">댓글</span><span> - 타인을 비방하거나 개인정보를 유출하는 글의 게시를 삼가해 주세요.</span>
+							<div class="form-header" style="text-align: left; padding: 8px 15px;">
+								<span class="bold">댓글 ${dto.replyCount}</span>
 							</div>
 							
 							<table class="table table-borderless reply-form">
 								<tr>
 									<td>
-										<textarea class="free-control" name="content"></textarea>
+										<textarea class="free-control" name="rpcontent"></textarea>
 									</td>
 								</tr>
 								<tr>
@@ -148,15 +170,7 @@
 				</div>
 			</div>
 
-			<aside class="sidebar">
-				<div style="display: flex; align-items: center; margin: 0 20px;">
-					<!-- 검색상자 -->
-					<input type="search" class="input-group searchBox">
-					
-					<!-- 검색버튼 -->
-				   	<button class="input-group btn mybtn">검색</button>
-				</div>
-			</aside>
+			
 		</div>
 
 
@@ -175,9 +189,18 @@
 </c:if>
 
 <script type="text/javascript">
- document.addEventListener('DOMContentLoaded', function() {
-	 document.getElementById('content').innerHTML = "${dto.content}";
- });
+document.addEventListener('DOMContentLoaded', function() {
+    let content = document.getElementById('content');
+    let data = content.innerHTML;
+
+    // ${pageContext.request.contextPath} 값을 JavaScript 변수로 가져옴
+    let contextPath = '${pageContext.request.contextPath}';
+    
+    // 업로드된 이미지 경로를 올바르게 변환
+    data = data.replace(/src="\/uploads\/image\//g, 'src="' + contextPath + '/uploads/image/');
+
+    content.innerHTML = data;
+});
 </script>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
