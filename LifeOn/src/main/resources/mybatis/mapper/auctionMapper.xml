@@ -171,7 +171,7 @@
     <select id="findByUserId" parameterType="map" resultType="com.sp.app.auction.response.prize.PrizeRep">
         SELECT NUM
         FROM PRODUCT_AUCTION_BID
-        WHERE PNUM = #{pnum} AND PABD = #{price}
+        WHERE PNUM = #{pnum} AND PABP= #{price}
     </select>
 
     <!--  경매 상품 낙찰한 회원 및 가격 등록 -->

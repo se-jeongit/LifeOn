@@ -7,6 +7,7 @@ import com.sp.app.auction.response.prize.PrizeRep;
 import com.sp.app.auction.vo.CategorySmall;
 import com.sp.app.common.UpdateSchedule;
 import com.sp.app.mapper.AuctionMapper;
+import com.sp.app.mapper.PointRecordMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.*;
 public class AuctionService implements AuctionServiceInterface{
 
     private final AuctionMapper mapper;
+    private final PointRecordMapper pointerMapper;
     private final UpdateSchedule updateSchedule = new UpdateSchedule();
 
     @Override
@@ -74,24 +76,28 @@ public class AuctionService implements AuctionServiceInterface{
 
     @Override
     public String biddingMoney(Map<String, Object> map){
-        int priceCompare = mapper.findByPrize(map).getPrice();
-        int price = (int) map.get("price");
+        int priceCompare = mapper.findByPrize(map).getPrice(); // 현재금액
+        int price = (int) map.get("price");  // 입찰금액
         if (priceCompare > price) {
             return "입찰금액이 현재금액보다 작습니다. 다시 입찰해주세요.";
         }
+        Integer priceCheckPoint = checkPoint(map);
+        if (priceCheckPoint < price) {
+            return "포인트가 부족합니다.";
+        }
         Integer s = mapper.findByBidding(map);
         map.put("price", price);
+
         if (s == 0){
             mapper.insertBidding(map);
-            mapper.updatePrizePrice(map);
+            updatePrizeAndPoint(map, price, priceCheckPoint, priceCompare);
         } else {
             mapper.updateBidding(map);
-            mapper.updatePrizePrice(map);
+            updatePrizeAndPoint(map, price, priceCheckPoint, priceCompare);
         }
 
         return "입찰에 성공하였습니다.";
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -153,11 +159,11 @@ public class AuctionService implements AuctionServiceInterface{
         map.put("stDate", stDate);
         map.put("edDate", edDate);
         map.put("status", prStatus);
-        map.put("price", Integer.parseInt(String.valueOf(price))); // price를 숫자 형식으로 변환
+        map.put("price", Integer.parseInt(String.valueOf(price))); // price 를 숫자 형식으로 변환
     }
 
 
-    protected  String updatePrizeStatusMethod(Map<String, Object> map) {
+    protected String updatePrizeStatusMethod(Map<String, Object> map) {
         if (map.get("status").equals("진행전")
                 && updateSchedule.updatePrize(map.get("stDate").toString())) {
             map.put("status", "진행중");
@@ -167,6 +173,7 @@ public class AuctionService implements AuctionServiceInterface{
                 && updateSchedule.updatePrize(map.get("edDate").toString())) {
             map.put("status", "마감");
             map.put("userId",findByUserId(map));
+
             updatePrizeStatus(map);
             mapper.insertProductBiddingSuccess(map);
             return "마감";
@@ -174,7 +181,42 @@ public class AuctionService implements AuctionServiceInterface{
         return map.get("status").toString();
     }
 
+    protected Integer checkPoint(Map<String, Object> map) {
+        Object userIdObj = map.get("userId");
+        Long userId;
+        if (userIdObj instanceof String) {
+            userId = Long.parseLong((String) userIdObj);
+        } else {
+            userId = (Long) userIdObj;
+        }
+        return pointerMapper.totalPoint(userId);
+    }
 
+    protected void updatePrizeAndPoint(Map<String, Object> map, int price, Integer priceCheckPoint, int priceCompare) {
+        mapper.updatePrizePrice(map);
+        pointUpdate(map, "경매입찰","사용",
+                price *-1, priceCheckPoint - price);
+        Long userId = findByUserId(map);
+        returnPoint(map, userId, priceCompare);
+    }
+
+
+    protected void pointUpdate(Map<String, Object> map, String pay, String type, int price, Integer priceCheckPoint) {
+        map.put("prec",pay);
+        map.put("pret",type);
+        map.put("prep", price);
+        map.put("pretp", priceCheckPoint);
+        pointerMapper.insertAuctionPoint(map);
+    }
+
+    protected void returnPoint(Map<String, Object> map, Long userId, int priceCompare) {
+        if (userId != null){
+            map.put("userId", userId);
+            Integer existingPoint = checkPoint(map);
+            pointUpdate(map, "입찰 실패","환급",
+                    priceCompare, existingPoint+ priceCompare);
+        }
+    }
 
 
 }

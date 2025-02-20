@@ -62,6 +62,11 @@
 		    FETCH FIRST 1 ROWS ONLY
 		), 0) FROM DUAL
 	</select>
+
+	<update id="insertAuctionPoint" parameterType="com.sp.app.model.PointRecord">
+		INSERT INTO point_record(prnum, PREC,PRET,PREP,PRETP,PREPD,NUM)
+		VALUES(POINT_RECORD_SEQ.nextval,#{prec},#{pret},#{prep},#{pretp},SYSDATE,#{userId})
+	</update>
 	
 	
 </mapper>
