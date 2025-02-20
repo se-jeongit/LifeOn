@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sp.app.model.PolicyBoard;
+import com.sp.app.model.PolicyReply;
 
 public interface PolicyBoardService {
 	public void insertBoard(PolicyBoard dto, String uploadPath) throws Exception;
@@ -26,4 +27,19 @@ public interface PolicyBoardService {
 	public int boardLikeCount(long psnum);
 	public boolean isUserBoardLiked(Map<String, Object> map);
 
+	//댓글
+	public void insertReply(PolicyReply dto) throws Exception;
+	public int replyCount(Map<String, Object> map);
+	public List<PolicyReply> listReply(Map<String,Object> map);
+	
+	
+	//댓글의 답글
+	public List<PolicyReply> listReplyAnswer(Map<String,Object> map);
+	public int replyAnswerCount(Map<String, Object> map);
+	
+	//댓글 좋아요 /싫어요
+	public void insertReplyLike(Map<String,Object> map) throws Exception;
+	public Map<String, Object> replyLikeCount(Map<String, Object> map);
+	
+	
 }

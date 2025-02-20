@@ -133,8 +133,7 @@
 								</tr>
 								<tr>
 									<td align="right">
-										<button type="button" class="btn btn-light btnSendReply"
-											onclick="location.href='${pageContext.request.contextPath}/policy/listReply';">댓글등록</button>
+										<button type="button" class="btn btn-light btnSendReply">댓글등록</button>
 									</td>
 								</tr>
 							</table>
@@ -200,6 +199,178 @@
 			});
 		});	
 	
+		$(function() {
+			listPage(1);
+		});
+		
+		function listPage(page) {
+			let url = '${pageContext.request.contextPath}/policy/listReply';
+			let psnum = '${dto.psnum}';
+			let params = {psnum:psnum, pageNo:page};
+			
+			const fn = function(data) {
+				$('#listReply').html(data);
+			};
+			
+			ajaxRequest(url, 'get', params, 'text', fn);
+		}
+		
+$(function() {
+	$('.btnSendReply').click(function(){
+		let psnum = '${dto.psnum}';
+		const $tb = $(this).closest('table');
+		
+		let content = $tb.find('textarea').val().trim();
+		if(! content) {
+			$tb.find('textarea').focus();
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/policy/insertReply';
+		let params = {psnum:psnum, content:content, parentNum:0};
+		
+		const fn = function(data) {
+			$tb.find('textarea').val('');
+			
+			let state = data.state;
+			if(state == 'true') {
+				listPage(1);
+			} else {
+				alert('댓글을 추가하지 못했습니다.');
+			}
+		};
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+})
+
+/* 
+//댓글 좋아요/싫어요
+$(function() {
+	$('.reply').on('click', '.btnSendReplyLike', function() {
+		const $btn = $(this);
+		let replyNum = $btn.attr('data-replyNum');
+		let replyLike = $btn.attr('data-replyLike');
+		let userLiked = $btn.parent('td').attr('data-userLiked');
+		
+		if(userLiked !== '-1') {
+			return false;
+		}
+		
+		let msg = '게시글이 마음에 들지 않습니까?';
+		if(replyLike == '1') {
+			msg = '게시글에 공감하십니까?';
+		}
+		
+		if(! confirm(msg)) {
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/policy/insertReplyLike';
+		let params = {replyNum:replyNum, replyLike:replyLike};
+		
+		const fn = function(data) {
+			let state = data.state;
+			if(state === 'true') {
+				let likeCount == data.likeCount;
+				let disLikeCount == data.disLikeCount;
+				
+				$btn.parent('td').children().eq(0).find('span').html(likeCount);
+				$btn.parent('td').children().eq(1).find('span').html(disLikeCount);
+				
+				$btn.parent('td').attr('data-userLiked' , replyLike);
+				if(replyLike == '1') {
+					$btn.css('color', '#00F');
+				} else {
+					$btn.css('color', '#F00');
+				}
+			} else if(state == 'liked') {
+				alert('공감 여부는 한번만 가능합니다.');
+			} else {
+				alert('게시글 공감 여부 처리가 실패했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+});
+*/
+
+
+//댓글별 답글 리스트 
+function listReplyAnswer(parentNum) {
+	let url = '${pageContext.request.contextPath}/policy/listReplyAnswer';
+	let params = {parentNum:parentNum};
+	
+	const fn = function(data) {
+		$('#listReplyAnswer' + parentNum).html(data);
+	};
+	ajaxRequest(url, 'get', params, 'text', fn);
+}
+
+//댓글별 답글 개수
+function countReplyAnswer(parentNum) {
+	let url = '${pageContext.request.contextPath}/policy/countReplyAnswer';
+	let params = {parentNum:parentNum};
+	
+	const fn = function(data) {
+		let count = data.count;
+		$('#answerCount' + parentNum).html(count);
+	};
+	ajaxRequest(url, 'post', params, 'json', fn);
+}
+
+
+
+//댓글별 답글 등록 
+$(function(){
+	$('.reply').on('click', '.btnSendReplyAnswer', function(){
+		let psnum = '${dto.psnum}';
+		let replyNum = $(this).attr('data-replyNum');
+		const $td = $(this).closest('td');
+		
+		let content = $td.find('textarea').val().trim();
+		if(! content) {
+			$td.find('textarea').focus();
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/policy/insertReply';
+		let params = {psnum:psnum, content:content, parentNum:replyNum};
+		
+		const fn = function(data) {
+			$td.find('textarea').val('');
+			
+			let state = data.state;
+			if(state === 'true') {
+				listReplyAnswer(replyNum);	
+				countReplyAnswer(replyNum);
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+});
+
+
+//답글 버튼
+$(function() {
+	$('.reply').on('click', '.btnReplyAnswerLayout', function (){
+		const $trAnswer = $(this).closest('tr').next();
+		
+		let isVisible = $trAnswer.is(':visible');
+		let replyNum = $(this).attr('data-replyNum');
+		
+		if(isVisible) {
+			$trAnswer.hide();
+		} else {
+			$trAnswer.show();
+			
+			listReplyAnswer(replyNum); //답글 리스트
+			
+			countReplyAnswer(replyNum); // 답글 개수
+		}
+	});
+});
 	</script>
 
 

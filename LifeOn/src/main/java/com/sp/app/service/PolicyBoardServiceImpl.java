@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.sp.app.common.StorageService;
 import com.sp.app.mapper.PolicyBoardMapper;
-
 import com.sp.app.model.PolicyBoard;
+import com.sp.app.model.PolicyReply;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -200,5 +200,108 @@ public class PolicyBoardServiceImpl implements PolicyBoardService {
 		}
 		return result;
 	}
+
+	@Override
+	public void insertReply(PolicyReply dto) throws Exception {
+		try {
+			mapper.insertReply(dto);
+		} catch (Exception e) {
+			log.info("insertReply : ", e);
+			
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public int replyCount(Map<String, Object> map) {
+		int result = 0;
+		try {
+			result = mapper.replyCount(map);
+			
+		} catch (Exception e) {
+			log.info("replyCount:", e);
+		}
+		return result;
+	}
+
+	@Override
+	public List<PolicyReply> listReply(Map<String, Object> map) {
+		List<PolicyReply> list = null;
+		
+		try {
+			list = mapper.listReply(map);
+			
+			for(PolicyReply dto : list) {
+				
+				map.put("replyNum", dto.getReplyNum());
+			}
+		} catch (Exception e) {
+			log.info("listReply : ", e);
+		}
+		return list;
+	}
+
+	@Override
+	public List<PolicyReply> listReplyAnswer(Map<String, Object> map) {
+		List<PolicyReply> list =null;
+		try {
+			list = mapper.listReplyAnswer(map);
+	
+		} catch (Exception e) {
+			log.info("listReplyAnswer :", e);
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int replyAnswerCount(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = mapper.replyAnswerCount(map);
+		} catch (Exception e) {
+			log.info("replyAnswerCount: ", e);
+		}
+		return result;
+	}
+
+	@Override
+	public void insertReplyLike(Map<String, Object> map) throws Exception {
+		try {
+			mapper.insertReplyLike(map);
+		} catch (Exception e) {
+			log.info("insertReplyLike : ", e);
+			throw e;
+		}
+	}
+
+	@Override
+	public Map<String, Object> replyLikeCount(Map<String, Object> map) {
+		Map<String, Object> countMap = null;
+		
+		try {
+			countMap = mapper.replyLikeCount(map);
+			
+		} catch (Exception e) {
+			log.info("replyLiekCount : ", e);
+		}
+		
+		return countMap;
+	}
+	
+	protected int userReplyLike(Map<String, Object> map) {
+		int result = -1;
+		
+		try {
+			result = mapper.userReplyLiked(map).orElse(-1);
+			
+		} catch (Exception e) {
+			log.info("userReplyLiked : ", e);
+		}
+		return result;
+	}
+	
 
 }

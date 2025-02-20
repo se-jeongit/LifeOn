@@ -1,5 +1,6 @@
 package com.sp.app.admin.controller;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -24,11 +25,13 @@ import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.model.PolicyBoard;
+import com.sp.app.model.PolicyReply;
 import com.sp.app.model.SessionInfo;
 import com.sp.app.service.PolicyBoardService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -357,6 +360,166 @@ public class PolicyBoardController {
 		
 		model.put("state", state);
 		model.put("boardLikeCount", boardLikeCount);
+		
+		return model;
+	}
+	
+	//댓글 및 댓글의 답글 등록 : AJAX-JSON
+	@PostMapping("insertReply")
+	@ResponseBody
+	public Map<String, Object> insertReply(PolicyReply dto, HttpSession session) {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			dto.setUserId(info.getId());
+			
+			service.insertReply(dto);
+			
+		} catch (Exception e) {
+			state="false";
+		}
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	//댓글 리스트 : AJAX - TEXT
+	@GetMapping("listReply")
+	public String listReply(
+			@RequestParam(name = "psnum") long psnum,
+			@RequestParam(name ="pageNo", defaultValue = "1") int current_page,
+			Model model,
+			HttpServletResponse resp,
+			HttpSession session ) throws Exception {
+		
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			int size = 5;
+			int total_page = 0;
+			int dataCount = 0;
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("psnum", psnum);
+			map.put("userId", info.getId());
+			
+			dataCount = service.replyCount(map);
+			total_page = paginateUtil.pageCount(dataCount, size);
+			current_page = Math.min(current_page, total_page);
+			
+			int offset = (current_page -1) * size;
+			if(offset < 0 ) offset = 0;
+			
+			map.put("offset",  offset);
+			map.put("size", size);
+			
+			List<PolicyReply> listReply = service.listReply(map);
+			
+			String paging = paginateUtil.pagingMethod(
+					current_page, total_page, "listPage");
+			
+			model.addAttribute("listReply", listReply);
+			model.addAttribute("pageNo", current_page);
+			model.addAttribute("replyCount", dataCount);
+			model.addAttribute("total_page", total_page);
+			model.addAttribute("paging", paging);
+			
+			
+		} catch (Exception e) {
+			log.info("listReply : " , e);
+			
+			resp.sendError(406);
+			throw e;
+		}
+		
+		return "policy/listReply";
+	}
+	
+	@GetMapping("listReplyAnswer")
+	public String listReplyAnswer(
+			@RequestParam Map<String, Object> paramMap,
+			Model model,
+			HttpServletResponse resp,
+			HttpSession session	) throws Exception {
+		
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			paramMap.put("userId", info.getId());
+			
+			List<PolicyReply> listAnswer = service.listReplyAnswer(paramMap);
+			
+			model.addAttribute("listAnswer", listAnswer);
+		} catch (Exception e) {
+			log.info("listReplyAnswer : ", e);
+			
+			resp.sendError(406);
+			throw e;
+		}
+		
+		return "policy/listReplyAnswer";
+	}
+	
+	@ResponseBody
+	@PostMapping("countReplyAnswer")
+	public Map<String, ?> countReplyAnswer(
+			@RequestParam Map<String, Object> paramMap,
+			HttpSession session) throws Exception {
+		
+		Map<String, Object> model = new HashMap<>();
+		
+		int count = 0;
+		
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			paramMap.put("userId", info.getId());
+			
+			count = service.replyAnswerCount(paramMap);
+			
+		} catch (Exception e) {
+			log.info("countReplyAnswer : ", e);
+		}
+		model.put("count", count);
+		
+		return model;
+	}
+	
+	//댓글의 좋아요/싫어요 추가 : AJAX-JSON
+	@ResponseBody
+	@PostMapping("insertReplyLike")
+	public Map<String, ?> insertReplyLike(
+			@RequestParam Map<String, Object> paramMap,
+			HttpSession session) {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		int likeCount = 0;
+		int disLikeCount = 0;
+		
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			paramMap.put("userId", info.getId());
+			service.insertReplyLike(paramMap);
+			
+			Map<String, Object> countMap = service.replyLikeCount(paramMap);
+			
+			likeCount = ((BigDecimal)countMap.get("LIKECOUNT")).intValue();
+			disLikeCount =((BigDecimal)countMap.get("DISLIKECOUNT")).intValue();
+			
+			
+		} catch (DuplicateKeyException e) {
+			state = "liked";
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("likeCount", likeCount);
+		model.put("dlisLikeCount", disLikeCount);
+		model.put("state", state);
 		
 		return model;
 	}
