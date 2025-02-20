@@ -311,6 +311,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				dto.setRpcontent(myUtil.htmlSymbols(dto.getRpcontent()));
 				
 				map.put("rpnum", dto.getRpnum());
+				map.put("psnum", dto.getPsnum());
+				dto.setNickname(dto.getNickname());
 				dto.setMemberLiked(memberReplyLiked(map));
 			}
 			

@@ -29,15 +29,18 @@
 $(function(){
     var url = window.location.pathname;
     var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
+    var urlRegExp2 = new RegExp("^" + url.split('/').slice(0, 3).join('/'));
+
 
     try {
-        $('.sub-link').each(function() {
-            if (urlRegExp.test(this.href.replace(/\/$/, ''))) {
+        $('.sub-link').each(function () {
+            var linkUrl = $(this).attr('href').split('/').slice(0, 3).join('/');
+            if (urlRegExp2.test(linkUrl)) {
                 $(this).addClass('active');
                 return false;
             }
         });
-
+        
         if (!$('.sub-link').hasClass('active')) {
             var parent = url.replace(/\/$/, '').substring(0, url.replace(/\/$/, '').lastIndexOf('/'));
             if (!parent) parent = '/';
