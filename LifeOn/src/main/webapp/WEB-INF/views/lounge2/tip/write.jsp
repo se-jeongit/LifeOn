@@ -108,8 +108,8 @@ function check() {
 					<table class="table table-borderless">
 	 					<tr>
 							<td class="text-center">
-								<button type="button" class="btn" onclick="check();">${mode=='update'?'수정완료':'등록완료'}&nbsp;<i class="bi bi-check2"></i></button>
-								<button type="button" class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
+								<button type="button" class="ssbtn" onclick="check();">${mode=='update'?'수정완료':'등록완료'}&nbsp;<i class="bi bi-check2"></i></button>
+								<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
 
 								<c:if test="${mode == 'update'}">
 									<input type="hidden" name="num" value="${dto.num}">

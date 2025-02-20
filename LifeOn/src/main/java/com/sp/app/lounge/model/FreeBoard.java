@@ -16,6 +16,7 @@ public class FreeBoard {
     private long num; // 회원번호
     private String id; // 회원아이디
     private String nickname; // 회원닉네임
+    private String profile_image; // 회원프로필
     private String subject; // 글제목
     private String content; // 글내용
     private String reg_date; // 글등록일

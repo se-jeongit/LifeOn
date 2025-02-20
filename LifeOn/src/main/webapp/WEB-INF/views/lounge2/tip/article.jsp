@@ -41,22 +41,24 @@
 					<table class="table board-article">
 						<thead>
 							<tr>
-								<td colspan="2">
-									제&emsp;목 : ${dto.subject}
+								<td colspan="2" style="font-size: 24px; font-weight: 800;">
+									${dto.subject}
 								</td>
 							</tr>
 						</thead>
 						
 						<tbody>
 							<tr>
-								<td width="30%">
-									작성자 : ${dto.nickname}
+								<td width="40%;">
+									<div style="display: flex; align-items: center;">
+										<div class="profile" style="margin: 5px; width: 35px; height: 35px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+										</div>	
+										<div style="font-size: 16px;">${dto.nickname}</div>
+									</div>
 								</td>
-								<td align="right" style="font-size: 12px; ">
-									<p style="margin: 0;">등록일 : ${dto.reg_date} | 조회 : ${dto.hitCount}</p>
-									<c:if test="${not empty dto.uddate}">
-									<p style="margin: 0;">최근수정일 : ${dto.uddate}</p>
-									</c:if>
+								<td align="right">
+									<div>조회수 ${dto.hitCount}회</div>
 								</td>
 							</tr>
 							
@@ -65,16 +67,26 @@
 									${dto.content}
 								</td>
 							</tr>
-							
 							<tr>
-								<td colspan="2" class="text-center p-3" style="border-bottom: none;">
-									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기">
-										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill' : 'bi-bookmark'}"></i>
-										&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
-									</button>
+								<td colspan="2" align="left" style="font-size: 12px; border-bottom: none;">
+									<div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap;">
+										<div>
+											<span>등록일 ${dto.reg_date}</span>
+											<c:if test="${not empty dto.uddate}">
+												<span> · 최근수정일 ${dto.uddate}</span>
+											</c:if>
+										</div>
+										<div>
+										<button type="button" class="ssbtn btnSendBoardLike" title="즐겨찾기">
+										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill likeColor' : 'bi-bookmark'}"></i>
+										&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
+										</button>
+											<button type="button" class="ssbtn">신고하기</button>
+										</div>
+									</div>
 								</td>
 							</tr>
-					
+	
 							<tr>
 								<td colspan="2">
 									<c:forEach var="vo" items="${listFile}" varStatus="status">
@@ -116,7 +128,7 @@
 							<td class="text-start">
 								<c:choose>
 									<c:when test="${sessionScope.member.nickName == dto.nickname}">
-										<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip/update?psnum=${dto.psnum}&page=${page}';">수정</button>
+										<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip/update?psnum=${dto.psnum}&page=${page}';">수정</button>
 									</c:when>
 									<c:otherwise>
 									</c:otherwise>
@@ -124,13 +136,13 @@
 								
 								<c:choose>
 									<c:when test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade > 1}">
-							    		<button type="button" class="btn btn-light" onclick="deleteOk();">삭제</button>
+							    		<button type="button" class="ssbtn" onclick="deleteOk();">삭제</button>
 									</c:when>
 								</c:choose>
 							
 							</td>
 							<td class="text-end">
-								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip?${query}';">리스트</button>
+								<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip?${query}';">리스트</button>
 							</td>
 						</tr>
 					</table>
@@ -145,12 +157,12 @@
 									<div class="form-header" style="text-align: left; padding: 10px 5px;">
 										<span class="bold">댓글 ${dto.replyCount}개</span>
 									</div>
-										<textarea class="free-control" name="rpcontent" placeholder="댓글 내용을 입력해주세요." style="background: #fdfeff; height: 100px;"></textarea>
+										<textarea class="free-control" name="rpcontent" placeholder="칭찬과 격려의 댓글은 작성자에게 큰 힘이 됩니다! 😊" style="background: #fdfeff; height: 100px;"></textarea>
 									</td>
 								</tr>
 								<tr>
 								   <td align="right">
-										<button type="button" class="btn btn-light btnSendReply">댓글 등록</button>
+										<button type="button" class="ssbtn btnSendReply">댓글등록</button>
 									</td>
 								 </tr>
 							</table>
@@ -191,13 +203,27 @@
 </c:if>
 
 <script type="text/javascript">
-function open(rpnum) {
-    if ($('#reply-menu-${rpnum}').css('display') == 'block') {
-        $('#reply-menu-${rpnum}').hide();
-    } else {
-        $('reply-menu-${rpnum}').show();
-    }
-}
+$(function() {
+    $('.reply').on('click', '.reply-dropdown', function() {
+        const $menu = $(this).next('.reply-menu');
+
+        if ($menu.is(':visible')) {
+            $menu.fadeOut(100);
+        } else {
+            $('.reply-menu').fadeOut(100);
+            $menu.fadeIn(100);
+        }
+    });
+
+
+    $('.reply').on('click', function(evt) {
+        if ($(evt.target).closest('.reply-dropdown').length) {
+            return false;
+        }
+        
+        $('.reply-menu').fadeOut(100);
+    });
+});
 </script>
 
 <script type="text/javascript">
@@ -221,9 +247,9 @@ $(function() {
 			
 			if (state === "true") {
 				if (memberLiked) {
-					$i.removeClass('bi-bookmark-fill').addClass('bi-bookmark');
+					$i.removeClass('bi-bookmark-fill likeColor').addClass('bi-bookmark');
 				} else {
-					$i.removeClass('bi-bookmark').addClass('bi-bookmark-fill');
+					$i.removeClass('bi-bookmark').addClass('bi-bookmark-fill likeColor');
 				}
 				
 				let count = data.boardLikeCount;
@@ -296,18 +322,17 @@ $(function(){
 	});
 });
 
-// 댓글 삭제
 $(function() {
 	$('.reply').on('click', '.deleteReply', function() {	
 		if (! confirm('댓글을 삭제하시겠습니까?')) {
 			return false;
 		}
 		
-		let replyNum = $(this).attr('data-replyNum');
+		let rpnum = $(this).attr('data-replyNum');
 		let page = $(this).attr('data-pageNo');
 		
 		let url = '${pageContext.request.contextPath}/lounge2/tip/deleteReply';
-		let params = {replyNum: replyNum, mode: 'reply'};
+		let params = {rpnum: rpnum, mode: 'reply'};
 		
 		const fn = function(data) {
 			listPage(page);
@@ -317,21 +342,20 @@ $(function() {
 	});
 });
 
-// 댓글 좋아요 / 싫어요
 $(function() {
 	$('.reply').on('click', '.btnSendReplyLike', function() {	
 		const $btn = $(this);
-		let replyNum = $btn.attr('data-replyNum');
-		let replyLike = $btn.attr('data-replyLike');
-		let userLiked = $btn.parent('td').attr('data-userLiked');
+		let rpnum = $btn.attr('data-replyNum');
+		let rplike = $btn.attr('data-replyLike');
+		let memberLiked = $btn.parent('span').attr('data-memberLiked');
 		
-		if (userLiked !== '-1') {
+		if (memberLiked !== '-1') {
 			return false;
 		}
 		
-		let msg = '댓글이 마음에 들지 않습니까 ?';
-		if (replyLike === '1') {
-			msg = '댓글에 공감하십니까?';
+		let msg = '이 댓글이 싫으신가요?';
+		if (rplike === '1') {
+			msg = '이 댓글에 공감하시나요?';
 		}
 		
 		if (! confirm(msg)) {
@@ -339,7 +363,7 @@ $(function() {
 		}
 		
 		let url = '${pageContext.request.contextPath}/lounge2/tip/insertReplyLike';
-		let params = {replyNum: replyNum, replyLike: replyLike};
+		let params = {rpnum: rpnum, rplike: rplike};
 		
 		const fn = function(data) {
 			let state = data.state;
@@ -347,14 +371,15 @@ $(function() {
 				let likeCount = data.likeCount;
 				let disLikeCount = data.disLikeCount;
 				
-				$btn.parent('td').children().eq(0).find('span').html(likeCount);
-				$btn.parent('td').children().eq(1).find('span').html(disLikeCount);
+				$btn.parent('span').children().eq(0).find('span').html(likeCount);
+				$btn.parent('span').children().eq(1).find('span').html(disLikeCount);
 				
-				$btn.parent('td').attr('data-userLiked', replyLike);
-				if (replyLike === '1') {
-					$btn.css('color', '#00f');
+				alert(state);
+				$btn.parent('span').attr('data-memberLiked', rplike);
+				if (rplike === '1') {
+					$btn.removeClass('likeColor').addClass('disLikeColor');
 				} else {
-					$btn.css('color', '#f00');
+					$btn.removeClass('disLikeColor').addClass('likeColor');
 				}
 				
 			} else if (state === 'liked') {

@@ -459,6 +459,23 @@ public class FreeBoardController {
 	}
 	
 	@ResponseBody
+	@PostMapping("tip/deleteReply")
+	public Map<String, ?> deleteReply(@RequestParam Map<String, Object> paramMap) {
+		Map<String , Object> model = new HashMap<>();
+		
+		String state = "true";
+		try {
+			service.deleteReply(paramMap);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	@ResponseBody
 	@PostMapping("tip/insertReplyLike")
 	public Map<String, ?> insertReplyLike(
 			@RequestParam Map<String, Object> paramMap,

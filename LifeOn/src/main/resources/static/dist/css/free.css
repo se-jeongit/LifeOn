@@ -258,6 +258,30 @@
 	vertical-align: middle;
 }
 
-.hidden {
-	opacity: 0;
+.reply-menu-item {
+	padding: 5px 8px;
+}
+
+.reply-menu-item:hover {
+	background: #f8f9fa;
+}
+
+.ssbtn {
+	color: #333;
+	background: #fff;
+	padding: 6px 8px;
+	border: 1px solid #999;
+	border-radius: 4px;
+}
+
+.ssbtn:hover {
+	background: #f8f9fa;
+}
+
+.likeColor {
+	color: #006AFF;
+}
+
+.disLikeColor {
+	color: #db5151;
 }

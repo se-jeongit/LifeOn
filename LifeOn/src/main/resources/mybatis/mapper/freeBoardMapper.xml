@@ -50,7 +50,7 @@
 	</select>
 	
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT hb.psnum, m.num, m.id, nickname, subject, content, hb.reg_date, uddate, hb.blind, bdtype,
+		SELECT hb.psnum, m.num, m.id, nickname, subject, content, hb.reg_date, uddate, hb.blind, bdtype, m.profile_image,
 			hitCount, NVL(replyCount, 0) replyCount, NVL(fileCount, 0) fileCount, NVL(boardLikeCount, 0) boardLikeCount
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
@@ -81,7 +81,7 @@
 	</select>
 	
 	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, uddate, hb.blind, bdtype,
+		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, uddate, hb.blind, bdtype, m.profile_image,
 			NVL(replyCount, 0) replyCount, NVL(boardLikeCount, 0) boardLikeCount
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
@@ -199,7 +199,7 @@
 	</select>
 	
 	<select id="listReply" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT r.rpnum, r.rpcontent, r.rpreg_date, r.ps_num, rpblind, r.num, m.nickname,
+		SELECT r.rpnum, r.rpcontent, r.rpreg_date, r.ps_num, rpblind, r.num, m.nickname, m.profile_image,
 			NVL(likeCount, 0) likeCount,
 			NVL(disLikeCount, 0) disLikeCount
 		FROM HYBRID_BOARD_REPLY r
@@ -222,7 +222,7 @@
 	
 	<insert id="insertReplyLike" parameterType="map">
 		INSERT INTO HYBRID_BOARD_LIKE (rpnum, num, rplike)
-			VALUES(#{rpnum}, #{num} #{rplike})
+			VALUES(#{rpnum}, #{num}, #{rplike})
 	</insert>
 	
 	<select id="replyLikeCount" parameterType="map" resultType="map">
