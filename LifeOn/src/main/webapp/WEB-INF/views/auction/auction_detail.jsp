@@ -39,7 +39,6 @@
             <jsp:include page="/WEB-INF/views/layout/rmaket.jsp"/>
         </div>
         <div class="container">
-            <h3 style="padding-top: 30px; padding-left: 80px">경매장</h3>
             <jsp:include page="/WEB-INF/views/auction/auction_detail_content.jsp"/>
         </div>
     </div>

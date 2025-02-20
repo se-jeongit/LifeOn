@@ -67,7 +67,7 @@
 
 
     /* 모달 창 스타일 */
-    .modal {
+    .modal-prize {
         display: none; /* 기본적으로 숨김 */
         position: fixed; /* 화면에 고정 */
         z-index: 1; /* 다른 요소 위에 표시 */
@@ -78,7 +78,7 @@
         overflow: auto; /* 스크롤 가능 */
     }
 
-    .modal-content {
+    .modal-content-prize {
         background-color: #fefefe;
         margin: 15% auto; /* 화면 중앙에 위치 */
         padding: 20px;
@@ -194,8 +194,8 @@
 
 
 <!-- 모달 창 -->
-<div id="auctionModal" class="modal">
-    <div class="modal-content">
+<div id="auctionModal" class="modal-prize">
+    <div class="modal-content-prize">
         <span class="close">&times;</span>
         <div>
             <div style="text-align: center">
