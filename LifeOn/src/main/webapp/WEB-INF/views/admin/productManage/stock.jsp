@@ -57,7 +57,7 @@
 <header class="container-fluid header-top fixed-top px-4">
     <jsp:include page="/WEB-INF/views/admin/layout/header.jsp"/>
 </header>
-    
+
 <main class="wrapper">
     <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
     <div class="container">
