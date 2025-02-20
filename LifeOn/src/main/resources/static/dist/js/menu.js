@@ -17,12 +17,14 @@ $(function(){
 
 // 메뉴 활성화
 $(function(){
-    var url = window.location.pathname;
-    var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
-
+    let url = window.location.pathname;
+	if (url.includes("/auction")) {
+		url = "/market" + url;
+	}
+    let urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
 	$('nav .navbar-collapse>ul>li>a').each(function() {
-		var filterUrl = url.split('/')[1].substring(0, 6);
-		
+		let filterUrl = url.split('/')[1].substring(0, 6);
+
 		if (this.href.includes(filterUrl)) {
 			$(this).addClass('active');
 			return false;
@@ -31,7 +33,7 @@ $(function(){
 			return false;
 		}
 	});
-	
+
 	if($('nav .navbar-collapse>ul>li>a').hasClass("active")) return false;
 	
 	$('nav .navbar-collapse>ul>li a').each(function() {
@@ -47,13 +49,13 @@ $(function(){
 	});
 	if($('nav .navbar-collapse>ul>li a').hasClass("active")) return false;
 	
- 	var parent = url.replace(/\/$/, '').substr(0, url.replace(/\/$/, '').lastIndexOf("/"));
+ 	let parent = url.replace(/\/$/, '').substr(0, url.replace(/\/$/, '').lastIndexOf("/"));
  	if(! parent) parent = "/";
-    var urlParentRegExp = new RegExp(parent);
+    let urlParentRegExp = new RegExp(parent);
 	$('nav .navbar-collapse>ul>li a').each(function() {
 		if($(this).attr("href")=="#") return true;
 		
-		var phref = this.href.replace(/\/$/, '').substr(0, this.href.replace(/\/$/, '').lastIndexOf("/"));
+		let phref = this.href.replace(/\/$/, '').substr(0, this.href.replace(/\/$/, '').lastIndexOf("/"));
 		if (urlParentRegExp.test(phref)) {
 			if(! $(this).closest(".dropdown")) {
 				$(this).addClass('active');

@@ -29,7 +29,7 @@
 $(function(){
     var url = window.location.pathname;
     var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
-
+	console.log(urlRegExp);
     try {
         $('.sub-link').each(function() {
             if (urlRegExp.test(this.href.replace(/\/$/, ''))) {
