@@ -1,5 +1,6 @@
 package com.sp.app.lounge.model;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class PhotoBoard {
 	private String bdtype;
 	private String reg_date;
 	private int blind;
+	
 	private int hitCount;
 	private int boardLikeCount;
 	private int replyCount;
@@ -33,7 +35,13 @@ public class PhotoBoard {
 	private String rpcontent; 
 	private String rpreg_date; 
 	private int rpblind; // 0: Default, 1: 블라인드처리
+	private int rplike;
 	
 	private int replyLike; 
+	private int likeCount;
+	private int disLikeCount;
+	
+	@Value("-1") // 초기값
+	private int memberLiked;
 	
 }

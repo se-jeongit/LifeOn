@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.lounge.mapper.PhotoBoardMapper;
+import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.lounge.model.PhotoReply;
 
@@ -96,41 +97,25 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 		}
 	}
 
-	@Override
-	public PhotoBoard findByPrev(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
-	public PhotoBoard findByNext(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void updateBoard(PhotoBoard dto, String uploadPath) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteBoard(long num, String uploadPath, String userId, int userLevel) throws Exception {
+	public void deleteBoard(String bdtype, long psnum, String nickname, int grade) throws Exception {
 		try {
 			
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("psnum", num);
+			Map<String, Object> map = new HashMap<>();
+			map.put("bdtype", bdtype);
+			map.put("psnum", psnum);
+			
 			deleteFile(map);
 			
 			PhotoBoard dto = findById(map);
 			
-			if(dto == null || (userLevel<51 && ! dto.getNickname().equals(userId))) {
+			if(dto == null || (grade < 51 && ! dto.getNickname().equals(nickname))) {
 				return;
 			}
 			
-			deleteUploadFile(uploadPath, dto.getSsfname());
-			
-			mapper.deleteBoard(num);
+			mapper.deleteBoard(map);
 			
 		} catch (Exception e) {
 			log.info("deleteBoard : ", e);
@@ -146,33 +131,101 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	}
 	
 	@Override
-	public void BoardLike(Map<String, Object> map) throws Exception {
+	public void boardLike(Map<String, Object> map) throws Exception {
+		try {
+			mapper.boardLike(map);
+		} catch (Exception e) {
+			log.info("boardLike : ", e);
+			
+			throw e;
+		}
+	}
+
+	@Override
+	public List<PhotoBoard> listFile(long num) {
+		List<PhotoBoard> listFile =  null;
+		
+		try {
+			listFile = mapper.listFile(num);
+		} catch (Exception e) {
+			log.info("listFile : ", e);
+		}
+		return listFile;
+	}
+
+	@Override
+	public void updateBoard(PhotoBoard dto, String uploadPath) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public PhotoBoard findByPrev(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PhotoBoard findByNext(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateFile(PhotoBoard dto) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public PhotoBoard findByFileId(long fileNum) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteFile(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void deleteBoardLike(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			mapper.deleteBoardLike(map);
+		} catch (Exception e) {
+			log.info("deleteBoardLike : ", e);
+			
+			throw e;
+		}		
 	}
 
 	@Override
 	public int boardLikeCount(long num) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean MemberBoardLiked(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void Reply(PhotoReply dto) throws Exception {
-		// TODO Auto-generated method stub
+		int result = 0;
+		try {
+			result = mapper.boardLikeCount(num);
+		} catch (Exception e) {
+			log.info("boardLikeCount : ", e);
+		}
 		
+		return result;
+	}
+
+	@Override
+	public boolean memberBoardLiked(Map<String, Object> map) {
+		boolean result = false;
+		
+		try {
+			PhotoBoard dto = mapper.memberBoardLiked(map);
+			if (dto != null) {
+				result = true;
+			}
+		} catch (Exception e) {
+			log.info("memberBoardLiked : ", e);
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -194,7 +247,7 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	}
 
 	@Override
-	public void ReplyLike(Map<String, Object> map) throws Exception {
+	public void replyLike(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -212,34 +265,9 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	}
 
 	@Override
-	public List<PhotoBoard> listFile(long num) {
-		List<PhotoBoard> listFile =  null;
-		
-		try {
-			listFile = mapper.listFile(num);
-		} catch (Exception e) {
-			log.info("listFile : ", e);
-		}
-		return listFile;
-	}
-
-	@Override
-	public PhotoBoard findByFileId(long fileNum) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deleteFile(Map<String, Object> map) throws Exception {
+	public void reply(PhotoReply dto) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void updateFile(PhotoBoard dto) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 }

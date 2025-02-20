@@ -78,10 +78,31 @@
 		WHERE psnum = #{psnum}
 	</update>
 	
-	<delete id="deleteBoard" parameterType="Long">
+	<delete id="deleteBoard" parameterType="map">
 		DELETE FROM HYBRID_BOARD
 		WHERE psnum = #{psnum}
 	</delete>
 	
+	<insert id="boardLike" parameterType="map">
+		INSERT INTO HYBRID_BOARD_FAV (psnum, num)
+			VALUES (#{psnum}, #{num})
+	</insert>
+	
+	<delete id="deleteBoardLike" parameterType="map">
+		DELETE FROM HYBRID_BOARD_FAV
+		WHERE psnum = #{psnum} AND num = #{num}
+	</delete>
+	
+	<select id="boardLikeCount" parameterType="Long" resultType="Integer">
+		SELECT COUNT(*)
+		FROM HYBRID_BOARD_FAV
+		WHERE psnum = #{psnum}
+	</select>
+	
+	<select id="memberBoardLiked" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
+		SELECT psnum, num
+		FROM HYBRID_BOARD_FAV
+		WHERE psnum = #{psnum} AND num = #{num}
+	</select>
 	
 </mapper>

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -253,12 +254,52 @@ public class PhotoBoardController {
 			
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
 			
-			service.deleteBoard(psnum, uploadPath, info.getNickName(), info.getGrade());
+			
+			service.deleteBoard(bdtype, psnum, info.getNickName(), info.getGrade());
 			
 		} catch (Exception e) {
 			log.info("deleteBoard : ", e);
 		}
 		
 		return "redirect:/lounge1/" + bdtype + "?" + query;
+	}
+	
+	@ResponseBody
+	@PostMapping("{bdtype}/boardLike")
+	public Map<String, ?> boardLike(@PathVariable(name = "bdtype") String bdtype,
+			@RequestParam(name = "psnum") long num,
+			@RequestParam(name = "memberLiked") boolean memberLiked,
+			HttpSession session) {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		int boardLikeCount = 0;
+		
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("psnum", num);
+			map.put("num", info.getNum());
+			map.put("nickname", info.getNickName());
+			
+			if (memberLiked) {
+				service.deleteBoardLike(map);
+			} else {
+				service.boardLike(map); 
+			}
+			
+			boardLikeCount = service.boardLikeCount(num);
+			
+		} catch (DuplicateKeyException e) {
+			state ="liked";
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
+		model.put("boardLikeCount", boardLikeCount);
+		
+		return model;
 	}
 }

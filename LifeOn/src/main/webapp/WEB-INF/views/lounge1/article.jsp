@@ -17,6 +17,8 @@
     width: 80%; /* 필요에 따라 조절 */
     max-width: 1200px; /* 원하는 최대 크기 설정 */
     margin: 0 auto; /* 좌우 여백을 동일하게 설정 */
+    display: flex;
+    justify-content: center; 
 }
 
 #content img {
@@ -27,7 +29,14 @@
 }
 
 .freeForm {
-    min-height: 600px; /* 게시글 기본 높이 설정 */
+    height: 800px; /* 게시글 기본 높이 설정 */
+    
+}
+
+#content {
+    flex-grow: 1; /* 내용이 차지하는 공간을 균등하게 유지 */
+    overflow-y: auto;
+    
 }
 
 </style>
@@ -187,6 +196,47 @@
 		}
 	</script>
 </c:if>
+
+<script type="text/javascript">
+$(function() {
+	$('.btnSendBoardLike').click(function() {
+		const $i = $(this).find('i');
+		let memberLiked = $i.hasClass('bi-bookmark-fill');
+		let msg = memberLiked ? '게시글 즐겨찾기를 취소하시겠습니까?' : '게시글 즐겨찾기를 하시겠습니까?';
+		
+		if (! confirm(msg)) {
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/lounge1/{bdtype}/boardLike';
+		let psnum = '${dto.psnum}';
+		let params = {psnum: psnum, memberLiked: memberLiked};
+		
+		const fn = function(data) {
+			let state = data.state;
+			
+			if (state === "true") {
+				if (memberLiked) {
+					$i.removeClass('bi-bookmark-fill').addClass('bi-bookmark');
+				} else {
+					$i.removeClass('bi-bookmark').addClass('bi-bookmark-fill');
+				}
+				
+				let count = data.boardLikeCount;
+				$('#boardLikeCount').text(count);
+				
+			} else if (state == "liked") {
+				alert('게시글 공감은 한번만 가능합니다.');
+			} else {
+				alert('게시글 공감 여부 처리가 실패 했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+});
+
+</script>
 
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
