@@ -1,0 +1,85 @@
+package com.sp.app.admin.service;
+
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.sp.app.admin.mapper.ProductManageMapper;
+import com.sp.app.admin.model.ProductManage;
+import com.sp.app.common.StorageService;
+import com.sp.app.exception.StorageException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class ProductManageServiceImpl implements ProductManageService{
+	private final ProductManageMapper mapper;
+	private final StorageService storageSerivce;
+	@Override
+	public List<ProductManage> listBigCategory() {
+		List<ProductManage> list = null;
+		
+		try {
+			list = mapper.listBigCategory();
+		} catch (Exception e) {
+			log.info("listBigCategory : ", e);
+		}
+		return list;
+	}
+
+	@Override
+	public List<ProductManage> listSmallCategory(int cbn) {
+		List<ProductManage> list = null;
+		
+		try {
+			list = mapper.listSmallCategory(cbn);
+		} catch (Exception e) {
+			log.info("listSmallCategory : ", e);
+		}
+		
+		return list;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	@Override
+	public void insertProduct(ProductManage dto, String uploadPath) throws Exception {
+		try {
+			//썸네일
+			String filename = storageSerivce.uploadFileToServer(dto.getPphFile(), uploadPath);
+			dto.setPph(filename);
+			
+			mapper.insertProduct(dto);
+			mapper.insertStock(dto);
+			insertProductImage(dto, uploadPath);
+		} catch (Exception e) { 
+			log.info("insertProduct : " , e);
+			throw e;
+		}
+	}
+	
+	protected void insertProductImage(ProductManage dto, String uploadPath) throws Exception {
+		for(MultipartFile mf : dto.getPppFile()) {
+			try {
+				String ppp = Objects.requireNonNull(storageSerivce.uploadFileToServer(mf, uploadPath)); //서버에서 저장된 파일경로
+				
+				dto.setPpp(ppp);
+				mapper.insertProductImage(dto);
+				
+			} catch (NullPointerException e) {
+				log.info("insertProductImage1 : " , e);
+			} catch (StorageException e) {
+				log.info("insertProductImage2 : " , e);
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+	}
+	
+}

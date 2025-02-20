@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sp.app.admin.mapper.ProductManageMapper">
+	
+	<select id="listBigCategory" resultType="com.sp.app.admin.model.ProductManage">
+		SELECT cbn, cbc
+		FROM category_big	
+	</select>
+	
+	<select id="listSmallCategory" parameterType="Integer" resultType="com.sp.app.admin.model.ProductManage">
+		SELECT csn, csc, cbn
+		FROM category_small
+		WHERE cbn = #{cbn}	
+	</select>
+	
+	<insert id="insertProduct" parameterType="com.sp.app.admin.model.ProductManage">
+		INSERT INTO product(pnum, ptype, pname, pct, pph, csn)
+		VALUES (product_seq.NEXTVAL, #{ptype}, #{pname}, #{pct}, #{pph}, #{csn})
+	</insert>
+	
+	<insert id="insertStock" parameterType="com.sp.app.admin.model.ProductManage">
+		INSERT INTO product_together_stock (pnum, ptsc, ptsq, ptst)
+		VALUES (product_seq.CURRVAL, #{ptsc}, #{ptsq}, #{ptst})
+	</insert>
+	
+	<insert id="insertProductImage" parameterType="com.sp.app.admin.model.ProductManage">
+		INSERT INTO product_picture (ppnum, ppp, pnum)
+		VALUES (product_picture_seq.NEXTVAL, #{ppp}, product_seq.CURRVAL)
+	</insert>
+	
+	
+	
+	
+</mapper>

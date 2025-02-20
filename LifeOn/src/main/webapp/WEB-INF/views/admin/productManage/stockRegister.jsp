@@ -52,45 +52,45 @@
         <h2>상품 및 재고 등록</h2>
 		
 		<hr>
-        <form action="/product-stock/register" method="post" enctype="multipart/form-data">
+        <form name="productForm" method="post" enctype="multipart/form-data">
             <h4>📌 상품 정보 입력</h4>
 
             <div class="form-group">
                 <label for="productName">상품명</label>
-                <input type="text" id="productName" name="productName" required>
+                <input type="text" id="pname" name="pname" required>
             </div>
 
 
             <div class="form-group">
-                <label for="categoryLarge">카테고리 (대)</label>
-                <select id="categoryLarge" name="categoryLarge" required>
+                <label for="bigCategory">카테고리 (대)</label>
+                <select id="bigCategory" name="cbn" required onchange="categoryCheck();">
                     <option value="">카테고리를 선택하세요</option>
-                    <c:forEach var="large" items="${categoryLargeList}">
-                        <option value="${large.categoryId}">${large.categoryName}</option>
+                    <c:forEach var="dto" items="${bigCategory}">
+                        <option value="${dto.cbn}">${dto.cbc}</option>
                     </c:forEach>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="categorySmall">카테고리 (소)</label>
-                <select id="categorySmall" name="categorySmall" required disabled>
+                <label for="smallCategory">카테고리 (소)</label>
+                <select id="smallCategory" name="csn" required disabled>
                     <option value="">먼저 대분류를 선택하세요</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="productDesc">상품 설명</label>
-                <textarea id="productDesc" name="productDesc" required></textarea>
+                <textarea id="productDesc" name="pct" required></textarea>
             </div>
 
             <div class="form-group">
                 <label for="thumbnailImage">대표 이미지</label>
-                <input type="file" id="thumbnailImage" name="thumbnailImage" required>
+                <input type="file" id="thumbnailImage" name="pphFile" required>
             </div>
             
             <div class="form-group">
                 <label for="thumbnailImage">상품 이미지</label>
-                <input type="file" id="Image" name="Image" required>
+                <input type="file" id="Image" name="pppFile" multiple>
             </div>
             
 
@@ -98,18 +98,18 @@
 
             <div class="form-group">
                 <label for="supplier">업체명</label>
-                <input type="text" id="supplier" name="supplier" required>
+                <input type="text" id="supplier" name="ptsc" required>
             </div>
 
             <div class="form-group">
                 <label for="stockQuantity">재고 수량</label>
-                <input type="number" id="stockQuantity" name="stockQuantity" required min="1">
+                <input type="number" id="stockQuantity" name="ptsq" required min="1">
             </div>
 
-            <input type="hidden" name="productType" value="공동구매">
-            <input type="hidden" name="stockType" value="상품등록">
+            <input type="hidden" name="ptype" value="공동구매">
+            <input type="hidden" name="ptst" value="상품등록">
 
-            <button type="submit" class="btn">상품 및 재고 등록</button>
+            <button type="button" class="btn" onclick="productOk();">상품 및 재고 등록</button>
         </form>
     </div>
 </main>
@@ -121,26 +121,43 @@
 <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
 
 <script>
-document.getElementById("categoryLarge").addEventListener("change", function() {
-    let categoryId = this.value;
-    let categorySmallSelect = document.getElementById("categorySmall");
+function productOk(){
+	const f = document.productForm;
+    f.action = '${pageContext.request.contextPath}/admin/productManage/stockRegister';
+    f.submit();
+}
 
-    if (!categoryId) {
-        categorySmallSelect.innerHTML = "<option value=''>먼저 대분류를 선택하세요</option>";
-        categorySmallSelect.disabled = true;
+
+function categoryCheck() {
+    // 선택된 대분류 카테고리 값 가져오기
+    let cbn = $('#bigCategory').val();
+
+    if (!cbn) {
+        $('#smallCategory').html("<option value=''>:: 카테고리 선택 ::</option>");
+        $('#smallCategory').prop("disabled", true);
         return;
     }
 
-    fetch(`/categories/small?largeCategoryId=${categoryId}`)
-        .then(response => response.json())
-        .then(data => {
-            categorySmallSelect.innerHTML = "<option value=''>소분류를 선택하세요</option>";
-            data.forEach(category => {
-                categorySmallSelect.innerHTML += `<option value="${category.categoryId}">${category.categoryName}</option>`;
+    let url = '${pageContext.request.contextPath}/admin/productManage/smallCategories';
+
+    // AJAX: POST 방식으로 JSON 요청
+    $.post(url, { cbn: cbn }, function(data) {
+        if (data.length > 0) {
+            let options = "<option value=''>:: 카테고리 선택 ::</option>";
+            
+            $.each(data, function(index, category) {
+                options += "<option value='" + category.csn + "'>" + category.csc + "</option>";
             });
-            categorySmallSelect.disabled = false;
-        });
-});
+
+            $('#smallCategory').html(options);
+            $('#smallCategory').prop("disabled", false);
+        } else {
+            $('#smallCategory').html("<option value=''>소분류 없음</option>");
+            $('#smallCategory').prop("disabled", true);
+        }
+    }, 'json');
+    
+}
 </script>
 
 </body>
