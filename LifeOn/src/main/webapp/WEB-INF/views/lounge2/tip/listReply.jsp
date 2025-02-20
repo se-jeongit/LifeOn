@@ -45,7 +45,7 @@
 							</div>
 							<div style="display: flex; justify-content: flex-end; flex-wrap: wrap;">
 								<span data-userLiked="${dto.memberLiked}">
-									<span type="button" class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요">
+									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요">
 										<i class="bi ${dto.memberLiked == 1 ? 'bi-heart-fill':'bi-heart'}"></i>
 										<span>${dto.likeCount}</span>
 									</span>
