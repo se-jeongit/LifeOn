@@ -29,9 +29,10 @@
 <script type="text/javascript">
 
     $(function () {
-        var url = window.location.pathname;
-        var urlRegExp = new RegExp("^" + url.split('/').slice(0, 2).join('/'));
-
+        let url = window.location.pathname;
+        let urlRegExp = new RegExp("^" + url.split('/').slice(0, 2).join('/'));
+        //var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
+        //console.log(urlRegExp);
         try {
             $('.sub-link').each(function () {
                 var linkUrl = $(this).attr('href').split('/').slice(0, 2).join('/');

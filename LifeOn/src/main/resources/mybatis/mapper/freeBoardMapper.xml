@@ -82,9 +82,15 @@
 	
 	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.FreeBoard">
 		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, uddate, hb.blind, bdtype,
-			NVL(boardLikeCount, 0) boardLikeCount
+			NVL(replyCount, 0) replyCount, NVL(boardLikeCount, 0) boardLikeCount
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
+		LEFT OUTER JOIN (
+			SELECT COUNT(*) replyCount, ps_num, rpblind
+			FROM HYBRID_BOARD_REPLY
+			WHERE rpblind = 0
+			GROUP BY ps_num, rpblind
+		) r ON hb.psnum = r.ps_num
 		LEFT OUTER JOIN (
 			SELECT psnum, COUNT(*) boardLikeCount
 			FROM HYBRID_BOARD_FAV
@@ -189,7 +195,7 @@
 	<select id="replyCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*), 0)
 		FROM HYBRID_BOARD_REPLY
-		WHERE rpblind = 0
+		WHERE ps_num = #{psnum} AND rpblind = 0
 	</select>
 	
 	<select id="listReply" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
@@ -204,7 +210,7 @@
 			FROM HYBRID_BOARD_LIKE
 			GROUP BY rpnum
 		) c ON r.rpnum = c.rpnum
-		WHERE r.rpblind = 0
+		WHERE r.ps_num = #{psnum} AND r.rpblind = 0
 		ORDER BY r.rpnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>

@@ -61,8 +61,8 @@
 <main class="wrapper">
     <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
     <div class="container">
-        <h2>재고 관리</h2>
-        
+        <h2>공동구매 상품 재고관리</h2>
+        <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/stockRegister'" class="btn btn-primary mt-3">상품 및 재고 등록</button>
         <table class="table">
             <thead>
                 <tr>
@@ -71,6 +71,7 @@
                     <th>업체명</th>
                     <th>카테고리 (대 / 소)</th>
                     <th>현재 재고</th>
+                    <th>공동구매 등록여부</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,6 +81,7 @@
                     <td>자연농원</td>
                     <td>과일 / 사과</td>
                     <td class="">20 개</td>
+                    <td><button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">공동구매 등록</button></td>
                 </tr>
                 <tr>
                     <td><img src="${pageContext.request.contextPath}/dist/images/profile.png" class="thumbnail"></td>
@@ -87,6 +89,7 @@
                     <td>베리팜</td>
                     <td>과일 / 딸기</td>
                     <td class="low-stock">3 개</td>
+                    <td><button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">공동구매 등록</button></td>
                 </tr>
                 <tr>
                     <td><img src="${pageContext.request.contextPath}/dist/images/profile.png" class="thumbnail"></td>
@@ -94,6 +97,7 @@
                     <td>청정농장</td>
                     <td>유제품 / 계란</td>
                     <td>50 개</td>
+                    <td><button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">공동구매 등록</button></td>
                 </tr>
             </tbody>
         </table>

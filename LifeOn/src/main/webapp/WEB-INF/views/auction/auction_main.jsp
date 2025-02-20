@@ -3,9 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/photo.css" type="text/css">
-
+    <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
     <style>
         .main-container {
             width: 100%;
@@ -41,8 +42,6 @@
 
 
     <title>LifeOn</title>
-
-    <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 
 </head>
 <body>

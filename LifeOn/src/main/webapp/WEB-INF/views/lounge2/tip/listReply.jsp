@@ -2,57 +2,67 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
-<div class="reply-info">
-	<span class="reply-count">댓글 ${replyCount}개</span>
-	<span>[목록, ${pageNo}/${total_page} 페이지]</span>
+<div style="padding: 10px;">
+	<div class="reply-info" style="text-align: left; padding: 0px 5px 10px 5px;">
+		<span>[목록, ${pageNo}/${total_page} 페이지]</span>
+	</div>
+		
+	<table class="table table-hover">
+		<c:forEach var="dto" items="${listReply}">
+			<tr class="border">
+				<td style="width: 10%; vertical-align: baseline;">
+					<div class="profile" style="margin: 5px; width: 40px; height: 40px; border-radius: 70%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+						<img src="${pageContext.request.contextPath}${sessionScope.member.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+					</div>	
+				</td>
+				<td style="text-align: left;">
+					<div>
+						<div style="display: flex; justify-content: space-between; align-items: center;align-items: center;">
+							<div class="name" style="padding: 5px 0px; display: flex; justify-content: flex-start;">
+								${dto.nickname}
+							</div>
+							<div style="display: flex; justify-content: flex-end;">
+								<c:choose>
+									<c:when test="${sessionScope.member.nickName == dto.nickname}">
+										<span class="deleteReply" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</span>
+										<span class="hideReply" data-replyNum="${dto.rpnum}"></span>
+									</c:when>
+									<c:when test="${sessionScope.member.grade >= 1}">
+										<span class="deleteReply" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</span> ·
+										<span class="blockReply">차단</span>
+									</c:when>
+									<c:otherwise>
+										<span class="notifyReply">신고</span> ·
+										<span class="blockReply">차단</span>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+						<div class="content" >${dto.rpcontent}</div>
+						<div style="font-size: 12px; color: #777; padding-top: 5px; display: flex; justify-content: space-between; flex-wrap: wrap;">
+							<div style="display: flex; justify-content: flex-start; flex-wrap: wrap;">
+								${dto.rpreg_date}
+							</div>
+							<div style="display: flex; justify-content: flex-end; flex-wrap: wrap;">
+								<span data-userLiked="${dto.memberLiked}">
+									<span type="button" class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요">
+										<i class="bi ${dto.memberLiked == 1 ? 'bi-heart-fill':'bi-heart'}"></i>
+										<span>${dto.likeCount}</span>
+									</span>
+									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="0" title="싫어요">
+										<i class="bi ${dto.memberLiked == 0 ? 'bi-heartbreak-fill':'bi-heartbreak'}"></i>
+										<span>${dto.disLikeCount}</span>
+									</span>	        
+								</span>
+							</div>
+						</div>
+					</div>				
+				</td>
+
+			</tr>
+		</c:forEach>
+	</table>
+	<div class="page-navigation">
+		${paging}
+	</div>			
 </div>
-
-<table class="table table-borderless">
-	<c:forEach var="dto" items="${listReply}">
-		<tr class="border table-light">
-			<td width="50%">
-				<div class="row reply-writer">
-					<div class="col-1"><i class="bi bi-person-circle text-muted icon"></i></div>
-					<div class="col-auto align-self-center">
-						<div class="name">${dto.nickname}</div>
-						<div class="date">${dto.rpreg_date}</div>
-					</div>
-				</div>				
-			</td>
-			<td width="50%" align="right" class="align-middle">
-				<span class="reply-dropdown"><i class="bi bi-three-dots-vertical"></i></span>
-				<div class="reply-menu">
-					<c:choose>
-						<c:when test="${sessionScope.member.nickName == dto.nickname}">
-							<div class="deleteReply reply-menu-item" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</div>
-							<div class="hideReply reply-menu-item" data-replyNum="${dto.rpnum}"></div>
-						</c:when>
-						<c:when test="${sessionScope.member.grade >= 1}">
-							<div class="deleteReply reply-menu-item" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</div>
-							<div class="blockReply reply-menu-item">차단</div>
-						</c:when>
-						<c:otherwise>
-							<div class="notifyReply reply-menu-item">신고</div>
-							<div class="blockReply reply-menu-item">차단</div>
-						</c:otherwise>
-					</c:choose>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2" valign="top" class="text-primary">${dto.rpcontent}</td>
-		</tr>
-
-		<tr>
-			<td align="right" data-userLiked="${dto.memberLiked}">
-				<button type="button" class="btn btn-light btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요" style="color:${dto.memberLiked==1?'blue':'black'};"><i class="bi bi-hand-thumbs-up"></i> <span>${dto.likeCount}</span></button>
-				<button type="button" class="btn btn-light btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="0" title="싫어요" style="color:${dto.memberLiked==0?'red':'black'};"><i class="bi bi-hand-thumbs-down"></i> <span>${dto.disLikeCount}</span></button>	        
-			</td>
-		</tr>
-	
-	</c:forEach>
-</table>
-
-<div class="page-navigation">
-	${paging}
-</div>			

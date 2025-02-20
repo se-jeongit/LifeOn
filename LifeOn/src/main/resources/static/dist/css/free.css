@@ -167,6 +167,8 @@
 /* 페이징 */
 .page-navigation .pagination {
     background-color: #FFF;
+    margin: 0;
+    padding-top: 20px;
 }
 
 .page-navigation .pagination .page-item {

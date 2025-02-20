@@ -408,7 +408,7 @@ public class FreeBoardController {
 	}
 		
 	@GetMapping("tip/listReply")
-	public String listReply(
+	public String listReply(FreeBoard dto,
 			@RequestParam(name = "rpnum") long num,
 			@RequestParam(name = "pageNo", defaultValue = "1") int current_page,
 			Model model,
@@ -424,6 +424,7 @@ public class FreeBoardController {
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("rpnum", num);
+			map.put("psnum", dto.getPsnum());
 			map.put("num", info.getNum());
 			map.put("nickname", info.getNickName());
 			
@@ -437,13 +438,9 @@ public class FreeBoardController {
 			map.put("offset", offset);
 			map.put("size", size);
 			
-			List<FreeBoard> list = service.listBoard(map);
-			
 			List<FreeBoard> listReply = service.listReply(map);
 			
 			String paging = paginateUtil.pagingMethod(current_page, total_page, "listPage");
-			
-			model.addAttribute("list", list);
 			
 			model.addAttribute("listReply", listReply);
 			model.addAttribute("pageNo", current_page);

@@ -18,11 +18,6 @@
 	color: #333;
 }
 
-.sub-link:hover, .sub-link.active {
-	color: #006AFF;
-	text-decoration: none;
-}
-
 </style>
 
 <script type="text/javascript">
@@ -30,7 +25,6 @@ $(function(){
     var url = window.location.pathname;
     var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
     var urlRegExp2 = new RegExp("^" + url.split('/').slice(0, 3).join('/'));
-
 
     try {
         $('.sub-link').each(function () {

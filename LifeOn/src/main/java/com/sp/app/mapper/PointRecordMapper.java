@@ -12,4 +12,7 @@ public interface PointRecordMapper {
 	public int dataCount(Map<String, Object> map);
 	public List<PointRecord> listPoint(Map<String, Object> map);
 	public int totalPoint(long num);
+
+	void insertAuctionPoint(Map<String, Object> map);
+
 }

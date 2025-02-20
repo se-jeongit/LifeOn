@@ -137,14 +137,15 @@
 					
 					<div class="reply">
 						<form name="replyForm" method="post">
-							<div class="form-header" style="text-align: left; padding: 8px 15px;">
-								<span class="bold">댓글 ${dto.replyCount}</span>
-							</div>
+
 							
 							<table class="table table-borderless reply-form">
 								<tr>
 									<td>
-										<textarea class="free-control" name="rpcontent"></textarea>
+									<div class="form-header" style="text-align: left; padding: 10px 5px;">
+										<span class="bold">댓글 ${dto.replyCount}개</span>
+									</div>
+										<textarea class="free-control" name="rpcontent" placeholder="댓글 내용을 입력해주세요." style="background: #fdfeff; height: 100px;"></textarea>
 									</td>
 								</tr>
 								<tr>
@@ -236,7 +237,8 @@ $(function() {
 function listPage(page) {
 	let url = '${pageContext.request.contextPath}/lounge2/tip/listReply';
 	let rpnum = '${dto.rpnum}';
-	let params = {rpnum: rpnum, pageNo: page};
+	let psnum = '${dto.psnum}';
+	let params = {rpnum: rpnum, pageNo: page, psnum: psnum};
 	
 	const fn = function(data) {
 		$('#listReply').html(data);
@@ -254,6 +256,13 @@ $(function(){
 		
 		let rpcontent = $tb.find('textarea').val().trim();
 		if(! rpcontent) {
+			alert('댓글 내용을 입력하세요.');
+			$tb.find('textarea').focus();
+			return false;
+		}
+		
+		if(rpcontent.length > 300) {
+			alert('300자 이하 댓글만 등록 가능합니다.');
 			$tb.find('textarea').focus();
 			return false;
 		}
@@ -274,31 +283,6 @@ $(function(){
 		
 		ajaxRequest(url, 'post', params, 'json', fn);
 		
-	});
-});
-
-// 삭제, 신고메뉴
-$(function() {
-	$('.reply').on('click', '.reply-dropdown', function() {	
-		const $menu = $(this).next('.reply-menu');
-		
-		if ($menu.is(':visible')) {
-			$menu.fadeOut(100);
-		} else {
-			$('.reply-menu').hide();
-			$menu.fadeIn(100);
-			
-			let pos = $(this).offset();
-			$menu.offset({left:pos.left-70, top:pos.top+20});
-		}
-	});
-	
-	$('.reply').on('click', function(evt) {
-		if ($(evt.target.parentNode).hasClass('reply-dropdown')) {
-			return false;
-		}
-		
-		$('.reply-menu').hide();
 	});
 });
 
