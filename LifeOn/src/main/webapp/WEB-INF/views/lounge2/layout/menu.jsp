@@ -4,20 +4,25 @@
 
 <style>
 .nav-scroller {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	
-	margin-top: 84px;
-	height: 60px;
-	color: #333;
-	border-top: 1px solid #D9D9D9;
-	border-bottom: 1px solid #D9D9D9;
-}
-.sub-link {
-	color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-top: 84px;
+    height: 60px;
+    color: #333;
+    border-top: 1px solid #D9D9D9;
+    border-bottom: 1px solid #D9D9D9;
 }
 
+.sub-link {
+    color: #333;
+}
+
+.sub-link:hover, .sub-link.active {
+    color: #006AFF;
+    text-decoration: none;
+}
 </style>
 
 <script type="text/javascript">

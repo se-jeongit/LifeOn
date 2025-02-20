@@ -191,6 +191,16 @@
 </c:if>
 
 <script type="text/javascript">
+function open(rpnum) {
+    if ($('#reply-menu-${rpnum}').css('display') == 'block') {
+        $('#reply-menu-${rpnum}').hide();
+    } else {
+        $('reply-menu-${rpnum}').show();
+    }
+}
+</script>
+
+<script type="text/javascript">
 $(function() {
 	$('.btnSendBoardLike').click(function() {
 		const $i = $(this).find('i');
@@ -359,7 +369,6 @@ $(function() {
 });
 
 </script>
-
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

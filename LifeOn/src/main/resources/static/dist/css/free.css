@@ -165,6 +165,10 @@
 } */
 
 /* 페이징 */
+.page-navigation {
+	padding: 0;
+}
+
 .page-navigation .pagination {
     background-color: #FFF;
     margin: 0;
@@ -252,4 +256,8 @@
 .board-article {
 	text-align: left;
 	vertical-align: middle;
+}
+
+.hidden {
+	opacity: 0;
 }

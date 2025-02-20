@@ -22,34 +22,37 @@
 								${dto.nickname}
 							</div>
 							<div style="display: flex; justify-content: flex-end;">
-								<c:choose>
-									<c:when test="${sessionScope.member.nickName == dto.nickname}">
-										<span class="deleteReply" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</span>
-										<span class="hideReply" data-replyNum="${dto.rpnum}"></span>
-									</c:when>
-									<c:when test="${sessionScope.member.grade >= 1}">
-										<span class="deleteReply" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</span> ·
-										<span class="blockReply">차단</span>
-									</c:when>
-									<c:otherwise>
-										<span class="notifyReply">신고</span> ·
-										<span class="blockReply">차단</span>
-									</c:otherwise>
-								</c:choose>
+								<div class="reply-menu" id="reply-menu-${dto.rpnum}" style="display: none; font-size: 11px; background: #fff; color: #333; position: absolute; border: 1px solid #e0e0e0; border-radius: 4px; padding: 5px; margin-top: 15px; cursor: pointer;">
+									<c:choose>
+										<c:when test="${sessionScope.member.nickName == dto.nickname}">
+											<div class="deleteReply reply-menu-item" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</div>
+											<div class="hideReply reply-menu-item" data-replyNum="${dto.rpnum}"></div>
+										</c:when>
+										<c:when test="${sessionScope.member.grade >= 1}">
+											<div class="deleteReply reply-menu-item" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</div>
+											<div class="blockReply reply-menu-item">차단</div>
+										</c:when>
+										<c:otherwise>
+											<div class="notifyReply reply-menu-item">신고</div>
+											<div class="blockReply reply-menu-item">차단</div>
+										</c:otherwise>
+									</c:choose>
+								</div>
+								<span class="reply-dropdown" onclick="open(${dto.rpnum});" style="cursor: pointer;"><i class="bi bi-three-dots" style="padding: 5px;"></i></span>
 							</div>
 						</div>
-						<div class="content" >${dto.rpcontent}</div>
+						<div class="content" style="width: 90%;">${dto.rpcontent}</div>
 						<div style="font-size: 12px; color: #777; padding-top: 5px; display: flex; justify-content: space-between; flex-wrap: wrap;">
 							<div style="display: flex; justify-content: flex-start; flex-wrap: wrap;">
 								${dto.rpreg_date}
 							</div>
 							<div style="display: flex; justify-content: flex-end; flex-wrap: wrap;">
 								<span data-userLiked="${dto.memberLiked}">
-									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요">
+									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요" style="padding: 3px;">
 										<i class="bi ${dto.memberLiked == 1 ? 'bi-heart-fill':'bi-heart'}"></i>
 										<span>${dto.likeCount}</span>
 									</span>
-									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="0" title="싫어요">
+									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="0" title="싫어요" style="padding: 3px;">
 										<i class="bi ${dto.memberLiked == 0 ? 'bi-heartbreak-fill':'bi-heartbreak'}"></i>
 										<span>${dto.disLikeCount}</span>
 									</span>	        
