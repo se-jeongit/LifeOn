@@ -88,8 +88,8 @@ $(function(){
 				<span class="menu--label">상품관리</span>
 			</a>
 			<ul class="submenu">
-				<li><a href="<c:url value='/admin/productManage/list'/>" class="menu--link" title="상품 목록">상품 목록</a></li>
-				<li><a href="<c:url value='/admin/productManage/stock'/>" class="menu--link" title="재고 관리">재고 관리</a></li>
+				<li><a href="<c:url value='/admin/productManage/stock'/>" class="menu--link" title="재고 관리">공동구매 상품 및 재고</a></li>
+				<li><a href="<c:url value='/admin/productManage/list'/>" class="menu--link" title="상품 목록">공동구매 상품목록</a></li>
 			</ul>
 		</li>
 	

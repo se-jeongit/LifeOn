@@ -98,7 +98,7 @@
 <main class="wrapper">
     <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
     <div class="container">
-        <h2>상품목록</h2>
+        <h2>공동구매 상품목록</h2>
         
         <div class="status-tabs">
             <a href="#" class="active">전체</a>
@@ -106,7 +106,6 @@
             <a href="#">구매성공</a>
             <a href="#">구매실패</a>
         </div>
-        
         <table class="table">
             <thead>
                 <tr>
@@ -157,7 +156,6 @@
                 </tr>
             </tbody>
         </table>
-        <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">신규상품등록</button>
     </div>
 </main>
 

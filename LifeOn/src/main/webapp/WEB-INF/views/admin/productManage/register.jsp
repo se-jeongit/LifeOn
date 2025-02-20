@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LifeOn - 상품 등록</title>
+<title>LifeOn - 공동구매 상품 등록</title>
 
 <jsp:include page="/WEB-INF/views/admin/layout/headerResources.jsp"/>
 <style>
@@ -50,48 +50,22 @@
 <main class="wrapper">
     <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
     <div class="container">
-        <h2>신규 상품 등록</h2>
+        <h2>공동구매 상품 등록</h2>
         
-        <form action="product_register_ok.jsp" method="post" enctype="multipart/form-data">
+        <form action="/product/register" method="post" enctype="multipart/form-data">
+           
             <div class="form-group">
-                <label for="productSelect">상품 선택</label>
-                <select id="productSelect" name="productId" required>
-                    <option value="">상품을 선택하세요</option>
-                    <c:forEach var="stock" items="${stockList}">
-                        <option value="${stock.productId}" 
-                                data-category-large="${stock.categoryLarge}"
-                                data-category-small="${stock.categorySmall}">
-                            ${stock.productName} (${stock.categoryLarge} / ${stock.categorySmall})
-                        </option>
-                    </c:forEach>
-                </select>
+                <label for="productQuantity">상품 원가</label>
+                <input type="number" id="productQuantity" name="productQuantity" required>
             </div>
-
+            
             <div class="form-group">
-                <label for="categoryLarge">카테고리 (대)</label>
-                <input type="text" id="categoryLarge" name="categoryLarge" readonly>
+                <label for="productQuantity">상품 할인가</label>
+                <input type="number" id="productQuantity" name="productQuantity" required>
             </div>
-
-            <div class="form-group">
-                <label for="categorySmall">카테고리 (소)</label>
-                <input type="text" id="categorySmall" name="categorySmall" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="productDesc">상품 설명</label>
-                <textarea id="productDesc" name="productDesc" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="thumbnailImage">썸네일 이미지</label>
-                <input type="file" id="thumbnailImage" name="thumbnailImage" required>
-            </div>
-
-            <div class="form-group">
-                <label for="productImage">상품 상세 이미지</label>
-                <input type="file" id="productImage" name="productImage" required>
-            </div>
-
+           
+           
+           
             <div class="form-group">
                 <label for="productQuantity">상품 수량</label>
                 <input type="number" id="productQuantity" name="productQuantity" required>
@@ -122,5 +96,7 @@
 </footer>
 
 <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
+
+
 </body>
 </html>

@@ -58,13 +58,13 @@ $(function(){
 		</li>
 
 		<li class="menu--item">
-			<a href="<c:url value='/mypage' />" aria-current="page" class="menu--link" title="포인트내역">
+			<a href="<c:url value='/point/mypage' />" aria-current="page" class="menu--link" title="포인트내역">
 				<span class="menu--label">포인트내역</span>
 			</a>
 		</li>
 	
 		<li class="menu--item">
-	        <a href="<c:url value='/admin' />" class="menu--link" title="주문/배송">
+	        <a href="<c:url value='#' />" class="menu--link" title="주문/배송">
 				<span class="menu--label">주문/배송</span>
 			</a>
 		</li>

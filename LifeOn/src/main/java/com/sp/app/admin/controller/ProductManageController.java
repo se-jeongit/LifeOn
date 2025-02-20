@@ -30,4 +30,10 @@ public class ProductManageController {
 
 		return "admin/productManage/register";
 	}
+	
+	@GetMapping("stockRegister")
+	public String stockRegister() throws Exception {
+
+		return "admin/productManage/stockRegister";
+	}
 }
