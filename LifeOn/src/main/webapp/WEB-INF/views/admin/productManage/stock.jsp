@@ -66,6 +66,7 @@
         <table class="table">
             <thead>
                 <tr>
+                	<th>번호</th>
                     <th>썸네일</th>
                     <th>상품명</th>
                     <th>업체명</th>
@@ -75,32 +76,22 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><img src="${pageContext.request.contextPath}/dist/images/profile.png" alt="상품 이미지" class="thumbnail"></td>
-                    <td>유기농 사과</td>
-                    <td>자연농원</td>
-                    <td>과일 / 사과</td>
-                    <td class="">20 개</td>
-                    <td><button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">공동구매 등록</button></td>
-                </tr>
-                <tr>
-                    <td><img src="${pageContext.request.contextPath}/dist/images/profile.png" class="thumbnail"></td>
-                    <td>신선한 딸기</td>
-                    <td>베리팜</td>
-                    <td>과일 / 딸기</td>
-                    <td class="low-stock">3 개</td>
-                    <td><button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">공동구매 등록</button></td>
-                </tr>
-                <tr>
-                    <td><img src="${pageContext.request.contextPath}/dist/images/profile.png" class="thumbnail"></td>
-                    <td>무항생제 계란</td>
-                    <td>청정농장</td>
-                    <td>유제품 / 계란</td>
-                    <td>50 개</td>
-                    <td><button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">공동구매 등록</button></td>
-                </tr>
+            	<c:forEach var="dto" items="${list}" varStatus="status">
+            		<tr>
+            			<td>${dataCount - (page-1) * size - status.index}</td>
+            			<td><img src="${pageContext.request.contextPath}/uploads/product/${dto.pph}" alt="상품 이미지" width="50"></td>
+            			<td>${dto.pname}</td>
+            			<td>${dto.ptsc}</td>
+            			<td>${dto.cbc} / ${dto.csc}</td>
+            			<td>${dto.ptsq}</td>
+            			<td><button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">공동구매 등록</button></td>         		
+            		</tr>
+            	</c:forEach>
             </tbody>
-        </table>
+        </table>           
+        <div class="page-navigation">
+			${dataCount == 0 ? "포인트 내역이 없습니다" : paging}
+		</div>
     </div>
 </main>
 

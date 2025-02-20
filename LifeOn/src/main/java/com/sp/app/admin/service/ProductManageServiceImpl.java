@@ -1,6 +1,7 @@
 package com.sp.app.admin.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
@@ -81,5 +82,58 @@ public class ProductManageServiceImpl implements ProductManageService{
 			}
 		}
 	}
+
+	@Override
+	public List<ProductManage> listProduct(Map<String, Object> map) {
+		List<ProductManage> list = null;
+		
+		try {
+			list = mapper.listProduct(map);
+		} catch (Exception e) {
+			log.info("listProduct : ", e);
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int dataCount(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = mapper.dataCount(map);			
+		} catch (Exception e) {
+			log.info("dataCount : ", e);
+		}
+		
+		return result;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

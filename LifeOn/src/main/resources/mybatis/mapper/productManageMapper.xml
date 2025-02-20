@@ -29,7 +29,20 @@
 		VALUES (product_picture_seq.NEXTVAL, #{ppp}, product_seq.CURRVAL)
 	</insert>
 	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM product_together_stock
+	</select>
 	
+	<select id="listProduct" parameterType="map" resultType="com.sp.app.admin.model.ProductManage">
+		SELECT p.pnum, p.pname, p.pph, cs.csc, cb.cbc, ts.ptsc, ts.ptsq
+		FROM product p
+		JOIN category_small cs ON p.csn = cs.csn
+		JOIN category_big cb ON cb.cbn = cs.cbn
+		JOIN product_together_stock ts ON p.pnum = ts.pnum
+		ORDER BY pnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY	
+	</select>
 	
 	
 </mapper>

@@ -2,6 +2,7 @@ package com.sp.app.admin.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,5 +18,8 @@ public interface ProductManageMapper {
 	public void insertProduct(ProductManage dto) throws SQLException;
 	public void insertStock(ProductManage dto) throws SQLException;
 	public void insertProductImage(ProductManage dto) throws SQLException;
+	
+	public int dataCount(Map<String, Object> map);
+	public List<ProductManage> listProduct(Map<String, Object> map);
 	
 }
