@@ -77,13 +77,10 @@
 							
 							<tr>
     							<td colspan="2" valign="top" height="200" style="border-bottom: none;">
-							        <div id="content">
-							            <c:out value="${dto.content}" escapeXml="false"/>
-							        </div>
+							         <c:out value="${dto.content}" escapeXml="false" />
 							    </td>
 							</tr>
 
-				
 							<tr>
 								<td colspan="2" class="text-center p-3" style="border-bottom: none;">
 									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기">
@@ -236,21 +233,6 @@ $(function() {
 	});
 });
 
-</script>
-
-<script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function() {
-    let content = document.getElementById('content');
-    let data = content.innerHTML;
-
-    // ${pageContext.request.contextPath} 값을 JavaScript 변수로 가져옴
-    let contextPath = '${pageContext.request.contextPath}';
-    
-    // 업로드된 이미지 경로를 올바르게 변환
-    data = data.replace(/src="\/uploads\/image\//g, 'src="' + contextPath + '/uploads/image/');
-
-    content.innerHTML = data;
-});
 </script>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
