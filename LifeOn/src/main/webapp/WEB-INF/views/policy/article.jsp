@@ -265,7 +265,7 @@ $(function() {
 	});
 });
 
-//삭제, 신고 메뉴
+//삭제, 신고 메뉴입니다
 $(function() {
 	$('.reply').on('click', '.reply-dropdown', function () {
 		const $menu = $(this).next('.reply-menu');
