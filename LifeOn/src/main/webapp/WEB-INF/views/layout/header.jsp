@@ -115,7 +115,7 @@
 						<a href="<c:url value='/member/logout'/>" style="text-decoration: none;">로그아웃</a>
 					</div>	
 					<div class="p-2">
-						<a href="<c:url value='/'/>" style="text-decoration: none;">고객센터</a>
+						<a href="<c:url value='/help'/>" style="text-decoration: none;">고객센터</a>
 					</div>	
 								
 					<c:if test="${sessionScope.member.grade >= 1}">

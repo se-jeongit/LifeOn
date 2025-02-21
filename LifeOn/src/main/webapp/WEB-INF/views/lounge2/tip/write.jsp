@@ -126,13 +126,6 @@ function check() {
 				<div class="rightBox">
 					<p>❤️검색순위❤️</p>
 				</div>
-				<div style="display: flex; align-items: center; margin: 0 20px;">
-					<!-- 검색상자 -->
-					<input type="search" class="input-group searchBox">
-					
-					<!-- 검색버튼 -->
-				   	<button class="input-group btn mybtn">검색</button>
-				</div>
 			</aside>
 		</div>
 	</div>
