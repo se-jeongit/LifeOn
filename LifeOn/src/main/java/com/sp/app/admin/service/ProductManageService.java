@@ -11,6 +11,7 @@ public interface ProductManageService {
 	public List<ProductManage> listSmallCategory(int cbn);
 	
 	public void insertProduct(ProductManage dto, String uploadPath) throws Exception;
+	public void insertTogetherProduct(ProductManage dto) throws Exception;
 	
 	public List<ProductManage> listProduct(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);

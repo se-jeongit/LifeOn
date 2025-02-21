@@ -29,6 +29,15 @@
 		VALUES (product_picture_seq.NEXTVAL, #{ppp}, product_seq.CURRVAL)
 	</insert>
 	
+	
+	<insert id="insertTogetherProduct" parameterType="com.sp.app.admin.model.ProductManage">
+		INSERT INTO product_together (ptp, ptsp, ptq, ptd, ptsd, pted, ptdd)
+		VALUES (#{ptp}, #{ptsp}, #{ptq}, SYSDATE, #{ptsd}, #{pted}, #{ptdd})
+		WHERE pnum = #{pnum}	
+	</insert>	
+	
+	
+
 	<select id="dataCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*),0)
 		FROM product_together_stock

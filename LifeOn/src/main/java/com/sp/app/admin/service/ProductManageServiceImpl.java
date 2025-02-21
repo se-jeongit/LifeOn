@@ -82,6 +82,17 @@ public class ProductManageServiceImpl implements ProductManageService{
 			}
 		}
 	}
+	
+	@Override
+	public void insertTogetherProduct(ProductManage dto) throws Exception {
+		try {
+			insertTogetherProduct(dto);
+		} catch (Exception e) {
+			log.info("insertTogetherProduct : " , e);
+			throw e;
+		}
+		
+	}
 
 	@Override
 	public List<ProductManage> listProduct(Map<String, Object> map) {
@@ -108,6 +119,8 @@ public class ProductManageServiceImpl implements ProductManageService{
 		
 		return result;
 	}
+
+
 	
 	
 	

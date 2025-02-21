@@ -14,10 +14,13 @@ public interface ProductManageMapper {
 	public List<ProductManage> listBigCategory();
 	public List<ProductManage> listSmallCategory(int cbn);
 	
-	//INSERT
+	//INSERT(재고 + 상품통합 + 사진)
 	public void insertProduct(ProductManage dto) throws SQLException;
 	public void insertStock(ProductManage dto) throws SQLException;
 	public void insertProductImage(ProductManage dto) throws SQLException;
+	
+	//INSERT(공동구매)
+	public void insertTogetherProduct(ProductManage dto) throws SQLException;
 	
 	public int dataCount(Map<String, Object> map);
 	public List<ProductManage> listProduct(Map<String, Object> map);
