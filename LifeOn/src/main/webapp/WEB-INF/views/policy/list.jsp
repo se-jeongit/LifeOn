@@ -76,7 +76,7 @@
 				<div class="body-main">
 					<div class="row board-list-header">
 						<div class="col-auto me-auto dataCount"></div>
-							00건
+							${dataCount}건
 						<div class="col-auto">&nbsp;</div>
 					</div>
 
