@@ -265,6 +265,30 @@ $(function() {
 	});
 });
 
+//삭제, 신고 메뉴
+$(function() {
+	$('.reply').on('click', '.reply-dropdown', function () {
+		const $menu = $(this).next('.reply-menu');
+		
+		if($menu.is(':visible')) {
+			$menu.fadeOut(100);
+		} else {
+			$('.reply-menu').hide();
+			$menu.fadeIn(100);
+			
+			let pos = $(this).offset();
+			$mene.offset({left:pos.left-70, top:pos.top+20});
+		}
+	});
+	
+	$('.reply').on('click', function(evt) {
+		if($(evt.target.parentNode).hasClass('reply-dropdown')) {
+			return false;
+		}
+		$('.reply-menu').hide();
+	});
+});
+
 
 //댓글 좋아요/싫어요
 $(function() {
