@@ -1,5 +1,7 @@
 package com.sp.app.admin.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -129,6 +131,31 @@ public class ProductManageServiceImpl implements ProductManageService{
 		try {
 			list = mapper.listTogetherProduct(map);
 			
+			for(ProductManage dto : list) {
+				String startStr = dto.getPtsd();
+				String endStr = dto.getPted();
+				
+				LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.ISO_LOCAL_DATE);
+				LocalDate end = LocalDate.parse(endStr, DateTimeFormatter.ISO_LOCAL_DATE);				
+				LocalDate today = LocalDate.now();
+				
+				int target = dto.getPtq(); //상품수량
+				int sold = 0; //d 어케가져올지 미정
+				
+				if(today.isBefore(start)) {
+					dto.setStatus("진행전");
+				} else if(! today.isAfter(end)) {
+					dto.setStatus("진행중");
+				} else {
+					if(sold < target) {
+						dto.setStatus("구매실패");
+					} else {
+						dto.setStatus("판매완료");
+					}
+				}
+			}
+			
+			
 		} catch (Exception e) {
 			log.info("listTogetherProduct : ", e);
 		}
@@ -142,6 +169,9 @@ public class ProductManageServiceImpl implements ProductManageService{
 		
 		try {
 			result = mapper.dataCount2(map);
+			
+			
+			
 		} catch (Exception e) {
 			log.info("dataCount2 : ", e);
 		}

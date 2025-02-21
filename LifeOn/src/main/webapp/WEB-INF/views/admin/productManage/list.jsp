@@ -99,13 +99,14 @@
     <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
     <div class="container">
         <h2>공동구매 상품목록</h2>
-        
-        <div class="status-tabs">
-            <a href="#" class="active">전체</a>
-            <a href="#">진행중</a>
-            <a href="#">구매성공</a>
-            <a href="#">구매실패</a>
-        </div>
+		<div class="status-tabs">
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=all" class="${schType=='all'?'active':''}">전체</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list" class="${schType=='a'?'active':''}">진행전</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=b" class="${schType=='b'?'active':''}">진행중</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=c" class="${schType=='c'?'active':''}">구매성공</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=d" class="${schType=='d'?'active':''}">구매실패</a>
+		</div>
+
         <table class="table">
             <thead>
                 <tr>
@@ -122,7 +123,7 @@
             	<c:forEach var="dto" items="${list}" varStatus="status">
             		<tr>
             			<td>${dataCount - (page-1) * size - status.index}</td>
-            			<td>[진행중]</td>
+            			<td>[${dto.status}]</td>
             			<td>
             				시작일 : ${dto.ptsd}<br>
             				종료일 : ${dto.pted}<br>

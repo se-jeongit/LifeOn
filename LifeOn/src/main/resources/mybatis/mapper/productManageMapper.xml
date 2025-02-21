@@ -60,6 +60,11 @@
 	<select id="dataCount2" parameterType="map" resultType="Integer">
 		SELECT COUNT(*)
 		FROM product_together
+		<where>
+			<if test="schType != null">
+				<include refid="where-list"/>
+			</if>
+		</where>
 	</select>
 	
 	
@@ -72,10 +77,39 @@
 		FROM product p
 		LEFT JOIN product_together pt ON p.pnum = pt.pnum
 		WHERE pt.pnum IS NOT NULL
+		<where>
+		<if test="schType != null">
+			<include refid="where-list"/>
+		</if>
+		</where>
 		ORDER BY pt.pnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY	
 	</select>
-	
+
+	<sql id="where-list">
+    <choose>
+        <when test="schType == 'all'">
+        </when>
+        
+        <when test="schType == 'a'">
+            status = '진행전'
+        </when>
+        
+        <when test="schType == 'b'">
+            status = '진행중'
+        </when>
+
+        <when test="schType == 'c'">
+            status = '구매성공'
+        </when>
+
+        <when test="schType == 'd'">
+            status = '구매실패'
+        </when>
+        <otherwise>
+        </otherwise>
+    </choose>
+	</sql>	
 	
 	
 	

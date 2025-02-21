@@ -115,12 +115,17 @@ public class ProductManageController {
 	
 	@GetMapping("list")
 	public String productManage(@RequestParam(name = "page", defaultValue = "1") int current_page,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
 			Model model, HttpServletRequest req) throws Exception {
+		System.out.println("schType: " + schType);
 		try {
 			int size = 10;
 			int total_page = 0;
 			int dataCount = 0;
 			Map<String, Object> map = new HashMap<>();
+			map.put("schType", schType);
+			
+			System.out.println("schType: " + schType);
 			
 			dataCount = service.dataCount2(map);
 			total_page = paginateUtil.pageCount(dataCount, size);
@@ -136,6 +141,13 @@ public class ProductManageController {
 			String listUrl = cp + "/admin/productManage/list";
 			String query = "page=" + current_page;
 			
+			if(schType.length() != 0) {
+				String qs = "schType=" + schType;
+				listUrl += "?" +qs;
+				query += "&" + qs;
+			}
+			
+			
 			List<ProductManage> list = service.listTogetherProduct(map);
 			String paging = paginateUtil.paging(current_page, total_page, listUrl);
 			
@@ -145,6 +157,8 @@ public class ProductManageController {
 			model.addAttribute("page", current_page);
 			model.addAttribute("total_page", total_page);
 			model.addAttribute("paging", paging);
+			
+			model.addAttribute("schType", schType);
 			model.addAttribute("query", query);
 		} catch (Exception e) {
 			log.info("list : ", e);
