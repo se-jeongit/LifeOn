@@ -95,7 +95,7 @@ function elapsedText(date) {
 				<div>
 					<c:forEach var="dto" items="${list}" varStatus="status">
 					<div class="mx-3">
-				  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'">
+				  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="cursor: pointer;">
 							<table class="table table-hover m-0">
 								<tbody>
 								 	<tr>
