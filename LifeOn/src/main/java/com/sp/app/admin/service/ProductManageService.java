@@ -15,4 +15,8 @@ public interface ProductManageService {
 	
 	public List<ProductManage> listProduct(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
+	
+	public List<ProductManage> listTogetherProduct(Map<String, Object> map);
+	public int dataCount2(Map<String, Object> map);
+	
 }

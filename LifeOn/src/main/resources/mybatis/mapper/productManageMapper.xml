@@ -31,9 +31,8 @@
 	
 	
 	<insert id="insertTogetherProduct" parameterType="com.sp.app.admin.model.ProductManage">
-		INSERT INTO product_together (ptp, ptsp, ptq, ptd, ptsd, pted, ptdd)
-		VALUES (#{ptp}, #{ptsp}, #{ptq}, SYSDATE, #{ptsd}, #{pted}, #{ptdd})
-		WHERE pnum = #{pnum}	
+		INSERT INTO product_together (pnum, ptp, ptsp, ptq, ptd, ptsd, pted, ptdd)
+		VALUES (#{pnum}, #{ptp}, #{ptsp}, #{ptq}, SYSDATE, #{ptsd}, #{pted}, #{ptdd})
 	</insert>	
 	
 	
@@ -44,14 +43,41 @@
 	</select>
 	
 	<select id="listProduct" parameterType="map" resultType="com.sp.app.admin.model.ProductManage">
-		SELECT p.pnum, p.pname, p.pph, cs.csc, cb.cbc, ts.ptsc, ts.ptsq
+		SELECT p.pnum, p.pname, p.pph, cs.csc, cb.cbc, ts.ptsc, ts.ptsq,
+		CASE 
+            WHEN pt.pnum IS NULL THEN 'N' 
+            ELSE 'Y'                     
+        END AS asRegister
 		FROM product p
 		JOIN category_small cs ON p.csn = cs.csn
 		JOIN category_big cb ON cb.cbn = cs.cbn
 		JOIN product_together_stock ts ON p.pnum = ts.pnum
+		LEFT JOIN product_together pt ON p.pnum = pt.pnum
 		ORDER BY pnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY	
 	</select>
+	
+	<select id="dataCount2" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)
+		FROM product_together
+	</select>
+	
+	
+	<select id="listTogetherProduct" parameterType="map" resultType="com.sp.app.admin.model.ProductManage">
+		SELECT p.pnum, p.pname, p.pph, pt.ptp, pt.ptsp, pt.ptq, 
+		TO_CHAR(pt.ptd, 'YYYY-MM-DD') AS ptd, 
+		TO_CHAR(pt.ptsd, 'YYYY-MM-DD') AS ptsd, 
+		TO_CHAR(pt.pted, 'YYYY-MM-DD') AS pted, 
+		TO_CHAR(pt.ptdd, 'YYYY-MM-DD') AS ptdd
+		FROM product p
+		LEFT JOIN product_together pt ON p.pnum = pt.pnum
+		WHERE pt.pnum IS NOT NULL
+		ORDER BY pt.pnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY	
+	</select>
+	
+	
+	
 	
 	
 </mapper>

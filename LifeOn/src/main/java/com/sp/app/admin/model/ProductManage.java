@@ -19,6 +19,7 @@ public class ProductManage {
 	private String pct; //상품내용
 	private String pph; //썸네일사진
 	private MultipartFile pphFile;
+	
 	//카테고리TAB
 	private int cbn; //카테고리 대번호
 	private String cbc; //카테고리 대내용
@@ -46,6 +47,7 @@ public class ProductManage {
 	private String pted; //종료날짜
 	private String ptdd; //예상발송일
 	
+	private String asRegister; // Y/N 재고에는 등록되었지만 공동구매에 등록된 상품인지 아닌지 확인하기 위한 컬럼
 	
 	
 }

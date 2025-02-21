@@ -113,20 +113,67 @@ public class ProductManageController {
 		return "admin/productManage/stock";
 	}
 	
-	
-	
-	
 	@GetMapping("list")
-	public String productManage() throws Exception {
-
+	public String productManage(@RequestParam(name = "page", defaultValue = "1") int current_page,
+			Model model, HttpServletRequest req) throws Exception {
+		try {
+			int size = 10;
+			int total_page = 0;
+			int dataCount = 0;
+			Map<String, Object> map = new HashMap<>();
+			
+			dataCount = service.dataCount2(map);
+			total_page = paginateUtil.pageCount(dataCount, size);
+			current_page = Math.min(current_page, total_page);
+			
+			int offset = (current_page -1) * size;
+			if(offset < 0 ) offset = 0;
+			
+			map.put("offset", offset);
+			map.put("size", size);
+			
+			String cp = req.getContextPath();
+			String listUrl = cp + "/admin/productManage/list";
+			String query = "page=" + current_page;
+			
+			List<ProductManage> list = service.listTogetherProduct(map);
+			String paging = paginateUtil.paging(current_page, total_page, listUrl);
+			
+			model.addAttribute("list", list);
+			model.addAttribute("dataCount", dataCount);
+			model.addAttribute("size", size);
+			model.addAttribute("page", current_page);
+			model.addAttribute("total_page", total_page);
+			model.addAttribute("paging", paging);
+			model.addAttribute("query", query);
+		} catch (Exception e) {
+			log.info("list : ", e);
+		}
+		
 		return "admin/productManage/list";
 	}
 	
-	
 	@GetMapping("register")
-	public String register() throws Exception {
-
+	public String register(@RequestParam(name = "pnum") long pnum,
+			@RequestParam(name = "ptsq") int ptsq,
+			Model model) throws Exception {
+		model.addAttribute("pnum", pnum);
+		model.addAttribute("ptsq", ptsq);
 		return "admin/productManage/register";
 	}
+	
+	@PostMapping("register")
+	public String registerSubmit(ProductManage dto) {
+		try {
+			service.insertTogetherProduct(dto);
+		} catch (Exception e) {
+			log.info("registerSubmit : ", e);
+		}
+		return "redirect:/admin/productManage/list";
+	}
+	
+	
+	
+	
 	
 }

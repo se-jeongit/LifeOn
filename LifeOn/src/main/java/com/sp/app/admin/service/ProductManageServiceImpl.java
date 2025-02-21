@@ -86,7 +86,7 @@ public class ProductManageServiceImpl implements ProductManageService{
 	@Override
 	public void insertTogetherProduct(ProductManage dto) throws Exception {
 		try {
-			insertTogetherProduct(dto);
+			mapper.insertTogetherProduct(dto);
 		} catch (Exception e) {
 			log.info("insertTogetherProduct : " , e);
 			throw e;
@@ -100,6 +100,8 @@ public class ProductManageServiceImpl implements ProductManageService{
 		
 		try {
 			list = mapper.listProduct(map);
+			
+			
 		} catch (Exception e) {
 			log.info("listProduct : ", e);
 		}
@@ -117,6 +119,32 @@ public class ProductManageServiceImpl implements ProductManageService{
 			log.info("dataCount : ", e);
 		}
 		
+		return result;
+	}
+
+	@Override
+	public List<ProductManage> listTogetherProduct(Map<String, Object> map) {
+		List<ProductManage> list = null;
+		
+		try {
+			list = mapper.listTogetherProduct(map);
+			
+		} catch (Exception e) {
+			log.info("listTogetherProduct : ", e);
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int dataCount2(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = mapper.dataCount2(map);
+		} catch (Exception e) {
+			log.info("dataCount2 : ", e);
+		}
 		return result;
 	}
 
