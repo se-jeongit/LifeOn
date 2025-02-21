@@ -1,4 +1,3 @@
-
 package com.sp.app.admin.model;
 
 import java.util.List;
@@ -47,9 +46,9 @@ public class ProductManage {
 	private String ptsd; //시작날짜
 	private String pted; //종료날짜
 	private String ptdd; //예상발송일
+	private String status;   // 진행전, 진행중, 구매실패, 구매성공
 	
 	private String asRegister; // Y/N 재고에는 등록되었지만 공동구매에 등록된 상품인지 아닌지 확인하기 위한 컬럼
 	
 	
 }
-
