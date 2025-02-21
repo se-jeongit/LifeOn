@@ -67,20 +67,35 @@ function elapsedText(date) {
 			<div class="main_content">
 				<!-- 상단메뉴 -->
 				<div class="main_menu">
-					<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px;">
-					   	<p style="margin: 0;">총 게시글 ${dataCount}개 (${page} / ${total_page} 페이지)</p>
-				   	</div>
-					
-					<div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
-						<button class="ssbtn" onclick="location.href='<c:url value='tip/write'/>'">글쓰기</button>
-					</div>
+				   	<div>
+				   		<p style="font-size: 16px; margin: 0;">총 게시글 ${dataCount}개 (${page} / ${total_page} 페이지)</p>
+			   		</div>
+				   	<div style="display: flex;">
+					   	<form name="searchForm" style="display: inline-flex; align-items: center;">
+							<select name="schType" class="myselect">
+								<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
+								<option value="nickname" ${schType=="nickname"?"selected":""}>작성자</option>
+								<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
+								<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
+								<option value="content" ${schType=="content"?"selected":""}>내용</option>
+							</select>
+							<!-- 검색상자 -->
+							<input type="search" name=kwd value="${kwd}" class="input-group searchBox">
+							<!-- 검색버튼 -->
+					   		<button class="input-group mybtn" onclick="searchList();">검색</button>
+					   		<!-- 새로고침 버튼 -->
+							<button type="button" class="ssbtn" style="margin-left: 2px;" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';" title="새로고침"><i class="bi bi-arrow-counterclockwise"></i></button>
+				   		</form>
+						<!-- 글쓰기 버튼 -->
+						<button class="ssbtn" style="margin-left: 5px;" onclick="location.href='<c:url value='tip/write'/>'">글쓰기</button>
+					</div>	
 				</div>
 				
 				<!-- 글리스트 -->
 				<div>
 					<c:forEach var="dto" items="${list}" varStatus="status">
 					<div class="mx-3">
-				  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'">
+				  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="cursor: pointer;">
 							<table class="table table-hover m-0">
 								<tbody>
 								 	<tr>
@@ -131,7 +146,7 @@ function elapsedText(date) {
 				</div>
 
 				<div class="page-navigation">
-					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+					${dataCount == 0 ? "<p style='padding-top: 40px;'>등록된 게시물이 없습니다.</p>" : paging}
 				</div>
 				
 			</div>
@@ -140,16 +155,8 @@ function elapsedText(date) {
 				<div class="rightBox">
 					<p>❤️검색순위❤️</p>
 				</div>
-				<div style="display: flex; align-items: center; margin: 0 20px;">
-					<!-- 검색상자 -->
-					<input type="search" class="input-group searchBox">
-					
-					<!-- 검색버튼 -->
-				   	<button class="input-group btn mybtn">검색</button>
-				   	
-				   	<!-- 상단이동 버튼 -->
-				   	<%-- <button type="button" class="top_btn" onclick="location.href='<c:url value=''/>'">TOP</button> --%>
-				</div>
+			   	<!-- 상단이동 버튼 -->
+			   	<%-- <button type="button" class="top_btn" onclick="location.href='<c:url value=''/>'">TOP</button> --%>
 			</aside>
 		</div>
     </div>
@@ -162,6 +169,35 @@ $(window).scroll(function() {
 });
  */
 </script>
+
+<script type="text/javascript">
+// 검색 키워드 입력란에서 엔터를 누른 경우 서버 전송 막기 
+window.addEventListener('load', () => {
+	const inputEL = document.querySelector('form input[name=kwd]'); 
+	inputEL.addEventListener('keydown', function (evt) {
+	    if(evt.key === 'Enter') {
+	    	evt.preventDefault();
+	    	
+	    	searchList();
+	    }
+	});
+});
+
+function searchList() {
+	const f = document.searchForm;
+	if(! f.kwd.value.trim()) {
+		return;
+	}
+	
+	// form 요소는 FormData를 이용하여 URLSearchParams 으로 변환
+	const formData = new FormData(f);
+	let requestParams = new URLSearchParams(formData).toString();
+	
+	let url = '${pageContext.request.contextPath}/lounge2/tip';
+	location.href = url + '?' + requestParams;
+}
+</script>
+
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

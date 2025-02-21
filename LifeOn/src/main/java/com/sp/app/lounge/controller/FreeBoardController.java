@@ -100,7 +100,7 @@ public class FreeBoardController {
 				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
 				
 				listUrl += "?" + qs;
-				articleUrl += "&" + qs;
+				query += "&" + qs;
 			}
 			
 			String paging = paginateUtil.paging(current_page, total_page, listUrl);
@@ -425,6 +425,7 @@ public class FreeBoardController {
 			Map<String, Object> map = new HashMap<>();
 			map.put("rpnum", num);
 			map.put("psnum", dto.getPsnum());
+			map.put("rplike", dto.getRplike());
 			map.put("num", info.getNum());
 			map.put("nickname", info.getNickName());
 			

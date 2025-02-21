@@ -4,6 +4,7 @@ import com.sp.app.auction.response.category.AllCategoryResponse;
 import com.sp.app.auction.response.category.BigCategoryResponse;
 import com.sp.app.auction.response.prize.PrizeDetailRep;
 import com.sp.app.auction.service.AuctionService;
+import com.sp.app.auction.service.AuctionServiceInterface;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.model.SessionInfo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuctionController {
 
-    private final AuctionService auctionService;
+    private final AuctionServiceInterface auctionService;
     private final PaginateUtil paginateUtil;
 
     //TODO: 검색어 입력 처리동작 미완

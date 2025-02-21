@@ -42,7 +42,6 @@
     justify-content: space-between; /* 양쪽 끝 정렬 */
     flex-wrap: wrap; /* 자식 요소가 넘칠 경우 줄바꿈 */
 }
-
     
 .pull-right {
      float: right; 
@@ -60,7 +59,7 @@
 
 <main class="container d-flex flex-column min-vh-100 align-items-center" style="padding-top: 50px;">
  <div class="row w-100">
-  <section class="col-md-6 mx-auto">
+  <section class="col-md-6 mx-auto" style="width: 100%;">
   			<h2>
 			<c:choose>
 				<c:when test="${bdtype == 'room'}">인테리어</c:when> 
@@ -75,9 +74,11 @@
         </div>
         
         <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
+        </div>
+        </div>
+        </div>
+        <div style="    display: flex; justify-content: flex-end;">
           <button class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/write';">글쓰기</button>
-        </div>
-        </div>
         </div>
         </section>
     

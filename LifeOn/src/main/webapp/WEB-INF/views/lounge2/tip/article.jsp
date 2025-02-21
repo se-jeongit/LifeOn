@@ -81,7 +81,7 @@
 										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill likeColor' : 'bi-bookmark'}"></i>
 										&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
 										</button>
-											<button type="button" class="ssbtn">신고하기</button>
+											<button type="button" class="ssbtn" onclick="javascript:dialogReport();">신고하기</button>
 										</div>
 									</div>
 								</td>
@@ -139,7 +139,6 @@
 							    		<button type="button" class="ssbtn" onclick="deleteOk();">삭제</button>
 									</c:when>
 								</c:choose>
-							
 							</td>
 							<td class="text-end">
 								<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip?${query}';">리스트</button>
@@ -177,13 +176,6 @@
 				<div class="rightBox">
 					<p>❤️검색순위❤️</p>
 				</div>
-				<div style="display: flex; align-items: center; margin: 0 20px;">
-					<!-- 검색상자 -->
-					<input type="search" class="input-group searchBox">
-					
-					<!-- 검색버튼 -->
-				   	<button class="input-group btn mybtn">검색</button>
-				</div>
 			</aside>
 		</div>
 	</div>
@@ -202,6 +194,121 @@
 	</script>
 </c:if>
 
+<!-- 신고 모달 -->
+<script type="text/javascript">
+function dialogReport() {
+	$('#dialogReport').modal('show');  
+}
+
+$(function(){
+	$('#dialogReport').on('hide.bs.modal', function() {
+		$('button, input, select, textarea').each(function(){
+			$(this).blur();
+		});
+	});
+
+    // 신고 버튼 클릭 시 처리
+ 	$('#submitReport').on('click', function() {
+        var reportReason = $('input[name="reportReason"]:checked').val();
+		if (reportReason === "") {
+        	alert("신고 사유를 입력해주세요.");
+        	return;
+		}
+
+      	// 여기에 신고 처리 로직 추가
+      	// 예: AJAX 요청을 통해 신고 내용을 서버로 전송
+
+		alert("신고가 접수되었습니다.");
+		$('#dialogReport').modal('hide');
+	});
+});
+</script>
+
+<div class="modal fade" id="dialogReport" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		
+      		<div class="modal-header" style="display: flex; justify-content: space-between; padding: 10px 20px;">
+        		<h5 class="modal-title" id="reportModalLabel">게시글 신고하기</h5>
+        		<button type="button" style="border: none; background: #fff; font-size: 30px;" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true">&times;</span>
+        		</button>
+      		</div>
+      		
+      		<div class="modal-body">
+       			<form id="reportForm">
+          			<div class="form-group">
+			        	<table class="table table-hover">
+			            	<thead>
+			              		<tr>
+			                		<th>신고사유 선택</th>
+			              		</tr>
+			            	</thead>
+			            	<tbody>
+			              		<tr>
+			                		<td>
+				                		<input type="radio" id="radio1" name="reportReason" value="1" class="reportReasonRadio">
+				                		<label for="radio1">스팸홍보/도배글 입니다.</label>
+			                		</td>
+			              		</tr>
+			              		<tr>
+			                		<td>
+			                			<input type="radio" id="radio2" name="reportReason" value="2" class="reportReasonRadio">
+			                			<label for="radio2">불법정보를 포함하고 있습니다.</label>
+			                		</td>
+			              		</tr>
+			              		<tr>
+			                		<td>
+			                			<input type="radio" id="radio3" name="reportReason" value="3" class="reportReasonRadio">
+			                			<label for="radio3">청소년에게 유해한 내용입니다.</label>
+			                		</td>
+			              		</tr>
+			              		<tr>
+			                		<td>
+			                			<input type="radio" id="radio4" name="reportReason" value="4" class="reportReasonRadio">
+			                			<label for="radio4">욕설/생명경시/혐오/차별적 표현입니다.</label>
+			                		</td>
+			              		</tr>
+			             		<tr>
+			                		<td>
+			                			<input type="radio" id="radio5" name="reportReason" value="5" class="reportReasonRadio">
+			                			<label for="radio5">음란물 입니다.</label>
+			                		</td>
+			              		</tr>
+			              		<tr>
+			                		<td>
+			                			<input type="radio" id="radio6" name="reportReason" value="6" class="reportReasonRadio">
+			                			<label for="radio6">불쾌한 표현이 있습니다.</label>
+			                		</td>
+			              		</tr>
+			              		<tr>
+				                	<td>
+				                		<input type="radio" id="radio7" name="reportReason" value="7" class="reportReasonRadio">
+				                		<label for="radio7">개인정보 노출 게시물 입니다.</label>
+		                			</td>
+			              		</tr>
+			              		<tr>
+			                		<td style="border-bottom: none;">
+			                			<input type="radio" id="radio8" name="reportReason" value="8" class="reportReasonRadio">
+			                			<label for="radio8" style="padding-bottom: 5px;">기타</label>
+			                			<textarea class="free-control" name="" placeholder="기타 사유를 300자 이내로 입력해주세요."></textarea>
+			                		</td>
+			              		</tr>
+			            	</tbody>
+			            </table>
+			            <p style="text-align: center; margin: 0; color: #999;">신고하게 된 사유를 자세히 작성해주시면 관리자의 결정에 도움이 됩니다.</p>
+          			</div>
+        		</form>
+      		</div>
+      		
+      		<div class="modal-footer" style="display: flex; justify-content: center;">
+        		<button type="button" class="ssbtn" id="submitReport">신고하기</button>
+        		<button type="button" class="ssbtn" data-dismiss="modal">닫기</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
+
 <script type="text/javascript">
 $(function() {
     $('.reply').on('click', '.reply-dropdown', function() {
@@ -214,7 +321,6 @@ $(function() {
             $menu.fadeIn(100);
         }
     });
-
 
     $('.reply').on('click', function(evt) {
         if ($(evt.target).closest('.reply-dropdown').length) {
@@ -350,6 +456,7 @@ $(function() {
 		let memberLiked = $btn.parent('span').attr('data-memberLiked');
 		
 		if (memberLiked !== '-1') {
+			alert('댓글 공감 여부는 한번만 가능합니다.');
 			return false;
 		}
 		
@@ -374,12 +481,11 @@ $(function() {
 				$btn.parent('span').children().eq(0).find('span').html(likeCount);
 				$btn.parent('span').children().eq(1).find('span').html(disLikeCount);
 				
-				alert(state);
 				$btn.parent('span').attr('data-memberLiked', rplike);
 				if (rplike === '1') {
-					$btn.removeClass('likeColor').addClass('disLikeColor');
+					$btn.parent('span').children().eq(0).find('i').removeClass('bi-heart').addClass('bi-heart-fill disLikeColor');
 				} else {
-					$btn.removeClass('disLikeColor').addClass('likeColor');
+					$btn.parent('span').children().eq(1).find('i').removeClass('bi-heartbreak').addClass('bi-heartbreak-fill likeColor');
 				}
 				
 			} else if (state === 'liked') {

@@ -52,7 +52,10 @@
     <select id="findByAllCategorySmall" parameterType="map" resultType="com.sp.app.auction.vo.CategorySmall">
         SELECT CSN, CSC, CBN
         FROM CATEGORY_SMALL CS
-        WHERE CBN = #{cbn}
+        <if test="cbn != null and cbn != ''">
+            WHERE CBN = #{cbn}
+        </if>
+
     </select>
 
     <!--  분류에 맞는 카테고리 상품 가져옴  -->

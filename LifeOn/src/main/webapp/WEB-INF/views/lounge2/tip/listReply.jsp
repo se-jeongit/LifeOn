@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
 <div style="padding: 10px;">
-	<c:if test="${replyCount} != 0">
+	<c:if test="${replyCount == 1}">
 		<div class="reply-info" style="text-align: left; padding: 0px 5px 10px 5px;">
 			<span>[ 댓글목록, ${pageNo} / ${total_page} 페이지 ]</span>
 		</div>
@@ -51,11 +51,11 @@
 							<div style="display: flex; justify-content: flex-end; flex-wrap: wrap;">
 								<span data-memberLiked="${dto.memberLiked}" style="padding-right: 20px; cursor: pointer;">
 									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요" style="padding: 3px;">
-										<i class="bi ${dto.memberLiked == 0 ? 'bi-heart-fill likeColor':'bi-heart'}"></i>
+										<i class="bi ${dto.rplike == 1 ? 'bi-heart-fill disLikeColor':'bi-heart'}"></i>
 										<span>${dto.likeCount}</span>
 									</span>
 									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="0" title="싫어요" style="padding: 3px;">
-										<i class="bi ${dto.memberLiked == 0 ? 'bi-heartbreak-fill disLikeColor':'bi-heartbreak'}"></i>
+										<i class="bi ${dto.rplike == 0 && dto.rplike != -1 ? 'bi-heartbreak-fill likeColor':'bi-heartbreak'}"></i>
 										<span>${dto.disLikeCount}</span>
 									</span>	        
 								</span>
