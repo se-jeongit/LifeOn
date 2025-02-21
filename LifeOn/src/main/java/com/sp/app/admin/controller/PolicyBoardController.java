@@ -417,6 +417,9 @@ public class PolicyBoardController {
 			
 			List<PolicyReply> listReply = service.listReply(map);
 			
+			
+			
+			
 			String paging = paginateUtil.pagingMethod(
 					current_page, total_page, "listPage");
 			
@@ -435,6 +438,23 @@ public class PolicyBoardController {
 		}
 		
 		return "policy/listReply";
+	}
+	
+	//댓글 및 댓글의 답글 삭제 : AJAX-JSON
+	@ResponseBody
+	@PostMapping("deleteReply")
+	public Map<String, ?> deleteReply(@RequestParam Map<String, Object> paramMap) {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		try {
+			service.deleteReply(paramMap);
+			
+		} catch (Exception e) {
+			state = "false";
+		}
+		model.put("state", state);
+		return model;
 	}
 	
 	@GetMapping("listReplyAnswer")
@@ -518,7 +538,7 @@ public class PolicyBoardController {
 		}
 		
 		model.put("likeCount", likeCount);
-		model.put("dlisLikeCount", disLikeCount);
+		model.put("disLikeCount", disLikeCount);
 		model.put("state", state);
 		
 		return model;

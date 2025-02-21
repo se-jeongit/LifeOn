@@ -243,7 +243,29 @@ $(function() {
 	});
 })
 
-/* 
+//댓글 삭제
+$(function() {
+	$('.reply').on('click', '.deleteReply', function () {
+		if(! confirm('게시글을 삭제하시겠습니까?')) {
+			return false;
+		}
+		
+		let replyNum = $(this).attr('data-replyNum');
+		let page = $(this).attr('data-pageNo');
+		
+		let url = '${pageContext.request.contextPath}/policy/deleteReply';
+		let params = {replyNum:replyNum, mode:'reply'};
+		
+		const fn = function(data) {
+			listPage(page);
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+		
+	});
+});
+
+
 //댓글 좋아요/싫어요
 $(function() {
 	$('.reply').on('click', '.btnSendReplyLike', function() {
@@ -257,10 +279,11 @@ $(function() {
 		}
 		
 		let msg = '게시글이 마음에 들지 않습니까?';
+		
 		if(replyLike == '1') {
+			
 			msg = '게시글에 공감하십니까?';
 		}
-		
 		if(! confirm(msg)) {
 			return false;
 		}
@@ -268,11 +291,12 @@ $(function() {
 		let url = '${pageContext.request.contextPath}/policy/insertReplyLike';
 		let params = {replyNum:replyNum, replyLike:replyLike};
 		
+		
 		const fn = function(data) {
 			let state = data.state;
-			if(state === 'true') {
-				let likeCount == data.likeCount;
-				let disLikeCount == data.disLikeCount;
+			if(state == 'true') {
+				let likeCount = data.likeCount;
+				let disLikeCount = data.disLikeCount;
 				
 				$btn.parent('td').children().eq(0).find('span').html(likeCount);
 				$btn.parent('td').children().eq(1).find('span').html(disLikeCount);
@@ -293,7 +317,7 @@ $(function() {
 		ajaxRequest(url, 'post', params, 'json', fn);
 	});
 });
-*/
+
 
 
 //댓글별 답글 리스트 

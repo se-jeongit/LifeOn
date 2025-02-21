@@ -31,6 +31,7 @@ public interface PolicyBoardService {
 	public void insertReply(PolicyReply dto) throws Exception;
 	public int replyCount(Map<String, Object> map);
 	public List<PolicyReply> listReply(Map<String,Object> map);
+	public void deleteReply(Map<String, Object> map) throws Exception;
 	
 	
 	//댓글의 답글

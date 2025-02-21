@@ -235,12 +235,15 @@ public class PolicyBoardServiceImpl implements PolicyBoardService {
 			for(PolicyReply dto : list) {
 				
 				map.put("replyNum", dto.getReplyNum());
+				dto.setUserLiked(userReplyLike(map));
 			}
 		} catch (Exception e) {
 			log.info("listReply : ", e);
 		}
 		return list;
 	}
+	
+	
 
 	@Override
 	public List<PolicyReply> listReplyAnswer(Map<String, Object> map) {
@@ -301,6 +304,18 @@ public class PolicyBoardServiceImpl implements PolicyBoardService {
 			log.info("userReplyLiked : ", e);
 		}
 		return result;
+	}
+
+	@Override
+	public void deleteReply(Map<String, Object> map) throws Exception {
+		try {
+			mapper.deleteReply(map);
+			
+		} catch (Exception e) {
+			log.info("deleteReply : ", e);
+			
+			throw e;
+		}
 	}
 	
 

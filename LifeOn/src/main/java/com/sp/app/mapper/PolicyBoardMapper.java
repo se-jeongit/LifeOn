@@ -34,6 +34,7 @@ public interface PolicyBoardMapper {
 	public void insertReply(PolicyReply dto) throws SQLException;
 	public int replyCount(Map<String, Object> map);
 	public List<PolicyReply> listReply(Map<String, Object> map);
+	public void deleteReply(Map<String, Object> map) throws SQLException;
 	
 	
 	//댓글의 답글

@@ -143,6 +143,10 @@
       	VALUES (policy_board_reply_seq.NEXTVAL, #{psnum}, #{userId}, #{content}, SYSDATE, #{parentNum}, 1, 0)
       </insert>
       
+      <delete id="deleteReply" parameterType="map">
+      	DELETE FROM policy_board_reply
+      	WHERE replyNum = #{replyNum} 
+      </delete>
       
       <select id="replyCount" parameterType="map" resultType="Integer">
       	SELECT NVL(COUNT(*), 0)
@@ -198,7 +202,7 @@
       </insert>
       
       <select id="replyLikeCount" parameterType="map" resultType="map">
-      	SELECT COUNT(DECODE(replyLike,1,1)) likeCount,
+      	SELECT COUNT(DECODE(replyLike, 1, 1)) likeCount,
       		COUNT(DECODE(replyLike, 0, 1)) disLikeCount
       	FROM policy_reply_like
       	WHERE replyNum = #{replyNum}
@@ -207,7 +211,7 @@
       <select id="userReplyLiked" parameterType="map" resultType="Integer">
       	SELECT replyLike
       	FROM policy_reply_like
-      	WHERE replyNum=#{replyNum} AND userId = {userId}
+      	WHERE replyNum=#{replyNum} AND userId = #{userId}
       </select>
 	  
 </mapper>
