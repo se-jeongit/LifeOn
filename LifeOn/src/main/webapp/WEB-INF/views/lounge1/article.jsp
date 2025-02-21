@@ -10,7 +10,7 @@
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/photo.css" type="text/css">
 
 <style type="text/css">
 .body-container {
@@ -21,6 +21,8 @@
     justify-content: center; 
 }
 
+main section {width: 100% !important;}
+
 #content img {
     max-width: 100%; /* 부모 요소 크기를 넘지 않도록 */
     height: auto; /* 비율 유지 */
@@ -29,14 +31,25 @@
 }
 
 .freeForm {
-    height: 800px; /* 게시글 기본 높이 설정 */
+     min-height: 800px; /* 게시글 기본 높이 설정 */
+     margin: 0 auto; /* 좌우 여백 동일하게 설정 */
     
+}
+
+.freeForm p {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.freeForm img {
+    width: 50%;
+    display: flex;
 }
 
 #content {
     flex-grow: 1; /* 내용이 차지하는 공간을 균등하게 유지 */
     overflow-y: auto;
-    
 }
 
 </style>
@@ -77,7 +90,7 @@
 							
 							<tr>
     							<td colspan="2" valign="top" height="200" style="border-bottom: none;">
-							         <c:out value="${dto.content}" escapeXml="false" />
+							         ${dto.content}
 							    </td>
 							</tr>
 

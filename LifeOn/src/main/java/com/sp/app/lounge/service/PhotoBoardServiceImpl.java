@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.lounge.mapper.PhotoBoardMapper;
-import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.lounge.model.PhotoReply;
 
@@ -52,6 +51,8 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 
 		try {
 			list = mapper.listBoard(map);
+			
+			// 이미지 추추
 			
 		} catch (Exception e) {
 			log.info("listBoard : ", e);

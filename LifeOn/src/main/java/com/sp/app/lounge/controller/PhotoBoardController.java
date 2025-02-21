@@ -202,7 +202,7 @@ public class PhotoBoardController {
 			
 			PhotoBoard dto = Objects.requireNonNull(service.findById(map));
 			
-			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+			// dto.setContent(myUtil.htmlSymbols(dto.getContent())); 엔터를 <Br>로 , 스마트 에디터 사용하므로 (태그보임)
 
 			map.put("schType", schType);
 			map.put("kwd", kwd);
