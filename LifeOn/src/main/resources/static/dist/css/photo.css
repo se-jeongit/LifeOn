@@ -99,6 +99,8 @@ h1, h2, h3, h4, h5, h6, p, a, b {
 
 .page-navigation .pagination .page-link:focus {
     box-shadow: none;
+<<<<<<< HEAD
+=======
 }
 
 /* free.css 코드 */
@@ -384,4 +386,5 @@ h1, h2, h3, h4, h5, h6, p, a, b {
 
 .disLikeColor {
 	color: #db5151;
+>>>>>>> ac55d03 (커밋)
 }

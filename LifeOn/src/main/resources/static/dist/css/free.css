@@ -5,6 +5,10 @@
 	height: 150px;
 	background: #222;
 	color: #FFF;
+<<<<<<< HEAD
+	margin-bottom: 60px;
+=======
+>>>>>>> ac55d03 (커밋)
 	
 	display: flex;
 	justify-content: center;
@@ -49,10 +53,13 @@
 .main_content {
 	width: 40%;
 	padding: 20px;
+<<<<<<< HEAD
+=======
 	margin: 60px 0px;
 	
 	border: 1px solid #e9e9e9;
 	border-radius: 8px;
+>>>>>>> ac55d03 (커밋)
 	
 	display: inline-table;
 }
@@ -63,7 +70,10 @@
 	align-items: center;
 	justify-content: space-between;
 	flex-wrap: wrap;
+<<<<<<< HEAD
+=======
 	margin-bottom: 8px;
+>>>>>>> ac55d03 (커밋)
 }
 
 .sidebar {
@@ -81,7 +91,11 @@
 	padding: 20px;
 	border-radius: 8px;
 	border: 1px solid #e0e0e0;
+<<<<<<< HEAD
+	margin: 80px 20px 20px 20px;
+=======
 	margin: 60px 20px 20px 20px;
+>>>>>>> ac55d03 (커밋)
 }
 
 .leftBox {
@@ -90,7 +104,11 @@
 	padding: 20px;
 	border-radius: 8px;
 	border: 1px solid #e0e0e0;
+<<<<<<< HEAD
+	margin: 80px 20px 20px 20px;
+=======
 	margin: 60px 20px 20px 20px;
+>>>>>>> ac55d03 (커밋)
 	
 	/* position: sticky;
     top: 150px; */
@@ -98,8 +116,13 @@
 
 .searchBox {
 	width: 150px;
+<<<<<<< HEAD
+	padding: 5px 10px;
+	border: 1px solid #e0e0e0;
+=======
 	padding: 6px 8px;
 	border: 1px solid #999;
+>>>>>>> ac55d03 (커밋)
 	border-right: none;
 	border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
@@ -142,15 +165,22 @@
 }
 
 .mybtn {
+<<<<<<< HEAD
+	width: 50px;
+	border: 1px solid #e0e0e0;
+=======
 	background: #fff;
 	padding: 6px 8px;
 	border: 1px solid #999;
+>>>>>>> ac55d03 (커밋)
 	border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 	border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
 }
 
+<<<<<<< HEAD
+=======
 .mybtn:hover {
 	background: #f8f9fa;
 }
@@ -162,6 +192,7 @@
 	margin-right: 2px;
 }
 
+>>>>>>> ac55d03 (커밋)
 /* .top_btn {
 	border: 1px solid #e0e0e0;
 	background: #fff;
@@ -178,6 +209,10 @@
 } */
 
 /* 페이징 */
+<<<<<<< HEAD
+.page-navigation .pagination {
+    background-color: #FFF;
+=======
 .page-navigation {
 	padding: 0;
 }
@@ -186,6 +221,7 @@
     background-color: #FFF;
     margin: 0;
     padding-top: 20px;
+>>>>>>> ac55d03 (커밋)
 }
 
 .page-navigation .pagination .page-item {
@@ -213,6 +249,15 @@
     box-shadow: none;
 }
 
+<<<<<<< HEAD
+.freeForm {
+	border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+=======
+>>>>>>> ac55d03 (커밋)
 .free-control {
 	border: 1px solid #e0e0e0;
 	border-radius: 4px;
@@ -269,6 +314,8 @@
 .board-article {
 	text-align: left;
 	vertical-align: middle;
+<<<<<<< HEAD
+=======
 }
 
 .reply-menu-item {
@@ -301,4 +348,5 @@
 
 label {
   cursor: pointer;
+>>>>>>> ac55d03 (커밋)
 }

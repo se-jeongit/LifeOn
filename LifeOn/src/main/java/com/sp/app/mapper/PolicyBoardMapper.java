@@ -4,12 +4,18 @@ package com.sp.app.mapper;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD
+=======
 import java.util.Optional;
+>>>>>>> ac55d03 (커밋)
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.sp.app.model.PolicyBoard;
+<<<<<<< HEAD
+=======
 import com.sp.app.model.PolicyReply;
+>>>>>>> ac55d03 (커밋)
 
 @Mapper
 public interface PolicyBoardMapper {
@@ -30,6 +36,8 @@ public interface PolicyBoardMapper {
 	public int boardLikeCount(long num);
 	public PolicyBoard userBoardLike(Map<String, Object> map);
 	
+<<<<<<< HEAD
+=======
 	
 	public void insertReply(PolicyReply dto) throws SQLException;
 	public int replyCount(Map<String, Object> map);
@@ -47,4 +55,5 @@ public interface PolicyBoardMapper {
 	public Optional<Integer> userReplyLiked(Map<String,Object> map);
 	
 	
+>>>>>>> ac55d03 (커밋)
 }
