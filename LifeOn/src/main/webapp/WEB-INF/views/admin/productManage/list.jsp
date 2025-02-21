@@ -79,13 +79,13 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const tabs = document.querySelectorAll(".status-tabs a");
-        tabs.forEach(tab => {
+        /* tabs.forEach(tab => {
             tab.addEventListener("click", function(e) {
                 e.preventDefault();
                 tabs.forEach(t => t.classList.remove("active"));
                 this.classList.add("active");
             });
-        });
+        }); */
     });
 </script>
 </head>
@@ -100,12 +100,14 @@
     <div class="container">
         <h2>공동구매 상품목록</h2>
 		<div class="status-tabs">
-		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=all" class="${schType=='all'?'active':''}">전체</a>
-		    <a href="${pageContext.request.contextPath}/admin/productManage/list" class="${schType=='a'?'active':''}">진행전</a>
+		    <a href="<c:url value='/admin/productManage/list?schType=all'/>" class="${schType=='all'?'active':''}">전체</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=a" class="${schType=='a'?'active':''}">진행전</a>
 		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=b" class="${schType=='b'?'active':''}">진행중</a>
 		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=c" class="${schType=='c'?'active':''}">구매성공</a>
 		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=d" class="${schType=='d'?'active':''}">구매실패</a>
 		</div>
+		
+
 
         <table class="table">
             <thead>
