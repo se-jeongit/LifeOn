@@ -84,7 +84,19 @@
             			<td>${dto.ptsc}</td>
             			<td>${dto.cbc} / ${dto.csc}</td>
             			<td>${dto.ptsq}</td>
-            			<td><button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'" class="btn btn-primary mt-3">공동구매 등록</button></td>         		
+            			<td>
+						    <c:choose>
+						        <c:when test="${dto.asRegister == 'Y'}">
+						            <!-- 공동구매 상품 등록이 되어있는 경우 -->
+						            <button type="button" class="btn btn-secondary" disabled>등록 완료</button>
+						            <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/list'" class="btn btn-info">상품 보러가기</button>
+						        </c:when>
+						        <c:otherwise>
+						            <!-- 공동구매 상품 등록 미완료인 경우 -->
+						            <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register?pnum=${dto.pnum}&ptsq=${dto.ptsq}'" class="btn btn-primary mt-3">공동구매 등록</button>
+						        </c:otherwise>
+						    </c:choose>
+						</td>
             		</tr>
             	</c:forEach>
             </tbody>

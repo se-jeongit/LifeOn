@@ -52,41 +52,44 @@
     <div class="container">
         <h2>공동구매 상품 등록</h2>
         
-        <form action="/product/register" method="post" enctype="multipart/form-data">
+        <form name="productForm" method="post">
            
             <div class="form-group">
-                <label for="productQuantity">상품 원가</label>
-                <input type="number" id="productQuantity" name="productQuantity" required>
+                <label for="ptp">상품 원가</label>
+                <input type="number" id="ptp" name="ptp" required>
             </div>
             
             <div class="form-group">
-                <label for="productQuantity">상품 할인가</label>
-                <input type="number" id="productQuantity" name="productQuantity" required>
+                <label for="ptsp">상품 할인가</label>
+                <input type="number" id="ptsp" name="ptsp" required>
             </div>
            
            
            
             <div class="form-group">
-                <label for="productQuantity">상품 수량</label>
-                <input type="number" id="productQuantity" name="productQuantity" required>
+                <label for="ptq">상품 수량</label>
+                <input type="number" id="ptq" name="ptq" required>
             </div>
 
             <div class="form-group">
-                <label for="startDate">판매 시작일</label>
-                <input type="date" id="startDate" name="startDate" required>
+                <label for="ptsd">판매 시작일</label>
+                <input type="date" id="ptsd" name="ptsd" required>
             </div>
 
             <div class="form-group">
-                <label for="endDate">판매 종료일</label>
-                <input type="date" id="endDate" name="endDate" required>
+                <label for="pted">판매 종료일</label>
+                <input type="date" id="pted" name="pted" required>
             </div>
 
             <div class="form-group">
-                <label for="expectedShippingDate">예상 발송일</label>
-                <input type="date" id="expectedShippingDate" name="expectedShippingDate" required>
+                <label for="ptdd">예상 발송일</label>
+                <input type="date" id="ptdd" name="ptdd" required>
             </div>
-
-            <button type="submit" id="submitBtn" class="btn">상품 등록</button>
+			
+			<input type="hidden" id="pnum" name="pnum" value="${pnum}">
+			<input type="hidden" id="ptsq" name="ptsq" value="${ptsq}">  
+			
+            <button type="button" class="btn" onclick="productRegister();">상품 등록</button>
         </form>
     </div>
 </main>
@@ -96,6 +99,25 @@
 </footer>
 
 <jsp:include page="/WEB-INF/views/admin/layout/footerResources.jsp"/>
+
+<script type="text/javascript">
+function productRegister(){
+	const f = document.productForm;
+	
+    let stock = parseInt(document.getElementById("ptsq").value);  // 현재 재고량
+    let quantity = parseInt(document.getElementById("ptq").value); // 입력된 공동구매 수량
+
+    if (quantity > stock) {
+        alert("공동구매 수량이 현재 재고보다 많을 수 없습니다.");
+        quantityInput.focus();
+    }
+	
+	
+    f.action = '${pageContext.request.contextPath}/admin/productManage/register';
+    f.submit();	
+}
+
+</script>
 
 
 </body>

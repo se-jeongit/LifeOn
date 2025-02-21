@@ -110,52 +110,44 @@
             <thead>
                 <tr>
                     <th>번호</th>
+                    <th>상태</th>
                     <th>공구기간</th>
-                    <th>상품명</th>
+                    <th>상품</th>
                     <th>목표수량</th>
                     <th>판매수량</th>
                     <th>비고</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>196</td>
-                    <td>진행중<br>2017-11-15</td>
-                    <td>
-                        <img src="${pageContext.request.contextPath}/dist/images/profile.png" alt="상품 이미지" style="width:100px; height:100px;">
-                        나이키 운동화<br>
-                        판매가격 : 1,000원
-                    </td>
-                    <td>10개</td>
-                    <td>0개</td>
-                    <td>
-                        등록일 : 2016-07-28<br>
-                        종료일 : 2017-11-15<br>
-                        <button class="btn btn-order">주문보기</button>
-                        <button class="btn btn-edit">수정</button>
-                        <button class="btn btn-delete">삭제</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>17</td>
-                    <td>[공동구매실패]</td>
-                    <td>
-                        <img src="${pageContext.request.contextPath}/dist/images/profile.png" alt="이미지 준비중" style="width:100px; height:100px;">
-                        test<br>
-                        판매가격 : 8,000원
-                    </td>
-                    <td>1개</td>
-                    <td>0개</td>
-                    <td>
-                        등록일 : 2011-03-01<br>
-                        종료일 : 2016-12-29<br>
-                        <button class="btn btn-order">주문보기</button>
-                        <button class="btn btn-edit">수정</button>
-                        <button class="btn btn-delete">삭제</button>
-                    </td>
-                </tr>
+            	<c:forEach var="dto" items="${list}" varStatus="status">
+            		<tr>
+            			<td>${dataCount - (page-1) * size - status.index}</td>
+            			<td>[진행중]</td>
+            			<td>
+            				시작일 : ${dto.ptsd}<br>
+            				종료일 : ${dto.pted}<br>
+            				예상발송일 : ${dto.ptdd}
+            			</td>
+            			<td>
+            				<img src="${pageContext.request.contextPath}/uploads/product/${dto.pph}" alt="상품 이미지" width="50">
+            				<br>${dto.pname}
+            				<br>원가 : ${dto.ptp}
+            				<br>할인가 : ${dto.ptsp}
+            			</td>
+            			<td>${dto.ptq}</td>
+            			<td>0개</td>
+            			<td>
+            				<button class="btn btn-order">상세보기</button>
+                        	<button class="btn btn-edit">판매완료</button>
+                        	<button class="btn btn-delete">마감처리</button>
+            			</td>
+            		</tr>
+            	</c:forEach>
             </tbody>
         </table>
+        <div class="page-navigation">
+			${dataCount == 0 ? "포인트 내역이 없습니다" : paging}
+		</div>
     </div>
 </main>
 
