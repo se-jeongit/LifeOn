@@ -201,14 +201,14 @@
 	<select id="listReply" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
 		SELECT r.rpnum, r.rpcontent, r.rpreg_date, r.ps_num, rpblind, r.num, m.nickname, m.profile_image,
 			NVL(likeCount, 0) likeCount,
-			NVL(disLikeCount, 0) disLikeCount
+			NVL(disLikeCount, 0) disLikeCount, COALESCE(rplike, -1) rplike
 		FROM HYBRID_BOARD_REPLY r
 		JOIN member m ON r.num = m.num
 		LEFT OUTER JOIN (
-			SELECT rpnum, COUNT(DECODE(rplike, 1, 1)) likeCount,
+			SELECT rpnum, rplike, COUNT(DECODE(rplike, 1, 1)) likeCount,
 				COUNT(DECODE(rplike, 0, 1)) disLikeCount
 			FROM HYBRID_BOARD_LIKE
-			GROUP BY rpnum
+			GROUP BY rpnum, rplike
 		) c ON r.rpnum = c.rpnum
 		WHERE r.ps_num = #{psnum} AND r.rpblind = 0
 		ORDER BY r.rpnum DESC
@@ -232,7 +232,7 @@
 	</select>
 	
 	<select id="memberReplyLiked" parameterType="map" resultType="Integer">
-		SELECT rpnum, num
+		SELECT rpnum, num, rplike
 		FROM HYBRID_BOARD_LIKE
 		WHERE rpnum = #{rpnum} AND num = #{num}
 	</select>
