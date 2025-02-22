@@ -35,9 +35,8 @@ public class PhotoBoard {
 	private String rpcontent; 
 	private String rpreg_date; 
 	private int rpblind; // 0: Default, 1: 블라인드처리
-	private int rplike;
-	
-	private int replyLike; 
+	private int rplike; // 0 싫어요 1 좋아요
+	 
 	private int likeCount;
 	private int disLikeCount;
 	

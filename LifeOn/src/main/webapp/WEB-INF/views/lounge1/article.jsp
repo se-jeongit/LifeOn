@@ -166,31 +166,31 @@ main section {width: 100% !important;}
 					
 					<div class="reply">
 						<form name="replyForm" method="post">
-							<div class="form-header" style="text-align: left; padding: 8px 15px;">
-								<span class="bold">댓글 ${dto.replyCount}</span>
-							</div>
+						
 							
 							<table class="table table-borderless reply-form">
 								<tr>
 									<td>
-										<textarea class="free-control" name="rpcontent"></textarea>
+									<div class="form-header" style="text-align: left; padding: 10px 5px;">
+										<span class="bold">댓글 ${dto.replyCount}개</span>
+									</div>
+										<textarea class="free-control" name="rpcontent" placeholder="칭찬과 격려의 댓글은 작성자에게 큰 힘이 됩니다! 😊" style="background: #fdfeff; height: 100px;"></textarea>
 									</td>
 								</tr>
 								<tr>
 								   <td align="right">
-										<button type="button" class="btn btn-light btnSendReply">댓글 등록</button>
+										<button type="button" class="ssbtn btnSendReply">댓글등록</button>
 									</td>
 								 </tr>
 							</table>
 						</form>
-		
+						
 						<div id="listReply"></div>
 					</div>
 				</div>
 			</div>
 
 			
-		</div>
 
 
 </main>
@@ -206,6 +206,30 @@ main section {width: 100% !important;}
 		}
 	</script>
 </c:if>
+
+<script type="text/javascript">
+$(function() {
+    $('.reply').on('click', '.reply-dropdown', function() {
+        const $menu = $(this).next('.reply-menu');
+
+        if ($menu.is(':visible')) {
+            $menu.fadeOut(100);
+        } else {
+            $('.reply-menu').fadeOut(100);
+            $menu.fadeIn(100);
+        }
+    });
+
+    $('.reply').on('click', function(evt) {
+        if ($(evt.target).closest('.reply-dropdown').length) {
+            return false;
+        }
+        
+        $('.reply-menu').fadeOut(100);
+    });
+});
+</script>
+
 
 <script type="text/javascript">
 $(function() {
@@ -245,6 +269,134 @@ $(function() {
 		ajaxRequest(url, 'post', params, 'json', fn);
 	});
 });
+
+$(function() {
+	listPage(1);
+});
+
+function listPage(page) {
+	let url = '${pageContext.request.contextPath}/lounge1/{bdtype}/listReply';
+	let rpnum = '${dto.rpnum}';
+	let psnum = '${dto.psnum}';
+	let params = {rpnum: rpnum, pageNo: page, psnum: psnum};
+	
+	const fn = function(data) {
+		$('#listReply').html(data);
+	};
+	
+	ajaxRequest(url, 'get', params, 'text', fn);
+}
+
+$(function(){
+	$('.btnSendReply').click(function(){
+		let rpnum = '${dto.rpnum}';
+		let psnum = '${dto.psnum}';
+		let num = '${dto.num}';
+		const $tb = $(this).closest('table');
+		
+		let rpcontent = $tb.find('textarea').val().trim();
+		if(! rpcontent) {
+			alert('댓글 내용을 입력하세요.');
+			$tb.find('textarea').focus();
+			return false;
+		}
+		
+		if(rpcontent.length > 300) {
+			alert('300자 이하 댓글만 등록 가능합니다.');
+			$tb.find('textarea').focus();
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/lounge1/{bdtype}/reply';
+		let params = {rpnum: rpnum, rpcontent: rpcontent, psnum: psnum, num: num};
+		
+		const fn = function(data) {
+			$tb.find('textarea').val('');
+			
+			let state = data.state;
+			if(state === 'true') {
+				listPage(1);
+			} else {
+				alert('댓글을 추가하지 못했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+		
+	});
+});
+
+$(function() {
+	$('.reply').on('click', '.deleteReply', function() {	
+		if (! confirm('댓글을 삭제하시겠습니까?')) {
+			return false;
+		}
+		
+		let rpnum = $(this).attr('data-replyNum');
+		let page = $(this).attr('data-pageNo');
+		
+		let url = '${pageContext.request.contextPath}/lounge1/{bdtype}/deleteReply';
+		let params = {rpnum: rpnum, mode: 'reply'};
+		
+		const fn = function(data) {
+			listPage(page);
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);		
+	});
+});
+
+$(function() {
+	$('.reply').on('click', '.btnSendReplyLike', function() {	
+		const $btn = $(this);
+		let rpnum = $btn.attr('data-replyNum');
+		let rplike = $btn.attr('data-replyLike');
+		let memberLiked = $btn.parent('span').attr('data-memberLiked');
+		
+		if (memberLiked !== '-1') {
+			alert('댓글 공감 여부는 한번만 가능합니다.');
+			return false;
+		}
+		
+		let msg = '이 댓글이 싫으신가요?';
+		if (rplike === '1') {
+			msg = '이 댓글에 공감하시나요?';
+		}
+		
+		if (! confirm(msg)) {
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/lounge1/{bdtype}/replyLike';
+		let params = {rpnum: rpnum, rplike: rplike};
+		
+		const fn = function(data) {
+			let state = data.state;
+			if (state === 'true') {
+				let likeCount = data.likeCount;
+				let disLikeCount = data.disLikeCount;
+				
+				$btn.parent('span').children().eq(0).find('span').html(likeCount);
+				$btn.parent('span').children().eq(1).find('span').html(disLikeCount);
+				
+				$btn.parent('span').attr('data-memberLiked', rplike);
+				if (rplike === '1') {
+					$btn.parent('span').children().eq(0).find('i').removeClass('bi-heart').addClass('bi-heart-fill disLikeColor');
+				} else {
+					$btn.parent('span').children().eq(1).find('i').removeClass('bi-heartbreak').addClass('bi-heartbreak-fill likeColor');
+				}
+				
+			} else if (state === 'liked') {
+				alert('공감 여부는 한번만 가능합니다.');
+			} else {
+				alert('댓글 공감 여부 처리가 실패했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+});
+
 
 </script>
 

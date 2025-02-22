@@ -1,5 +1,6 @@
 package com.sp.app.lounge.controller;
 
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import com.sp.app.model.SessionInfo;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -299,6 +301,135 @@ public class PhotoBoardController {
 		
 		model.put("state", state);
 		model.put("boardLikeCount", boardLikeCount);
+		
+		return model;
+	}
+	
+	@PostMapping("{bdtype}/reply")
+	@ResponseBody
+	public Map<String, Object> reply(@PathVariable(name = "bdtype") String bdtype,
+			PhotoBoard dto, HttpSession session) {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			dto.setNum(info.getNum());
+			dto.setPsnum(dto.getPsnum());
+			service.reply(dto);
+			
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
+		
+		return model;
+	}
+		
+	@GetMapping("{bdtype}/listReply")
+	public String listReply(@PathVariable(name = "bdtype") String bdtype,
+			PhotoBoard dto, @RequestParam(name = "rpnum") long num,
+			@RequestParam(name = "pageNo", defaultValue = "1") int current_page,
+			Model model,
+			HttpServletResponse resp,
+			HttpSession session) throws Exception {
+		
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			int size = 5;
+			int total_page = 0;
+			int dataCount = 0;
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("rpnum", num);
+			map.put("psnum", dto.getPsnum());
+			map.put("rplike", dto.getRplike());
+			map.put("num", info.getNum());
+			map.put("nickname", info.getNickName());
+			
+			dataCount = service.replyCount(map);
+			total_page = paginateUtil.pageCount(dataCount, size);
+			current_page = Math.min(current_page, total_page);
+			
+			int offset = (current_page - 1) * size;
+			if (offset < 0) offset = 0;
+			
+			map.put("offset", offset);
+			map.put("size", size);
+			
+			List<PhotoBoard> listReply = service.listReply(map);
+			
+			String paging = paginateUtil.pagingMethod(current_page, total_page, "listPage");
+			
+			model.addAttribute("listReply", listReply);
+			model.addAttribute("pageNo", current_page);
+			model.addAttribute("replyCount", dataCount);
+			model.addAttribute("total_page", total_page);
+			model.addAttribute("paging", paging);
+			
+		} catch (Exception e) {
+			log.info("listReply : ", e);
+			
+			resp.sendError(406);
+			throw e;
+		}
+		
+		return "lounge1/{bdtype}/listReply";
+	}
+	
+	@ResponseBody
+	@PostMapping("{bdtype}/deleteReply")
+	public Map<String, ?> deleteReply(@PathVariable(name = "bdtype") String bdtype,
+		@RequestParam Map<String, Object> paramMap) {
+		Map<String , Object> model = new HashMap<>();
+		
+		String state = "true";
+		try {
+			service.deleteReply(paramMap);
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	@ResponseBody
+	@PostMapping("{bdtype}/replyLike")
+	public Map<String, ?> insertReplyLike(@PathVariable(name = "bdtype") String bdtype,
+			@RequestParam Map<String, Object> paramMap,
+			HttpSession session) {
+		
+		Map<String , Object> model = new HashMap<>();
+		
+		String state = "true";
+		int likeCount = 0;
+		int disLikeCount = 0;
+		
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			paramMap.put("num", info.getNum());
+			service.replyLike(paramMap);
+			
+			// 좋아요 / 싫어요 개수
+			Map<String, Object> countMap = service.replyLikeCount(paramMap);
+			likeCount = ((BigDecimal)countMap.get("LIKECOUNT")).intValue();
+			disLikeCount = ((BigDecimal)countMap.get("DISLIKECOUNT")).intValue();
+			
+		} catch (DuplicateKeyException e) {
+			state = "liked";
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("likeCount", likeCount);
+		model.put("disLikeCount", disLikeCount);
+		model.put("state", state);
 		
 		return model;
 	}

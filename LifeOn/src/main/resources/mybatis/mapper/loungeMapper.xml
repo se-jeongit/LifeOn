@@ -14,12 +14,18 @@
 				(INSTR(subject, #{kwd}) &gt; 0
 			    	OR DBMS_LOB.INSTR(content, #{kwd}) &gt; 0 )
 			</when>
-			<when test="schType == 'reg_date'">
-				(TO_CHAR(reg_date, 'YYYY-MM-DD') = #{kwd}
-			    	OR TO_CHAR(reg_date, 'YYYYMMDD') = #{kwd})
+			<when test="schType == 'nickname'">
+				INSTR(nickname, #{kwd}) &gt; 0
+			</when>
+			<when test="schType == 'subject'">
+				INSTR(subject, #{kwd}) &gt; 0
 			</when>
 			<when test="schType == 'content'">
 				DBMS_LOB.INSTR(content, #{kwd}) &gt; 0
+			</when>
+			<when test="schType == 'reg_date'">
+				(TO_CHAR(reg_date, 'YYYY-MM-DD') = #{kwd}
+			    	OR TO_CHAR(reg_date, 'YYYYMMDD') = #{kwd})
 			</when>
 			<otherwise>
 				INSTR(${schType}, #{kwd}) &gt; 0
@@ -50,6 +56,11 @@
 			WHERE rpblind = 0
 			GROUP BY rpnum, ps_num, rpblind
 		) c ON hb.psnum = c.ps_num
+		LEFT OUTER JOIN (
+			SELECT psnum, COUNT(*) boardLikeCount
+			FROM HYBRID_BOARD_FAV
+			GROUP BY psnum
+		) b ON hb.psnum = b.psnum
 		<where>
 			<if test="kwd != null and kwd != ''">
 				<include refid="mySql"/>
@@ -64,6 +75,12 @@
 		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, hb.blind, bdtype
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
+		LEFT OUTER JOIN (
+			SELECT COUNT(*) replyCount, ps_num, rpblind
+			FROM HYBRID_BOARD_REPLY
+			WHERE rpblind = 0
+			GROUP BY ps_num, rpblind
+		) r ON hb.psnum = r.ps_num
 		LEFT OUTER JOIN (
 			SELECT psnum, COUNT(*) boardLikeCount
 			FROM HYBRID_BOARD_FAV

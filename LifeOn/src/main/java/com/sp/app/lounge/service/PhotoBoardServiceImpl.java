@@ -10,7 +10,6 @@ import com.sp.app.common.MyUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.lounge.mapper.PhotoBoardMapper;
 import com.sp.app.lounge.model.PhotoBoard;
-import com.sp.app.lounge.model.PhotoReply;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -228,47 +227,97 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 		
 		return result;
 	}
-
+	
 	@Override
-	public int replyCount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return 0;
+	public void reply(PhotoBoard dto) throws Exception {
+		try {
+			mapper.reply(dto);
+		} catch (Exception e) {
+			log.info("reply : ", e);
+			
+			throw e;
+		}
 	}
 
 	@Override
-	public List<PhotoReply> listReply(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public int replyCount(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = mapper.replyCount(map);
+		} catch (Exception e) {
+			log.info("replyCount : ", e);
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<PhotoBoard> listReply(Map<String, Object> map) {
+		List<PhotoBoard> list = null;
+		
+		try {
+			list = mapper.listReply(map);
+			
+			for (PhotoBoard dto : list) {
+				dto.setRpcontent(myUtil.htmlSymbols(dto.getRpcontent()));
+				
+				map.put("rpnum", dto.getRpnum());
+				map.put("psnum", dto.getPsnum());
+				dto.setNickname(dto.getNickname());
+				dto.setMemberLiked(memberReplyLiked(map));
+			}
+			
+		} catch (Exception e) {
+			log.info("listReply : ", e);
+		}
+		
+		return list;
+	}
+	
+	protected int memberReplyLiked(Map<String, Object> map) {
+		int result = -1;
+		
+		try {
+			result = mapper.memberReplyLiked(map).orElse(-1);
+		} catch (Exception e) {
+			log.info("userReplyLiked : ", e);
+		}
+		
+		return result;
 	}
 
 	@Override
 	public void deleteReply(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			mapper.deleteReply(map);
+		} catch (Exception e) {
+			log.info("deleteReply : ", e);
+			
+			throw e;
+		}
 	}
 
 	@Override
 	public void replyLike(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			mapper.replyLike(map);
+		} catch (Exception e) {
+			log.info("replyLike : ", e);
+			
+			throw e;
+		}
 	}
 
 	@Override
 	public Map<String, Object> replyLikeCount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void updateReplyShowHide(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
+		Map<String, Object> countMap = null;
 		
+		try {
+			countMap = mapper.replyLikeCount(map);
+		} catch (Exception e) {
+			log.info("replyLikeCount : ", e);
+		}
+		return countMap;
+		}
 	}
-
-	@Override
-	public void reply(PhotoReply dto) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-}

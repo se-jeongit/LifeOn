@@ -7,9 +7,7 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.model.PhotoBoard;
-import com.sp.app.lounge.model.PhotoReply;
 
 @Mapper
 public interface PhotoBoardMapper {
@@ -36,9 +34,9 @@ public interface PhotoBoardMapper {
 	public int boardLikeCount(long num);
 	public PhotoBoard memberBoardLiked(Map<String, Object> map);
 	
-	public void reply(PhotoReply dto) throws Exception;
+	public void reply(PhotoBoard dto) throws Exception;
 	public int replyCount(Map<String, Object> map);
-	public List<PhotoReply> listReply(Map<String, Object> map);
+	public List<PhotoBoard> listReply(Map<String, Object> map);
 	public void deleteReply(Map<String, Object> map) throws Exception;
 	
 	public void replyLike(Map<String, Object> map) throws Exception;
