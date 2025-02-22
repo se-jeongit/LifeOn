@@ -31,6 +31,12 @@ function check() {
         f.subject.focus();
         return false;
     }
+    
+	if(f.subject.length > 300) {
+		alert('제목은 30자 이하만 가능합니다.');
+		f.subject.focus();
+		return false;
+	}
 
     str = f.content.value.trim();
     if( !str || str === '<p><br></p>') {
@@ -38,6 +44,12 @@ function check() {
         f.content.focus();
         return false;
     }
+    
+	if(f.content.length > 300) {
+		alert('내용은 약 1300자 이하만 가능합니다.');
+		f.content.focus();
+		return false;
+	}
 
     f.action = '${pageContext.request.contextPath}/lounge2/tip/${mode}';
     f.submit();
@@ -61,7 +73,7 @@ function check() {
 				</div>
 			</aside>
 			
-			<div class="main_content" style="margin-top: 60px;">
+			<div class="main_content">
 				<form name="freeForm" class="freeForm" method="post" enctype="multipart/form-data">
 					<table class="table write-form">
 						<tr>

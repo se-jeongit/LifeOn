@@ -147,8 +147,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			}
 			
 			FreeBoard dto = findById(num);
-			if (dto == null || (grade < 51 && ! dto.getNickname().equals(nickname))) {
-				return;
+			if (dto == null || (grade < 1 && !dto.getNickname().equals(nickname))) {
+			    return;
 			}
 			
 			Map<String, Object> map = new HashMap<String, Object>();

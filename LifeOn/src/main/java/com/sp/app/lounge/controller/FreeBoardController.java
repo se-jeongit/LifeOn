@@ -184,11 +184,14 @@ public class FreeBoardController {
 			FreeBoard prevDto = service.findByPrev(map);
 			FreeBoard nextDto = service.findByNext(map);
 			
+			List<FreeBoard> list2 = service.listBoard(map);
 			List<FreeBoard> listFile = service.listFile(num);
 			
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
 			map.put("num", info.getNum());
 			boolean isMemberLiked = service.isMemberBoardLiked(map);
+			
+			model.addAttribute("list2", list2);
 			
 			model.addAttribute("dto", dto);
 			model.addAttribute("prevDto", prevDto);

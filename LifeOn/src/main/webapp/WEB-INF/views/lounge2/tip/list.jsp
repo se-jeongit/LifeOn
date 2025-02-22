@@ -54,13 +54,74 @@ function elapsedText(date) {
     	<h3 style="margin: 0px;">생활의 도움을 받아볼까?</h3>
 	</div>
 	
+	<div style="display: flex; justify-content: center; margin-top: 30px;">
+	   	<div>
+		   	<form name="searchForm" style="display: inline-flex; align-items: center;">
+				<select name="schType" class="myselect">
+					<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
+					<option value="nickname" ${schType=="nickname"?"selected":""}>작성자</option>
+					<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
+					<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
+					<option value="content" ${schType=="content"?"selected":""}>내용</option>
+				</select>
+				<!-- 검색상자 -->
+				<input type="search" name=kwd value="${kwd}" class="searchBox" placeholder="검색어를 입력해주세요.">
+				<!-- 검색버튼 -->
+		   		<button class="mybtn" style="margin-right: 2px;" onclick="searchList();">검색&nbsp;<i class="bi bi-search"></i></button>
+			   	<!-- 새로고침 버튼 -->
+				<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';" title="새로고침">초기화&nbsp;<i class="bi bi-arrow-repeat"></i></button>
+	   		</form>
+		</div>
+	</div>
+	
 	<div class="body-container">
 		<div class="body-content">
 			<aside class="sidenav">
-				<div class="leftBox">
-					<p>❤️최신순❤️</p>
-					<p>❤️조회순❤️</p>
-					<p>❤️즐겨찾기순❤️</p>
+				<div class="leftBox" style="margin-bottom: 10px;">
+					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+						조회순
+					</div>
+					
+					<table class="table table-hover" style="table-layout: fixed;">
+						<c:forEach var="dto" items="${list}" varStatus="status">
+		              		<tr>
+								<td style="padding: 10px 25px; word-wrap: break-word;">
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
+									</div>
+									<div style="display: flex; align-items: center;">
+										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+										</div>
+										<span>${dto.nickname}</span>
+									</div>
+								</td>
+		              		</tr>
+						</c:forEach>
+		            </table>
+				</div>
+				<div class="leftBox" style="margin-top: 0px;">
+					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+						댓글순
+					</div>
+					
+					<table class="table table-hover" style="table-layout: fixed;">
+						<c:forEach var="dto" items="${list}" varStatus="status">
+		              		<tr>
+								<td style="padding: 10px 25px; word-wrap: break-word;">
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
+									</div>
+									<div style="display: flex; align-items: center;">
+										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+										</div>
+										<span>${dto.nickname}</span>
+									</div>
+								</td>
+		              		</tr>
+						</c:forEach>
+		            </table>
 				</div>
 			</aside>
 			
@@ -70,78 +131,63 @@ function elapsedText(date) {
 				   	<div>
 				   		<p style="font-size: 16px; margin: 0;">총 게시글 ${dataCount}개 (${page} / ${total_page} 페이지)</p>
 			   		</div>
-				   	<div style="display: flex;">
-					   	<form name="searchForm" style="display: inline-flex; align-items: center;">
-							<select name="schType" class="myselect">
-								<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
-								<option value="nickname" ${schType=="nickname"?"selected":""}>작성자</option>
-								<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
-								<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
-								<option value="content" ${schType=="content"?"selected":""}>내용</option>
-							</select>
-							<!-- 검색상자 -->
-							<input type="search" name=kwd value="${kwd}" class="input-group searchBox">
-							<!-- 검색버튼 -->
-					   		<button class="input-group mybtn" onclick="searchList();">검색</button>
-					   		<!-- 새로고침 버튼 -->
-							<button type="button" class="ssbtn" style="margin-left: 2px;" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';" title="새로고침"><i class="bi bi-arrow-counterclockwise"></i></button>
-				   		</form>
+			   		<div>
 						<!-- 글쓰기 버튼 -->
-						<button class="ssbtn" style="margin-left: 5px;" onclick="location.href='<c:url value='tip/write'/>'">글쓰기</button>
-					</div>	
+						<button class="ssbtn" onclick="location.href='<c:url value='tip/write'/>'">글쓰기&nbsp;<i class="bi bi-pencil"></i></button>
+					</div>
 				</div>
 				
 				<!-- 글리스트 -->
 				<div>
 					<c:forEach var="dto" items="${list}" varStatus="status">
-					<div class="mx-3">
-				  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="cursor: pointer;">
-							<table class="table table-hover m-0">
-								<tbody>
-								 	<tr>
-								 		<td>
-										 	<h4 class="tip_subject">
-											 	${dto.subject}
-											</h4>
+						<div class="mx-3">
+					  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="cursor: pointer;">
+								<table class="table table-hover m-0" style="table-layout: fixed;">
+									<tbody>
+									 	<tr>
+									 		<td>
+											 	<h4 class="tip_subject">
+												 	${dto.subject}
+												</h4>
+		
+											 	<div class="tip_content">
+													${dto.content}
+										        </div>
+										        <div style="display: flex; justify-content: space-between; align-items: center;">
+														<div style="display: flex; align-items: center;">
+															<div class="profile" style="margin: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+																<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+															</div>	
+															<span class='tip_userName'>${dto.nickname}</span>
+														<span>&nbsp;·&nbsp;</span>
+														
+	                                    				<span id="result-${dto.psnum}"></span>
+					                                    <script type="text/javascript">
+					                                    	document.addEventListener("DOMContentLoaded", function() {
+					                                            const dateStr = "${dto.reg_date}".trim();
+					                                            const date = new Date(dateStr);
+					                                            const id = "result-${dto.psnum}";
 	
-										 	<div class="tip_content">
-												${dto.content}
-									        </div>
-									        <div style="display: flex; justify-content: space-between; align-items: center;">
-													<div style="display: flex; align-items: center;">
-														<div class="profile" style="margin: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-															<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-														</div>	
-														<span class='tip_userName'>${dto.nickname}</span>
-													<span>&nbsp;·&nbsp;</span>
-													
-                                    				<span id="result-${dto.psnum}"></span>
-				                                    <script type="text/javascript">
-				                                    	document.addEventListener("DOMContentLoaded", function() {
-				                                            const dateStr = "${dto.reg_date}".trim();
-				                                            const date = new Date(dateStr);
-				                                            const id = "result-${dto.psnum}";
-
-				                                        	document.getElementById(id).innerText = elapsedText(date);
-				                                    	});
-				                                    </script>
+					                                        	document.getElementById(id).innerText = elapsedText(date);
+					                                    	});
+					                                    </script>
+														</div>
+													<div>
+														<i class="tip_icon bi bi-bookmark"></i>
+														<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
+														<i class="tip_icon bi bi-eye"></i>
+														<span>${dto.hitCount}&nbsp;&nbsp;</span>
+														<i class="tip_icon bi bi-chat-dots"></i>
+														<span>${dto.replyCount}&nbsp;&nbsp;</span>
 													</div>
-												<div>
-													<i class="tip_icon bi bi-bookmark"></i>
-													<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
-													<i class="tip_icon bi bi-eye"></i>
-													<span>${dto.hitCount}&nbsp;&nbsp;</span>
-													<i class="tip_icon bi bi-chat-dots"></i>
-													<span>${dto.replyCount}&nbsp;&nbsp;</span>
 												</div>
-											</div>
-										</td>
-							        </tr>
-	
-								</tbody>
-							</table>
+											</td>
+								        </tr>
+		
+									</tbody>
+								</table>
+							</div>
 						</div>
-					</div>
 					</c:forEach>
 				</div>
 
@@ -152,8 +198,52 @@ function elapsedText(date) {
 			</div>
 			
 			<aside class="sidebar">
-				<div class="rightBox">
-					<p>❤️검색순위❤️</p>
+				<div class="rightBox" style="margin-bottom: 10px;">
+					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+						검색순위
+					</div>
+					
+					<table class="table table-hover" style="table-layout: fixed;">
+						<c:forEach var="dto" items="${list}" varStatus="status">
+		              		<tr>
+								<td style="padding: 10px 25px; word-wrap: break-word;">
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
+									</div>
+									<div style="display: flex; align-items: center;">
+										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+										</div>
+										<span>${dto.nickname}</span>
+									</div>
+								</td>
+		              		</tr>
+						</c:forEach>
+		            </table>
+				</div>
+				
+				<div class="rightBox" style="margin-top: 0;">
+					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+						즐겨찾기순
+					</div>
+					
+					<table class="table table-hover" style="table-layout: fixed;">
+						<c:forEach var="dto" items="${list}" varStatus="status">
+		              		<tr>
+								<td style="padding: 10px 25px; word-wrap: break-word;">
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
+									</div>
+									<div style="display: flex; align-items: center;">
+										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+										</div>
+										<span>${dto.nickname}</span>
+									</div>
+								</td>
+		              		</tr>
+						</c:forEach>
+		            </table>
 				</div>
 			   	<!-- 상단이동 버튼 -->
 			   	<%-- <button type="button" class="top_btn" onclick="location.href='<c:url value=''/>'">TOP</button> --%>

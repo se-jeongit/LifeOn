@@ -50,7 +50,7 @@
 	</select>
 	
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT hb.psnum, m.num, m.id, nickname, subject, content, hb.reg_date, uddate, hb.blind, bdtype, m.profile_image,
+		SELECT hb.psnum, m.num, m.id, nickname, subject, content, hb.reg_date, uddate, hb.blind, bdtype, m.grade, m.profile_image,
 			hitCount, NVL(replyCount, 0) replyCount, NVL(fileCount, 0) fileCount, NVL(boardLikeCount, 0) boardLikeCount
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num

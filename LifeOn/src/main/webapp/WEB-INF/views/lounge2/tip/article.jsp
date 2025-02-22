@@ -29,19 +29,60 @@
 	<div class="body-container">
 		<div class="body-content">
 			<aside class="sidenav">
-				<div class="leftBox">
-					<p>❤️최신순❤️</p>
-					<p>❤️조회순❤️</p>
-					<p>❤️즐겨찾기순❤️</p>
+				<div class="leftBox" style="margin-bottom: 10px;">
+					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+						조회순
+					</div>
+					
+					<table class="table table-hover" style="table-layout: fixed;">
+						<c:forEach var="dto" items="${list}" varStatus="status">
+		              		<tr>
+								<td style="padding: 10px 25px; word-wrap: break-word;">
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
+									</div>
+									<div style="display: flex; align-items: center;">
+										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+										</div>
+										<span>${dto.nickname}</span>
+									</div>
+								</td>
+		              		</tr>
+						</c:forEach>
+		            </table>
+				</div>
+				<div class="leftBox" style="margin-top: 0px;">
+					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+						댓글순
+					</div>
+					
+					<table class="table table-hover" style="table-layout: fixed;">
+						<c:forEach var="dto" items="${list}" varStatus="status">
+		              		<tr>
+								<td style="padding: 10px 25px; word-wrap: break-word;">
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
+									</div>
+									<div style="display: flex; align-items: center;">
+										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+										</div>
+										<span>${dto.nickname}</span>
+									</div>
+								</td>
+		              		</tr>
+						</c:forEach>
+		            </table>
 				</div>
 			</aside>
 			
-			<div class="main_content" style="margin-top: 60px;">
+			<div class="main_content">
 				<div class="freeForm">
-					<table class="table board-article">
+					<table class="table board-article" style="table-layout: fixed;">
 						<thead>
 							<tr>
-								<td colspan="2" style="font-size: 24px; font-weight: 800;">
+								<td colspan="2" style="font-size: 24px; font-weight: 800; word-wrap: break-word;">
 									${dto.subject}
 								</td>
 							</tr>
@@ -93,30 +134,28 @@
 										<p class="border text-secondary my-1 p-2">
 											<i class="bi bi-folder2-open"></i> 첨부파일 다운로드 : 
 											<a href="${pageContext.request.contextPath}/lounge2/tip/download?fnum=${vo.fnum}">${vo.cpfname}</a>
-											</p>
+										</p>
 									</c:forEach>
 								</td>
 							</tr>
 							
 							<tr>
-								<td colspan="2">
-									이전글 :
+								<td colspan="2" style="word-wrap: break-word;">
 									<c:if test="${empty prevDto}">
-										이전글이 없습니다.
+										이전글 : 이전글이 없습니다.
 									</c:if>
 									<c:if test="${not empty prevDto}">
-										<a href="${pageContext.request.contextPath}/lounge2/tip/article/${prevDto.psnum}?${query}">${prevDto.subject}</a>
+										<a href="${pageContext.request.contextPath}/lounge2/tip/article/${prevDto.psnum}?${query}">이전글 : ${prevDto.subject}</a>
 									</c:if>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2">
-									다음글 :
+								<td colspan="2" style="word-wrap: break-word;">
 									<c:if test="${empty nextDto}">
-										다음글이 없습니다.
+										다음글 : 다음글이 없습니다.
 									</c:if>
 									<c:if test="${not empty nextDto}">
-										<a href="${pageContext.request.contextPath}/lounge2/tip/article/${nextDto.psnum}?${query}">${nextDto.subject}</a>
+										<a href="${pageContext.request.contextPath}/lounge2/tip/article/${nextDto.psnum}?${query}">다음글 : ${nextDto.subject}</a>
 									</c:if>
 								</td>
 							</tr>
@@ -130,12 +169,10 @@
 									<c:when test="${sessionScope.member.nickName == dto.nickname}">
 										<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip/update?psnum=${dto.psnum}&page=${page}';">수정</button>
 									</c:when>
-									<c:otherwise>
-									</c:otherwise>
 								</c:choose>
 								
 								<c:choose>
-									<c:when test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade > 1}">
+									<c:when test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
 							    		<button type="button" class="ssbtn" onclick="deleteOk();">삭제</button>
 									</c:when>
 								</c:choose>
@@ -182,7 +219,7 @@
 
 </main>
 
-<c:if test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade > 1}">
+<c:if test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
 	<script type="text/javascript">
 		function deleteOk() {
 			if (confirm('게시글을 삭제 하시겠습니까?')) {
@@ -248,49 +285,49 @@ $(function(){
 			              		<tr>
 			                		<td>
 				                		<input type="radio" id="radio1" name="reportReason" value="1" class="reportReasonRadio">
-				                		<label for="radio1">스팸홍보/도배글 입니다.</label>
+				                		<label for="radio1" style="width: 90%">스팸홍보/도배글 입니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
 			                			<input type="radio" id="radio2" name="reportReason" value="2" class="reportReasonRadio">
-			                			<label for="radio2">불법정보를 포함하고 있습니다.</label>
+			                			<label for="radio2" style="width: 90%">불법정보를 포함하고 있습니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
 			                			<input type="radio" id="radio3" name="reportReason" value="3" class="reportReasonRadio">
-			                			<label for="radio3">청소년에게 유해한 내용입니다.</label>
+			                			<label for="radio3" style="width: 90%">청소년에게 유해한 내용입니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
 			                			<input type="radio" id="radio4" name="reportReason" value="4" class="reportReasonRadio">
-			                			<label for="radio4">욕설/생명경시/혐오/차별적 표현입니다.</label>
+			                			<label for="radio4" style="width: 90%">욕설/생명경시/혐오/차별적 표현입니다.</label>
 			                		</td>
 			              		</tr>
 			             		<tr>
 			                		<td>
 			                			<input type="radio" id="radio5" name="reportReason" value="5" class="reportReasonRadio">
-			                			<label for="radio5">음란물 입니다.</label>
+			                			<label for="radio5" style="width: 90%">음란물 입니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
 			                			<input type="radio" id="radio6" name="reportReason" value="6" class="reportReasonRadio">
-			                			<label for="radio6">불쾌한 표현이 있습니다.</label>
+			                			<label for="radio6" style="width: 90%">불쾌한 표현이 있습니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 				                	<td>
 				                		<input type="radio" id="radio7" name="reportReason" value="7" class="reportReasonRadio">
-				                		<label for="radio7">개인정보 노출 게시물 입니다.</label>
+				                		<label for="radio7" style="width: 90%">개인정보 노출 게시물 입니다.</label>
 		                			</td>
 			              		</tr>
 			              		<tr>
 			                		<td style="border-bottom: none;">
 			                			<input type="radio" id="radio8" name="reportReason" value="8" class="reportReasonRadio">
-			                			<label for="radio8" style="padding-bottom: 5px;">기타</label>
+			                			<label for="radio8" style="padding-bottom: 5px; width: 90%;">기타</label>
 			                			<textarea class="free-control" name="" placeholder="기타 사유를 300자 이내로 입력해주세요."></textarea>
 			                		</td>
 			              		</tr>
