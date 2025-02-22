@@ -377,7 +377,7 @@ public class PhotoBoardController {
 			throw e;
 		}
 		
-		return "lounge1/{bdtype}/listReply";
+		return "lounge1/listReply";
 	}
 	
 	@ResponseBody

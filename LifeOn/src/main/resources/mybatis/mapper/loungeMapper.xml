@@ -4,8 +4,8 @@
 <mapper namespace="com.sp.app.lounge.mapper.PhotoBoardMapper">
 
 	<insert id="insertBoard" parameterType="com.sp.app.lounge.model.PhotoBoard">
-		INSERT INTO hybrid_board(psnum, num, subject, content, bdtype, hitCount, ipaddr, reg_date, blind)
-		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{bdtype}, 0, #{ipaddr}, SYSDATE, 0)
+		INSERT INTO hybrid_board(psnum, num, subject, content, bdtype, thumbnail hitCount, ipaddr, reg_date, blind)
+		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{bdtype}, #{thumbnail}, 0, #{ipaddr}, SYSDATE, 0)
 	</insert>
 	
 	<sql id="mySql">
@@ -116,10 +116,60 @@
 		WHERE psnum = #{psnum}
 	</select>
 	
-	<select id="memberBoardLiked" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
+	<select id="memberBoardLiked" parameterType="map" resultType="com.sp.app.lounge.model.PhotoBoard">
 		SELECT psnum, num
 		FROM HYBRID_BOARD_FAV
 		WHERE psnum = #{psnum} AND num = #{num}
+	</select>
+	
+	<insert id="reply" parameterType="com.sp.app.lounge.model.PhotoBoard">
+		INSERT INTO HYBRID_BOARD_REPLY (rpnum, rpcontent, rpreg_date, ps_num, num, rpblind)
+			VALUES (hybrid_board_reply_seq.NEXTVAL, #{rpcontent}, SYSDATE, #{psnum}, #{num}, 0)
+	</insert>
+	
+	<select id="replyCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM HYBRID_BOARD_REPLY
+		WHERE ps_num = #{psnum} AND rpblind = 0
+	</select>
+	
+	<select id="listReply" parameterType="map" resultType="com.sp.app.lounge.model.PhotoBoard">
+		SELECT r.rpnum, r.rpcontent, r.rpreg_date, r.ps_num, rpblind, r.num, m.nickname, m.profile_image,
+			NVL(likeCount, 0) likeCount,
+			NVL(disLikeCount, 0) disLikeCount, COALESCE(rplike, -1) rplike
+		FROM HYBRID_BOARD_REPLY r
+		JOIN member m ON r.num = m.num
+		LEFT OUTER JOIN (
+			SELECT rpnum, rplike, COUNT(DECODE(rplike, 1, 1)) likeCount,
+				COUNT(DECODE(rplike, 0, 1)) disLikeCount
+			FROM HYBRID_BOARD_LIKE
+			GROUP BY rpnum, rplike
+		) c ON r.rpnum = c.rpnum
+		WHERE r.ps_num = #{psnum} AND r.rpblind = 0
+		ORDER BY r.rpnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+	
+	<delete id="deleteReply" parameterType="map">
+		DELETE FROM HYBRID_BOARD_REPLY
+		WHERE rpnum = #{rpnum}
+	</delete>
+	
+	<insert id="replyLike" parameterType="map">
+		INSERT INTO HYBRID_BOARD_LIKE (rpnum, num, rplike)
+			VALUES(#{rpnum}, #{num}, #{rplike})
+	</insert>
+	
+	<select id="replyLikeCount" parameterType="map" resultType="map">
+		SELECT COUNT(DECODE(rplike, 1, 1)) likeCount, COUNT(DECODE(rplike, 0, 1)) disLikeCount
+		FROM HYBRID_BOARD_LIKE
+		WHERE rpnum = #{rpnum}
+	</select>
+	
+	<select id="memberReplyLiked" parameterType="map" resultType="Integer">
+		SELECT rpnum, num, rplike
+		FROM HYBRID_BOARD_LIKE
+		WHERE rpnum = #{rpnum} AND num = #{num}
 	</select>
 	
 </mapper>

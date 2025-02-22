@@ -15,8 +15,10 @@ public class PhotoBoard {
     private long num; // 회원번호
     private String id; 
     private String nickname; 
+    private String profile_image;
 	private String subject;
 	private String content;
+	private String thumbnail;
 	private String ipaddr;
 	private String bdtype;
 	private String reg_date;
