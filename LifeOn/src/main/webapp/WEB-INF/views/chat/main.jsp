@@ -81,6 +81,58 @@
     </div>
 </main>
 
+<script type="text/javascript">
+$(function() {
+	var socket = null;
+	var host = '${wsURL}';
+	
+	if('WebSocket' in window) {
+		socket = new WebSocket(host);
+	} else if('MozWebSocket' in window) {
+		socket = new MozWebSocket(host);
+	} else {
+		showMessage('<div class="chat-info"> 사용하신 브라우저는 채팅이 불가능합니다.</div>');
+		return false;
+	}
+	
+	socket.onopen = function(evt) { onOpen(evt); };
+	
+	
+	function onOpen(evt) {
+		// 서버에 접속이 성공한 경우
+		let uid = '${sessionScope.member.num}';
+		let nickName = '${sessionScope.member.nickName}';
+		if(! uid ) {
+			location.href = '${pageContext.request.contextPath}/member/login';
+			return;
+		}
+		
+		showMessage('<div class="msg-right">채팅방에 입장했습니다.</div>');
+		// 서버 접속이 성공하면 아이디와 이름을 JSON 으로 서버에 전송
+		let obj = {};
+		obj.type = 'connect';
+		obj.uid = uid;
+		obj.nickName = nickName;
+		
+		let jsonStr = JSON.stringify(obj);
+		socket.send(jsonStr);
+		
+	}
+	
+});
+
+function showMessage(message) {
+	const $EL = $('.chat-msg-container');
+	$EL.append(message);
+	
+	// 스크롤바를 최하단으로 이동
+	$EL.scrollTop($EL.prop('scrollHeight'));
+}
+
+
+
+</script>
+
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
 </footer>

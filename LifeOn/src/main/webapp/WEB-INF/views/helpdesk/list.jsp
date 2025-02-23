@@ -84,7 +84,7 @@ tr:nth-of-type(even) td {
 				<div class="body-main">
 					<div class="tab">
 						<a class="active" href="${pageContext.request.contextPath}/help">자주묻는질문</a> 
-						<a href="${pageContext.request.contextPath}/chat">1:1채팅상담</a>
+						<a href="${pageContext.request.contextPath}/chat/main">1:1채팅상담</a>
 					</div>
 
 					<div class="table-border">
