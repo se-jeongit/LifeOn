@@ -29,51 +29,10 @@
 	<div class="body-container">
 		<div class="body-content">
 			<aside class="sidenav">
-				<div class="leftBox" style="margin-bottom: 10px;">
-					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
-						조회순
-					</div>
-					
-					<table class="table table-hover" style="table-layout: fixed;">
-						<c:forEach var="dto" items="${list}" varStatus="status">
-		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${dto.subject}
-									</div>
-									<div style="display: flex; align-items: center;">
-										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-										</div>
-										<span>${dto.nickname}</span>
-									</div>
-								</td>
-		              		</tr>
-						</c:forEach>
-		            </table>
-				</div>
-				<div class="leftBox" style="margin-top: 0px;">
-					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
-						댓글순
-					</div>
-					
-					<table class="table table-hover" style="table-layout: fixed;">
-						<c:forEach var="dto" items="${list}" varStatus="status">
-		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${dto.subject}
-									</div>
-									<div style="display: flex; align-items: center;">
-										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-										</div>
-										<span>${dto.nickname}</span>
-									</div>
-								</td>
-		              		</tr>
-						</c:forEach>
-		            </table>
+				<div class="leftBox">
+					<p>❤️최신순❤️</p>
+					<p>❤️조회순❤️</p>
+					<p>❤️즐겨찾기순❤️</p>
 				</div>
 			</aside>
 			
@@ -190,9 +149,6 @@
 							<table class="table table-borderless reply-form">
 								<tr>
 									<td>
-									<div class="form-header" style="text-align: left; padding: 10px 5px;">
-										<span class="bold">댓글 ${dto.replyCount}개</span>
-									</div>
 										<textarea class="free-control" name="rpcontent" placeholder="칭찬과 격려의 댓글은 작성자에게 큰 힘이 됩니다! 😊" style="background: #fdfeff; height: 100px;"></textarea>
 									</td>
 								</tr>
@@ -529,6 +485,46 @@ $(function() {
 				alert('공감 여부는 한번만 가능합니다.');
 			} else {
 				alert('댓글 공감 여부 처리가 실패했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+});
+
+$(function() {
+	$('.reply').on('click', '.hideReply', function() {	
+		let $menu = $(this);
+		
+		let rpnum = $(this).attr('data-replyNum');
+		let rpblind = $(this).attr('data-replyBlind');
+		
+		let msg = '댓글을 차단 하시겠습니까?';
+		if (rpblind === '0') {
+			msg = '댓글 차단을 해제 하시겠습니까?'
+		}
+		
+		if (! confirm(msg)) {
+			return false;
+		}
+		
+		rpblind = rpblind === '1' ? '0' : '1';
+		
+		let url = '${pageContext.request.contextPath}/lounge2/tip/replyShowHide';
+		let params = {replyNum: replyNum, showReply: showReply};
+		
+		const fn = function(data) {
+			if (data.state === 'true') {
+				let $item = $menu.closest('tr').next('tr').find('td');
+				if (showReply === '1') {
+					$item.removeClass('text-primary').removeClass('text-opacity-50');
+					$menu.attr('data-showReply', '1');
+					$menu.text('숨김');
+				} else {
+					$item.addClass('text-primary').addClass('text-opacity-50');
+					$menu.attr('data-showReply', '0');
+					$menu.text('표시');
+				}
 			}
 		};
 		

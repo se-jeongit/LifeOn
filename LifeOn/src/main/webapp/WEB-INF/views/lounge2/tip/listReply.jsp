@@ -3,9 +3,10 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
 <div style="padding: 10px;">
-	<c:if test="${replyCount == 1}">
+	<c:if test="${replyCount >= 1}">
 		<div class="reply-info" style="text-align: left; padding: 0px 5px 10px 5px;">
-			<span>[ 댓글목록, ${pageNo} / ${total_page} 페이지 ]</span>
+			<span class="bold">총 댓글 ${replyCount}개 </span>
+			<span>[댓글목록, ${pageNo} / ${total_page} 페이지]</span>
 		</div>
 	</c:if>
 		
@@ -34,6 +35,7 @@
 										<c:when test="${sessionScope.member.grade >= 1}">
 											<div class="deleteReply reply-menu-item" data-replyNum="${dto.rpnum}" data-pageNo="${pageNo}">삭제</div>
 											<div class="blockReply reply-menu-item">차단</div>
+											<div class="hideReply reply-menu-item" data-replyNum="${dto.rpnum}" data-replyBlind="${dto.rpblind}">${dto.showReply == 1 ? "차단" : "차단해제"}</div>
 										</c:when>
 										<c:otherwise>
 											<div class="notifyReply reply-menu-item">신고</div>
@@ -51,11 +53,11 @@
 							<div style="display: flex; justify-content: flex-end; flex-wrap: wrap;">
 								<span data-memberLiked="${dto.memberLiked}" style="padding-right: 20px; cursor: pointer;">
 									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요" style="padding: 3px;">
-										<i class="bi ${dto.rplike == 1 ? 'bi-heart-fill disLikeColor':'bi-heart'}"></i>
+										<i class="bi ${dto.rplike == 1 && dto.memberLiked == dto.rpnum ? 'bi-heart-fill disLikeColor':'bi-heart'}"></i>
 										<span>${dto.likeCount}</span>
 									</span>
 									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="0" title="싫어요" style="padding: 3px;">
-										<i class="bi ${dto.rplike == 0 && dto.rplike != -1 ? 'bi-heartbreak-fill likeColor':'bi-heartbreak'}"></i>
+										<i class="bi ${dto.rplike == 0 && dto.memberLiked == dto.rpnum ? 'bi-heartbreak-fill likeColor':'bi-heartbreak'}"></i>
 										<span>${dto.disLikeCount}</span>
 									</span>	        
 								</span>
