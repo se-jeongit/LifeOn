@@ -32,7 +32,7 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 			dto.setNum(seq);
 
 			mapper.insertBoard(dto);
-
+				// ?? 
 			// 파일 업로드
 			if (! dto.getSelectFile().isEmpty()) {
 				insertFile(dto, uploadPath);
