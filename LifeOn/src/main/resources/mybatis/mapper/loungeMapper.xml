@@ -2,10 +2,14 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sp.app.lounge.mapper.PhotoBoardMapper">
-
+	
+	<select id="PhotoBoardSeq" resultType="Long">
+		SELECT hybrid_board_seq.NEXTVAL FROM dual
+	</select>
+	
 	<insert id="insertBoard" parameterType="com.sp.app.lounge.model.PhotoBoard">
-		INSERT INTO hybrid_board(psnum, num, subject, content, bdtype, thumbnail hitCount, ipaddr, reg_date, blind)
-		VALUES (hybrid_board_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{bdtype}, #{thumbnail}, 0, #{ipaddr}, SYSDATE, 0)
+		INSERT INTO HYBRID_BOARD (psnum, num, subject, content, bdtype, hitCount, ipaddr, reg_date, blind)
+		VALUES (#{psnum}, #{num}, #{subject}, #{content}, #{bdtype}, 0, #{ipaddr}, SYSDATE, 0)
 	</insert>
 	
 	<sql id="mySql">
@@ -46,10 +50,17 @@
 	</select>
 	
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.PhotoBoard">
-		SELECT hb.psnum, m.num, m.id, nickname, subject, content, TO_CHAR(hb.reg_date, 'yyyy-mm-dd') as reg_date, hb.blind,
-			hitCount, NVL(replyCount, 0) replyCount
+		SELECT hb.psnum, m.num, m.id, nickname, subject, content, TO_CHAR(hb.reg_date, 'yyyy-mm-dd') as reg_date, 
+				hb.blind, m.grade, m.profile_image, hitCount, NVL(replyCount, 0) replyCount, NVL(boardLikeCount, 0) boardLikeCount
 		FROM HYBRID_BOARD hb
-		JOIN MEMBER m ON hb.num = m.num
+		JOIN MEMBER m ON hb.num = m.num	
+		LEFT OUTER JOIN (
+        SELECT psnum, ssfname FROM (
+            SELECT psnum, ssfname, 
+                   ROW_NUMBER() OVER(PARTITION BY psnum ORDER BY fnum ASC) AS rank
+            FROM HYBRID_FILE
+        ) WHERE rank = 1
+    ) hf ON hb.psnum = hf.psnum
 		LEFT OUTER JOIN (
 			SELECT rpnum, COUNT(*) replyCount, ps_num, rpblind
 			FROM HYBRID_BOARD_REPLY
@@ -72,7 +83,7 @@
 	</select>
 	
 	<select id="findById" parameterType="map" resultType="com.sp.app.lounge.model.PhotoBoard">
-		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, hb.blind, bdtype
+		SELECT hb.psnum, hb.num, nickname, subject, content, hitCount, hb.reg_date, hb.blind, bdtype, m.profile_image,
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
 		LEFT OUTER JOIN (
@@ -171,5 +182,17 @@
 		FROM HYBRID_BOARD_LIKE
 		WHERE rpnum = #{rpnum} AND num = #{num}
 	</select>
+	
+	<insert id="updateFile" parameterType="com.sp.app.lounge.model.PhotoBoard">
+		INSERT INTO HYBRID_FILE (fnum, ssfname, cpfname, psnum)
+	    	VALUES (hybrid_file_seq.NEXTVAL, #{ssfname, jdbcType=VARCHAR}, #{cpfname, jdbcType=VARCHAR}, #{psnum})
+	</insert>
+	
+	<delete id="deleteFile" parameterType="map">
+		DELETE FROM HYBRID_FILE
+		WHERE ${field} = #{psnum}
+	</delete>
+	
+
 	
 </mapper>

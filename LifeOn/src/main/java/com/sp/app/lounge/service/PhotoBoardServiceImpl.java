@@ -3,11 +3,14 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.StorageService;
+import com.sp.app.exception.StorageException;
 import com.sp.app.lounge.mapper.PhotoBoardMapper;
 import com.sp.app.lounge.model.PhotoBoard;
 
@@ -25,14 +28,14 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	@Override
 	public void insertBoard(PhotoBoard dto, String uploadPath) throws Exception {
 		try {
-			if(! dto.getSelectFile().isEmpty()) {
-				String saveFilename = 
-						storageService.uploadFileToServer(dto.getSelectFile(), uploadPath);
-				String originalFilename = 
-						dto.getSelectFile().getOriginalFilename();
-				
-				dto.setSsfname(saveFilename);
-				dto.setCpfname(originalFilename);
+			long seq = mapper.PhotoBoardSeq();
+			dto.setNum(seq);
+
+			mapper.insertBoard(dto);
+
+			// 파일 업로드
+			if (! dto.getSelectFile().isEmpty()) {
+				insertFile(dto, uploadPath);
 			}
 			
 			mapper.insertBoard(dto);
@@ -50,8 +53,6 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 
 		try {
 			list = mapper.listBoard(map);
-			
-			// 이미지 추추
 			
 		} catch (Exception e) {
 			log.info("listBoard : ", e);
@@ -98,7 +99,6 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	}
 
 
-
 	@Override
 	public void deleteBoard(String bdtype, long psnum, String nickname, int grade) throws Exception {
 		try {
@@ -130,16 +130,6 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 
 	}
 	
-	@Override
-	public void boardLike(Map<String, Object> map) throws Exception {
-		try {
-			mapper.boardLike(map);
-		} catch (Exception e) {
-			log.info("boardLike : ", e);
-			
-			throw e;
-		}
-	}
 
 	@Override
 	public List<PhotoBoard> listFile(long num) {
@@ -147,12 +137,56 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 		
 		try {
 			listFile = mapper.listFile(num);
+			
 		} catch (Exception e) {
 			log.info("listFile : ", e);
 		}
 		return listFile;
 	}
 
+	@Override
+	public void updateFile(PhotoBoard dto) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public PhotoBoard findByFileId(long fileNum) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void deleteFile(Map<String, Object> map) throws Exception {
+		try {
+			mapper.deleteFile(map);
+		} catch (Exception e) {
+			log.info("deleteFile : ", e);
+			
+			throw e;
+		}
+	}
+	
+	protected void insertFile(PhotoBoard dto, String uploadPath) throws Exception {
+		for (MultipartFile mf : dto.getSelectFile()) {
+			try {
+				String saveFilename = Objects.requireNonNull(storageService.uploadFileToServer(mf, uploadPath));
+				
+				String originalFilename = mf.getOriginalFilename();
+				
+				dto.setCpfname(originalFilename);
+				dto.setSsfname(saveFilename);
+
+				mapper.updateFile(dto);
+				
+			} catch (NullPointerException e) {
+			} catch (StorageException e) {
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+	}
+	
 	@Override
 	public void updateBoard(PhotoBoard dto, String uploadPath) throws Exception {
 		// TODO Auto-generated method stub
@@ -172,21 +206,14 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	}
 
 	@Override
-	public void updateFile(PhotoBoard dto) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public PhotoBoard findByFileId(long fileNum) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deleteFile(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public void boardLike(Map<String, Object> map) throws Exception {
+		try {
+			mapper.boardLike(map);
+		} catch (Exception e) {
+			log.info("boardLike : ", e);
+			
+			throw e;
+		}
 	}
 
 	@Override

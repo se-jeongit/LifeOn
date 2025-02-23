@@ -109,25 +109,31 @@ function check() {
 						</tr>
 						
 						<tr>
-							<td class="col-sm-2" scope="row">첨 부</td>
+							<td scope="row" style="vertical-align: middle;">첨부파일</td>
 							<td>
-								<input type="file" name="selectFile" class="form-control">			
+							<div class="filebox">
+								<input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly="readonly">
+							    <label for="file">파일선택</label> 
+							    <input type="file" id="file" name="selectFile" multiple>
+							</div>
 							</td>
 						</tr>
 						
-						<tr>
-							<td class="col-sm-2" scope="row">첨부된파일</td>
-							<td>
-								<p class="form-control-plaintext">
-								<c:if test="${not empty dto.ssfname}">
-									<a href="javascript:deleteFile('${dto.num}')"><i class="bi bi-trash"></i></a>
-									${dto.cpfname}
-								</c:if>
-								&nbsp;
-								</p>
-							</td>
-						</tr>
+						<c:if test="${mode == 'update'}">
+							<c:forEach var="vo" items="${listFile}">
+								<tr> 
+									<td scope="row" style="vertical-align: middle;">첨부된파일</td>
+									<td>
+										<p class="free-control">
+											<span class="delete-file" data-fileNum="${vo.fnum}"><i class="bi bi-trash"></i></span> 
+											${vo.cpfname}
+										</p>
+									</td>
+								  </tr>
+							</c:forEach>
+						</c:if>
 					</table>
+					
 					<table class="table table-borderless">
 						<tr>
 							<td class="text-center">
@@ -152,14 +158,22 @@ function check() {
 
 <c:if test="${mode == 'update'}">
 	<script type="text/javascript">
-		function deleteFile(num) {
-			if (! confirm('파일을 삭제 하시겠습니까?')) {
-				return;
+		$('.delete-file').click(function(){
+			if(! confirm('선택한 파일을 삭제 하시겠습니까 ? ')) {
+				return false;
 			}
 			
+			let $tr = $(this).closest('tr');
+			let fnum = $(this).attr('data-fileNum');
 			let url = '${pageContext.request.contextPath}/lounge/${bdtype}/deleteFile?num=' + num + '&page=${page}';
-			location.href = url;
-		}
+			
+			$.ajaxSetup({ beforeSend: function(e) { e.setRequestHeader('AJAX', true); } });
+			$.post(url, {fnum: fnum}, function(data){
+				$($tr).remove();
+			}, 'json').fail(function(jqXHR){
+				console.log(jqXHR.responseText);
+			});
+		});
 	</script>
 </c:if>
 
