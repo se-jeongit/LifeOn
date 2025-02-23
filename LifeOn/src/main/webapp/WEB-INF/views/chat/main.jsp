@@ -36,6 +36,27 @@
 .chat-connection-list span { display: block; cursor: pointer; margin-bottom: 3px; }
 .chat-connection-list span:hover { color: #0d6efd }
 
+.msg-right {
+    align-self: flex-end;         /* 오른쪽 정렬 */
+    text-align: right;            /* 텍스트 오른쪽 정렬 */
+    background-color: #DCF8C6;    /* 배경 색상 (예시: WhatsApp 스타일) */
+    padding: 8px;                 
+    border-radius: 10px;          
+    margin: 5px 0;                
+    max-width: 70%;               /* 너무 넓게 표시되지 않도록 제한 */
+}
+
+.msg-left {
+    align-self: flex-start;       /* 왼쪽 정렬 */
+    text-align: left;             /* 텍스트 왼쪽 정렬 */
+    background-color: #FFF;       /* 배경 색상 */
+    padding: 8px;
+    border-radius: 10px;
+    margin: 5px 0;
+    max-width: 70%;
+}
+
+
 </style>
 
 
@@ -125,7 +146,7 @@ $(function() {
 			return;
 		}
 		
-		showMessage('<div class="msg-right">채팅방에 입장했습니다.</div>' +'<div>1:1상담은 귓속말로 진행됩니다.</div>');
+		showMessage('<div class="msg-right">채팅방에 입장했습니다.<br> 1:1상담은 귓속말로 진행됩니다.</br></div>');
 		// 서버 접속이 성공하면 아이디와 이름을 JSON 으로 서버에 전송
 		let obj = {};
 		obj.type = 'connect';
