@@ -45,15 +45,25 @@
     margin: 5px 0;                
     max-width: 70%;               /* 너무 넓게 표시되지 않도록 제한 */
 }
-
 .msg-left {
-    align-self: flex-start;       /* 왼쪽 정렬 */
-    text-align: left;             /* 텍스트 왼쪽 정렬 */
-    background-color: #FFF;       /* 배경 색상 */
+    align-self: flex-start;
+    text-align: left;
+    background-color: #FFF8DC;
     padding: 8px;
     border-radius: 10px;
     margin: 5px 0;
     max-width: 70%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.sender-name {
+    font-size: 0.8em;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.message-content {
+    word-break: break-word;
 }
 
 
@@ -192,6 +202,36 @@ $(function() {
 		
 	}
 	
+	// 귓속말
+	$('.chat-connection-list').on('click', 'span', function(){
+		let uid = $(this).attr('data-uid');
+		let nickName = $(this).text().trim();
+		
+		$('#chatOneMsg').attr('data-uid', uid);
+		$('#chatOneMsg').attr('data-nickName', nickName);
+		
+		$('#myDialogModalLabel').html('귓속말-' + nickName);
+		$('#myDialogModal').modal('show');
+	});
+	
+	const modalEl = document.getElementById('myDialogModal');
+	modalEl.addEventListener('show.bs.modal', function(){
+		$('#chatOneMsg').on('keydown', function(evt){
+			let key = evt.key || evt.keyCode;
+			
+			if(key === 'Enter' || key === 13) {
+				sendOneMessage();
+			}
+		});
+	});
+	
+	modalEl.addEventListener('hidden.bs.modal', function(){
+		$('#chatOneMsg').off('keydown');
+		$('#chatOneMsg').val('');
+	});
+	
+	
+	
 	function onMessage(evt) {
 		let data = JSON.parse(evt.data);
 		let cmd = data.type;
@@ -233,12 +273,24 @@ $(function() {
 			let nickName = data.nickName;
 			let msg = data.chatMsg;
 			
-			let out = '<div class="user-left">' + nickName + '</div>';
+			let out = '<div class="msg-left">';
+			out += '<div class="sender-name">' + nickName + '</div>';
+			out += '<div class="message-content">' + msg + '</div>';
+			out += '</div>';
+			    
+			showMessage(out);
+			
+		} else if(cmd === 'whisper') {
+			let uid = data.uid;
+			let nickName = data.nickName;
+			let msg = data.chatMsg;
+			
+			let out = '<div class="user-left">' + nickName + '(귓속)</div>';
 			out += '<div class="msg-left">' + msg + '</div>';
 			
 			showMessage(out);
 			
-		} else if(cmd === 'time') {
+		}  else if(cmd === 'time') {
 			console.log(data);
 		}
 	}
@@ -247,33 +299,6 @@ $(function() {
 		showMessage('<div class="chat-info">채팅이 불가능합니다.</div>');		
 	}
 	
-	// 귓속말
-	$('.chat-connection-list').on('click', 'span', function(){
-		let uid = $(this).attr('data-uid');
-		let nickName = $(this).text().trim();
-		
-		$('#chatOneMsg').attr('data-uid', uid);
-		$('#chatOneMsg').attr('data-nickName', nickName);
-		
-		$('#myDialogModalLabel').html('귓속말-' + nickName);
-		$('#myDialogModal').modal('show');
-	});
-	
-	const modalEl = document.getElementById('myDialogModal');
-	modalEl.addEventListener('show.bs.modal', function(){
-		$('#chatOneMsg').on('keydown', function(evt){
-			let key = evt.key || evt.keyCode;
-			
-			if(key === 'Enter' || key === 13) {
-				sendOneMessage();
-			}
-		});
-	});
-	
-	modalEl.addEventListener('hidden.bs.modal', function(){
-		$('#chatOneMsg').off('keydown');
-		$('#chatOneMsg').val('');
-	});
 	
 	function sendOneMessage() {
 		// 귓속말 전송
