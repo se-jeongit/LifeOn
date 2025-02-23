@@ -81,6 +81,22 @@
     </div>
 </main>
 
+<!-- 귓속말 Modal -->
+<div class="modal fade" id="myDialogModal" tabindex="-1" aria-labelledby="myDialogModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myDialogModalLabel">귓속말</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body pt-1">
+				<input type="text" id="chatOneMsg" class="form-control" 
+							placeholder="귓속말을 입력 하세요...">
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
 $(function() {
 	var socket = null;
@@ -96,7 +112,9 @@ $(function() {
 	}
 	
 	socket.onopen = function(evt) { onOpen(evt); };
-	
+	socket.onmessage = function(evt) { onMessage(evt); };
+	socket.onclose = function(evt) { onClose(evt); };
+	socket.onerror = function(evt) { onError(evt); };
 	
 	function onOpen(evt) {
 		// 서버에 접속이 성공한 경우
@@ -107,7 +125,7 @@ $(function() {
 			return;
 		}
 		
-		showMessage('<div class="msg-right">채팅방에 입장했습니다.</div>');
+		showMessage('<div class="msg-right">채팅방에 입장했습니다.</div>' +'<div>1:1상담은 귓속말로 진행됩니다.</div>');
 		// 서버 접속이 성공하면 아이디와 이름을 JSON 으로 서버에 전송
 		let obj = {};
 		obj.type = 'connect';
@@ -117,6 +135,149 @@ $(function() {
 		let jsonStr = JSON.stringify(obj);
 		socket.send(jsonStr);
 		
+		// 채팅입력창에 엔터를 누르면 메세지를 전송하기 위해 #chatMsg에 keydown 이벤트 등록 
+		$('#chatMsg').on('keydown', function(evt) {
+			
+			let key = evt.key || evt.keyCode;
+			if(key == 'Enter' || key == 13) {
+				sendMessage();
+			}
+		});
+	}
+	
+	function onClose(evt) {
+		
+	}
+	
+	//메시지 전송
+	function sendMessage() {
+		let msg = $('#chatMsg').val().trim();
+		if(! msg) {
+			$('#chatMsg').focus();
+			return;
+		}
+		
+		let obj = {};
+		obj.type = 'message';
+		obj.chatMsg = msg;
+		
+		let jsonStr = JSON.stringify(obj);
+		socket.send(jsonStr);
+		
+		$('#chatMsg').val('');
+		
+		let out = '<div class="msg-right">' + msg + '</div>';
+		showMessage(out);
+		
+	}
+	
+	function onMessage(evt) {
+		let data = JSON.parse(evt.data);
+		let cmd = data.type;
+		
+		if(cmd === 'userList') {
+			//처음 접속할때 접속자 리스트 받기
+			let users = data.users;
+			for(let i = 0; i < users.length; i++) {
+				let uid = users[i][0];
+				let nickName = users[i][1];
+				
+				let out = '<span id="user-' + uid + '"data-uid="' + uid + '"><i class="bi bi-person-square"></i>'
+				+ nickName + '</span>';
+				$('.chat-connection-list').append(out);
+			}
+		} else if(cmd === 'userConnect') {
+			//다른 접속자가 접속했을 때 
+			let uid = data.uid;
+			let nickName = data.nickName;
+			
+			let out = '<div class="chat-info">' + nickName + '님이 입장하였습니다.</div>';
+			showMessage(out);
+			
+			out = '<span id="user-' + uid + '" data-uid="' + uid + '"><i class="bi bi-person-square"></i>'
+			+ nickName + '</span>';
+			$('.chat-connection-list').append(out);
+		} else if (cmd === 'userDisconnect') {
+			//접속자가 나갔을 때 
+			let uid = data.uid;
+			let nickName = data.nickName;
+			
+			let out = '<div class="chat-info">' + nickName + '님이 나갔습니다.</div>';
+			showMessage(out);
+			
+			$('#user-' + uid).remove();
+			
+		} else if(cmd === 'message') {
+			let uid = data.uid;
+			let nickName = data.nickName;
+			let msg = data.chatMsg;
+			
+			let out = '<div class="user-left">' + nickName + '</div>';
+			out += '<div class="msg-left">' + msg + '</div>';
+			
+			showMessage(out);
+			
+		} else if(cmd === 'time') {
+			console.log(data);
+		}
+	}
+	
+	function onError(evt) {
+		showMessage('<div class="chat-info">채팅이 불가능합니다.</div>');		
+	}
+	
+	// 귓속말
+	$('.chat-connection-list').on('click', 'span', function(){
+		let uid = $(this).attr('data-uid');
+		let nickName = $(this).text().trim();
+		
+		$('#chatOneMsg').attr('data-uid', uid);
+		$('#chatOneMsg').attr('data-nickName', nickName);
+		
+		$('#myDialogModalLabel').html('귓속말-' + nickName);
+		$('#myDialogModal').modal('show');
+	});
+	
+	const modalEl = document.getElementById('myDialogModal');
+	modalEl.addEventListener('show.bs.modal', function(){
+		$('#chatOneMsg').on('keydown', function(evt){
+			let key = evt.key || evt.keyCode;
+			
+			if(key === 'Enter' || key === 13) {
+				sendOneMessage();
+			}
+		});
+	});
+	
+	modalEl.addEventListener('hidden.bs.modal', function(){
+		$('#chatOneMsg').off('keydown');
+		$('#chatOneMsg').val('');
+	});
+	
+	function sendOneMessage() {
+		// 귓속말 전송
+		let msg = $('#chatOneMsg').val().trim();
+		if(! msg) {
+			$('#chatOneMsg').focus();
+			return;
+		}
+		
+		let uid = $('#chatOneMsg').attr('data-uid');
+		let nickName = $('#chatOneMsg').attr('data-nickName').trim();
+		
+		let obj = {};
+		obj.type = 'whisper';
+		obj.chatMsg = msg;
+		obj.receiver = uid;
+		
+		let jsonStr = JSON.stringify(obj);
+		socket.send(jsonStr);
+		
+		let out = '<div class="msg-right">' + msg + '(' + nickName + ')</div>';
+		showMessage(out);
+		
+		$('#chatOneMsg').val('');
+		$('#myDialogModal').modal('hide');
 	}
 	
 });
@@ -129,7 +290,13 @@ function showMessage(message) {
 	$EL.scrollTop($EL.prop('scrollHeight'));
 }
 
-
+$(function(){
+	$('#myDialogModal').on('hide.bs.modal', function() {
+		$('button, input, select, textarea').each(function(){
+			$(this).blur();
+		});
+	});
+});
 
 </script>
 

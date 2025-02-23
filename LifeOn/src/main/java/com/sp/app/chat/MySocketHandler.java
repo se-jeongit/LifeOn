@@ -110,9 +110,48 @@ public class MySocketHandler extends TextWebSocketHandler {
 				connectList.put("users", arrUsers);
 				
 				sendTextMessageToOne(mapToString(connectList), session);
+			
+				// 다른 접속 유저에게 접속 자실을 알림
+				Map<String, Object> connectUser = new HashMap<>();
+				connectUser.put("type", "userConnect");
+				connectUser.put("uid", uid);
+				connectUser.put("nickName", nickName);
+				
+				sendTextMessageToAll(mapToString(connectUser), uid);
+			} else if(type.equals("message")) {
+				// 채팅 문자열을 전송 받은 경우
+				User user = getUser(session);
+				String msg = jsonReceive.get("chatMsg").asText();
+				
+				Map<String, Object> map = new HashMap<>();
+				map.put("type", "message");
+				map.put("chatMsg", msg);
+				map.put("uid", user.getUid());
+				map.put("nickName", user.getNickName());
+				
+				sendTextMessageToAll(mapToString(map), user.getUid());
+			} else if(type.equals("whisper")) {
+				// 귓속말을 전송 받은 경우
+				User user = getUser(session);
+				String msg = jsonReceive.get("chatMsg").asText();
+				String receiver = jsonReceive.get("receiver").asText();
+				
+				User receiverUser = connectUsers.get(receiver);
+				if(receiverUser == null) {
+					return;
+				}
+				
+				Map<String, Object> map = new HashMap<>();
+				map.put("type", "whisper");
+				map.put("chatMsg", msg);
+				map.put("uid", user.getUid());
+				map.put("nickName", user.getNickName());
+				
+				sendTextMessageToOne(mapToString(map), receiverUser.getSession());
 			}
+			
 		} catch (Exception e) {
-
+			log.info("handleMessage : ", e);
 		}
 	}
 	
