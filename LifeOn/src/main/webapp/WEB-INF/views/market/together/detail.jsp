@@ -55,6 +55,19 @@
     .closed-status {
     	color: red;
 	}
+	
+	.buy-button {
+        font-size: 25px;
+        font-weight: bold;
+        color: white;
+        background-color: blue;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+	
 </style>
 
 
@@ -87,7 +100,9 @@
 	                </div> 
 	                <div class="status-box" style="font-size: 40px; font-weight: bold; margin-left: auto;">
        					<p style="color: ${dto.status eq '마감' ? 'red' : 'blue'}">${dto.status}</p>
-		                <p style="font-size: 22px">남은 수량 : ${dto.ptq}개</p>
+		                <c:if test="${dto.status eq '구매가능'}">
+						    <p style="font-size: 22px">남은 수량 : ${dto.ptq}개</p>
+						</c:if>
    					</div>   
 	            </div>
 	            <div class="head-main">
@@ -98,9 +113,11 @@
 	                <p> 예상 발송일 : ${dto.ptdd}</p>
 	            </div>
 	
-	            <div style="padding-top: 30px; display: flex; height: 100px">
-	                <p style="font-size: 20px; font-weight: 500; padding-top: 20px">구매하기</p>
-	            </div>
+<div style="padding-top: 30px; display: flex; justify-content: flex-end; align-items: center; height: 100px;">
+    <c:if test="${dto.status eq '구매가능'}">
+        <button type="button" class="buy-button" onclick="location.href='${pageContext.request.contextPath}/market/order/payment?pnum=${dto.pnum}'"> 주문하기 </button>
+    </c:if>
+</div>
 	        </div>
 	    </div>
 	</div>
