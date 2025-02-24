@@ -101,10 +101,10 @@
         <h2>공동구매 상품목록</h2>
 		<div class="status-tabs">
 		    <a href="<c:url value='/admin/productManage/list?schType=all'/>" class="${schType=='all'?'active':''}">전체</a>
-		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=a" class="${schType=='a'?'active':''}">진행전</a>
-		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=b" class="${schType=='b'?'active':''}">진행중</a>
-		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=c" class="${schType=='c'?'active':''}">구매성공</a>
-		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=d" class="${schType=='d'?'active':''}">구매실패</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=astatus" class="${schType == 'astatus'?'active':''}">진행전</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=bstatus" class="${schType == 'bstatus'?'active':''}">진행중</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=cstatus" class="${schType == 'cstatus'?'active':''}">구매성공</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=dstatus" class="${schType == 'dstatus'?'active':''}">구매실패</a>
 		</div>
 		
 
@@ -134,22 +134,25 @@
             			<td>
             				<img src="${pageContext.request.contextPath}/uploads/product/${dto.pph}" alt="상품 이미지" width="50">
             				<br>${dto.pname}
-            				<br>원가 : ${dto.ptp}
-            				<br>할인가 : ${dto.ptsp}
+            				<br>원가 : <fmt:formatNumber value="${dto.ptp}" type="currency"/>
+            				<br>할인가 : <fmt:formatNumber value="${dto.ptsp}" type="currency"/>
             			</td>
-            			<td>${dto.ptq}</td>
+            			<td>${dto.ptq}개</td>
             			<td>0개</td>
             			<td>
-            				<button class="btn btn-order">상세보기</button>
-                        	<button class="btn btn-edit">판매완료</button>
-                        	<button class="btn btn-delete">마감처리</button>
+            				<button class="btn btn-order" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/update?pnum=${dto.pnum}&ptsq=${dto.ptsq}'">수정하기</button>
+                        	<c:if test="${dto.status eq '구매성공'}">
+    							<button class="btn btn-edit">판매완료</button>
+							</c:if>
+                        	<button class="btn btn-delete" onclick="if(confirm('진짜 마감처리 하시겠습니까?')) location.href='${pageContext.request.contextPath}/admin/productManage/delete?pnum=${dto.pnum}'">마감처리</button>
+
             			</td>
             		</tr>
             	</c:forEach>
             </tbody>
         </table>
         <div class="page-navigation">
-			${dataCount == 0 ? "포인트 내역이 없습니다" : paging}
+			${dataCount == 0 ? "상품목록이 없습니다." : paging}
 		</div>
     </div>
 </main>

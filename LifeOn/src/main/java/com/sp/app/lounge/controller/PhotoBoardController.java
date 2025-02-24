@@ -46,7 +46,7 @@ public class PhotoBoardController {
 	
 	@PostConstruct
 	public void init() {
-		uploadPath = storageService.getRealPath("/uploadPath/tip");
+		uploadPath = storageService.getRealPath("/uploadPath/{bdtype}");
 	}
 	
 	/*
@@ -101,6 +101,7 @@ public class PhotoBoardController {
 				*/
 				
 		    dto.setNum(info.getNum());
+		    dto.setId(info.getId());
 			dto.setNickname(info.getNickName());
 			dto.setIpaddr(req.getRemoteAddr());
 			dto.setBdtype(bdtype);
@@ -211,20 +212,21 @@ public class PhotoBoardController {
 			
 			PhotoBoard prevDto = service.findByPrev(map);
 			PhotoBoard nextDto = service.findByNext(map);
-			/*
-			 SessionInfo info = (SessionInfo) session.getAttribute("member");
-			 map.put("nickname", info.getNickName());
-			 boolean ismemberLiked = service.isMemberBoardLiked(map);
-			*/
+			
+			List<PhotoBoard> listFile = service.listFile(psnum);
+			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			map.put("num", info.getNum());
+			boolean isMemberLiked = service.memberBoardLiked(map);
 			
 			model.addAttribute("bdtype", bdtype); 
 			model.addAttribute("psnum", psnum); 
 			model.addAttribute("dto", dto);
 			model.addAttribute("prevDto", prevDto);
 			model.addAttribute("nextDto", nextDto);
+			model.addAttribute("listFile", listFile);
+			model.addAttribute("isMemberLiked", isMemberLiked);
 			
-			// model.addAttribute("ismemberLiked", ismemberLiked);
-
 			model.addAttribute("query", query);
 			model.addAttribute("page", page);
 			
@@ -256,7 +258,6 @@ public class PhotoBoardController {
 			
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
 			
-			
 			service.deleteBoard(bdtype, psnum, info.getNickName(), info.getGrade());
 			
 		} catch (Exception e) {
@@ -264,6 +265,39 @@ public class PhotoBoardController {
 		}
 		
 		return "redirect:/lounge1/" + bdtype + "?" + query;
+	}
+	
+	@ResponseBody
+	@PostMapping("{bdtype}/deleteFile")
+	public Map<String, ?> deleteFile(@PathVariable(name = "bdtype") String bdtype,
+			@RequestParam(name = "fnum") long fileNum,
+			HttpSession session) throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "false";
+		
+		try {
+			
+			PhotoBoard dto = Objects.requireNonNull(service.findByFileId(fileNum));
+			
+			service.deleteUploadFile(uploadPath, dto.getSsfname());
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("field", "fnum");
+			map.put("psnum", fileNum);
+				
+			service.deleteFile(map);
+			
+			state = "true";
+			
+		} catch (NullPointerException e) {
+			log.info("deleteFile : ", e);
+		} catch (Exception e) {
+			log.info("deleteFile : ", e);
+		}
+		
+		model.put("state", state);
+		return model;
 	}
 	
 	@ResponseBody

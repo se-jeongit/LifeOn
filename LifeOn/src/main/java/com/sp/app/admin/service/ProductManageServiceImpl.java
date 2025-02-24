@@ -88,12 +88,57 @@ public class ProductManageServiceImpl implements ProductManageService{
 	@Override
 	public void insertTogetherProduct(ProductManage dto) throws Exception {
 		try {
+			
+			String startStr = dto.getPtsd();
+			String endStr = dto.getPted();
+			
+			LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.ISO_LOCAL_DATE);
+			LocalDate end = LocalDate.parse(endStr, DateTimeFormatter.ISO_LOCAL_DATE);				
+			LocalDate today = LocalDate.now();
+			
+			int target = dto.getPtq(); //상품수량
+			int sold = 0; //d 어케가져올지 미정
+			
+			if(today.isBefore(start)) {
+				dto.setStatus("진행전");
+			} else if(! today.isAfter(end)) {
+				dto.setStatus("진행중");
+			} else {
+				if(sold < target) {
+					dto.setStatus("구매실패");
+				} else {
+					dto.setStatus("구매성공");
+				}
+			}
+			
 			mapper.insertTogetherProduct(dto);
 		} catch (Exception e) {
 			log.info("insertTogetherProduct : " , e);
 			throw e;
 		}
 		
+	}
+	@Override
+	public void updateTogetherProduct(ProductManage dto) throws Exception {
+		try {
+			mapper.updateTogetherProduct(dto);
+		} catch (Exception e) {
+			log.info("updateTogetherProduct : ", e);
+			throw e;
+		}
+	}
+	
+	@Override
+	public void deleteTogetherProduct(long pnum) throws Exception {
+		try {
+			ProductManage dto = findByPnum(pnum);
+			if(dto == null){
+				return;
+			}
+			mapper.deleteTogetherProduct(pnum);
+		} catch (Exception e) {
+			log.info("deleteTogetherProduct : ", e);
+		}
 	}
 
 	@Override
@@ -130,7 +175,7 @@ public class ProductManageServiceImpl implements ProductManageService{
 		
 		try {
 			list = mapper.listTogetherProduct(map);
-			
+			/*
 			for(ProductManage dto : list) {
 				String startStr = dto.getPtsd();
 				String endStr = dto.getPted();
@@ -154,7 +199,7 @@ public class ProductManageServiceImpl implements ProductManageService{
 					}
 				}
 			}
-			
+			*/
 			
 		} catch (Exception e) {
 			log.info("listTogetherProduct : ", e);
@@ -177,6 +222,20 @@ public class ProductManageServiceImpl implements ProductManageService{
 		}
 		return result;
 	}
+
+	@Override
+	public ProductManage findByPnum(long pnum) {
+		ProductManage dto = null;
+		
+		try {
+			dto = mapper.findByPnum(pnum);
+		} catch (Exception e) {
+			log.info("findByPnum : ", e);
+		}
+		
+		return dto;
+	}
+
 
 
 	

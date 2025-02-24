@@ -1,5 +1,7 @@
 package com.sp.app.lounge.model;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +33,7 @@ public class PhotoBoard {
 	private long fnum;
 	private String ssfname; // 서버 저장 파일명
 	private String cpfname; // 클라이언트가 올린 파일
-	private MultipartFile selectFile;
+	private  List<MultipartFile> selectFile;
 	
 	private long rpnum; 
 	private String rpcontent; 
