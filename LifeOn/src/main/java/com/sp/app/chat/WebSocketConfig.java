@@ -16,5 +16,6 @@ public class WebSocketConfig implements WebSocketConfigurer{
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(socketHandler, "/chat.msg");
 	}
+	
 
 }
