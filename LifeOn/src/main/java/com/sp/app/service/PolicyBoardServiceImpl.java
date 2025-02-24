@@ -20,7 +20,7 @@ public class PolicyBoardServiceImpl implements PolicyBoardService {
 	private final PolicyBoardMapper mapper;
 	private final StorageService storageService;
 
-	
+
 	@Override
 	public void insertBoard(PolicyBoard dto, String uploadPath) throws Exception {
 		try {
