@@ -22,6 +22,12 @@ public interface ProductManageMapper {
 	//INSERT(공동구매)
 	public void insertTogetherProduct(ProductManage dto) throws SQLException;
 	
+	//UPDATE(공동구매)
+	public void updateTogetherProduct(ProductManage dto) throws SQLException;
+	
+	//DELETE(공동구매)
+	public void deleteTogetherProduct(long pnum) throws SQLException;
+	
 	//재고 list
 	public int dataCount(Map<String, Object> map);
 	public List<ProductManage> listProduct(Map<String, Object> map);
@@ -29,6 +35,10 @@ public interface ProductManageMapper {
 	//공동구매 list
 	public int dataCount2(Map<String, Object> map);
 	public List<ProductManage> listTogetherProduct(Map<String, Object> map);
+	
+	public ProductManage findByPnum(long pnum);
+	
+	
 	
 	
 }

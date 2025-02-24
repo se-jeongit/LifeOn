@@ -50,46 +50,46 @@
 <main class="wrapper">
     <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
     <div class="container">
-        <h2>공동구매 상품 등록</h2>
+        <h2>${mode == "register" ? "공동구매 상품 등록" : "공동구매 상품 수정" }</h2>
         
         <form name="productForm" method="post">
            
             <div class="form-group">
                 <label for="ptp">상품 원가</label>
-                <input type="number" id="ptp" name="ptp" required>
+                <input type="number" id="ptp" name="ptp" required value="${dto.ptp}">
             </div>
             
             <div class="form-group">
                 <label for="ptsp">상품 할인가</label>
-                <input type="number" id="ptsp" name="ptsp" required>
+                <input type="number" id="ptsp" name="ptsp" required value="${dto.ptsp}">
             </div>
            
            
            
             <div class="form-group">
                 <label for="ptq">상품 수량</label>
-                <input type="number" id="ptq" name="ptq" required>
+                <input type="number" id="ptq" name="ptq" required value="${dto.ptq}">
             </div>
 
             <div class="form-group">
                 <label for="ptsd">판매 시작일</label>
-                <input type="date" id="ptsd" name="ptsd" required>
+                <input type="date" id="ptsd" name="ptsd" required value="${dto.ptsd}">
             </div>
 
             <div class="form-group">
                 <label for="pted">판매 종료일</label>
-                <input type="date" id="pted" name="pted" required>
+                <input type="date" id="pted" name="pted" required value="${dto.pted}">
             </div>
 
             <div class="form-group">
                 <label for="ptdd">예상 발송일</label>
-                <input type="date" id="ptdd" name="ptdd" required>
+                <input type="date" id="ptdd" name="ptdd" required value="${dto.ptdd}">
             </div>
 			
 			<input type="hidden" id="pnum" name="pnum" value="${pnum}">
 			<input type="hidden" id="ptsq" name="ptsq" value="${ptsq}">  
 			
-            <button type="button" class="btn" onclick="productRegister();">상품 등록</button>
+            <button type="button" class="btn" onclick="productRegister();">${mode == "register" ? "상품 등록" : "상품 수정" }</button>
         </form>
     </div>
 </main>
@@ -113,7 +113,7 @@ function productRegister(){
     }
 	
 	
-    f.action = '${pageContext.request.contextPath}/admin/productManage/register';
+    f.action = '${pageContext.request.contextPath}/admin/productManage/${mode}';
     f.submit();	
 }
 

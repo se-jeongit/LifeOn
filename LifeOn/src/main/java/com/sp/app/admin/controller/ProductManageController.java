@@ -3,6 +3,7 @@ package com.sp.app.admin.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -173,6 +174,7 @@ public class ProductManageController {
 			Model model) throws Exception {
 		model.addAttribute("pnum", pnum);
 		model.addAttribute("ptsq", ptsq);
+		model.addAttribute("mode", "register");
 		return "admin/productManage/register";
 	}
 	
@@ -187,6 +189,52 @@ public class ProductManageController {
 	}
 	
 	
+	@GetMapping("update")
+	public String updateForm(@RequestParam(name = "pnum") long pnum,
+			@RequestParam(name = "ptsq") int ptsq,
+			@RequestParam(name = "page", defaultValue = "1") String page,
+			Model model) {
+		try {
+			ProductManage dto = Objects.requireNonNull(service.findByPnum(pnum));
+			model.addAttribute("mode", "update");
+			model.addAttribute("pnum", pnum);
+			model.addAttribute("ptsq", ptsq);
+			model.addAttribute("dto", dto);
+
+			return "admin/productManage/register";
+			
+		} catch(NullPointerException e) {
+		} catch (Exception e) {
+			log.info("updateForm : ", e);
+		}
+		
+		return "redirect:/admin/productManage/list?page=" + page;
+	}
+	
+	@PostMapping("update")
+	public String updateSubmit(ProductManage dto,
+			@RequestParam(name = "page", defaultValue = "1") String page) {
+		try {
+			service.updateTogetherProduct(dto);
+		} catch (Exception e) {
+			log.info("updateSubmit : ", e);
+		}		
+		return "redirect:/admin/productManage/list?page=" + page;
+	}
+	
+	@GetMapping("delete")
+	public String deleteProduct(@RequestParam(name = "pnum") long pnum,
+			@RequestParam(name = "page", defaultValue = "1") String page) {
+		try {
+			service.deleteTogetherProduct(pnum);
+			
+		} catch (Exception e) {
+			log.info("deleteProduct : ", e);
+		}
+		
+		
+		return "redirect:/admin/productManage/list?=" + page;
+	}
 	
 	
 	

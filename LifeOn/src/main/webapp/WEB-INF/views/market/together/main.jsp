@@ -27,24 +27,38 @@
         border-radius: 5px;
     }
     .product-info {
-        font-size: 14px;
+        font-size: 12px;
         color: #666;
-        margin-top: 5px;
+        margin-top: 5px; 
+        text-align: left; 
     }
-    .product-price {
-        font-weight: bold;
-        color: black;
-    }
+    .product-header {
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	}
+	
+	.product-price{
+	    margin: 0;
+	    margin-left: 10px; 
+	}
+	
+	.purchase-status {
+	    font-size: 20px;
+	    font-weight: bold;
+	    color: blue;
+	}
+	.closed-status {
+    	color: red;
+	}
     .product-discount {
         color: red;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: bold;
-    }
-    .pagination .page-item.active .page-link {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: white;
-    }
+        text-align: left; 
+    	margin-left: 8px; 
+    }    
+    
     .filter-section {
         background: #F7F9FA;
         padding: 15px;
@@ -87,6 +101,7 @@
     .recently-viewed h5 {
         font-weight: bold;
     }
+    
 </style>
 </head>
 <body>
@@ -97,23 +112,24 @@
 <main class="container d-flex flex-column min-vh-100 align-items-center" style="padding-top: 84px;">
     <div class="row w-100">
         <!-- Sidebar -->
-        <aside class="col-md-3">
+        <aside class="col-md-2">
             <div class="filter-section mb-3">
                 <h5>필터</h5>
-                <ul class="filter-category">
-                    <li><a href="#">전체</a></li>
-                    <li><a href="#">패션의류/잡화</a></li>
-                    <li><a href="#">생활용품</a></li>
-                    <li><a href="#">홈인테리어</a></li>
-                    <li><a href="#" class="subcategory">전자제품</a>
-                        <ul class="filter-category subcategory">
-                            <li><a href="#">노트북</a></li>
-                            <li><a href="#">핸드폰</a></li>
-                            <li><a href="#">이어폰</a></li>
-                            <li><a href="#">기타</a></li>
-                        </ul>
-                    </li>
-                </ul>
+								
+				<div class="form-group">
+				    <label for="bigCategory" style="font-size:17px">[[카테고리]]</label>
+				    <ul class="filter-category" id="bigCategoryList">
+				        <c:forEach var="dto" items="${bigCategory}">
+				            <li class="category">
+				                <a href="#" class="subcategory-toggle" data-category-id="${dto.cbn}">${dto.cbc}</a>
+				                <ul class="filter-category subcategory" id="smallCategory-${dto.cbn}" style="display:none;">
+				                    <!-- 소분류 항목이 여기에 동적으로 들어감 -->
+				                </ul>
+				            </li>
+				        </c:forEach>
+				    </ul>
+				</div>
+
                 <h5>검색 기간</h5>
                 <input type="date" class="form-control mb-2" placeholder="시작일"> ~ 
                 <input type="date" class="form-control" placeholder="종료일">
@@ -124,34 +140,32 @@
         </aside>
         
         <!-- Main Content -->
-        <section class="col-md-6">
+        <section class="col-md-8">
             <h2>공동구매</h2>
             <div class="product-grid">
-                <c:forEach var="i" begin="1" end="9">
-                    <div class="product-card">
-                        <img src="${pageContext.request.contextPath}/dist/images/profile.png" alt="상품 이미지">
-                        <p class="mt-2 product-name"><strong>물품이름</strong></p>
-                        <p class="product-price"><fmt:formatNumber value="23000" type="currency"/></p>
-                        <p class="product-discount">13,000원</p>
-                        <p class="product-info">시작일 : 2024-10-22 - 종료일 : 2024-12-22</p>
-                        <p class="product-info">남은수량 : ${i * 10}개 | 예상 발송일 : 2025-01-03</p>
-                        <p class="text-danger">구매 가능</p>
-                    </div>
+                <c:forEach var="dto" items="${list}">
+	                    <div class="product-card">
+                			<a href="${articleUrl}?pnum=${dto.pnum}" class="product-card-link">
+	                        <img src="${pageContext.request.contextPath}/uploads/product/${dto.pph}" alt="상품 이미지">
+			            	</a>
+	                        <p class="mt-2 product-name"><strong>${dto.pname}</strong></p>
+	                        <div class="product-header">
+							    <p class="product-price"><del><fmt:formatNumber value="${dto.ptp}" type="currency"/></del></p>
+							    <p class="purchase-status ${dto.status eq '마감' ? 'closed-status' : ''}">${dto.status}</p>
+							</div>
+	    					<p class="product-discount"><fmt:formatNumber value="${dto.ptsp}" type="currency"/></p>
+	                        <p class="product-info">시작일 : ${dto.ptsd} - 종료일 : ${dto.pted}</p>
+	                        <p class="product-info">남은수량 : ${dto.ptq}개 &nbsp;&nbsp;&nbsp;예상 발송일 : ${dto.ptdd}</p>
+	                    </div>
                 </c:forEach>
             </div>
             
-            <nav class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                </ul>
-            </nav>
+	        <div class="page-navigation">
+				${dataCount == 0 ? "상품목록이 없습니다." : paging}
+			</div>
         </section>
         
-         <aside class="col-md-3">
+         <aside class="col-md-2">
             <div class="recently-viewed">
                 <h5>즐겨찾기</h5>
                 <h5>최근 본 상품</h5>
@@ -165,5 +179,11 @@
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
 </footer>
 <jsp:include page="/WEB-INF/views/layout/footerResources.jsp"/>
+
+
+
+
+
+
 </body>
 </html>

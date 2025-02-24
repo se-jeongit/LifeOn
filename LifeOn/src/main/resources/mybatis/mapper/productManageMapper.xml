@@ -5,7 +5,7 @@
 	
 	<select id="listBigCategory" resultType="com.sp.app.admin.model.ProductManage">
 		SELECT cbn, cbc
-		FROM category_big	
+		FROM category_big	 
 	</select>
 	
 	<select id="listSmallCategory" parameterType="Integer" resultType="com.sp.app.admin.model.ProductManage">
@@ -31,11 +31,20 @@
 	
 	
 	<insert id="insertTogetherProduct" parameterType="com.sp.app.admin.model.ProductManage">
-		INSERT INTO product_together (pnum, ptp, ptsp, ptq, ptd, ptsd, pted, ptdd)
-		VALUES (#{pnum}, #{ptp}, #{ptsp}, #{ptq}, SYSDATE, #{ptsd}, #{pted}, #{ptdd})
+		INSERT INTO product_together (pnum, ptp, ptsp, ptq, ptd, ptsd, pted, ptdd, status)
+		VALUES (#{pnum}, #{ptp}, #{ptsp}, #{ptq}, SYSDATE, #{ptsd}, #{pted}, #{ptdd}, #{status})
 	</insert>	
 	
+	<update id="updateTogetherProduct" parameterType="com.sp.app.admin.model.ProductManage">
+		UPDATE product_together SET ptp=#{ptp}, ptsp=#{ptsp}, ptq =#{ptq},
+			ptsd = #{ptsd}, pted = #{pted}, ptdd = #{ptdd}
+		WHERE pnum = #{pnum}
+	</update>
 	
+	<delete id="deleteTogetherProduct" parameterType="Long">
+		DELETE FROM product_together
+		WHERE pnum = #{pnum}
+	</delete>
 
 	<select id="dataCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*),0)
@@ -69,18 +78,21 @@
 	
 	
 	<select id="listTogetherProduct" parameterType="map" resultType="com.sp.app.admin.model.ProductManage">
-		SELECT p.pnum, p.pname, p.pph, pt.ptp, pt.ptsp, pt.ptq, 
+		SELECT p.pnum, p.pname, p.pph, pt.ptp, pt.ptsp, pt.ptq, ts.ptsq, pt.status,
 		TO_CHAR(pt.ptd, 'YYYY-MM-DD') AS ptd, 
 		TO_CHAR(pt.ptsd, 'YYYY-MM-DD') AS ptsd, 
 		TO_CHAR(pt.pted, 'YYYY-MM-DD') AS pted, 
 		TO_CHAR(pt.ptdd, 'YYYY-MM-DD') AS ptdd
 		FROM product p
+		JOIN product_together_stock ts ON p.pnum = ts.pnum
 		LEFT JOIN product_together pt ON p.pnum = pt.pnum
-		WHERE pt.pnum IS NOT NULL
 		<where>
-		<if test="schType != null">
-			<include refid="where-list"/>
-		</if>
+			<if test="schType == null or schType == 'all'">
+      			pt.pnum IS NOT NULL
+   			</if>
+			<if test="schType != null and schType != 'all'" >
+				AND <include refid="where-list"/>
+			</if>
 		</where>
 		ORDER BY pt.pnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY	
@@ -91,19 +103,19 @@
         <when test="schType == 'all'">
         </when>
         
-        <when test="schType == 'a'">
+        <when test="schType == 'astatus'">
             status = '진행전'
         </when>
         
-        <when test="schType == 'b'">
+        <when test="schType == 'bstatus'">
             status = '진행중'
         </when>
 
-        <when test="schType == 'c'">
+        <when test="schType == 'cstatus'">
             status = '구매성공'
         </when>
 
-        <when test="schType == 'd'">
+        <when test="schType == 'dstatus'">
             status = '구매실패'
         </when>
         <otherwise>
@@ -111,6 +123,20 @@
     </choose>
 	</sql>	
 	
+	
+	<select id="findByPnum" parameterType="Long" resultType="com.sp.app.admin.model.ProductManage">
+		SELECT p.pnum, p.pname, p.pph, p.pct, ts.ptsq, pp.ppp, 
+			pt.ptp, pt.ptsp, pt.ptq, pt.ptd, pt.status,
+			TO_CHAR(pt.ptsd, 'YYYY-MM-DD') AS ptsd, 
+			TO_CHAR(pt.pted, 'YYYY-MM-DD') AS pted, 
+			TO_CHAR(pt.ptdd, 'YYYY-MM-DD') AS ptdd
+		FROM product p
+		JOIN product_together_stock ts ON p.pnum = ts.pnum
+		JOIN product_picture pp ON p.pnum = pp.pnum
+		LEFT JOIN product_together pt ON p.pnum = pt.pnum
+		WHERE p.pnum = #{pnum}
+	
+	</select>
 	
 	
 	

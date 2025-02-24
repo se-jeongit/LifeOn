@@ -89,7 +89,7 @@
 						        <c:when test="${dto.asRegister == 'Y'}">
 						            <!-- 공동구매 상품 등록이 되어있는 경우 -->
 						            <button type="button" class="btn btn-secondary" disabled>등록 완료</button>
-						            <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/list'" class="btn btn-info">상품 보러가기</button>
+						            <button type="button" onclick="location.href='${pageContext.request.contextPath}/market/together/detail?pnum=${dto.pnum}'" class="btn btn-info">상품 보러가기</button>
 						        </c:when>
 						        <c:otherwise>
 						            <!-- 공동구매 상품 등록 미완료인 경우 -->
