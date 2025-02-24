@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.sp.app.interceptor.LoginCheckInterceptor;
@@ -32,13 +31,13 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 		excludePaths.add("/member/pwdSet");
 		excludePaths.add("/member/");
 		excludePaths.add("/uploads/**");
-	
+		excludePaths.add("/lounge1/room");
+		excludePaths.add("/lounge1/recipe");
+		excludePaths.add("/lounge2/tip");
+		excludePaths.add("/lounge2/daily");
 		
 		registry.addInterceptor(new LoginCheckInterceptor())
 			.excludePathPatterns(excludePaths);
 		
 	}
-	
-	
-	
 }

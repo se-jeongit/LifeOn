@@ -36,6 +36,10 @@ public interface FreeBoardMapper {
 	public int boardLikeCount(long num);
 	public FreeBoard memberBoardLiked(Map<String, Object> map);
 	
+	// 게시글 신고
+	public void insertBoardBlind(Map<String, Object> map) throws SQLException;
+	public Long reprtNum(Map<String, Object> map);
+	
 	// 댓글
 	public void insertReply(FreeBoard dto) throws SQLException;
 	public int replyCount(Map<String, Object> map);
@@ -46,4 +50,7 @@ public interface FreeBoardMapper {
 	public void insertReplyLike(Map<String, Object> map) throws SQLException;
 	public Map<String, Object> replyLikeCount(Map<String, Object> map);
 	public Optional<Integer> memberReplyLiked(Map<String, Object> map);
+	
+	// 댓글 신고
+	public void updateReplyBlind(Map<String, Object> map) throws SQLException;
 }

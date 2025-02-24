@@ -81,7 +81,16 @@ textarea:focus, input:focus { outline: none; }
 }
 
 /* 로딩 */
-.typing-indicator { width: 60px; height: 30px; position: relative; z-index: 4; }
+.typing-indicator {
+        width: 60px;
+        height: 30px;
+        position: absolute;
+        top: 50% !important;;
+        left: 50% !important;;
+        transform: translate(-50%, -50%) !important;;
+        z-index: 4;
+}
+
 .typing-circle {
 	width: 8px;
 	height: 8px;
@@ -91,7 +100,7 @@ textarea:focus, input:focus { outline: none; }
 	left: 15%;
 	transform-origin: 50%;
 	animation: typing-circle7124 0.5s alternate infinite ease;
-	}
+}
 	
 @keyframes typing-circle7124 {
 	0% { top: 20px; height: 5px; border-radius: 50px 50px 25px 25px; transform: scaleX(1.7); }

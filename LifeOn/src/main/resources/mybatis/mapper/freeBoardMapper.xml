@@ -60,10 +60,9 @@
 			GROUP BY psnum
 		) hf ON hb.psnum = hf.psnum
 		LEFT OUTER JOIN (
-			SELECT COUNT(*) replyCount, ps_num, rpblind
+			SELECT COUNT(*) replyCount, ps_num
 			FROM HYBRID_BOARD_REPLY
-			WHERE rpblind = 0
-			GROUP BY ps_num, rpblind
+			GROUP BY ps_num
 		) c ON hb.psnum = c.ps_num
 		LEFT OUTER JOIN (
 			SELECT psnum, COUNT(*) boardLikeCount
@@ -86,10 +85,9 @@
 		FROM HYBRID_BOARD hb
 		JOIN MEMBER m ON hb.num = m.num
 		LEFT OUTER JOIN (
-			SELECT COUNT(*) replyCount, ps_num, rpblind
+			SELECT COUNT(*) replyCount, ps_num
 			FROM HYBRID_BOARD_REPLY
-			WHERE rpblind = 0
-			GROUP BY ps_num, rpblind
+			GROUP BY ps_num
 		) r ON hb.psnum = r.ps_num
 		LEFT OUTER JOIN (
 			SELECT psnum, COUNT(*) boardLikeCount
@@ -187,15 +185,32 @@
 		WHERE psnum = #{psnum} AND num = #{num}
 	</select>
 	
+	<insert id="insertBoardBlind" parameterType="map">
+		INSERT INTO REPORT (repnum, repr, repd, repan, repat, num)
+			VALUES (report_seq.NEXTVAL, #{repr}, SYSDATE, #{repan}, 3, #{num})
+	</insert>
+	
+	<select id="reprtNum" parameterType="map" resultType="long">
+		SELECT r.num as reprtNum FROM report r
+		JOIN member m ON m.num = r.num
+		WHERE repan = #{psnum} AND m.num = #{num}
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
 	<insert id="insertReply" parameterType="com.sp.app.lounge.model.FreeBoard">
 		INSERT INTO HYBRID_BOARD_REPLY (rpnum, rpcontent, rpreg_date, ps_num, num, rpblind)
 			VALUES (hybrid_board_reply_seq.NEXTVAL, #{rpcontent}, SYSDATE, #{psnum}, #{num}, 0)
 	</insert>
 	
+	<update id="updateReplyBlind" parameterType="map">
+		UPDATE HYBRID_BOARD_REPLY SET rpblind = #{rpblind}
+		WHERE rpnum = #{rpnum}
+	</update>
+	
 	<select id="replyCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*), 0)
 		FROM HYBRID_BOARD_REPLY
-		WHERE ps_num = #{psnum} AND rpblind = 0
+		WHERE ps_num = #{psnum}
 	</select>
 	
 	<select id="listReply" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
@@ -211,8 +226,8 @@
 			FROM HYBRID_BOARD_LIKE
 			GROUP BY rpnum
 		) c ON r.rpnum = c.rpnum
-		LEFT JOIN HYBRID_BOARD_LIKE l ON r.rpnum = l.rpnum AND l.num = #{num}
-		WHERE r.ps_num = #{psnum} AND r.rpblind = 0
+		LEFT OUTER JOIN HYBRID_BOARD_LIKE l ON r.rpnum = l.rpnum AND l.num = #{num}
+		WHERE r.ps_num = #{psnum}
 		ORDER BY r.rpnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>

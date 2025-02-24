@@ -24,10 +24,10 @@
 function check() {
     const f = document.freeForm;
     let str;
-	
+    
     str = f.subject.value.trim();
-    if( !str ) {
-        alert('제목을 입력하세요. ');
+    if(! str) {
+        alert('제목을 입력하세요.');
         f.subject.focus();
         return false;
     }
@@ -39,8 +39,8 @@ function check() {
 	}
 
     str = f.content.value.trim();
-    if( !str || str === '<p><br></p>') {
-        alert('내용을 입력하세요. ');
+    if(! str || str === '<p><br></p>') {
+        alert('내용을 입력하세요.');
         f.content.focus();
         return false;
     }
@@ -64,16 +64,9 @@ function check() {
 	</div>
 	
 	<div class="body-container">
-		<div class="body-content">
-			<aside class="sidenav">
-				<div class="leftBox">
-					<p>❤️최신순❤️</p>
-					<p>❤️조회순❤️</p>
-					<p>❤️즐겨찾기순❤️</p>
-				</div>
-			</aside>
+		<div class="body-content" style="justify-content: center;">
 			
-			<div class="main_content">
+			<div class="main_content" style="width: 40%">
 				<form name="freeForm" class="freeForm" method="post" enctype="multipart/form-data">
 					<table class="table write-form">
 						<tr>
@@ -87,7 +80,7 @@ function check() {
 						<tr>
 							<td scope="row" style="padding-top: 20px;">내&emsp;용</td>
 							<td>
-								<textarea name="content" placeholder="내용을 작성해주세요." class="free-control" style="height: 200px;">${dto.content}</textarea>
+								<textarea name="content" id="ir1" placeholder="내용을 작성해주세요." class="free-control" style="width: 100%; height: 400px;">${dto.content}</textarea>
 							</td>
 						</tr>
 						
@@ -133,12 +126,7 @@ function check() {
 					</table>
 				</form>
 			</div>
-			
-			<aside class="sidebar">
-				<div class="rightBox">
-					<p>❤️검색순위❤️</p>
-				</div>
-			</aside>
+
 		</div>
 	</div>
 	
@@ -165,8 +153,8 @@ function check() {
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript">
-/*
-var oEditors = [];
+
+/* var oEditors = [];
 nhn.husky.EZCreator.createInIFrame({
 	oAppRef: oEditors,
 	elPlaceHolder: 'ir1',
@@ -189,8 +177,8 @@ function submitContents(elClickedObj) {
 		
 	} catch(e) {
 	}
-}
-*/
+} */
+
 $("#file").on('change', function() {
     var fileCount = $("#file")[0].files.length;
     $(".upload-name").val(fileCount + "개 파일 선택됨");

@@ -26,6 +26,7 @@ import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.exception.StorageException;
 import com.sp.app.lounge.model.FreeBoard;
+import com.sp.app.lounge.model.Reprt;
 import com.sp.app.lounge.service.FreeBoardService;
 import com.sp.app.model.SessionInfo;
 
@@ -176,19 +177,22 @@ public class FreeBoardController {
 			
 			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
 			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
 			Map<String, Object> map = new HashMap<>();
 			map.put("schType", schType);
 			map.put("kwd", kwd);
 			map.put("psnum", num);
+			map.put("num", info.getNum());
 			
 			FreeBoard prevDto = service.findByPrev(map);
 			FreeBoard nextDto = service.findByNext(map);
 			
 			List<FreeBoard> listFile = service.listFile(num);
 			
-			SessionInfo info = (SessionInfo) session.getAttribute("member");
-			map.put("num", info.getNum());
 			boolean isMemberLiked = service.isMemberBoardLiked(map);
+			
+			Long reprNnum = service.reprtNum(map);
 			
 			model.addAttribute("dto", dto);
 			model.addAttribute("prevDto", prevDto);
@@ -196,6 +200,8 @@ public class FreeBoardController {
 			model.addAttribute("listFile", listFile);
 			
 			model.addAttribute("isMemberLiked", isMemberLiked);
+			
+			model.addAttribute("reprtNum", reprNnum);
 
 			model.addAttribute("query", query);
 			model.addAttribute("page", page);
@@ -385,6 +391,32 @@ public class FreeBoardController {
 		return model;
 	}
 	
+	@PostMapping("tip/boardBlind")
+	@ResponseBody
+	public Map<String, Object> boardBlind(Reprt dto, HttpSession session) {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			Map<String, Object> map = new HashMap<>();
+			
+			map.put("num",info.getNum());
+			map.put("repr",dto.getRepr());
+			map.put("repan",dto.getRepan());
+			
+			service.insertBoardBlind(map);
+			
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
+		
+		return model;
+	}
+	
 	@PostMapping("tip/insertReply")
 	@ResponseBody
 	public Map<String, Object> insertReply(FreeBoard dto, HttpSession session) {
@@ -494,10 +526,7 @@ public class FreeBoardController {
 			paramMap.put("num", info.getNum());
 			service.insertReplyLike(paramMap);
 			
-			// 좋아요 / 싫어요 개수
 			Map<String, Object> countMap = service.replyLikeCount(paramMap);
-			// 마이바티스의 resultType 이 map 인 경우 int 는 BigDecimal 로 넘어옴
-			// 오라클에서 resultType 이 map 인 경우 컬럼명은 모두 대문자로 넘어옴
 			likeCount = ((BigDecimal)countMap.get("LIKECOUNT")).intValue();
 			disLikeCount = ((BigDecimal)countMap.get("DISLIKECOUNT")).intValue();
 			
@@ -509,6 +538,31 @@ public class FreeBoardController {
 		
 		model.put("likeCount", likeCount);
 		model.put("disLikeCount", disLikeCount);
+		model.put("state", state);
+		
+		return model;
+	}
+	
+	@ResponseBody
+	@PostMapping("tip/replyBlind")
+	public Map<String, ?> replyBlind(
+			@RequestParam Map<String, Object> paramMap,
+			HttpSession session) {
+		
+		Map<String , Object> model = new HashMap<>();
+		
+		String state = "true";
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			paramMap.put("num", info.getNum());
+			
+			service.updateReplyBlind(paramMap);
+			
+		} catch (Exception e) {
+			state = "false";
+		}
+		
 		model.put("state", state);
 		
 		return model;

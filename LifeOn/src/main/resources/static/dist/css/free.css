@@ -78,7 +78,8 @@
 
 .rightBox {
 	width: 200px;
-	padding: 10px 0;
+	padding-top: 5px;
+	overflow : hidden;
 	border-radius: 8px;
 	border: 1px solid #999;
 	margin: 30px 20px;
@@ -89,7 +90,8 @@
 
 .leftBox {
 	width: 200px;
-	padding: 10px 0;
+	padding-top: 5px;
+	overflow : hidden;
 	border-radius: 8px;
 	border: 1px solid #999;
 	margin: 30px 20px;
@@ -304,4 +306,8 @@
 
 label {
   cursor: pointer;
+}
+
+.reportable td, .reportable th {
+	padding: 10px 15px;
 }

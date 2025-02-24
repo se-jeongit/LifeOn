@@ -29,6 +29,10 @@ public interface FreeBoardService {
 	public int boardLikeCount(long num);
 	public boolean isMemberBoardLiked(Map<String, Object> map);
 	
+	// 게시글 신고
+	public void insertBoardBlind(Map<String, Object> map) throws Exception;
+	public Long reprtNum(Map<String, Object> map);
+	
 	// 댓글
 	public void insertReply(FreeBoard dto) throws Exception;
 	public int replyCount(Map<String, Object> map);
@@ -38,4 +42,7 @@ public interface FreeBoardService {
 	// 댓글 좋아요
 	public void insertReplyLike(Map<String, Object> map) throws Exception;
 	public Map<String, Object> replyLikeCount(Map<String, Object> map);
+	
+	// 댓글 신고
+	public void updateReplyBlind(Map<String, Object> map) throws Exception;
 }

@@ -275,6 +275,35 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		
 		return result;
 	}
+	
+	@Override
+	public void insertBoardBlind(Map<String, Object> map) throws Exception {
+		try {
+			mapper.insertBoardBlind(map);
+		} catch (Exception e) {
+			log.info("insertBoardBlind : ", e);
+			
+			throw e;
+		}
+	}
+	
+	@Override
+	public Long reprtNum(Map<String, Object> map) {
+		Long num = null;
+		
+		try {
+			num = mapper.reprtNum(map);
+	        
+	        if (num == null) {
+	            num = 0L;
+			 }
+	        
+		} catch (Exception e) {
+			log.info("reprtNum : ", e);
+		}
+		
+		return num;
+	}
 
 	@Override
 	public void insertReply(FreeBoard dto) throws Exception {
@@ -329,7 +358,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		try {
 			result = mapper.memberReplyLiked(map).orElse(-1);
 		} catch (Exception e) {
-			log.info("userReplyLiked : ", e);
+			log.info("memberReplyLiked : ", e);
 		}
 		
 		return result;
@@ -367,5 +396,17 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			log.info("replyLikeCount : ", e);
 		}
 		return countMap;
+	}
+
+	@Override
+	public void updateReplyBlind(Map<String, Object> map) throws Exception {
+		try {
+			mapper.updateReplyBlind(map);
+		} catch (Exception e) {
+			log.info("updateReplyBlind : ", e);
+			
+			throw e;
+		}
+		
 	}
 }

@@ -76,24 +76,18 @@ function elapsedText(date) {
 	
 	<div class="body-container">
 		<div class="body-content">
-			<aside class="sidenav">
+			<aside class="sidenav" id="sidenav">
 				<div class="leftBox" style="margin-bottom: 10px;">
-					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
 						조회순
 					</div>
 					
-					<table class="table table-hover" style="table-layout: fixed;">
+					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
 						<c:forEach var="dto" items="${list}" varStatus="status">
 		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word;">
+								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
 									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
 										${dto.subject}
-									</div>
-									<div style="display: flex; align-items: center;">
-										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-										</div>
-										<span>${dto.nickname}</span>
 									</div>
 								</td>
 		              		</tr>
@@ -101,22 +95,16 @@ function elapsedText(date) {
 		            </table>
 				</div>
 				<div class="leftBox" style="margin-top: 0px;">
-					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
 						댓글순
 					</div>
 					
-					<table class="table table-hover" style="table-layout: fixed;">
+					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
 						<c:forEach var="dto" items="${list}" varStatus="status">
 		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word;">
+								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
 									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
 										${dto.subject}
-									</div>
-									<div style="display: flex; align-items: center;">
-										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-										</div>
-										<span>${dto.nickname}</span>
 									</div>
 								</td>
 		              		</tr>
@@ -197,24 +185,18 @@ function elapsedText(date) {
 				
 			</div>
 			
-			<aside class="sidebar">
+			<aside class="sidebar" id="sidebar">
 				<div class="rightBox" style="margin-bottom: 10px;">
-					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
 						검색순위
 					</div>
 					
-					<table class="table table-hover" style="table-layout: fixed;">
+					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
 						<c:forEach var="dto" items="${list}" varStatus="status">
 		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word;">
+								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
 									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
 										${dto.subject}
-									</div>
-									<div style="display: flex; align-items: center;">
-										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-										</div>
-										<span>${dto.nickname}</span>
 									</div>
 								</td>
 		              		</tr>
@@ -223,22 +205,16 @@ function elapsedText(date) {
 				</div>
 				
 				<div class="rightBox" style="margin-top: 0;">
-					<div style="padding: 5px 25px; text-align: left; font-weight: 600;">
+					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
 						즐겨찾기순
 					</div>
 					
-					<table class="table table-hover" style="table-layout: fixed;">
+					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
 						<c:forEach var="dto" items="${list}" varStatus="status">
 		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word;">
+								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
 									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
 										${dto.subject}
-									</div>
-									<div style="display: flex; align-items: center;">
-										<div class="profile" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-										</div>
-										<span>${dto.nickname}</span>
 									</div>
 								</td>
 		              		</tr>

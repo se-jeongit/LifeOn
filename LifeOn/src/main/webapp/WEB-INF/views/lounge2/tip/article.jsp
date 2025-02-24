@@ -29,11 +29,6 @@
 	<div class="body-container">
 		<div class="body-content">
 			<aside class="sidenav">
-				<div class="leftBox">
-					<p>❤️최신순❤️</p>
-					<p>❤️조회순❤️</p>
-					<p>❤️즐겨찾기순❤️</p>
-				</div>
 			</aside>
 			
 			<div class="main_content">
@@ -166,9 +161,6 @@
 			</div>
 
 			<aside class="sidebar">
-				<div class="rightBox">
-					<p>❤️검색순위❤️</p>
-				</div>
 			</aside>
 		</div>
 	</div>
@@ -187,32 +179,87 @@
 	</script>
 </c:if>
 
-<!-- 신고 모달 -->
 <script type="text/javascript">
 function dialogReport() {
-	$('#dialogReport').modal('show');  
+	let memberNum = '${sessionScope.member.num}';
+	let reprtNum = '${reprtNum}';
+	
+	if(memberNum === reprtNum) {
+		alert('이미 이 게시글은 신고하셨습니다. 신고하신 내용은 관리자 검토 후 조치 됩니다.');
+		$('#dialogReport').modal('hide');  
+	} else {
+		$('#dialogReport').modal('show');  
+	}
 }
 
-$(function(){
+$(function() {
 	$('#dialogReport').on('hide.bs.modal', function() {
 		$('button, input, select, textarea').each(function(){
 			$(this).blur();
 		});
 	});
-
-    // 신고 버튼 클릭 시 처리
+	
+    $('input[name="repr"]').on('change', function() {
+        if ($('#radio8').is(':checked')) {
+            $('textarea[name="addrepr"]').show();
+        } else {
+            $('textarea[name="addrepr"]').hide();
+        }
+    });
+	
  	$('#submitReport').on('click', function() {
-        var reportReason = $('input[name="reportReason"]:checked').val();
-		if (reportReason === "") {
-        	alert("신고 사유를 입력해주세요.");
-        	return;
-		}
+ 		let repr = $('input[name="repr"]:checked').val();
+        let addrepr = $('textarea[name="addrepr"]').val();
+      	
+        if ($('#radio8').is(':checked')) {
+            repr = addrepr;
+        }
+        
+        if (! repr) {
+            alert("신고 사유를 선택해주세요.");
+            return false;
+        }
+        
+        if (repr === '8' && addrepr.length < 1) {
+	        alert("기타 사유를 입력해주세요.");
+	        $('textarea[name="addrepr"]').focus();
+	        return false;
+        }
+        
+        if (addrepr.length > 300) {
+            alert("최대 300자 까지만 입력 가능합니다.");
+            $('textarea[name="addrepr"]').val(addrepr.substring(0, 300));
+            return false;
+        }
 
-      	// 여기에 신고 처리 로직 추가
-      	// 예: AJAX 요청을 통해 신고 내용을 서버로 전송
-
-		alert("신고가 접수되었습니다.");
-		$('#dialogReport').modal('hide');
+		let url = '${pageContext.request.contextPath}/lounge2/tip/boardBlind';
+		let repan = '${dto.psnum}';
+		let params = {repan: repan, repr: repr};
+		
+		
+		const fn = function(data) {
+			let state = data.state;
+			
+		   if (state === 'true') {
+		        if (confirm('허위 신고 시 운영정책에 따라 조치 될 수 있습니다. 정말로 신고하시겠습니까?')) {
+		            alert("신고가 접수가 완료되었습니다.");
+		            $('#dialogReport').modal('hide');
+		            
+		            setTimeout(function() {
+		                window.location.reload();
+		            }, 1000);
+		            
+		            setTimeout();
+		        } else {
+		            return false;
+		        }
+	        	repr = '';
+		    } else {
+		        alert("오류가 발생했습니다. 다시 시도해주세요.");
+		    }
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
 	});
 });
 </script>
@@ -223,80 +270,81 @@ $(function(){
 		
       		<div class="modal-header" style="display: flex; justify-content: space-between; padding: 10px 20px;">
         		<h5 class="modal-title" id="reportModalLabel">게시글 신고하기</h5>
-        		<button type="button" style="border: none; background: #fff; font-size: 30px;" class="close" data-dismiss="modal" aria-label="Close">
-          			<span aria-hidden="true">&times;</span>
-        		</button>
+        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       		</div>
       		
-      		<div class="modal-body">
+      		<div class="modal-body" style="padding: 5px 0px;">
        			<form id="reportForm">
           			<div class="form-group">
-			        	<table class="table table-hover">
+			        	<table class="table table-hover reportable m-0">
 			            	<thead>
 			              		<tr>
-			                		<th>신고사유 선택</th>
+			                		<th>
+				                		신고사유를 알려주세요
+				                		<p style="text-align: left; margin: 0; color: #999; font-weight: 400;">신고하신 내용은 관리자 검토 후 조치 됩니다.</p>
+			                		</th>
 			              		</tr>
 			            	</thead>
 			            	<tbody>
 			              		<tr>
 			                		<td>
-				                		<input type="radio" id="radio1" name="reportReason" value="1" class="reportReasonRadio">
+				                		<input type="radio" id="radio1" name="repr" value="스팸홍보/도배글 입니다." class="reportReasonRadio">
 				                		<label for="radio1" style="width: 90%">스팸홍보/도배글 입니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
-			                			<input type="radio" id="radio2" name="reportReason" value="2" class="reportReasonRadio">
+			                			<input type="radio" id="radio2" name="repr" value="불법정보를 포함하고 있습니다." class="reportReasonRadio">
 			                			<label for="radio2" style="width: 90%">불법정보를 포함하고 있습니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
-			                			<input type="radio" id="radio3" name="reportReason" value="3" class="reportReasonRadio">
+			                			<input type="radio" id="radio3" name="repr" value="청소년에게 유해한 내용입니다." class="reportReasonRadio">
 			                			<label for="radio3" style="width: 90%">청소년에게 유해한 내용입니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
-			                			<input type="radio" id="radio4" name="reportReason" value="4" class="reportReasonRadio">
+			                			<input type="radio" id="radio4" name="repr" value="욕설/생명경시/혐오/차별적 표현입니다." class="reportReasonRadio">
 			                			<label for="radio4" style="width: 90%">욕설/생명경시/혐오/차별적 표현입니다.</label>
 			                		</td>
 			              		</tr>
 			             		<tr>
 			                		<td>
-			                			<input type="radio" id="radio5" name="reportReason" value="5" class="reportReasonRadio">
+			                			<input type="radio" id="radio5" name="repr" value="음란물 입니다." class="reportReasonRadio">
 			                			<label for="radio5" style="width: 90%">음란물 입니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
-			                			<input type="radio" id="radio6" name="reportReason" value="6" class="reportReasonRadio">
+			                			<input type="radio" id="radio6" name="repr" value="불쾌한 표현이 있습니다." class="reportReasonRadio">
 			                			<label for="radio6" style="width: 90%">불쾌한 표현이 있습니다.</label>
 			                		</td>
 			              		</tr>
 			              		<tr>
 				                	<td>
-				                		<input type="radio" id="radio7" name="reportReason" value="7" class="reportReasonRadio">
+				                		<input type="radio" id="radio7" name="repr" value="개인정보 노출 게시물 입니다." class="reportReasonRadio">
 				                		<label for="radio7" style="width: 90%">개인정보 노출 게시물 입니다.</label>
 		                			</td>
 			              		</tr>
 			              		<tr>
 			                		<td style="border-bottom: none;">
-			                			<input type="radio" id="radio8" name="reportReason" value="8" class="reportReasonRadio">
-			                			<label for="radio8" style="padding-bottom: 5px; width: 90%;">기타</label>
-			                			<textarea class="free-control" name="" placeholder="기타 사유를 300자 이내로 입력해주세요."></textarea>
+			                			<input type="radio" id="radio8" name="repr" value="" class="reportReasonRadio">
+			                			<label for="radio8" style="width: 90%;">기타</label>
+			                			<textarea class="free-control" name="addrepr" style="margin-top: 5px; display:none;" placeholder="신고하시는 기타 이유를 입력해주세요. (최대글자는 300자 입니다.)"></textarea>
 			                		</td>
 			              		</tr>
 			            	</tbody>
 			            </table>
-			            <p style="text-align: center; margin: 0; color: #999;">신고하게 된 사유를 자세히 작성해주시면 관리자의 결정에 도움이 됩니다.</p>
+			            <p style="text-align: center; margin: 0; padding: 10px; padding-top: 15px; color: #999; border-top: 1px solid #e0e0e0;">신고하게 된 사유를 자세히 작성해주시면 관리자의 결정에 도움이 됩니다.</p>
           			</div>
         		</form>
       		</div>
       		
       		<div class="modal-footer" style="display: flex; justify-content: center;">
         		<button type="button" class="ssbtn" id="submitReport">신고하기</button>
-        		<button type="button" class="ssbtn" data-dismiss="modal">닫기</button>
+        		<button type="button" class="ssbtn" data-bs-dismiss="modal" aria-label="Close">닫기</button>
       		</div>
     	</div>
   	</div>
@@ -493,39 +541,34 @@ $(function() {
 });
 
 $(function() {
-	$('.reply').on('click', '.hideReply', function() {	
+	$('.reply').on('click', '.blindReply', function() {	
 		let $menu = $(this);
 		
 		let rpnum = $(this).attr('data-replyNum');
 		let rpblind = $(this).attr('data-replyBlind');
 		
-		let msg = '댓글을 차단 하시겠습니까?';
-		if (rpblind === '0') {
-			msg = '댓글 차단을 해제 하시겠습니까?'
-		}
-		
-		if (! confirm(msg)) {
+		if (! confirm('허위 신고 시 운영정책에 따라 조치 될 수 있습니다. 정말로 이 댓글을 신고하시겠습니까?')) {
 			return false;
 		}
+		alert('댓글 신고처리가 완료되었습니다.');
 		
 		rpblind = rpblind === '1' ? '0' : '1';
 		
-		let url = '${pageContext.request.contextPath}/lounge2/tip/replyShowHide';
-		let params = {replyNum: replyNum, showReply: showReply};
+		let url = '${pageContext.request.contextPath}/lounge2/tip/replyBlind';
+		let params = {rpnum: rpnum, rpblind: rpblind};
 		
 		const fn = function(data) {
-			if (data.state === 'true') {
-				let $item = $menu.closest('tr').next('tr').find('td');
-				if (showReply === '1') {
-					$item.removeClass('text-primary').removeClass('text-opacity-50');
-					$menu.attr('data-showReply', '1');
-					$menu.text('숨김');
-				} else {
-					$item.addClass('text-primary').addClass('text-opacity-50');
-					$menu.attr('data-showReply', '0');
-					$menu.text('표시');
-				}
-			}
+			let tableHtml = ''
+			
+			tableHtml += '<table class="table table-hover">';
+			tableHtml += '<tr class="border">';
+			tableHtml += '<td style="width: 10%"></td>';
+			tableHtml += '<td style="width: 90%; padding: 35px 0; text-align: left; vertical-align: middle;">';
+			tableHtml += '<div style="color: #999;">';
+			tableHtml += '<i class="bi bi-exclamation-circle"></i>&nbsp;&nbsp;신고에 의해 숨김 처리 되었습니다.';		
+			tableHtml += '</div></td></tr></table>';
+
+			$menu.closest('tr').html(tableHtml);
 		};
 		
 		ajaxRequest(url, 'post', params, 'json', fn);

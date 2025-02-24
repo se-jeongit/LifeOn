@@ -2,6 +2,18 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
+<!-- 로딩 -->
+<div id="loadingLayout" style="display:none; position: fixed; left: 0; top:0; width: 100%; min-height: 100%; z-index: 9000; background: rgba(255, 255, 255, 0.8);">
+	<div class="loader typing-indicator">
+	    <div class="typing-circle"></div>
+	    <div class="typing-circle"></div>
+	    <div class="typing-circle"></div>
+	    <div class="typing-shadow"></div>
+	    <div class="typing-shadow"></div>
+	    <div class="typing-shadow"></div>
+	</div>
+</div>
+
 <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
 	<div style="width: 250px; text-align: left;">
 		<ul class="nav pt-3 px-3">
@@ -35,16 +47,4 @@
     	<img src="" alt="OpenAPI" style="width: 120px; height: 50px; object-fit: cover;">
     	<img src="" alt="OpenAPI" style="width: 120px; height: 50px; object-fit: cover;">
     </div>
-</div>
-
-<!-- 로딩 -->
-<div id="loadingLayout" style="display:none; position: absolute; left: 0; top:0; width: 100%; height: 100%; z-index: 9000; background: #eee;">
-	<div class="loader typing-indicator">
-	    <div class="typing-circle"></div>
-	    <div class="typing-circle"></div>
-	    <div class="typing-circle"></div>
-	    <div class="typing-shadow"></div>
-	    <div class="typing-shadow"></div>
-	    <div class="typing-shadow"></div>
-	</div>
 </div>
