@@ -18,8 +18,15 @@ public class ChatController {
 	public String handle(HttpServletRequest req, Model model) {
 		
 		String cp = req.getContextPath();
-		String url = "ws://" + req.getServerName() + ":" +
-				req.getServerPort() + cp + "/chat.msg";
+		
+		//서버 IP 주소 가져오기
+		String serverName = req.getServerName();
+		int serverPort = req.getServerPort();
+		
+		//websocket URL 생성
+		String url = String.format("ws://%s:%d%s/chat.msg", serverName, serverPort, cp);
+		
+		log.info("WebSocket URL : " + url);
 		
 		model.addAttribute("wsURL", url);
 	

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sp.app.mapper.MemberManageMapper">
+
+	<select id="listMembers" parameterType="map" resultType="com.sp.app.model.Member">
+		SELECT num, id, nickName, grade, block, mod_date
+		FROM member
+	</select>
+
+	<select id="dataCount" parameterType="map" resultType="Integer">
+        SELECT COUNT(*) FROM member
+    </select>
+    
+    <update id="updateMemberAuthority" parameterType="map">
+    	UPDATE member
+    	SET block = #{block},
+    		mod_date = sysdate
+    	WHERE num = #{memberNum}    
+    </update>
+</mapper>

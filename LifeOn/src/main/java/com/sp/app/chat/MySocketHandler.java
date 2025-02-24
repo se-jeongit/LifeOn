@@ -118,6 +118,7 @@ public class MySocketHandler extends TextWebSocketHandler {
 				connectUser.put("nickName", nickName);
 				
 				sendTextMessageToAll(mapToString(connectUser), uid);
+				
 			} else if(type.equals("message")) {
 				// 채팅 문자열을 전송 받은 경우
 				User user = getUser(session);
