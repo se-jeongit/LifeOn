@@ -9,7 +9,7 @@ import com.sp.app.lounge.model.PhotoBoard;
 public interface PhotoBoardService {
 	public void insertBoard(PhotoBoard dto, String uploadPath) throws Exception;
 	public void updateBoard(PhotoBoard dto, String uploadPath) throws Exception;
-	public void deleteBoard(String bdtype, long psnum, String nickname, int grade) throws Exception;
+	public void deleteBoard(String bdtype, long psnum, String uploadPath, String nickname, int grade) throws Exception;
 	public List<PhotoBoard> listBoard(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
 	public PhotoBoard findById(Map<String, Object> map);
@@ -38,6 +38,7 @@ public interface PhotoBoardService {
 	
 	public void replyLike(Map<String, Object> map) throws Exception;
 	public Map<String, Object> replyLikeCount(Map<String, Object> map);
+
 
 	
 }

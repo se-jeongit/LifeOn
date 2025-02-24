@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
+import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.lounge.service.PhotoBoardService;
 import com.sp.app.model.SessionInfo;
@@ -46,7 +47,7 @@ public class PhotoBoardController {
 	
 	@PostConstruct
 	public void init() {
-		uploadPath = storageService.getRealPath("/uploadPath/{bdtype}");
+		uploadPath = storageService.getRealPath("/uploadPath/lounge1");
 	}
 	
 	/*
@@ -239,45 +240,71 @@ public class PhotoBoardController {
 		
 		return "redirect:/lounge1/" + bdtype + "?" + query;
 	}
-		
-	@GetMapping("{bdtype}/delete")
-	public String deleteBoard(@PathVariable(name = "bdtype") String bdtype,
-			@RequestParam(name = "psnum") long psnum,
-			@RequestParam(name = "schType", defaultValue = "all") String schType,
-			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+	
+	@GetMapping("{bdtype}/update")
+	public String updateForm(@PathVariable(name = "bdtype") String bdtype,
+			@RequestParam(name = "psnum") long num,
 			@RequestParam(name = "page") String page,
-			HttpSession session) {
-		
-		String query = "page=" + page;
+			Model model,
+			HttpSession session) throws Exception {
 		
 		try {
-			kwd = URLDecoder.decode(kwd, "utf-8");
-			if (! kwd.isBlank()) {
-				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
-			}
-			
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
 			
-			service.deleteBoard(bdtype, psnum, info.getNickName(), info.getGrade());
+			Map<String, Object> map = new HashMap<>();
+			map.put("bdtype", bdtype);
+			map.put("psnum", num);
 			
+			PhotoBoard dto = Objects.requireNonNull(service.findById(map));
+			
+			if (! info.getNickName().equals(dto.getNickname())) {
+				return "redirect:/lounge1/" + bdtype + "?page=" + page;
+			}
+			
+			List<PhotoBoard> listFile = service.listFile(num);
+			
+			model.addAttribute("dto", dto);
+			model.addAttribute("listFile", listFile);
+			model.addAttribute("page", page);
+			model.addAttribute("mode", "update");
+			
+			return "lounge1/write";
+			
+		} catch (NullPointerException e) {
 		} catch (Exception e) {
-			log.info("deleteBoard : ", e);
+			log.info("updateForm : ", e);
 		}
 		
-		return "redirect:/lounge1/" + bdtype + "?" + query;
+		return "redirect:/lounge1/" + bdtype + "?page=" + page;
+	}
+	
+	@PostMapping("{bdtype}/update")
+	public String updateSubmit(@PathVariable(name = "bdtype") String bdtype,
+			PhotoBoard dto, @RequestParam(name = "page") String page,
+			HttpSession session) throws Exception {
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			dto.setNum(info.getNum());
+			dto.setNickname(info.getNickName());
+			
+			service.updateBoard(dto, uploadPath);
+			
+		} catch (Exception e) {
+			log.info("updateSubmit : ", e);
+		}
+		return "redirect:/lounge1/" + bdtype + "?page=" + page;
 	}
 	
 	@ResponseBody
 	@PostMapping("{bdtype}/deleteFile")
-	public Map<String, ?> deleteFile(@PathVariable(name = "bdtype") String bdtype,
-			@RequestParam(name = "fnum") long fileNum,
+	public Map<String, ?> deleteFile(@RequestParam(name = "fnum") long fileNum,
 			HttpSession session) throws Exception {
 		Map<String, Object> model = new HashMap<>();
 		
 		String state = "false";
 		
 		try {
-			
 			PhotoBoard dto = Objects.requireNonNull(service.findByFileId(fileNum));
 			
 			service.deleteUploadFile(uploadPath, dto.getSsfname());
@@ -298,6 +325,33 @@ public class PhotoBoardController {
 		
 		model.put("state", state);
 		return model;
+	}
+		
+	@GetMapping("{bdtype}/delete")
+	public String deleteBoard(@PathVariable(name = "bdtype") String bdtype,
+			@RequestParam(name = "psnum") long psnum,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
+			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+			@RequestParam(name = "page") String page,
+			HttpSession session) {
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			if (! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			service.deleteBoard(bdtype, psnum, uploadPath, info.getNickName(), info.getGrade());
+			
+		} catch (Exception e) {
+			log.info("deleteBoard : ", e);
+		}
+		
+		return "redirect:/lounge1/" + bdtype + "?" + query;
 	}
 	
 	@ResponseBody

@@ -29,16 +29,14 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	public void insertBoard(PhotoBoard dto, String uploadPath) throws Exception {
 		try {
 			long seq = mapper.PhotoBoardSeq();
-			dto.setNum(seq);
+			dto.setPsnum(seq);
 
 			mapper.insertBoard(dto);
-				// ?? 
+
 			// 파일 업로드
 			if (! dto.getSelectFile().isEmpty()) {
 				insertFile(dto, uploadPath);
 			}
-			
-			mapper.insertBoard(dto);
 			
 		} catch (Exception e) {
 			log.info("insertBoard : ", e);
@@ -100,11 +98,12 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 
 
 	@Override
-	public void deleteBoard(String bdtype, long psnum, String nickname, int grade) throws Exception {
+	public void deleteBoard(String bdtype, long psnum, String uploadPath, String nickname, int grade) throws Exception {
 		try {
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("bdtype", bdtype);
+			map.put("field", "fnum");
 			map.put("psnum", psnum);
 			
 			deleteFile(map);
@@ -152,8 +151,15 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	
 	@Override
 	public PhotoBoard findByFileId(long fileNum) {
-		// TODO Auto-generated method stub
-		return null;
+		PhotoBoard dto = null;
+		
+		try {
+			dto = mapper.findByFileId(fileNum);
+		} catch (Exception e) {
+			log.info("findByfileId : ", e);
+		}
+		
+		return dto;
 	}
 	
 	@Override
@@ -189,7 +195,18 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	
 	@Override
 	public void updateBoard(PhotoBoard dto, String uploadPath) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			mapper.updateBoard(dto);
+			
+			if (! dto.getSelectFile().isEmpty()) {
+				insertFile(dto, uploadPath);
+			}
+			
+		} catch (Exception e) {
+			log.info("updateBoard : ", e);
+			
+			throw e;
+		}
 		
 	}
 

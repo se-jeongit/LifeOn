@@ -72,16 +72,23 @@ main section {width: 100% !important;}
 					<table class="table board-article">
 						<thead>
 							<tr>
-								<td colspan="2">
-									제&emsp;목 : ${dto.subject}
+								<td colspan="2" style="width: 50%; text-align: center;">
+								<div style="display: inline-block;">
+									${dto.subject}
+								</div>	
 								</td>
 							</tr>
 						</thead>
 						
 						<tbody>
 							<tr>
-								<td width="50%">
-									작성자 : ${dto.nickname}
+								<td width="40%;">
+									<div style="display: flex; align-items: center;">
+										<div class="profile" style="margin: 5px; width: 35px; height: 35px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+										</div>	
+										<div style="font-size: 16px;">${dto.nickname}</div>
+									</div>
 								</td>
 								<td align="right">
 									${dto.reg_date} | 조회 ${dto.hitCount}
@@ -144,11 +151,8 @@ main section {width: 100% !important;}
 							<td class="text-start">
 								<c:choose>
 									<c:when test="${sessionScope.member.nickName == dto.nickname}">
-										<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/update?num=${dto.num}&page=${page}';">수정</button>
+										<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/update?psnum=${dto.psnum}&page=${page}';">수정</button>
 									</c:when>
-									<c:otherwise>
-										<button type="button" class="btn btn-light" disabled>수정</button>
-									</c:otherwise>
 								</c:choose>
 								
 								<c:choose>

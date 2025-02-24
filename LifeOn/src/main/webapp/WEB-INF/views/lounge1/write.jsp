@@ -11,7 +11,6 @@
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/board.css" type="text/css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/boot-board.css" type="text/css">
 
 <style type="text/css">
 .body-title{
@@ -19,6 +18,8 @@
 	max-width: 900px;
 	margin : auto;
 	margin-top: 40px;
+	font-size: 24px;
+	font-weight: 600;
 }
 
 .write-form{
@@ -53,9 +54,9 @@ function check() {
         return false;
     }
 
-    f.action =  '${pageContext.request.contextPath}/lounge1/${bdtype}/write';
-    
-    return true;
+    f.action =  '${pageContext.request.contextPath}/lounge1/${bdtype}/${mode}';
+    f.submit();
+ 
 }
 </script>
 <!--  
@@ -73,7 +74,7 @@ function check() {
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 	
-<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
+<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 84px;">
     <div class="container">
 		<div class="body-container">
 		  <div class="body-title">
@@ -86,7 +87,7 @@ function check() {
 			
 			<div class="body-main">
 				<form name="boardForm" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/lounge1/write/${bdtype}">
-					<table class="table mt-3 write-form">
+					<table class="table mt-3 write-form" style="border: 1px solid #e0e0e0;">
 						<tr>
 							<td class="col-sm-2" scope="row">제 목</td>
 							<td>
@@ -104,12 +105,12 @@ function check() {
 						<tr>
 							<td class="col=sm-2" scope="row">내 용</td>
 							<td>
-								<textarea name="content" id="ir1" class="form-control">${dto.content}</textarea>
+								<textarea name="content" id="ir1" class="form-control" style="width: 99%; height: 400px;">${dto.content}</textarea>
 							</td>
 						</tr>
 						
 						<tr>
-							<td scope="row" style="vertical-align: middle;">첨부파일</td>
+							<td scope="row" style="vertical-align: middle;">썸네일</td>
 							<td>
 							<div class="filebox">
 								<input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly="readonly">
@@ -120,31 +121,31 @@ function check() {
 						</tr>
 						
 						<c:if test="${mode == 'update'}">
-							<c:forEach var="vo" items="${listFile}">
 								<tr> 
 									<td scope="row" style="vertical-align: middle;">첨부된파일</td>
 									<td>
-										<p class="free-control">
-											<span class="delete-file" data-fileNum="${vo.fnum}"><i class="bi bi-trash"></i></span> 
+										<div class="free-control">
+										<c:forEach var="vo" items="${listFile}">
+										 <img src="${pageContext.request.contextPath}/uploadPath/lounge1/${vo.ssfname}"
+											 class="delete-file" data-fileNum="${vo.fnum}"><i class="bi bi-trash"></i>
 											${vo.cpfname}
-										</p>
+									</c:forEach>
+										</div>
 									</td>
 								  </tr>
-							</c:forEach>
 						</c:if>
 					</table>
 					
 					<table class="table table-borderless">
 						<tr>
 							<td class="text-center">
-								<button type="button" class="btn btn-dark" onclick="submitContents(this.form);">${mode == "update" ? "수정완료" : "등록완료"}</button>
+								<button type="button" class="btn btn-dark" onclick="submitContents(this.form);">${mode == "update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></i></button>
 								<button type="reset" class="btn btn-light">다시입력</button>
-								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/#';">${mode == "update" ? "수정취소" : "등록취소"}</button>
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}';">${mode == "update" ? "수정취소" : "등록취소"}&nbsp;<i class="bi bi-x"></i></button>
 							
 								<c:if test="${mode == 'update'}">
 									<input type="hidden" name="num" value="${dto.num}">
-									<input type="hidden" name="saveFilename" value="${dto.ssfname}">
-									<input type="hidden" name="originalFilename" value="${dto.cpfname}">
+									<input type="hidden" name="psnum" value="${dto.psnum}">
 									<input type="hidden" name="page" value="${page}">
 								</c:if>
 							</td>
@@ -165,7 +166,7 @@ function check() {
 			
 			let $tr = $(this).closest('tr');
 			let fnum = $(this).attr('data-fileNum');
-			let url = '${pageContext.request.contextPath}/lounge/${bdtype}/deleteFile?num=' + num + '&page=${page}';
+			let url = '${pageContext.request.contextPath}/lounge/${bdtype}/deleteFile';
 			
 			$.ajaxSetup({ beforeSend: function(e) { e.setRequestHeader('AJAX', true); } });
 			$.post(url, {fnum: fnum}, function(data){
@@ -174,8 +175,83 @@ function check() {
 				console.log(jqXHR.responseText);
 			});
 		});
+		
 	</script>
 </c:if>
+
+<script type="text/javascript">
+window.addEventListener('DOMContentLoaded', evt => {
+	var sel_files = [];
+	
+	const viewerEL = document.querySelector('.write-form .filebox');
+	const imgAddEL = document.querySelector('.write-form .img-add');
+	const inputEL = document.querySelector('form[name=boardForm] input[name=selectFile]');
+	
+	imgAddEL.addEventListener('click', ev => {
+		inputEL.click();
+	});
+	
+	inputEL.addEventListener('change', ev => {
+		if(! ev.target.files) {
+			let dt = new DataTransfer();
+			for(let f of sel_files) {
+				dt.items.add(f);
+			}
+			document.boardForm.selectFile.files = dt.files;
+			
+	    	return;
+	    }
+		
+        for(let file of ev.target.files) {
+        	sel_files.push(file);
+        	
+        	let node = document.createElement('img');
+        	node.classList.add('item', 'img-item');
+        	node.setAttribute('data-filename', file.name);
+
+        	const reader = new FileReader();
+            reader.onload = e => {
+            	node.setAttribute('src', e.target.result);
+            };
+			reader.readAsDataURL(file);
+        	
+			viewerEL.appendChild(node);
+        }
+		
+		let dt = new DataTransfer();
+		for(let f of sel_files) {
+			dt.items.add(f);
+		}
+		
+		document.boardForm.selectFile.files = dt.files;		
+	});
+	
+	viewerEL.addEventListener('click', (e)=> {
+		if(e.target.matches('.img-item')) {
+			if(! confirm('선택한 파일을 삭제 하시겠습니까 ?')) {
+				return false;
+			}
+			
+			let filename = e.target.getAttribute('data-filename');
+			
+		    for(let i = 0; i < sel_files.length; i++) {
+		    	if(filename === sel_files[i].name){
+		    		sel_files.splice(i, 1);
+		    		break;
+				}
+		    }
+		
+			let dt = new DataTransfer();
+			for(let f of sel_files) {
+				dt.items.add(f);
+			}
+			document.boardForm.selectFile.files = dt.files;
+			
+			e.target.remove();
+		}
+	});	
+});
+</script>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript">
