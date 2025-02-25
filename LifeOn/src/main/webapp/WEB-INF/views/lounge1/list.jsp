@@ -98,7 +98,7 @@
         </div>
         </div>
         </div>
-        <div style="    display: flex; justify-content: flex-end;">
+        <div style=" display: flex; justify-content: flex-end;">
           <button class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/write';">글쓰기</button>
         </div>
         </section>

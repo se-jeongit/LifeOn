@@ -72,7 +72,7 @@
             </div>
           </div>
           <div class="meeting-activate-option">
-            <span>모집 중만 보기</span>
+            <span>모집중만 보기</span>
             <input type="checkbox" id="toggle" checked hidden />
             <label for="toggle" class="toggle-switch">
               <span class="toggle-button"></span>
@@ -80,6 +80,10 @@
           </div>
         </div>
       </header>
+      
+      	<div style="display: flex; justify-content: flex-end;">
+          <button class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/write';">글쓰기</button>
+        </div>
 
       <section class="main__content" >
         <ul id="meetings" class="meetings">
@@ -116,7 +120,7 @@
                   >
                     모집완료
                   </div>
-                  <div class="meeting__info-detail-more">
+                  <div class="meeting__info-detail-more" >
                     <div>
 						<i class="tip_icon bi bi-bookmark"></i>
 						<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
@@ -126,37 +130,12 @@
 						<span>${dto.replyCount}&nbsp;&nbsp;</span>
 					</div>
                   </div>
-               
-              
+           
             </a>
           </li>
         </ul>
-        <!-- no search result -->
-        <!-- <div class="search-result-none hidden">
-          <p>
-            '<strong class="search-keyword">검색어</strong>'에 대한 검색 결과가
-            없어요 !
-          </p>
-          <p>검색할 단어를 변경하거나, 검색어를 확인해주세요.</p>
-        </div> -->
-        <!-- no result -->
-        <div class="result-none hidden">
-          <p>찾고있는 모임이 없네요!</p>
-          <p>교집합을 만들어볼까요?</p>
-        </div>
       </section>
 
-      <!--  loading   -->
-      <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
     </main>
 
 <footer class="mt-auto py-2 text-center w-100" style="background: #F7F9FA;">

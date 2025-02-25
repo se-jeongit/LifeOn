@@ -3,6 +3,10 @@
 h3{
     font-weight: 500;
   }
+ 
+main {
+   flex: 0 0 auto;
+}
   
   .meeting > a {
     border-bottom: 1.3px solid var(--light-grey1);
@@ -27,8 +31,9 @@ h3{
   }
   
   .meeting__header {
-    display: flex;
+    display: grid;
     flex-direction: column;
+    grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
     font-size: 14px;
   }
@@ -284,6 +289,54 @@ h3{
   color: #fff;
 }
 
+.btn {
+	color: #333;
+	border: 1px solid #999;
+	background: #FBFBFB;
+	padding: 5px 10px;
+	border-radius: 10px;
+	font-weight: 500;
+	cursor: pointer;
+	font-size: 14px;
+	vertical-align: baseline;
+	margin-bottom: 5px;
+}
+.btn:active, .btn:focus, .btn:hover {
+	color: #FFF;
+	border: 1px solid #999;
+	background-color: #006AFF;
+	opacity: .95;
+}
+.btn[disabled], fieldset[disabled] .btn {
+	pointer-events: none;
+	cursor: default;
+	opacity: .65;
+}
+.btn-dark { background: #333; border:1px solid #222; color:#fff; }
+.btn-dark:hover, .btn-dark:active, .btn-dark:focus { background: #222; border:1px solid #222; color:#fff; }
+.btn-primary { background: #006AFF; border:1px solid #999; color:#fff; }
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus { background: #005FCE; border:1px solid #999; color:#fff; }
+.btnConfirm {
+    background: #006AFF;
+    border: solid 1px #999;
+    color: #fff;
+    font-size: 17px;
+    padding: 15px 10px;
+    text-align: center;
+    width: 100%;
+    border-radius: 7px;
+    vertical-align: baseline;
+}
+.btnConfirm:hover, .btnConfirm:focus, .btnConfirm:active {
+	font-weight: 400;
+	background: #005FCE;
+	border: solid 1px #999;
+}
+.btn-active, .btn-active:focus, .btn-active:hover {
+	color: #006AFF;
+	font-weight: 600;
+}
+
 /* 모임 옵션 스타일 */
 .meeting__options {
   display: flex;
@@ -308,7 +361,7 @@ h3{
 .toggle-switch {
   width: 40px;
   height: 20px;
-  background: #ccc;
+  background: #006aff;
   border-radius: 10px;
   position: relative;
   cursor: pointer;
@@ -327,7 +380,6 @@ h3{
 
 #toggle:checked + .toggle-switch .toggle-button {
   left: 20px;
-  background: #006aff;
 }
 
 /* 모임 리스트 스타일 */
@@ -366,8 +418,12 @@ h3{
   align-items: center;
 }
 
-.meeting__info-detail-more > div {
-    text-align: left;
+.meeting__info-detail-more {
+    text-align: center;
+}
+
+.meeting__info-detail-more div {
+	 text-align:right;
 }
 
 .meeting__tags {
@@ -382,6 +438,7 @@ h3{
   border-radius: 5px;
   display: inline-block;
   width: 75px;
+  text-align: center;
 }
 
 .meeting__status--on {
