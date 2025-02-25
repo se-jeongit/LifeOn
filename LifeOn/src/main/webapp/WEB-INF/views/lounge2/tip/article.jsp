@@ -23,7 +23,7 @@
 <main class="min-vh-100">
 	<!-- 배너 -->
     <div class="body-title">
-    	<h3 style="margin: 0px;">생활의 도움을 받아볼까?</h3>
+    	<em style="font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">나만 알고 싶던 생활 정보, 여기서 만나보세요!</em>
 	</div>
 	
 	<div class="body-container">

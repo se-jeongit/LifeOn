@@ -51,28 +51,28 @@ function elapsedText(date) {
 <main class="min-vh-100">
 	<!-- 배너 -->
     <div class="body-title">
-    	<h3 style="margin: 0px;">생활의 도움을 받아볼까?</h3>
-	</div>
-	
-	<div style="display: flex; justify-content: center; margin-top: 30px;">
-	   	<div>
-		   	<form name="searchForm" style="display: inline-flex; align-items: center;">
-				<select name="schType" class="myselect">
-					<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
-					<option value="nickname" ${schType=="nickname"?"selected":""}>작성자</option>
-					<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
-					<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
-					<option value="content" ${schType=="content"?"selected":""}>내용</option>
-				</select>
-				<!-- 검색상자 -->
-				<input type="search" name=kwd value="${kwd}" class="searchBox" placeholder="검색어를 입력해주세요.">
-				<!-- 검색버튼 -->
-		   		<button class="mybtn" style="margin-right: 2px;" onclick="searchList();">검색&nbsp;<i class="bi bi-search"></i></button>
-			   	<!-- 새로고침 버튼 -->
-				<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';" title="새로고침">초기화&nbsp;<i class="bi bi-arrow-repeat"></i></button>
-	   		</form>
+    	<em style="padding-bottom: 5px; font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">생활꿀팁, 지금 바로 검색해보세요!</em>
+		<div style="display: flex; justify-content: center; margin-top: 10px;">
+		   	<div>
+			   	<form name="searchForm" style="display: inline-flex; align-items: center;">
+					<select name="schType" class="myselect">
+						<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
+						<option value="nickname" ${schType=="nickname"?"selected":""}>작성자</option>
+						<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
+						<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
+						<option value="content" ${schType=="content"?"selected":""}>내용</option>
+					</select>
+					<!-- 검색상자 -->
+					<input type="search" name=kwd value="${kwd}" class="searchBox" placeholder="어떤 정보을 찾고 있나요?">
+					<!-- 검색버튼 -->
+			   		<button class="mybtn" style="margin-right: 2px;" onclick="searchList();">검색&nbsp;<i class="bi bi-search"></i></button>
+				   	<%-- <!-- 새로고침 버튼 -->
+					<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';" title="새로고침">새로고침&nbsp;<i class="bi bi-arrow-repeat"></i></button> --%>
+		   		</form>
+			</div>
 		</div>
 	</div>
+	
 	
 	<div class="body-container">
 		<div class="body-content">
@@ -113,7 +113,7 @@ function elapsedText(date) {
 				</div>
 			</aside>
 			
-			<div class="main_content">
+			<div class="main_content" style="height: 535px;">
 				<!-- 상단메뉴 -->
 				<div class="main_menu">
 				   	<div>
@@ -147,18 +147,18 @@ function elapsedText(date) {
 																<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
 															</div>	
 															<span class='tip_userName'>${dto.nickname}</span>
-														<span>&nbsp;·&nbsp;</span>
+															<span>&nbsp;·&nbsp;</span>
 														
-	                                    				<span id="result-${dto.psnum}"></span>
-					                                    <script type="text/javascript">
-					                                    	document.addEventListener("DOMContentLoaded", function() {
-					                                            const dateStr = "${dto.reg_date}".trim();
-					                                            const date = new Date(dateStr);
-					                                            const id = "result-${dto.psnum}";
-	
-					                                        	document.getElementById(id).innerText = elapsedText(date);
-					                                    	});
-					                                    </script>
+	                                    					<span id="result-${dto.psnum}"></span>
+					                                    	<script type="text/javascript">
+						                                    	document.addEventListener("DOMContentLoaded", function() {
+						                                            const dateStr = "${dto.reg_date}".trim();
+						                                            const date = new Date(dateStr);
+						                                            const id = "result-${dto.psnum}";
+		
+						                                        	document.getElementById(id).innerText = elapsedText(date);
+						                                    	});
+					                                    	</script>
 														</div>
 													<div>
 														<i class="tip_icon bi bi-bookmark"></i>
@@ -179,8 +179,8 @@ function elapsedText(date) {
 					</c:forEach>
 				</div>
 
-				<div class="page-navigation">
-					${dataCount == 0 ? "<p style='padding-top: 40px;'>등록된 게시물이 없습니다.</p>" : paging}
+				<div class="page-navigation" style="display: table-footer-group;">
+					${dataCount == 0 ? "<p style='margin-bottom: 350px;'>등록된 게시물이 없습니다.</p>" : paging}
 				</div>
 				
 			</div>
