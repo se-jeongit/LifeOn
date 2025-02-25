@@ -31,13 +31,15 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 		excludePaths.add("/member/pwdSet");
 		excludePaths.add("/member/");
 		excludePaths.add("/uploads/**");
+		
 		excludePaths.add("/lounge1/room");
 		excludePaths.add("/lounge1/recipe");
 		excludePaths.add("/lounge2/tip");
 		excludePaths.add("/lounge2/daily");
 		
+		excludePaths.add("/market/rent/list");
+		
 		registry.addInterceptor(new LoginCheckInterceptor())
 			.excludePathPatterns(excludePaths);
-		
 	}
 }

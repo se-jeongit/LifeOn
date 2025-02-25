@@ -30,12 +30,22 @@
 
     $(function () {
         let url = window.location.pathname;
-        let urlRegExp = new RegExp("^" + url.split('/').slice(0, 2).join('/'));
-        //var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
-        //console.log(urlRegExp);
+        let urlRegExp = new RegExp("^" + url.split('/').slice(0, 3).join('/'));
+        // var urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
+        // console.log(urlRegExp);
+        
+        if (url.includes("/auction")) {
+			urlRegExp = new RegExp("^" + url.split('/').slice(0, 2).join('/'));
+        }
+       	
         try {
             $('.sub-link').each(function () {
-                var linkUrl = $(this).attr('href').split('/').slice(0, 2).join('/');
+                var linkUrl = $(this).attr('href').split('/').slice(0, 3).join('/');
+
+                if (url.includes("/auction")) {
+                	linkUrl = $(this).attr('href').split('/').slice(0, 2).join('/');
+                }
+                
                 if (urlRegExp.test(linkUrl)) {
                     $(this).addClass('active');
                     return false;
@@ -43,7 +53,7 @@
             });
 
             if (!$('.sub-link').hasClass('active')) {
-                var parent = url.replace(/\/$/, '').substring(0, url.replace(/\/$/, '').lastIndexOf('/'));
+                var parent = url.replace(/\/$/, '').substring(6, url.replace(/\/$/, '').lastIndexOf('/'));
                 if (!parent) parent = '/';
                 var urlParentRegExp = new RegExp(parent);
 
@@ -72,7 +82,7 @@
 <div class="nav-scroller">
     <nav class="container nav" aria-label="navigation">
         <a class="nav-link sub-link" aria-current="page" href="<c:url value='/market/together/main'/>">공동구매</a>
-        <a class="nav-link sub-link" href="<c:url value='/'/>">물품대여</a>
+        <a class="nav-link sub-link" href="<c:url value='/market/rent/list'/>">물품대여</a>
         <a class="nav-link sub-link" href="<c:url value='/auction'/>">경매장</a>
     </nav>
 </div>
