@@ -98,9 +98,9 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card shadow-sm p-3">
-								<h5 class="mb-3">클릭 수가 많은 카테고리</h5>
+								<h5 class="mb-3">조회수가 많은 카테고리</h5>
 								<div class="chart-container">
-									<canvas id="categoryChart"></canvas>
+									<div id="categoryChart" style="width:100%; height:300px;"></div>
 								</div>
 							</div>
 						</div>
@@ -198,6 +198,88 @@
 	        genderChart.resize();
 	    });
 	});
+	
+	document.addEventListener("DOMContentLoaded", function () {
+	    // 초기 데이터 생성
+	    const data = [];
+	    for (let i = 0; i < 5; ++i) {
+	        data.push(Math.round(Math.random() * 200));
+	    }
+
+	    // 클릭 수가 많은 카테고리 (ECharts)
+	    var categoryChart = echarts.init(document.getElementById('categoryChart'));
+
+	    var option = {
+	        xAxis: {
+	            max: 'dataMax'
+	        },
+	        yAxis: {
+	            type: 'category',
+	            data: ['라운지', '마켓', '지역정보', '홈', '정책정보'],
+	            inverse: true,
+	            animationDuration: 300,
+	            animationDurationUpdate: 300,
+	            max: 4 // 상위 3개 막대만 표시
+	        },
+	        series: [
+	            {
+	                realtimeSort: true,
+	                name: '조회수',
+	                type: 'bar',
+	                data: data,
+	                label: {
+	                    show: true,
+	                    position: 'right',
+	                    valueAnimation: true
+	                }
+	            }
+	        ],
+	        legend: {
+	            show: true
+	        },
+	        animationDuration: 0,
+	        animationDurationUpdate: 3000,
+	        animationEasing: 'linear',
+	        animationEasingUpdate: 'linear'
+	    };
+
+	    categoryChart.setOption(option);
+
+	    // 실시간 데이터 업데이트 함수
+	    function updateChart() {
+	        for (var i = 0; i < data.length; ++i) {
+	            if (Math.random() > 0.9) {
+	                data[i] += Math.round(Math.random() * 2000);
+	            } else {
+	                data[i] += Math.round(Math.random() * 200);
+	            }
+	        }
+	        categoryChart.setOption({
+	            series: [
+	                {
+	                    type: 'bar',
+	                    data: data
+	                }
+	            ]
+	        });
+	    }
+
+	    // 0초 후 실행, 이후 3초마다 데이터 업데이트
+	    setTimeout(function () {
+	        updateChart();
+	    }, 0);
+
+	    setInterval(function () {
+	        updateChart();
+	    }, 3000);
+
+	    // 창 크기 변경 시 차트 크기 자동 조정
+	    window.addEventListener('resize', function() {
+	        categoryChart.resize();
+	    });
+	});
+	
+	
 	</script>
 	<footer>
 		<jsp:include page="/WEB-INF/views/admin/layout/footer.jsp" />
