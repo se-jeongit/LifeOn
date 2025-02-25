@@ -6,12 +6,43 @@
 	<select id="listMembers" parameterType="map" resultType="com.sp.app.model.Member">
 		SELECT num, id, nickName, grade, block, mod_date
 		FROM member
+		<where>
+			<if test="schType=='id' and kwd != ''">
+				id LIKE CONCAT('%', #{kwd}, '%')
+			</if>
+			<if test="schType=='nickName' and kwd != ''">
+				nickName LIKE CONCAT('%', #{kwd}, '%')
+			</if>
+			<!--  역할 필터링 조건 추가 -->
+			<if test="role=='member'">
+				AND grade = 0
+			</if>
+			<if test="role=='admin'">
+				AND grade = 1
+			</if>
+		</where>
 		ORDER BY num DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 
 	<select id="dataCount" parameterType="map" resultType="Integer">
         SELECT COUNT(*) FROM member
+    	<where>
+    		<if test="schType=='id' and kwd != ''">
+    			 id LIKE CONCAT('%', #{kwd}, '%')
+    		</if>
+    		<if test="schType=='nickName' and kwd != ''">
+                nickName LIKE CONCAT('%', #{kwd}, '%')
+            </if>
+            <!-- 역할 필터링 조건 추가 -->
+            <if test="role=='member'">
+                AND grade = 0  <!-- 회원인 경우 -->
+            </if>
+            <if test="role=='admin'">
+                AND grade = 1  <!-- 관리자인 경우 -->
+            </if>
+    	
+    	</where>
     </select>
     
     <update id="updateMemberAuthority" parameterType="map">

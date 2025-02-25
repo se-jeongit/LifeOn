@@ -96,7 +96,9 @@
 								<option value="entire">전체</option>
 								<option value="member">회원</option>
 								<option value="administrator">관리자</option>
-							</select> <input type="search" placeholder="검색어를 입력하세요">
+							</select> 
+							<input type="search" placeholder="검색어를 입력하세요">
+						
 						</div>
 					</div>
 
@@ -134,7 +136,7 @@
 										</c:choose>
 									</td>
 									<td>
-										${member.mod_date}"
+										${member.mod_date}
 									</td>
 									<td>
 										<button type="button" class="btn authorityBtn" data-bs-toggle="modal" data-bs-target="#authorityModal"
@@ -189,7 +191,26 @@
 		const buttons = document.querySelectorAll(".left .nav-link");
 		const defaultBtn = document.querySelector(".navA");
 		
-		if(defaultBtn) {
+		//URL에서 현재 role 파라미터 가져오기
+		const urlParams = new URLSearchParams(window.location.search);
+		const currentRole = urlParams.get('role') || 'all';
+		
+		
+		//현재 역할에 맞는 탭 활성화
+		buttons.forEach((button) => {
+			if (
+				(currentRole === 'all' && button.classList.contains("navA")) ||
+				(currentRole === 'member' && button.classList.contains("navB")) ||
+				(currentRole === 'admin' && button.classList.contains("navC"))
+			) {
+				button.classList.add("active");
+			} else {
+				button.classList.remove("active");
+			}
+		});
+		
+		//초기 로드시 탭이 선택되지 않았다면 기본 탭 활성화
+		if(!document.querySelector(".left .nav-link.active") && defaultBtn) {
 			defaultBtn.classList.add("active");
 		}
 		
@@ -200,6 +221,24 @@
 				
 				buttons.forEach((btn) => btn.classList.remove("active"));
 				targetBtn.classList.add("active");
+				
+				//현재 URL 가져오기
+				const currentUrl = new URL(window.location.href);
+				
+				// 선택한 탭에 따라 role 파라미터 설정
+				if(targetBtn.classList.contains("navA")) {
+					currentUrl.searchParams.set("role", "all");
+				} else if (targetBtn.classList.contains("navB")) {
+					currentUrl.searchParams.set("role", "member");
+				} else if (targetBtn.classList.contains("navC")) {
+					currentUrl.searchParams.set("role", "admin");
+				}
+				
+				// 페이지 번호 초기화
+				currentUrl.searchParams.set("page", "1");
+				
+				// 리다이렉트
+				window.location.href = currentUrl.toString();
 			});
 		});
 	});
