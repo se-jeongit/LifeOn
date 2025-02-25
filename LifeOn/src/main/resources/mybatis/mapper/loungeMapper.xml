@@ -63,10 +63,10 @@
         ) WHERE rank = 1
     ) hf ON hb.psnum = hf.psnum
 		LEFT OUTER JOIN (
-			SELECT rpnum, COUNT(*) replyCount, ps_num, rpblind
+			SELECT COUNT(*) replyCount, ps_num, rpblind
 			FROM HYBRID_BOARD_REPLY
 			WHERE rpblind = 0
-			GROUP BY rpnum, ps_num, rpblind
+			GROUP BY ps_num, rpblind
 		) c ON hb.psnum = c.ps_num
 		LEFT OUTER JOIN (
 			SELECT psnum, COUNT(*) boardLikeCount
@@ -162,7 +162,7 @@
 			FROM HYBRID_BOARD_LIKE
 			GROUP BY rpnum
 		) c ON r.rpnum = c.rpnum
-		LEFT JOIN HYBRID_BOARD_LIKE l ON r.rpnum = l.rpnum AND l.num = #{num}
+		LEFT OUTER JOIN HYBRID_BOARD_LIKE l ON r.rpnum = l.rpnum AND l.num = #{num}
 		WHERE r.ps_num = #{psnum} AND r.rpblind = 0
 		ORDER BY r.rpnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY

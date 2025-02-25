@@ -100,13 +100,28 @@ main section {width: 100% !important;}
 							         ${dto.content}
 							    </td>
 							</tr>
-
+						<!--  
 							<tr>
 								<td colspan="2" class="text-center p-3" style="border-bottom: none;">
 									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기">
 										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill' : 'bi-bookmark'}"></i>
 										&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
 									</button>
+								</td>
+							</tr>
+							-->
+							<tr>
+								<td colspan="2" align="right" style="font-size: 12px; border-bottom: none;">
+									<div style="display: flex; justify-content: flex-end; align-items: flex-end; flex-wrap: wrap;">
+								
+										<div>
+										<button type="button" class="ssbtn btnSendBoardLike" title="즐겨찾기">
+										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill likeColor' : 'bi-bookmark'}"></i>
+										&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
+										</button>
+											<button type="button" class="ssbtn" onclick="javascript:dialogReport();">신고하기</button>
+										</div>
+									</div>
 								</td>
 							</tr>
 					
@@ -146,6 +161,7 @@ main section {width: 100% !important;}
 							-->
 						</tbody>
 					</table>
+					
 					<table class="table table-borderless">
 						<tr>
 							<td class="text-start">
@@ -170,14 +186,11 @@ main section {width: 100% !important;}
 					
 					<div class="reply">
 						<form name="replyForm" method="post">
-						
+
 							
 							<table class="table table-borderless reply-form">
 								<tr>
 									<td>
-									<div class="form-header" style="text-align: left; padding: 10px 5px;">
-										<span class="bold">댓글 ${dto.replyCount}개</span>
-									</div>
 										<textarea class="free-control" name="rpcontent" placeholder="칭찬과 격려의 댓글은 작성자에게 큰 힘이 됩니다! 😊" style="background: #fdfeff; height: 100px;"></textarea>
 									</td>
 								</tr>
@@ -193,7 +206,7 @@ main section {width: 100% !important;}
 					</div>
 				</div>
 			</div>
-
+		</div>
 			
 
 

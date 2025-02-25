@@ -66,6 +66,27 @@
 				<c:when test="${bdtype == 'recipe'}">자취 레시피</c:when> 
 			</c:choose>
 			</h2>
+			
+			<div style="display: flex; justify-content: center; margin-top: 30px;">
+	   			<div>
+				   	<form name="searchForm" style="display: inline-flex; align-items: center;">
+						<select name="schType" class="myselect">
+							<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
+							<option value="nickname" ${schType=="nickname"?"selected":""}>작성자</option>
+							<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
+							<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
+							<option value="content" ${schType=="content"?"selected":""}>내용</option>
+						</select>
+						<!-- 검색상자 -->
+						<input type="search" name=kwd value="${kwd}" class="searchBox" placeholder="검색어를 입력해주세요.">
+						<!-- 검색버튼 -->
+				   		<button class="mybtn" style="margin-right: 2px;" onclick="searchList();">검색&nbsp;<i class="bi bi-search"></i></button>
+					   	<!-- 새로고침 버튼 -->
+						<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}';" title="새로고침">초기화&nbsp;<i class="bi bi-arrow-repeat"></i></button>
+			   		</form>
+				</div>
+			</div>
+	
     <div class="main_content">
       <!-- 상단메뉴 -->
       <div class="main_menu">
@@ -90,7 +111,7 @@
               <div onclick="location.href='${articleUrl}/${dto.psnum}?${query}'">
                 <table class="table table-hover m-0">		
                   <img src="${pageContext.request.contextPath}/uploadPath/lounge1/${dto.ssfname}"> 
-                  <h4 class="ph_subject">${dto.subject}</h4>
+                  <h5 class="ph_subject">${dto.subject}</h5>
                   <div style="display: flex; align-items: center;">
 					<div class="ph-info" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
 						<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
@@ -101,15 +122,14 @@
                       <span>${dto.reg_date}</span>
                       </div>
                     </div>
-                    </div>
+                    <div>
                       <i class="ph_icon bi bi-bookmark"></i>
                       <span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
                       <i class="ph_icon bi bi-eye"></i>
                       <span>${dto.hitCount}&nbsp;&nbsp;</span>
                       <i class="ph_icon bi bi-chat-dots"></i>
                       <span>${dto.replyCount}&nbsp;&nbsp;</span>
-                    </div>
-                  </div>
+                	</div>
                 </table>
               </div>
             </div>
@@ -121,16 +141,9 @@
         ${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
       </div>
       
-      <div style="display: flex; align-items: center; margin: 0 20px;">
-        <!-- 검색상자 -->
-        <input type="search" class="input-group searchBox">
-        
-        <!-- 검색버튼 -->
-        <button class="input-group btn mybtn">검색</button>
-      </div>
     </div> <!-- .main_content -->
-  </section> <!-- .col-md-6 -->
- </div> <!-- .row -->
+	<!-- .col-md-6 -->
+	<!-- .row -->
 </main>
 
 <footer class="mt-auto py-2 text-center w-100" style="background: #F7F9FA;">

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
-import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.lounge.service.PhotoBoardService;
 import com.sp.app.model.SessionInfo;
@@ -504,7 +503,7 @@ public class PhotoBoardController {
 			paramMap.put("num", info.getNum());
 			service.replyLike(paramMap);
 			
-			// 좋아요 / 싫어요 개수
+			// 좋아요 싫어요 개수
 			Map<String, Object> countMap = service.replyLikeCount(paramMap);
 			likeCount = ((BigDecimal)countMap.get("LIKECOUNT")).intValue();
 			disLikeCount = ((BigDecimal)countMap.get("DISLIKECOUNT")).intValue();
