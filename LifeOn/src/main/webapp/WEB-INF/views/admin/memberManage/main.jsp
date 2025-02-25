@@ -92,13 +92,15 @@
 						</div>
 
 						<div class="right">
-							<select id="authority" name="authority">
-								<option value="entire">전체</option>
-								<option value="member">회원</option>
-								<option value="administrator">관리자</option>
-							</select> 
-							<input type="search" placeholder="검색어를 입력하세요">
-						
+							<form name="searchForm">
+								<select name="schType">
+									<option value="all" ${schType=="all"?"selected" : ""}>전체</option>
+									<option value="id" ${schType=="id"?"selected" : ""}>아이디</option>
+									<option value="nickName" ${schType=="nickName"?"selected" : ""}>닉네임</option>
+								</select>
+								<input type="search" name="kwd" placeholder="검색어를 입력하세요">
+								<button type="submit" class="btn" style="background-color: #666;" onclick="searchList()">검색</button>
+							</form>
 						</div>
 					</div>
 
@@ -119,29 +121,24 @@
 								<tr>
 									<td>${member.id}</td>
 									<td>${member.nickName}</td>
-									<td>
-										<c:choose>
+									<td><c:choose>
 											<c:when test="${member.grade==1}">관리자</c:when>
 											<c:otherwise>회원</c:otherwise>
-										</c:choose>
-									</td>
-									<td>
-										<c:choose>
+										</c:choose></td>
+									<td><c:choose>
 											<c:when test="${member.block == 0}">
 												<i class="bi bi-circle"></i>
 											</c:when>
 											<c:when test="${member.block == 1}">
 												<i class="bi bi-x text-danger"></i>
 											</c:when>
-										</c:choose>
-									</td>
+										</c:choose></td>
+									<td>${member.mod_date}</td>
 									<td>
-										${member.mod_date}
-									</td>
-									<td>
-										<button type="button" class="btn authorityBtn" data-bs-toggle="modal" data-bs-target="#authorityModal"
-										data-member-num="${member.num}" data-member-id="${member.id}" data-member-block="${member.block}">권한변경
-										</button>										
+										<button type="button" class="btn authorityBtn"
+											data-bs-toggle="modal" data-bs-target="#authorityModal"
+											data-member-num="${member.num}" data-member-id="${member.id}"
+											data-member-block="${member.block}">권한변경</button>
 									</td>
 								</tr>
 							</c:forEach>
@@ -151,42 +148,71 @@
 			</div>
 		</div>
 	</main>
-	<div class="pagenavigation">
-		${paging}
+	<div class="pagenavigation">${paging}</div>
+	<!-- 모달창 코드 추가 -->
+	<div class="modal fade" id="authorityModal" tabindex="-1"
+		aria-labelledby="authorityModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="authorityModalLabel">권한 변경</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="닫기"></button>
+				</div>
+				<div class="modal-body">
+					<form id="authorityForm" action="updateMemberAuthority"
+						method="post">
+						<input type="hidden" name="memberNum" id="memberNum">
+						<div class="mb-3">
+							<label for="memberId" class="form-label">회원 아이디</label> <input
+								type="text" class="form-control" id="memberId" name="memberId"
+								readonly>
+						</div>
+						<div class="mb-3">
+							<label for="memberBlock" class="form-label">활성화 상태</label> <select
+								class="form-select" id="memberBlock" name="block">
+								<option value="0">활성화</option>
+								<option value="1">비활성화</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">저장</button>
+				</div>
+			</div>
+		</div>
 	</div>
-	  <!-- 모달창 코드 추가 -->
-   <div class="modal fade" id="authorityModal" tabindex="-1" aria-labelledby="authorityModalLabel" aria-hidden="true">
-     <div class="modal-dialog">
-       <div class="modal-content">
-         <div class="modal-header">
-           <h5 class="modal-title" id="authorityModalLabel">권한 변경</h5>
-           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
-         </div>
-         <div class="modal-body">
-           <form id="authorityForm" action="updateMemberAuthority" method="post">
-             <input type="hidden" name="memberNum" id="memberNum">
-             <div class="mb-3">
-               <label for="memberId" class="form-label">회원 아이디</label>
-               <input type="text" class="form-control" id="memberId" name="memberId" readonly>
-             </div>
-             <div class="mb-3">
-               <label for="memberBlock" class="form-label">활성화 상태</label>
-               <select class="form-select" id="memberBlock" name="block">
-                 <option value="0">활성화</option>
-                 <option value="1">비활성화</option>
-               </select>
-             </div>
-           </form>
-         </div>
-         <div class="modal-footer">
-           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-           <button type="button" class="btn btn-primary" id="saveBtn">저장</button>
-         </div>
-       </div>
-     </div>
-   </div>
 
 	<script type="text/javascript">
+	
+	// 검색 키워드 입력란에서 엔터를 누른 경우 서버 전송 막기 
+	window.addEventListener('load', () => {
+		const inputEL = document.querySelector('form input[name=kwd]'); 
+		inputEL.addEventListener('keydown', function (evt) {
+		    if(evt.key === 'Enter') {
+		    	evt.preventDefault();
+		    	
+		    	searchList();
+		    }
+		});
+	});
+	function searchList() {
+		const f = document.searchForm;
+		if(! f.kwd.value.trim()) {
+			return;
+		}
+		
+		// form 요소는 FormData를 이용하여 URLSearchParams 으로 변환
+		const formData = new FormData(f);
+		let requestParams = new URLSearchParams(formData).toString();
+		
+		let url = '${pageContext.request.contextPath}/admin/memberManage/main';
+		location.href = url + '?' + requestParams;
+	}
+	
 	document.addEventListener("DOMContentLoaded", function() {
 		const buttons = document.querySelectorAll(".left .nav-link");
 		const defaultBtn = document.querySelector(".navA");

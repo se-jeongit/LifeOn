@@ -7,11 +7,14 @@
 		SELECT num, id, nickName, grade, block, mod_date
 		FROM member
 		<where>
+			<if test="schType=='all' and kwd != ''">
+				 (id LIKE '%' || #{kwd} || '%' OR nickName LIKE '%' || #{kwd} || '%')
+			</if>
 			<if test="schType=='id' and kwd != ''">
-				id LIKE CONCAT('%', #{kwd}, '%')
+				id LIKE '%' || #{kwd} || '%'
 			</if>
 			<if test="schType=='nickName' and kwd != ''">
-				nickName LIKE CONCAT('%', #{kwd}, '%')
+				nickName LIKE '%' || #{kwd} || '%'
 			</if>
 			<!--  역할 필터링 조건 추가 -->
 			<if test="role=='member'">
@@ -28,11 +31,14 @@
 	<select id="dataCount" parameterType="map" resultType="Integer">
         SELECT COUNT(*) FROM member
     	<where>
+    		<if test="schType=='all' and kwd != ''">
+				 (id LIKE '%' || #{kwd} || '%' OR nickName LIKE '%' || #{kwd} || '%')
+			</if>
     		<if test="schType=='id' and kwd != ''">
-    			 id LIKE CONCAT('%', #{kwd}, '%')
+    			id LIKE '%' || #{kwd} || '%'
     		</if>
     		<if test="schType=='nickName' and kwd != ''">
-                nickName LIKE CONCAT('%', #{kwd}, '%')
+                nickName LIKE '%' || #{kwd} || '%'
             </if>
             <!-- 역할 필터링 조건 추가 -->
             <if test="role=='member'">
