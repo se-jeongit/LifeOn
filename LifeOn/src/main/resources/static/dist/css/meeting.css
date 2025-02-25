@@ -174,7 +174,6 @@ h3{
       font-size: 18px;
       height: 50px;
     }
-  }
   
   .meeting__views::before,
   .meeting__comments::before {
@@ -248,6 +247,17 @@ h3{
   outline: none;
   font-size: 16px;
   color: #333;
+  text-align: center;
+}
+
+.dropdown {
+  
+  color: #333;
+	padding: 7.7px;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	margin-right: 2px;
+	
 }
 
 /* 카테고리 스타일 */
@@ -283,7 +293,7 @@ h3{
 }
 
 .region-category .select-box {
-  border: 1px solid #ccc;
+  border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -356,6 +366,10 @@ h3{
   align-items: center;
 }
 
+.meeting__info-detail-more > div {
+    text-align: left;
+}
+
 .meeting__tags {
   display: flex;
   gap: 5px;
@@ -366,6 +380,8 @@ h3{
 .meeting__status {
   padding: 4px 8px;
   border-radius: 5px;
+  display: inline-block;
+  width: 75px;
 }
 
 .meeting__status--on {
@@ -374,8 +390,9 @@ h3{
 }
 
 .meeting__status--off {
-  background: #ccc;
-  color: #666;
+  background: #fff;
+  color: #006aff;;
+   border: 1px solid #006aff;
 }
 
 /* 검색 결과 없음 */
@@ -396,4 +413,4 @@ h3{
   align-items: center;
   height: 100px;
 }
- 
+  }

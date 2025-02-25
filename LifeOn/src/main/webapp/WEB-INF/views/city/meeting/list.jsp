@@ -19,7 +19,7 @@
 	<jsp:include page="/WEB-INF/views/city/layout/menu.jsp"/>
 </header>
 
-  <main layout:fragment="content" class="main">
+  <main class="min-vh-100">
       <div class="banner-container">
       	<div class="banner">
       		<img alt="" src="/images/banner-pc.png">
@@ -32,13 +32,13 @@
       
 
    <div class="search-bar">
-          <span class="icon icon-search">돋보기</span>
           <input
             id="search-bar-input"
             class="search-content"
             type="text"
-            placeholder="원하는 집합을 찾아보세요!"
+            placeholder="원하는 모임을 찾아보세요!"
           />
+          <span class="icon icon-search" ><i class="bi bi-search" style="font-size: 16px; padding-top: 3px;"></i></span>
         </div>
 
         <div class="category-container">
@@ -48,11 +48,8 @@
               <li data-id=1 class="category">밥/카페</li>
               <li data-id=2 class="category">운동</li>
               <li data-id=3 class="category">스터디</li>
-              <li data-id=4 class="category">방탈출</li>
-              <li data-id=5 class="category">보드게임</li>
-              <li data-id=6 class="category">문화</li>
-              <li data-id=7 class="category">펫</li>
-              <li data-id=8 class="category">기타</li>
+              <li data-id=4 class="category">문화생활</li>
+              <li data-id=5 class="category">기타</li>
             </ul>
           </nav>
         </div>
@@ -61,18 +58,17 @@
           <div class="region-category">
             <label for="category"></label>
             <div class="select-box select-box--input select-box--round">
-              <span>지역</span>
-              <ul class="select-box__options">
-                  <li data-id=1>서울</li>
-                  <li data-id=2>인천/경기</li>
-                  <li data-id=3>경남/부산/울산</li>
-                  <li data-id=4>충청/대전/세종</li>
-                  <li data-id=5>전라/광주</li>
-                  <li data-id=6>강원</li>
-                  <li data-id=7>경북/대구</li>
-                  <li data-id=8>제주</li>
-                  <li data-id=9>온라인</li>
-              </ul>
+              <select id="select-box__options" class="dropdown">
+                <option>지역</option>
+                <option>서울</option>
+                <option>인천/경기</option>
+                <option>경남/부산/울산</option>
+                <option>충청/대전/세종</option>
+                <option>전라/광주</option>
+                <option>강원</option>
+                <option>경북/대구</option>
+                <option>제주</option>
+            </select>
             </div>
           </div>
           <div class="meeting-activate-option">
@@ -85,7 +81,7 @@
         </div>
       </header>
 
-      <section class="main__content">
+      <section class="main__content" >
         <ul id="meetings" class="meetings">
           <li th:each="meeting : ${meetings}" th:attr="data-id=${meeting.id}">
             <a class="meeting" th:href="@{/meeting/{id}(id = ${meeting.id})}">
@@ -97,11 +93,13 @@
                   <span
                     class="meeting__region add-deco-img-left deco-img-location"
                     th:text="${meeting.region}"
-                    >지역</span
+                    ><i class="bi bi-geo-alt"></i>지역</span
                   >
+                 
                   <span class="meeting__date" th:text="${meeting.startedAt}"
-                    >11.01(일)</span
+                    ><i class="bi bi-calendar-check"></i>11.01(일)</span
                   >
+                
                 </div>
                 <h3 class="meeting__title" th:text="${meeting.title}">제목</h3>
               </div>
@@ -119,18 +117,14 @@
                     모집완료
                   </div>
                   <div class="meeting__info-detail-more">
-                    <div
-                      class="meeting__views add-deco-img-left deco-img-eyes"
-                      th:text="${meeting.viewCount}"
-                    >
-                      조회수
-                    </div>
-                    <div
-                      class="meeting__comments add-deco-img-left deco-img-speech-bubble"
-                      th:text="${meeting.commentCount}"
-                    >
-                      댓글수
-                    </div>
+                    <div>
+						<i class="tip_icon bi bi-bookmark"></i>
+						<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
+						<i class="tip_icon bi bi-eye"></i>
+						<span>${dto.hitCount}&nbsp;&nbsp;</span>
+						<i class="tip_icon bi bi-chat-dots"></i>
+						<span>${dto.replyCount}&nbsp;&nbsp;</span>
+					</div>
                   </div>
                
               
