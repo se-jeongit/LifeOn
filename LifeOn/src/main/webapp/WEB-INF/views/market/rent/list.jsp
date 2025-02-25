@@ -9,123 +9,47 @@
 <title>LifeOn</title>
 
 <style type="text/css">
-/* 메인 콘텐츠 스타일 */
-.main-container {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px;
+.category_title {
+	display: flex;
+	justify-content: space-between;
+
+	align-items: flex-end;
+    flex-wrap: wrap;
+    
+    max-width: 1080px;
+    margin: 60px auto 40px;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #333;
 }
 
-/* 좌측 사이드바 스타일 */
-.sidebar {
-    width: 20%;
-    background-color: #fff;
+.product_group {
+    max-width: 1080px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.product_search {
+	position: relative;
+    width: 240px;
+    float: left;
+    
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
 }
 
-.sidebar h2 {
-    margin-top: 0;
-}
-
-.category-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.category-list li {
-    margin: 10px 0;
-}
-
-.category-list li a {
-    text-decoration: none;
-    color: #333;
-}
-
-.category-list li a:hover {
-    color: #007BFF;
-}
-
-.search-box {
-    margin-top: 30px;
-}
-
-.search-box input {
-    width: 80%;
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.search-box button {
-    padding: 10px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.search-box button:hover {
-    background-color: #0056b3;
-}
-
-/* 상품 리스트 스타일 */
-.product-list {
-    width: 75%;
-    background-color: #fff;
+.product_content {
+	float: right;
+    width: 840px;
+    padding-left: 50px;
+    
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.product-item {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.product-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-.product-item h3 {
-    margin: 15px 0 10px;
-    font-size: 18px;
-}
-
-.product-item p {
-    margin: 10px 0;
-    font-size: 16px;
-    color: #333;
-}
-
-.product-item .add-to-cart {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.product-item .add-to-cart:hover {
-    background-color: #218838;
+    border: 1px solid #e0e0e0;
 }
 </style>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
 
 </head>
 <body>
@@ -135,31 +59,42 @@
 	<jsp:include page="/WEB-INF/views/market/layout/menu.jsp"/>
 </header>
 	
-<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 84px;">
-    <div class="container">
-		<div class="main-container">
-        <!-- 좌측 사이드바 -->
-        <aside class="sidebar">
-            <h2>카테고리</h2>
-            <ul class="category-list">
-                <li><a href="#">전체</a></li>
-                <li><a href="#">패션</a></li>
-                <li><a href="#">가전</a></li>
-                <li><a href="#">가구</a></li>
-                <li><a href="#">스포츠</a></li>
-                <li><a href="#">도서</a></li>
-            </ul>
-
-            <!-- 검색 기능 -->
-            <div class="search-box">
-                <input type="text" id="search-input" placeholder="상품 검색..." />
-                <button id="search-btn">검색</button>
-            </div>
-        </aside>
-
-        <!-- 상품 리스트 -->
-        <section class="product-list">
-            <h1>상품 리스트</h1>
+<main class="min-vh-100">
+	<!-- 배너 -->
+    <div class="body-title">
+    	<h3 style="margin: 0px;">대여? 돼여!</h3>
+	</div>
+	
+	<div style="display: flex; justify-content: center; margin-top: 30px;">
+		<h2>카테고리</h2>
+	</div>
+	
+	<!-- 카테고리 타이틀-->
+    <div class="category_title" id="category_title">
+    	<div>
+        	<h2>카테고리 이름</h2>
+		</div>
+        <div>
+            <span>
+            	<em>27,376</em> 개의 상품이 있습니다.
+            </span>
+		</div>
+    </div>
+	
+	<div class="body-container">
+		<div class="product_group">
+			<aside class="product_search" id="product_search">
+	            <!-- 검색 기능 -->
+	            <div class="search-box">
+	                <input type="text" id="search-input" placeholder="상품 검색..." />
+	                <button id="search-btn">검색</button>
+	            </div>
+        	</aside>
+        	
+			<div class="product_content">
+		        <!-- 상품 리스트 -->
+		        <section class="product-list">
+        
             <div class="product-grid">
                 <div class="product-item">
                     <img src="${pageContext.request.contextPath}/dist/images/noimage.png" alt="상품 1">
@@ -188,6 +123,7 @@
                 <!-- 추가 상품 항목들 -->
             </div>
         </section>
+    </div>
     </div>
     </div>
 </main>
