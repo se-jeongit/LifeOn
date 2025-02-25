@@ -148,19 +148,33 @@
 <jsp:include page="/WEB-INF/views/layout/footerResources.jsp"/>
 
 <script type="text/javascript">
-	
 	function productOk(){
 		const f = document.orderForm;
-		
 	    f.action = '${pageContext.request.contextPath}/market/order/payment';
 	    f.submit();
 	}
-	
-
 
     function updateTotalPrice() {
         let price = parseFloat(${dto2.ptsp});  // 상품 가격
-        let quantity = document.getElementById("odq").value;  // 선택된 수량
+        let quantityInput = document.getElementById("odq");
+        let quantity = parseInt(quantityInput.value);  // 선택된 수량
+        let maxQuantity = parseInt(quantityInput.max);  // 최대 구매 가능 수량 (남은 재고량)
+
+        // 🚨 재고보다 많은 수량 입력 방지
+        if (quantity > maxQuantity) {
+            alert("남은 재고보다 많은 수량을 입력할 수 없습니다.");
+            quantityInput.value = maxQuantity;  // 최대값으로 설정
+            quantity = maxQuantity;
+        }
+
+        // 🚨 1보다 작은 수량 입력 방지
+        if (quantity < 1) {
+            alert("구매 수량은 최소 1개 이상이어야 합니다.");
+            quantityInput.value = 1;  // 최소값으로 설정
+            quantity = 1;
+        }
+
+        // 총 결제 금액 계산
         let totalPrice = price * quantity;
 
         // 화면에 표시 (천 단위 콤마 적용)
@@ -170,6 +184,7 @@
         document.getElementById("totalPriceInput").value = totalPrice;
     }
 </script>
+
 
 
 

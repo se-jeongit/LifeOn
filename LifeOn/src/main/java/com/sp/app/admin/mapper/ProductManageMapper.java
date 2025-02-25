@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.sp.app.admin.model.ProductManage;
 
@@ -19,12 +20,23 @@ public interface ProductManageMapper {
 	public void insertStock(ProductManage dto) throws SQLException;
 	public void insertProductImage(ProductManage dto) throws SQLException;
 	
+	//DELETE(재고 + 상품통합 + 사진)
+	public void deleteProductImage(long pnum) throws SQLException;
+	public void deleteStock(long pnum) throws SQLException;
+	public void deleteProduct(long pnum) throws SQLException;
+	
+	public List<ProductManage> listProductFile(long pnum);
+	
 	//INSERT(공동구매)
 	public void insertTogetherProduct(ProductManage dto) throws SQLException;
 	
 	//UPDATE(공동구매)
 	public void updateTogetherProduct(ProductManage dto) throws SQLException;
 	
+	//UPDATE(수량)
+	public void updateTogetherQuantity(@Param("pnum") long pnum, @Param("odq") int odq) throws SQLException;
+
+
 	//DELETE(공동구매)
 	public void deleteTogetherProduct(long pnum) throws SQLException;
 	
@@ -38,7 +50,7 @@ public interface ProductManageMapper {
 	
 	public ProductManage findByPnum(long pnum);
 	
-	
+	public void updateStatus(@Param("pnum") long pnum, @Param("status") String status);
 	
 	
 }

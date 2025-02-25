@@ -65,6 +65,18 @@ public class ProductManageController {
 	}
 	
 	
+	@GetMapping("deleteStock")
+	public String stockDelete(@RequestParam(name = "pnum") long pnum) {
+		try {
+			service.deleteProduct(pnum, uploadPath);
+		} catch (Exception e) {
+			log.info("stockDelete : ", e);
+		}	
+		
+		return "redirect:/admin/productManage/stock";
+	}
+	
+	
 	@ResponseBody
 	@PostMapping("smallCategories")
 	public List<ProductManage> getSmallCategories(@RequestParam(name = "cbn") int cbn) {
@@ -187,7 +199,7 @@ public class ProductManageController {
 		}
 		return "redirect:/admin/productManage/list";
 	}
-	
+		
 	
 	@GetMapping("update")
 	public String updateForm(@RequestParam(name = "pnum") long pnum,

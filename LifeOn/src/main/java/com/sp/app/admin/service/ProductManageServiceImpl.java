@@ -15,6 +15,7 @@ import com.sp.app.admin.mapper.ProductManageMapper;
 import com.sp.app.admin.model.ProductManage;
 import com.sp.app.common.StorageService;
 import com.sp.app.exception.StorageException;
+import com.sp.app.mapper.OrderMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductManageServiceImpl implements ProductManageService{
 	private final ProductManageMapper mapper;
 	private final StorageService storageSerivce;
+	private final OrderMapper odmapper;
 	@Override
 	public List<ProductManage> listBigCategory() {
 		List<ProductManage> list = null;
@@ -85,6 +87,51 @@ public class ProductManageServiceImpl implements ProductManageService{
 		}
 	}
 	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	@Override
+	public void deleteProduct(long pnum, String uplaodPath) throws Exception {
+		try {
+			ProductManage dto = findByPnum(pnum);
+			
+			List<ProductManage> listFile = listProductFile(pnum);
+			if(listFile != null) {
+				for(ProductManage vo : listFile) {
+					deleteUploadFile(uplaodPath, vo.getPpp());
+				}
+			}
+			mapper.deleteProductImage(pnum);
+			mapper.deleteStock(pnum);
+			
+			deleteUploadFile(uplaodPath, dto.getPph());
+			
+			mapper.deleteProduct(pnum);
+		
+		} catch (Exception e) {
+			log.info("deleteProduct : ", e);
+			throw e;
+		}
+		
+	}
+	
+	@Override
+	public List<ProductManage> listProductFile(long pnum) {
+		List<ProductManage> listFile = null;
+		
+		try {
+			listFile = mapper.listProductFile(pnum);
+		} catch (Exception e) {
+			log.info("listProductFile : ", e);
+		}
+		
+		return listFile;
+	}
+	
+	
+	public boolean deleteUploadFile(String uploadPath, String filename) {
+		return storageSerivce.deleteFile(uploadPath, filename);
+	}
+	
+	
 	@Override
 	public void insertTogetherProduct(ProductManage dto) throws Exception {
 		try {
@@ -95,21 +142,13 @@ public class ProductManageServiceImpl implements ProductManageService{
 			LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.ISO_LOCAL_DATE);
 			LocalDate end = LocalDate.parse(endStr, DateTimeFormatter.ISO_LOCAL_DATE);				
 			LocalDate today = LocalDate.now();
-			
-			int target = dto.getPtq(); //상품수량
-			int sold = 0; //d 어케가져올지 미정
+
 			
 			if(today.isBefore(start)) {
 				dto.setStatus("진행전");
 			} else if(! today.isAfter(end)) {
 				dto.setStatus("진행중");
-			} else {
-				if(sold < target) {
-					dto.setStatus("구매실패");
-				} else {
-					dto.setStatus("구매성공");
-				}
-			}
+			} 
 			
 			mapper.insertTogetherProduct(dto);
 		} catch (Exception e) {
@@ -127,6 +166,17 @@ public class ProductManageServiceImpl implements ProductManageService{
 			throw e;
 		}
 	}
+	
+	
+	@Override
+	public void updateTogtherQuantity(long pnum, int odq) {
+		try {
+			mapper.updateTogetherQuantity(pnum, odq);
+		} catch (Exception e) {
+			log.info("updateTogtherQuantity : ", e);
+		}
+	}
+	
 	
 	@Override
 	public void deleteTogetherProduct(long pnum) throws Exception {
@@ -175,31 +225,11 @@ public class ProductManageServiceImpl implements ProductManageService{
 		
 		try {
 			list = mapper.listTogetherProduct(map);
-			/*
-			for(ProductManage dto : list) {
-				String startStr = dto.getPtsd();
-				String endStr = dto.getPted();
-				
-				LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.ISO_LOCAL_DATE);
-				LocalDate end = LocalDate.parse(endStr, DateTimeFormatter.ISO_LOCAL_DATE);				
-				LocalDate today = LocalDate.now();
-				
-				int target = dto.getPtq(); //상품수량
-				int sold = 0; //d 어케가져올지 미정
-				
-				if(today.isBefore(start)) {
-					dto.setStatus("진행전");
-				} else if(! today.isAfter(end)) {
-					dto.setStatus("진행중");
-				} else {
-					if(sold < target) {
-						dto.setStatus("구매실패");
-					} else {
-						dto.setStatus("판매완료");
-					}
-				}
+			
+			for(ProductManage dto : list) {  //팔린수량 설정
+				dto.setTotalOdq(odmapper.getTotalOdq(dto.getPnum()));
 			}
-			*/
+			
 			
 		} catch (Exception e) {
 			log.info("listTogetherProduct : ", e);
@@ -235,6 +265,12 @@ public class ProductManageServiceImpl implements ProductManageService{
 		
 		return dto;
 	}
+
+
+
+
+
+
 
 
 

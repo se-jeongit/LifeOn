@@ -13,5 +13,11 @@
 		VALUES (ord_detail_seq.NEXTVAL, ord_seq.CURRVAL, #{odq}, #{odp}, 0 ,#{pnum} )
 	</insert>
 	
+	<select id="getTotalOdq" resultType="Integer" parameterType="Long">
+	    SELECT COALESCE(SUM(odq), 0)
+	    FROM ORD_DETAIL
+	    WHERE pnum = #{pnum}
+	</select>
+	
 	
 </mapper>

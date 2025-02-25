@@ -11,10 +11,16 @@ public interface ProductManageService {
 	public List<ProductManage> listSmallCategory(int cbn);
 	
 	public void insertProduct(ProductManage dto, String uploadPath) throws Exception;
-	public void insertTogetherProduct(ProductManage dto) throws Exception;
 	
+	
+	public void deleteProduct(long pnum, String uploadPath) throws Exception;
+	public List<ProductManage> listProductFile(long pnum);
+	
+	public void insertTogetherProduct(ProductManage dto) throws Exception;
 	public void updateTogetherProduct(ProductManage dto) throws Exception;
 	public void deleteTogetherProduct(long pnum) throws Exception;
+	
+	public void updateTogtherQuantity(long pnum, int odq);
 	
 	public List<ProductManage> listProduct(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);

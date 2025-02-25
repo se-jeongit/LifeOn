@@ -67,6 +67,22 @@
         cursor: pointer;
         transition: background-color 0.3s;
     }
+	.admin-button {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: blue;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+	}
+	
+	.admin-button:hover {
+	    background-color: darkblue;
+	}
+	
 	
 </style>
 
@@ -78,7 +94,12 @@
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 	<jsp:include page="/WEB-INF/views/market/layout/menu.jsp"/>
 </header>
-	
+
+<c:if test="${sessionScope.member.grade == 1}">
+	<div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+		<button class="admin-button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/list'">공동구매목록 리스트로 돌아가기</button>
+	</div>
+</c:if>
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 84px;">
 	<div class="wow" style="display: flex; padding-top: 5px; margin: 10px auto; width: 1130px;">
 	    <img src="${pageContext.request.contextPath}/uploads/product/${dto.pph}" alt="이미지" class="detail-thumbnail-prize">
@@ -113,11 +134,11 @@
 	                <p> 예상 발송일 : ${dto.ptdd}</p>
 	            </div>
 	
-<div style="padding-top: 30px; display: flex; justify-content: flex-end; align-items: center; height: 100px;">
-    <c:if test="${dto.status eq '구매가능'}">
-        <button type="button" class="buy-button" onclick="location.href='${pageContext.request.contextPath}/market/order/payment?pnum=${dto.pnum}'"> 주문하기 </button>
-    </c:if>
-</div>
+				<div style="padding-top: 30px; display: flex; justify-content: flex-end; align-items: center; height: 100px;">
+				    <c:if test="${dto.status eq '구매가능'}">
+				        <button type="button" class="buy-button" onclick="location.href='${pageContext.request.contextPath}/market/order/payment?pnum=${dto.pnum}'"> 주문하기 </button>
+				    </c:if>
+				</div>
 	        </div>
 	    </div>
 	</div>

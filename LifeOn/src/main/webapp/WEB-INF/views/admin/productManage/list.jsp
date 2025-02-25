@@ -137,15 +137,16 @@
             				<br>원가 : <fmt:formatNumber value="${dto.ptp}" type="currency"/>
             				<br>할인가 : <fmt:formatNumber value="${dto.ptsp}" type="currency"/>
             			</td>
-            			<td>${dto.ptq}개</td>
-            			<td>0개</td>
+            			<td>${dto.pttq}개</td>
+            			<td>${dto.totalOdq}개</td>
             			<td>
             				<button class="btn btn-order" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/update?pnum=${dto.pnum}&ptsq=${dto.ptsq}'">수정하기</button>
                         	<c:if test="${dto.status eq '구매성공'}">
     							<button class="btn btn-edit">판매완료</button>
 							</c:if>
-                        	<button class="btn btn-delete" onclick="if(confirm('진짜 마감처리 하시겠습니까?')) location.href='${pageContext.request.contextPath}/admin/productManage/delete?pnum=${dto.pnum}'">마감처리</button>
-
+                        	<c:if test="${dto.status ne '구매성공'}">
+							    <button class="btn btn-delete" onclick="if(confirm('진짜 마감처리 하시겠습니까?')) location.href='${pageContext.request.contextPath}/admin/productManage/delete?pnum=${dto.pnum}'">마감처리</button>
+							</c:if>
             			</td>
             		</tr>
             	</c:forEach>

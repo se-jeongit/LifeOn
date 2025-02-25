@@ -18,28 +18,49 @@
 		INSERT INTO product(pnum, ptype, pname, pct, pph, csn)
 		VALUES (product_seq.NEXTVAL, #{ptype}, #{pname}, #{pct}, #{pph}, #{csn})
 	</insert>
-	
 	<insert id="insertStock" parameterType="com.sp.app.admin.model.ProductManage">
 		INSERT INTO product_together_stock (pnum, ptsc, ptsq, ptst)
 		VALUES (product_seq.CURRVAL, #{ptsc}, #{ptsq}, #{ptst})
-	</insert>
-	
+	</insert>	
 	<insert id="insertProductImage" parameterType="com.sp.app.admin.model.ProductManage">
 		INSERT INTO product_picture (ppnum, ppp, pnum)
 		VALUES (product_picture_seq.NEXTVAL, #{ppp}, product_seq.CURRVAL)
 	</insert>
 	
 	
+	<delete id="deleteProductImage" parameterType="Long">
+	    DELETE FROM product_picture WHERE pnum = #{pnum}
+	</delete>
+	<delete id="deleteStock" parameterType="Long">
+	    DELETE FROM product_together_stock WHERE pnum = #{pnum}
+	</delete>
+	<delete id="deleteProduct" parameterType="Long">
+	    DELETE FROM product WHERE pnum = #{pnum}
+	</delete>
+	
+	<select id="listProductFile" parameterType="Long">
+		SELECT ppnum, ppp, pnum
+		FROM product_picture
+		WHERE pnum = #{pnum}
+	</select>
+	
+	
 	<insert id="insertTogetherProduct" parameterType="com.sp.app.admin.model.ProductManage">
-		INSERT INTO product_together (pnum, ptp, ptsp, ptq, ptd, ptsd, pted, ptdd, status)
-		VALUES (#{pnum}, #{ptp}, #{ptsp}, #{ptq}, SYSDATE, #{ptsd}, #{pted}, #{ptdd}, #{status})
+		INSERT INTO product_together (pnum, ptp, ptsp, ptq, ptd, ptsd, pted, ptdd, status, pttq)
+		VALUES (#{pnum}, #{ptp}, #{ptsp}, #{pttq}, SYSDATE, #{ptsd}, #{pted}, #{ptdd}, #{status}, #{pttq})
 	</insert>	
 	
 	<update id="updateTogetherProduct" parameterType="com.sp.app.admin.model.ProductManage">
-		UPDATE product_together SET ptp=#{ptp}, ptsp=#{ptsp}, ptq =#{ptq},
+		UPDATE product_together SET ptp=#{ptp}, ptsp=#{ptsp}, pttq =#{pttq},
 			ptsd = #{ptsd}, pted = #{pted}, ptdd = #{ptdd}
 		WHERE pnum = #{pnum}
 	</update>
+	
+	<update id="updateTogetherQuantity">
+		UPDATE product_together SET ptq = ptq - #{odq}
+		WHERE pnum = #{pnum}
+	</update>
+	
 	
 	<delete id="deleteTogetherProduct" parameterType="Long">
 		DELETE FROM product_together
@@ -78,7 +99,7 @@
 	
 	
 	<select id="listTogetherProduct" parameterType="map" resultType="com.sp.app.admin.model.ProductManage">
-		SELECT p.pnum, p.pname, p.pph, pt.ptp, pt.ptsp, pt.ptq, ts.ptsq, pt.status,
+		SELECT p.pnum, p.pname, p.pph, pt.ptp, pt.ptsp, pt.ptq, ts.ptsq, pt.status, pt.pttq,
 		TO_CHAR(pt.ptd, 'YYYY-MM-DD') AS ptd, 
 		TO_CHAR(pt.ptsd, 'YYYY-MM-DD') AS ptsd, 
 		TO_CHAR(pt.pted, 'YYYY-MM-DD') AS pted, 
@@ -126,7 +147,7 @@
 	
 	<select id="findByPnum" parameterType="Long" resultType="com.sp.app.admin.model.ProductManage">
 		SELECT p.pnum, p.pname, p.pph, p.pct, ts.ptsq, pp.ppp, 
-			pt.ptp, pt.ptsp, pt.ptq, pt.ptd, pt.status,
+			pt.ptp, pt.ptsp, pt.ptq, pt.ptd, pt.status, pt.pttq,
 			TO_CHAR(pt.ptsd, 'YYYY-MM-DD') AS ptsd, 
 			TO_CHAR(pt.pted, 'YYYY-MM-DD') AS pted, 
 			TO_CHAR(pt.ptdd, 'YYYY-MM-DD') AS ptdd
@@ -139,5 +160,10 @@
 	</select>
 	
 	
+	<update id="updateStatus">
+		UPDATE product_together
+	   	SET status = #{status}
+	    WHERE pnum = #{pnum}
+	</update>
 	
 </mapper>

@@ -9,4 +9,6 @@ public interface OrderMapper {
 	public void insertOrder(Order dto);
 	public void insertOrderDetail(Order dto);
 	
+	public int getTotalOdq(long pnum);
+	
 }

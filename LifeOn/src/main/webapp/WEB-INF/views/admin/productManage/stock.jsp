@@ -36,6 +36,10 @@
         cursor: pointer;
         border-radius: 5px;
     }
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
     .low-stock {
         color: red;
         font-weight: bold;
@@ -93,6 +97,7 @@
 						        </c:when>
 						        <c:otherwise>
 						            <!-- 공동구매 상품 등록 미완료인 경우 -->
+						            <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/deleteStock?pnum=${dto.pnum}'" class="btn btn-delete mt-3">재고 삭제</button>
 						            <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register?pnum=${dto.pnum}&ptsq=${dto.ptsq}'" class="btn btn-primary mt-3">공동구매 등록</button>
 						        </c:otherwise>
 						    </c:choose>

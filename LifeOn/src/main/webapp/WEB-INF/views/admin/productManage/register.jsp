@@ -60,15 +60,15 @@
             </div>
             
             <div class="form-group">
-                <label for="ptsp">상품 할인가</label>
+                <label for="ptsp">상품 판매가</label>
                 <input type="number" id="ptsp" name="ptsp" required value="${dto.ptsp}">
             </div>
            
            
            
             <div class="form-group">
-                <label for="ptq">상품 수량</label>
-                <input type="number" id="ptq" name="ptq" required value="${dto.ptq}">
+                <label for="pttq">상품 목표 수량</label>
+                <input type="number" id="pttq" name="pttq" required value="${dto.pttq}">
             </div>
 
             <div class="form-group">
@@ -105,7 +105,7 @@ function productRegister(){
 	const f = document.productForm;
 	
     let stock = parseInt(document.getElementById("ptsq").value);  // 현재 재고량
-    let quantity = parseInt(document.getElementById("ptq").value); // 입력된 공동구매 수량
+    let quantity = parseInt(document.getElementById("pttq").value); // 입력된 공동구매 수량
 
     if (quantity > stock) {
         alert("공동구매 수량이 현재 재고보다 많을 수 없습니다.");

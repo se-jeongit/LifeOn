@@ -41,7 +41,8 @@ public class ProductManage {
 	//공동구매 - 상품정보
 	private int ptp; //상품원가
 	private int ptsp; //상품할인가
-	private int ptq; //상품수량
+	private int pttq; //목표수량
+	private int ptq; //상품남은수량
 	private String ptd; //상품등록날짜(SYSDATE)
 	private String ptsd; //시작날짜
 	private String pted; //종료날짜
@@ -50,5 +51,6 @@ public class ProductManage {
 	
 	private String asRegister; // Y/N 재고에는 등록되었지만 공동구매에 등록된 상품인지 아닌지 확인하기 위한 컬럼
 	
+	private int totalOdq; //팔린수량
 	
 }

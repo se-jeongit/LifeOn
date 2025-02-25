@@ -30,6 +30,8 @@ public class OrderController {
 	private final MemberService memberService;
 	private final ProductManageService productService;
 	private final OrderService orderService;
+	
+	
 	@GetMapping("payment")
 	public String paymentForm(@RequestParam(name = "pnum") long pnum,
 			HttpSession session,
@@ -61,13 +63,12 @@ public class OrderController {
 		try {
 			orderService.insertOrder(dto);
 			
-			
 			StringBuilder sb = new StringBuilder();
 			sb.append("주문이 성공적으로 이루어졌습니다.<br>");
 			sb.append("축하합니다.<br>");
 			
 			reAttr.addFlashAttribute("message", sb.toString());
-			reAttr.addFlashAttribute("title", "주문");
+			reAttr.addFlashAttribute("title", "주문성공");
 
 			return "redirect:/member/complete";	
 			
