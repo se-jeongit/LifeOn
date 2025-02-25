@@ -149,6 +149,9 @@
 			</div>
 		</div>
 	</main>
+	<div class="pagenavigation">
+		${paging}
+	</div>
 	  <!-- 모달창 코드 추가 -->
    <div class="modal fade" id="authorityModal" tabindex="-1" aria-labelledby="authorityModalLabel" aria-hidden="true">
      <div class="modal-dialog">
