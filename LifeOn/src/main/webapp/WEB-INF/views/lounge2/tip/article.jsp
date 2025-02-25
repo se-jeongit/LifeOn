@@ -73,7 +73,7 @@
 										</div>
 										<div>
 										<button type="button" class="ssbtn btnSendBoardLike" title="즐겨찾기">
-										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill likeColor' : 'bi-bookmark'}"></i>
+										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill buleColor' : 'bi-bookmark'}"></i>
 										&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
 										</button>
 											<button type="button" class="ssbtn" onclick="javascript:dialogReport();">신고하기</button>
@@ -192,6 +192,12 @@ function dialogReport() {
 	}
 }
 
+function reset() {
+    $('input[name="repr"]').prop('checked', false);
+    $('textarea[name="addrepr"]').val('');
+    $('textarea[name="addrepr"]').hide();
+}
+
 $(function() {
 	$('#dialogReport').on('hide.bs.modal', function() {
 		$('button, input, select, textarea').each(function(){
@@ -231,31 +237,30 @@ $(function() {
             $('textarea[name="addrepr"]').val(addrepr.substring(0, 300));
             return false;
         }
+        
+        if (! confirm('허위 신고 시 운영정책에 따라 조치 될 수 있습니다. 정말로 신고하시겠습니까?')) {
+        	return false;
+        }
 
 		let url = '${pageContext.request.contextPath}/lounge2/tip/boardBlind';
 		let repan = '${dto.psnum}';
 		let params = {repan: repan, repr: repr};
 		
-		
 		const fn = function(data) {
 			let state = data.state;
 			
 		   if (state === 'true') {
-		        if (confirm('허위 신고 시 운영정책에 따라 조치 될 수 있습니다. 정말로 신고하시겠습니까?')) {
-		            alert("신고가 접수가 완료되었습니다.");
-		            $('#dialogReport').modal('hide');
+		      $('#dialogReport').modal('hide');
 		            
-		            setTimeout(function() {
-		                window.location.reload();
-		            }, 1000);
-		            
-		            setTimeout();
-		        } else {
-		            return false;
-		        }
-	        	repr = '';
+              alert("신고가 접수가 완료되었습니다.");
+              
+		      setTimeout(function() {
+	              window.location.reload();
+		      }, 1000);
+		      
 		    } else {
 		        alert("오류가 발생했습니다. 다시 시도해주세요.");
+		        return false;
 		    }
 		};
 		
@@ -270,7 +275,7 @@ $(function() {
 		
       		<div class="modal-header" style="display: flex; justify-content: space-between; padding: 10px 20px;">
         		<h5 class="modal-title" id="reportModalLabel">게시글 신고하기</h5>
-        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="reset();"></button>
       		</div>
       		
       		<div class="modal-body" style="padding: 5px 0px;">
@@ -344,7 +349,7 @@ $(function() {
       		
       		<div class="modal-footer" style="display: flex; justify-content: center;">
         		<button type="button" class="ssbtn" id="submitReport">신고하기</button>
-        		<button type="button" class="ssbtn" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+        		<button type="button" class="ssbtn" data-bs-dismiss="modal" aria-label="Close" onclick="reset();">닫기</button>
       		</div>
     	</div>
   	</div>
@@ -394,9 +399,9 @@ $(function() {
 			
 			if (state === "true") {
 				if (memberLiked) {
-					$i.removeClass('bi-bookmark-fill likeColor').addClass('bi-bookmark');
+					$i.removeClass('bi-bookmark-fill buleColor').addClass('bi-bookmark');
 				} else {
-					$i.removeClass('bi-bookmark').addClass('bi-bookmark-fill likeColor');
+					$i.removeClass('bi-bookmark').addClass('bi-bookmark-fill buleColor');
 				}
 				
 				let count = data.boardLikeCount;
@@ -524,9 +529,9 @@ $(function() {
 				
 				$btn.parent('span').attr('data-memberLiked', rplike);
 				if (rplike === '1') {
-					$btn.parent('span').children().eq(0).find('i').removeClass('bi-heart').addClass('bi-heart-fill disLikeColor');
+					$btn.parent('span').children().eq(0).find('i').removeClass('bi-heart').addClass('bi-heart-fill redColor');
 				} else {
-					$btn.parent('span').children().eq(1).find('i').removeClass('bi-heartbreak').addClass('bi-heartbreak-fill likeColor');
+					$btn.parent('span').children().eq(1).find('i').removeClass('bi-heartbreak').addClass('bi-heartbreak-fill buleColor');
 				}
 				
 			} else if (state === 'liked') {

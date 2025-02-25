@@ -52,11 +52,11 @@
 							<div style="display: flex; justify-content: flex-end; flex-wrap: wrap;">
 								<span data-memberLiked="${dto.memberLiked}" style="padding-right: 20px; cursor: pointer;">
 									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="1" title="좋아요" style="padding: 3px;">
-										<i class="bi ${dto.rplike == 1 && dto.memberLiked == dto.rpnum ? 'bi-heart-fill disLikeColor':'bi-heart'}"></i>
+										<i class="bi ${dto.rplike == 1 && dto.memberLiked == dto.rpnum ? 'bi-heart-fill redColor':'bi-heart'}"></i>
 										<span>${dto.likeCount}</span>
 									</span>
 									<span class="btnSendReplyLike" data-replyNum="${dto.rpnum}" data-replyLike="0" title="싫어요" style="padding: 3px;">
-										<i class="bi ${dto.rplike == 0 && dto.memberLiked == dto.rpnum ? 'bi-heartbreak-fill likeColor':'bi-heartbreak'}"></i>
+										<i class="bi ${dto.rplike == 0 && dto.memberLiked == dto.rpnum ? 'bi-heartbreak-fill buleColor':'bi-heartbreak'}"></i>
 										<span>${dto.disLikeCount}</span>
 									</span>	        
 								</span>
