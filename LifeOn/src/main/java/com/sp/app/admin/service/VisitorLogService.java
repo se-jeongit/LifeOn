@@ -13,4 +13,7 @@ public interface VisitorLogService {
 	
 	//총 회원수
 	int countTotalMembers();
+	
+	//오늘 가입자 
+	int countTodayNewMembers();
 }

@@ -27,5 +27,11 @@
 		SELECT COUNT(*) FROM member
 	</select>
 	
+	<!--  오늘가입한 회원 수 조회 -->
+	<select id="countTodayNewMembers" resultType="int">
+		SELECT COUNT(*)
+		FROM member
+		WHERE TRUNC(reg_date) = TRUNC(SYSDATE)
+	</select>
 
 </mapper>

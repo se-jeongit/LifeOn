@@ -29,9 +29,9 @@
 }
 
 .state-card:hover {
-    background-color: #f0f8ff; /* 연한 파란색 (Aliceblue) */
-    transform: translateY(-5px); /* 약간 위로 올라감 */
-    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* 그림자 강조 */
+	background-color: #f0f8ff; /* 연한 파란색 (Aliceblue) */
+	transform: translateY(-5px); /* 약간 위로 올라감 */
+	box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* 그림자 강조 */
 }
 </style>
 </head>
@@ -63,13 +63,13 @@
 						<div class="col-md-3 mb-3">
 							<div class="card state-card shadow-sm">
 								<h5>총 회원수</h5>
-								<p class="fs-4 fw-bold">1000명</p>
+								<p id="totalMembers" class="fs-4 fw-bold">0명</p>
 							</div>
 						</div>
 						<div class="col-md-3 mb-3">
 							<div class="card state-card shadow-sm">
 								<h5>오늘 가입자</h5>
-								<p class="fs-4 fw-bold">00명</p>
+								<p id="todayNewMembers" class="fs-4 fw-bold">00명</p>
 							</div>
 						</div>
 					</div>
@@ -80,7 +80,7 @@
 							<div class="card shadow-sm p-3">
 								<h5 class="mb-3">회원 연령대</h5>
 								<div class="chart-container">
-									<div id="ageChart" style="width:100%; height:300px;"></div>
+									<div id="ageChart" style="width: 100%; height: 300px;"></div>
 								</div>
 							</div>
 						</div>
@@ -88,7 +88,7 @@
 							<div class="card shadow-sm p-3">
 								<h5 class="mb-3">남녀 성비</h5>
 								<div class="chart-container">
-									<div id="genderChart" style="width:100%; height:300px;"></div>
+									<div id="genderChart" style="width: 100%; height: 300px;"></div>
 								</div>
 							</div>
 						</div>
@@ -100,7 +100,7 @@
 							<div class="card shadow-sm p-3">
 								<h5 class="mb-3">조회수가 많은 카테고리</h5>
 								<div class="chart-container">
-									<div id="categoryChart" style="width:100%; height:300px;"></div>
+									<div id="categoryChart" style="width: 100%; height: 300px;"></div>
 								</div>
 							</div>
 						</div>
@@ -113,6 +113,7 @@
 	</main>
 	<script type="text/javascript">
 	document.addEventListener("DOMContentLoaded", function () {
+		// 누적 방문자
 		fetch('/admin/main/totalVisitors')
 			.then(response => response.json())
 			.then(data => {
@@ -123,6 +124,7 @@
 	
 	
 	document.addEventListener("DOMContentLoaded", function () {
+		//오늘 방문자
 		fetch('/admin/main/todayVisitors')
 			.then(response => response.json())
 			.then(data => {
@@ -130,6 +132,26 @@
 			})
 			.catch(error => console.error("오늘 방문자수 가져오기 실패 ", error));
 	});
+	
+	document.addEventListener("DOMContentLoaded", function () {
+	   // 총 회원 수 가져오기
+	   fetch('/admin/main/totalMembers')
+	        .then(response => response.json())
+	        .then(data => {
+	            document.getElementById('totalMembers').innerText = data + "명";
+	        })
+	        .catch(error => console.error('총 회원 수 가져오기 실패:', error));
+	});
+	
+	document.addEventListener("DOMContentLoaded", function () {
+        // 오늘 가입한 회원 수 불러오기
+        fetch('/admin/main/todayNewMembers')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('todayNewMembers').innerText = data + "명";
+            })
+            .catch(error => console.error('오늘 가입자 수 가져오기 실패:', error));
+    });
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	    // 회원 연령대 (ECharts)

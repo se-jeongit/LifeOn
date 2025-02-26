@@ -43,4 +43,10 @@ public class VisitorLogController {
 		return visitorLogService.countTotalMembers();
 	}
 	
+	@GetMapping("/todayNewMembers")
+	@ResponseBody
+	public int getTodayNewMembers() {
+		return visitorLogService.countTodayNewMembers();
+	}
+	
 }
