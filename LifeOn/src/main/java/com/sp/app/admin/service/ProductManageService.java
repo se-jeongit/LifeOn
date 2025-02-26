@@ -30,4 +30,6 @@ public interface ProductManageService {
 	
 	public ProductManage findByPnum(long pnum);
 	
+	public void updateProductStatus();
+	
 }

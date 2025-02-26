@@ -33,6 +33,7 @@ public class TogetherController {
 	@ResponseBody
 	@PostMapping("smallCategories")
 	public List<ProductManage> getSmallCategories(@RequestParam(name = "cbn") int cbn) {
+			
 		return service.listSmallCategory(cbn);
 	}
 	

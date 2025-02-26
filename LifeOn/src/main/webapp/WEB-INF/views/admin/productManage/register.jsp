@@ -104,15 +104,82 @@
 function productRegister(){
 	const f = document.productForm;
 	
+	
+	let str;
+	
+	str = f.ptp.value;
+	if( !str){
+		alert("원가를 입력하세요");
+		f.ptp.focus();
+		return;
+	}
+	
+	str = f.ptsp.value;
+	if( !str){
+		alert("판매가를 입력하세요");
+		f.ptsp.focus();
+		return;
+	}
+	
+	str = f.pttq.value;
+	if( !str){
+		alert("상품수량을 입력하세요");
+		f.pttq.focus();
+		return;
+	}
+	
+	str = f.ptsd.value;
+	if( !str){
+		alert("시작일을 입력하세요");
+		f.ptsd.focus();
+		return;
+	}
+	
+	str = f.pted.value;
+	if( !str){
+		alert("종료일을 입력하세요");
+		f.pted.focus();
+		return;
+	}
+	
+	str = f.ptdd.value;
+	if( !str){
+		alert("예상일을 입력하세요");
+		f.ptdd.focus();
+		return;
+	}
+	
     let stock = parseInt(document.getElementById("ptsq").value);  // 현재 재고량
     let quantity = parseInt(document.getElementById("pttq").value); // 입력된 공동구매 수량
-
     if (quantity > stock) {
         alert("공동구매 수량이 현재 재고보다 많을 수 없습니다.");
         quantityInput.focus();
+        return;
     }
 	
-	
+    let start = f.ptsd.value;
+    let end = f.pted.value;
+    let expect = f.ptdd.value;
+    let today = new Date().toISOString().split("T")[0];
+    
+    if (start && start < today) {
+        alert("시작일은 오늘 이전 날짜로 설정할 수 없습니다.");
+       	f.ptsd.focus();
+       	return;
+    }
+    
+    if (start && end && start > end) {
+        alert("종료일은 시작일보다 빠를 수 없습니다.");
+        f.pted.focus();
+        return;
+    }
+    
+    if (end && expect && end > expect){
+    	alert("예상발송일은 종료일보다 빠를 수 없습니다.");
+    	f.ptdd.focus();
+    	return;
+    }
+    
     f.action = '${pageContext.request.contextPath}/admin/productManage/${mode}';
     f.submit();	
 }

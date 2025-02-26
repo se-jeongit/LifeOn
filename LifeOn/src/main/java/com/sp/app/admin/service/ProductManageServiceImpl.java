@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,16 +138,14 @@ public class ProductManageServiceImpl implements ProductManageService{
 		try {
 			
 			String startStr = dto.getPtsd();
-			String endStr = dto.getPted();
 			
-			LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.ISO_LOCAL_DATE);
-			LocalDate end = LocalDate.parse(endStr, DateTimeFormatter.ISO_LOCAL_DATE);				
+			LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.ISO_LOCAL_DATE);		
 			LocalDate today = LocalDate.now();
 
 			
 			if(today.isBefore(start)) {
 				dto.setStatus("진행전");
-			} else if(! today.isAfter(end)) {
+			} else {
 				dto.setStatus("진행중");
 			} 
 			
@@ -264,6 +263,20 @@ public class ProductManageServiceImpl implements ProductManageService{
 		}
 		
 		return dto;
+	}
+
+	@Scheduled(cron = "0 0 0 * * *")
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	@Override
+	public void updateProductStatus() {
+		try {
+			mapper.updateStatusIng();
+			mapper.updateStatusFail();
+		} catch (Exception e) {
+			log.info("updateProductStatus : ", e);
+			log.info("공동구매 상태 자동 업데이트 실행됨! (테스트)");
+		}
+
 	}
 
 

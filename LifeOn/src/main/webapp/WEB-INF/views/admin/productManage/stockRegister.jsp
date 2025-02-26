@@ -123,6 +123,68 @@
 <script>
 function productOk(){
 	const f = document.productForm;
+	
+	let str;
+	
+	str = f.pname.value;
+	if(!str){
+		alert('상품명을 입력하세요');
+		f.pname.focus();
+		return;
+	}
+	
+	str = f.bigCategory.value;
+	if(!str){
+		alert('카테고리(대)를 선택하세요');
+		f.bigCategory.focus();
+		return;
+	}
+	
+	str = f.smallCategory.value;
+	if(!str){
+		alert('카테고리(소)를 선택하세요');
+		f.smallCategory.focus();
+		return;
+	}
+	
+	str = f.productDesc.value;
+	if(!str){
+		alert('상품설명을 입력하세요');
+		f.productDesc.focus();
+		return;
+	}
+	
+	str = f.thumbnailImage.value;
+	if(!str){
+		alert('대표사진을 선택하세요');
+		f.thumbnailImage.focus();
+		return;
+	}
+	
+	str = f.Image.value;
+	if(!str){
+		alert('상품 이미지를 선택하세요');
+		f.Image.focus();
+		return;
+	}
+	
+	str = f.supplier.value;
+	if(!str){
+		alert('업체명을 입력하세요');
+		f.supplier.focus();
+		return;
+	}
+	str = f.stockQuantity.value;
+	if(!str){
+		alert('재고수량을 입력하세요');
+		f.stockQuantity.focus();
+		return;
+	}
+	
+	
+	
+	
+	
     f.action = '${pageContext.request.contextPath}/admin/productManage/stockRegister';
     f.submit();
 }

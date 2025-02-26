@@ -52,7 +52,8 @@
 	
 	<update id="updateTogetherProduct" parameterType="com.sp.app.admin.model.ProductManage">
 		UPDATE product_together SET ptp=#{ptp}, ptsp=#{ptsp}, pttq =#{pttq},
-			ptsd = #{ptsd}, pted = #{pted}, ptdd = #{ptdd}
+			ptsd = #{ptsd}, pted = #{pted}, ptdd = #{ptdd},
+			ptq = ptq + (#{pttq} - (SELECT pttq FROM product_together WHERE pnum = #{pnum})) 
 		WHERE pnum = #{pnum}
 	</update>
 	
@@ -165,5 +166,22 @@
 	   	SET status = #{status}
 	    WHERE pnum = #{pnum}
 	</update>
+	
+	
+	<update id="updateStatusIng">
+		UPDATE product_together 
+    	SET status = '진행중'
+    	WHERE status = '진행전' 
+    	AND TO_CHAR(SYSDATE, 'YYYYMMDD') >= TO_CHAR(ptsd, 'YYYYMMDD')
+	</update>
+	
+	<update id="updateStatusFail">
+		UPDATE product_together 
+	    SET status = '구매실패'
+	    WHERE status = '진행중'
+	    AND TO_CHAR(SYSDATE, 'YYYYMMDD') > TO_CHAR(pted, 'YYYYMMDD')
+	</update>
+	
+	
 	
 </mapper>

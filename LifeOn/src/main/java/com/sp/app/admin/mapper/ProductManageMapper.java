@@ -50,7 +50,14 @@ public interface ProductManageMapper {
 	
 	public ProductManage findByPnum(long pnum);
 	
+	//status 구매성공 업데이트
 	public void updateStatus(@Param("pnum") long pnum, @Param("status") String status);
+	
+	
+	//status 업데이트
+	public void updateStatusIng();
+	public void updateStatusFail();
+	
 	
 	
 }

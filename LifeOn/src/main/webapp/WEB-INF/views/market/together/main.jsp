@@ -10,6 +10,8 @@
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
+
 <style>
     .product-card {
         border: 1px solid #ddd;
@@ -102,6 +104,33 @@
         font-weight: bold;
     }
     
+
+.subcategory-toggle {
+    color: black;
+    text-decoration: none;
+    font-size: 17px;
+    transition: color 0.3s;
+}
+
+.subcategory-toggle.active {
+    color: #006AFF; /* 선택 시 파란색 */
+    font-weight: bold;
+}
+
+/* 소분류 선택 시 강조 */
+.small-category {
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.small-category.selected {
+    color: #006AFF;
+    font-weight: bold;
+}
+  
+    
 </style>
 </head>
 <body>
@@ -109,39 +138,36 @@
     <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
     <jsp:include page="/WEB-INF/views/market/layout/menu.jsp"/>
 </header>
-<main class="container d-flex flex-column min-vh-100 align-items-center" style="padding-top: 84px;">
+<div class="body-title">
+	<em style="font-size: 50px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">공동구매</em>
+</div>
+<main class="container d-flex flex-column min-vh-100 align-items-center">
+	
+	
     <div class="row w-100">
-        <!-- Sidebar -->
         <aside class="col-md-2">
-            <div class="filter-section mb-3">
-                <h5>필터</h5>
-								
-				<div class="form-group">
-				    <label for="bigCategory" style="font-size:17px">[[카테고리]]</label>
-				    <ul class="filter-category" id="bigCategoryList">
-				        <c:forEach var="dto" items="${bigCategory}">
-				            <li class="category">
-				                <a href="#" class="subcategory-toggle" data-category-id="${dto.cbn}">${dto.cbc}</a>
-				                <ul class="filter-category subcategory" id="smallCategory-${dto.cbn}" style="display:none;">
-				                    <!-- 소분류 항목이 여기에 동적으로 들어감 -->
-				                </ul>
-				            </li>
-				        </c:forEach>
-				    </ul>
-				</div>
-
-                <h5>검색 기간</h5>
-                <input type="date" class="form-control mb-2" placeholder="시작일"> ~ 
-                <input type="date" class="form-control" placeholder="종료일">
-                <h5 class="mt-3">가격</h5>
-                <input type="number" class="form-control mb-2" placeholder="최저가격"> ~ 
-                <input type="number" class="form-control" placeholder="최고가격">
-            </div>
+			<div class="filter-section mb-3">
+			    <h5 style="text-align: center" >필터</h5>						
+			    <div class="form-group">
+			        <label for="bigCategory" style="font-size:17px; display: block; text-align: center;">[카테고리]</label>
+			        <br>
+			
+			        <ul class="filter-category" id="bigCategoryList">
+			            <c:forEach var="dto" items="${bigCategory}">
+			                <li class="category">
+			                    <a href="#" class="subcategory-toggle" data-category-id="${dto.cbn}">${dto.cbc}</a>
+			                    <ul class="filter-category subcategory" id="smallCategory-${dto.cbn}" style="display:none;">
+			                    	<!-- 여기에 소분류 동적추가--> 
+			                    </ul>
+			                </li>
+			            </c:forEach>
+			        </ul>
+			    </div>
+			</div>
         </aside>
         
         <!-- Main Content -->
         <section class="col-md-8">
-            <h2>공동구매</h2>
             <div class="product-grid">
                 <c:forEach var="dto" items="${list}">
 	                    <div class="product-card">
@@ -180,7 +206,67 @@
 </footer>
 <jsp:include page="/WEB-INF/views/layout/footerResources.jsp"/>
 
+<script type="text/javascript">
+$(document).ready(function () {
+    // 🔹 대분류 클릭 시 소분류 가져오기
+    $(".subcategory-toggle").click(function (e) {
+        e.preventDefault();
+        let cbn = $(this).data("category-id"); // 선택한 대분류 ID
+        let subCategoryList = $("#smallCategory-" + cbn);
 
+        console.log("✅ 선택된 대분류 ID:", cbn); // 콘솔에서 cbn 값 확인
+
+        // 🔹 기존에 선택된 대분류 색상 초기화
+        $(".subcategory-toggle").removeClass("active");
+        $(this).addClass("active"); // 현재 클릭한 대분류 강조
+
+        // 🔹 기존에 열린 다른 소분류 닫기
+        $(".filter-category .subcategory").not(subCategoryList).slideUp();
+
+        // 🔹 현재 클릭한 소분류가 이미 열려있으면 닫기
+        if (subCategoryList.is(":visible")) {
+            subCategoryList.slideUp();
+            return;
+        }
+
+        let url = '${pageContext.request.contextPath}/market/together/smallCategories';
+
+        // 🔹 AJAX 요청으로 소분류 가져오기
+        $.post(url, { cbn: cbn }, function (data) {
+            console.log("✅ 서버 응답 데이터:", data); // 응답 데이터 확인
+
+            if (data.length > 0) {
+                let subCategories = "";
+                $.each(data, function (index, category) {
+                    subCategories += "<li><a href='#' class='small-category' data-category-id='" + category.csn + "'>" + category.csc + "</a></li>";
+                });
+                subCategoryList.html(subCategories);
+            } else {
+                subCategoryList.html("<li>소분류 없음</li>");
+            }
+            subCategoryList.slideDown(); // 가져온 후 펼치기
+        }, "json").fail(function (xhr, status, error) {
+            console.error("❌ 소분류 불러오기 실패:", error);
+            console.error("❌ 서버 응답:", xhr.responseText);
+        });
+    });
+
+    // 🔹 소분류 클릭 시 색상 적용
+    $(document).on("click", ".small-category", function (e) {
+        e.preventDefault();
+
+        // 기존 선택 해제
+        $(".small-category").removeClass("selected");
+
+        // 현재 선택한 소분류 강조
+        $(this).addClass("selected");
+    });
+});
+
+
+
+
+</script>
 
 
 
