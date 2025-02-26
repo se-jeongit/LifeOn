@@ -18,7 +18,7 @@
     flex-wrap: wrap;
 }
 .category_nav {
-	max-width: 1280px;
+	width: 1280px;
 	position: relative;
 	border: 1px solid #e0e0e0;
 }
@@ -26,12 +26,12 @@
 .category_nav ul {
 	list-style-type: none; 
 	margin: 0px;            
-	padding: 0px;           
+	padding: 0px;   
 }
 
 .category_nav ul li {
 	color: #333;               
-	float: left;                
+	float: left;            
 	line-height: 50px;          
 	vertical-align: middle;     
 	text-align: center;         
@@ -40,7 +40,7 @@
 
 .menuLink, .submenuLink {
 	display: block;                     
-	width: 150px;                       
+	width: 160px;                       
 	font-weight: bold;                  
 	text-decoration: none;               
 }
@@ -56,12 +56,20 @@
 }
 
 .submenuLink {
-    width: 150px;   
+    width: 159.6px;   
     color: #333;
 }
 
 .submenu li:first-child {
     border-left: 1px solid #e0e0e0;
+}
+
+.submenu li:nth-child(9) {
+    border-left: 1px solid #e0e0e0;
+}
+
+.submenu li:nth-child(16) {
+    border-right: 1px solid #e0e0e0;
 }
 
 .submenu li:last-child {
@@ -92,7 +100,7 @@
 }
 
 .topMenuLi:hover .submenu { 
-    height: 52px;    
+    height: 50px;    
            
 }
 .submenuLink:hover {        
@@ -174,12 +182,12 @@
 
 .product_img {
     width: 100%;
-    height: 200px;
+    height: 160px;
     object-fit: cover;
 }
 
 .product_info {
-	padding: 20px;
+	padding: 15px;
 }
 
 .product_Viewe {
@@ -319,14 +327,14 @@
 	                <div class="product-item">
 	                    <img class="product_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
 	                    <div class="product_info">
-		                    <h5 style="text-align: left;">상품명</h5>
-	                    	<div style="text-align: left; font-size: 18px;">대여가능</div>
-	                    	<div style="text-align: left;">
-	                    		<span style="font-size: 24px; font-weight: bold;">1,000 </span>
-	                    		<span style="font-size: 20px; font-weight: 600;">원</span>
-	                    		<span> /일</span>
-	                    	</div>
-		                    <div style="text-align: left; padding-bottom: 5px; font-size: 18px;">보증금 : 5,000 원</div>
+			                    <h5 style="text-align: left;">상품명</h5>
+	                    	<div style="text-align: left; font-size: 16px;">대여가능</div>
+		                    	<div style="text-align: left;">
+		                    		<span style="font-size: 20px; font-weight: bold;">1,000 </span>
+		                    		<span style="font-size: 16px; font-weight: 600;">원</span>
+		                    		<span> /일</span>
+	                    		</div>
+		                    <div style="text-align: left; padding-bottom: 5px;">보증금 : 5,000 원</div>
 							<div style="text-align: left;">서울시 마포구&nbsp;·&nbsp;1일전</div>
 	                	</div>
 	                </div>
@@ -358,23 +366,26 @@
 
 <script type="text/javascript">
 document.querySelectorAll('.menuLink').forEach(menuLink => {
+    
     menuLink.addEventListener('click', function (e) {
         e.preventDefault(); // 기본 링크 이동 방지
         const submenu = this.nextElementSibling; // 서브 메뉴 (ul)
-
-        // 이미 열려 있는 서브 메뉴는 닫기
-        const allSubmenus = document.querySelectorAll('.submenu');
-        allSubmenus.forEach(sub => {
-            if (sub !== submenu) {
-                sub.style.height = '0'; // 다른 서브 메뉴 닫기
-            }
-        });
-
-        // 해당 서브 메뉴 열기
-        if (submenu.style.height === '0px' || submenu.style.height === '') {
-            submenu.style.height = submenu.scrollHeight + 'px'; // 서브 메뉴 열기
-        } else {
-            submenu.style.height = '0'; // 서브 메뉴 닫기
+        
+        if (submenu) {
+	        // 이미 열려 있는 서브 메뉴는 닫기
+	        const allSubmenus = document.querySelectorAll('.submenu');
+	        allSubmenus.forEach(sub => {
+	            if (sub !== submenu) {
+	                sub.style.height = '0'; // 다른 서브 메뉴 닫기
+	            }
+	        });
+	
+	        // 해당 서브 메뉴 열기
+	        if (submenu.style.height === '0px' || submenu.style.height === '') {
+	            submenu.style.height = submenu.scrollHeight + 'px'; // 서브 메뉴 열기
+	        } else {
+	            submenu.style.height = '0'; // 서브 메뉴 닫기
+	        }
         }
     });
 });
