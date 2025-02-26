@@ -4,4 +4,7 @@ public interface VisitorLogService {
 
 	//방문 로그 추가
 	void insertVisitorLog(String sessionId);
+	
+	//오늘 방문자 수 조회
+	int countTodayVisitors();
 }

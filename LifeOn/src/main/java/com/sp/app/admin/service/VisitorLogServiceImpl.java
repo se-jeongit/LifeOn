@@ -16,6 +16,11 @@ public class VisitorLogServiceImpl implements VisitorLogService {
 	public void insertVisitorLog(String sessionId) {
 		visitorLogMapper.insertVisitorLog(sessionId);
 	}
+
+	@Override
+	public int countTodayVisitors() {
+		return visitorLogMapper.countTodayVisitors();
+	}
 	
 	
 }

@@ -10,5 +10,11 @@
 		VALUES (visitor_logs_seq.NEXTVAL, CURRENT_TIMESTAMP, #{sessionId})
 	</insert>
 	
+	<!-- 오늘 방문자 수 조회 -->
+	<select id="countTodayVisitors" resultType="int">
+		SELECT COUNT(DISTINCT session_id)
+		FROM visitor_logs
+		WHERE TRUNC(visit_date) = TRUNC(SYSDATE)
+	</select>
 
 </mapper>

@@ -1,9 +1,11 @@
 package com.sp.app.admin.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.app.admin.service.VisitorLogService;
 
@@ -20,6 +22,13 @@ public class VisitorLogController {
 	public String logVisit(@RequestParam String sessionId) {
 		visitorLogService.insertVisitorLog(sessionId);
 		return "/main/home";
+	}
+	
+	// 오늘 방문자 수 조회 API(GET 요청)
+	@GetMapping("/todayVisitors")
+	@ResponseBody
+	public int getTodayVisitors() {
+		return visitorLogService.countTodayVisitors();
 	}
 	
 	

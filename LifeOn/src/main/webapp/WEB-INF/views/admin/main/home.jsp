@@ -57,7 +57,7 @@
 						<div class="col-md-3 mb-3">
 							<div class="card state-card shadow-sm">
 								<h5>오늘 방문자</h5>
-								<p class="fs-4 fw-bold">10명</p>
+								<p id="todayVisitors" class="fs-4 fw-bold">0명</p>
 							</div>
 						</div>
 						<div class="col-md-3 mb-3">
@@ -112,6 +112,15 @@
 		</div>
 	</main>
 	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function () {
+		fetch('/admin/main/todayVisitors')
+			.then(response => response.json())
+			.then(data => {
+				document.getElementById('todayVisitors').innerText = data + "명";
+			})
+			.catch(error => console.error("오늘 방문자수 가져오기 실패 ", error));
+	});
+	
 	document.addEventListener("DOMContentLoaded", function () {
 	    // 회원 연령대 (ECharts)
 	    var ageChart = echarts.init(document.getElementById('ageChart'));
