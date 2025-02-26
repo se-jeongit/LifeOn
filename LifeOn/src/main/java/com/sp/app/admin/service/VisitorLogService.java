@@ -7,4 +7,10 @@ public interface VisitorLogService {
 	
 	//오늘 방문자 수 조회
 	int countTodayVisitors();
+	
+	//누적 방문자 수
+	int countTotalVisitors();
+	
+	//총 회원수
+	int countTotalMembers();
 }

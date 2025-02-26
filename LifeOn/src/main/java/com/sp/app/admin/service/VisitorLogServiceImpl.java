@@ -21,6 +21,16 @@ public class VisitorLogServiceImpl implements VisitorLogService {
 	public int countTodayVisitors() {
 		return visitorLogMapper.countTodayVisitors();
 	}
+
+	@Override
+	public int countTotalVisitors() {
+		return visitorLogMapper.countTotalVisitors();
+	}
+
+	@Override
+	public int countTotalMembers() {
+		return visitorLogMapper.countTotalMembers();
+	}
 	
 	
 }

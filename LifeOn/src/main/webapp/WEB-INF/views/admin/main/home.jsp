@@ -51,7 +51,7 @@
 						<div class="col-md-3 mb-3">
 							<div class="card state-card shadow-sm">
 								<h5>누적 방문자 수</h5>
-								<p class="fs-4 fw-bold">1000명</p>
+								<p id="totalVisitors" class="fs-4 fw-bold">0명</p>
 							</div>
 						</div>
 						<div class="col-md-3 mb-3">
@@ -112,6 +112,16 @@
 		</div>
 	</main>
 	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function () {
+		fetch('/admin/main/totalVisitors')
+			.then(response => response.json())
+			.then(data => {
+				document.getElementById('totalVisitors').innerText = data + "명";
+			})
+			.catch(error => console.error('누적 방문자 수 가져오기 실패:', error));
+	});
+	
+	
 	document.addEventListener("DOMContentLoaded", function () {
 		fetch('/admin/main/todayVisitors')
 			.then(response => response.json())

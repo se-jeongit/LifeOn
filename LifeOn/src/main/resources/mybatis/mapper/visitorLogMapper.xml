@@ -16,5 +16,16 @@
 		FROM visitor_logs
 		WHERE TRUNC(visit_date) = TRUNC(SYSDATE)
 	</select>
+	
+	<select id="countTotalVisitors" resultType="int">
+		SELECT COUNT(DISTINCT session_id)
+		FROM visitor_logs
+	</select>
+	
+	<!--  총회원수 조회 -->
+	<select id="countTotalMembers" resultType="int">
+		SELECT COUNT(*) FROM member
+	</select>
+	
 
 </mapper>

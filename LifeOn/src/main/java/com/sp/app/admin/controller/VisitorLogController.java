@@ -31,5 +31,16 @@ public class VisitorLogController {
 		return visitorLogService.countTodayVisitors();
 	}
 	
+	@GetMapping("/totalVisitors")
+	@ResponseBody
+	public int getTotalVisitors() {
+		return visitorLogService.countTotalVisitors();
+	}
+	
+	@GetMapping("/totalMembers")
+	@ResponseBody
+	public int getTotalMembers() {
+		return visitorLogService.countTotalMembers();
+	}
 	
 }

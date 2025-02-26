@@ -18,4 +18,11 @@ public interface VisitorLogMapper {
 	
 	// 누적 방문자수 조회(SELECT)
 	int countTotalVisitors();
+	
+	// 총회원 
+	int countTotalMembers();
+	
+	// 오늘 가입한 회원
+	int countTodayNewMembers();
+	
 }
