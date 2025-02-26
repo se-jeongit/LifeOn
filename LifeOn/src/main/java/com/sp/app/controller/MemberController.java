@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sp.app.admin.service.VisitorLogService;
 import com.sp.app.model.Member;
 import com.sp.app.model.SessionInfo;
 import com.sp.app.service.CoolSmsService;
@@ -37,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 	private final MemberService service;
 	private final CoolSmsService coolSmsService;
-	
+	private final VisitorLogService visitorLogService;
 	
 
 	@GetMapping("login")
@@ -76,8 +77,11 @@ public class MemberController {
 		info.setProfile_image(dto.getProfile_image());
 	
 		session.setMaxInactiveInterval(60 * 60); // 세션 유지시간 60분
-		
 		session.setAttribute("member", info);
+		
+		//방문 로그 추가 (VisitorLogService 호출)
+		String sessionId = info.getId(); // 현재 세션 ID 가져오기
+		visitorLogService.insertVisitorLog(sessionId); // 방문 로그 기록 
 		
 		// 로그인 이전 주소로 이동
 		String uri = (String) session.getAttribute("preLoginURI");

@@ -1,6 +1,9 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" %>
+﻿<%@page import="org.springframework.web.context.annotation.SessionScope"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,6 +88,8 @@ function sendLogin() {
     f.action = '${pageContext.request.contextPath}/member/login';
     f.submit();
 }
+
+
 </script>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
