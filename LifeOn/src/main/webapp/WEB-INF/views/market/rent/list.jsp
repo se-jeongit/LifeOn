@@ -11,61 +11,94 @@
 <style type="text/css">
 .category_tab {
     max-width: 1280px;
-    margin: 60px auto 40px;
+    margin: 60px auto 0;
     
 	display: flex;
 	flex-direction: row;
     flex-wrap: wrap;
 }
-
-.check_btn { display: none; }
-.categorys { display: none; }
-.check_btn:checked ~ .categorys {
-    display: flex;
-    left: 90px;
-    top: 400px;
-} 
-
-.category-nav {
-	width: 150px;
-    padding: 10px;
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-   	border: 1px solid #e0e0e0;
-	border-left: none;
-	list-style: none;
-	cursor: pointer;
-}
-
-.category-nav:first-child, .categorys li:first-child {
-	border-left: 1px solid #e0e0e0;
-}
-
-.categorys {
+.category_nav {
 	max-width: 1280px;
-    position: absolute;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+	position: relative;
+	border: 1px solid #e0e0e0;
 }
 
-.categorys li {
-    padding: 10px;
-	width: 150px;
-	
-	display: flex;
-    justify-content: center;
-    border: 1px solid #e0e0e0;
-    border-left: none;
+.category_nav ul {
+	list-style-type: none; 
+	margin: 0px;            
+	padding: 0px;           
 }
 
-.category-nav nav:hover, .categorys li:hover {
+.category_nav ul li {
+	color: #333;               
+	float: left;                
+	line-height: 50px;          
+	vertical-align: middle;     
+	text-align: center;         
+	-position: relative; 
+}
+
+.menuLink, .submenuLink {
+	display: block;                     
+	width: 150px;                       
+	font-weight: bold;                  
+	text-decoration: none;               
+}
+
+.menuLink {
+    color: #333;
+}
+
+.topMenuLi:hover .menuLink {
+	color: #fff;                 
 	background-color: #99c3ff;
-	color: #fff;
-	text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+	text-decoration-line: none; 
+}
+
+.submenuLink {
+    width: 150px;   
+    color: #333;
+}
+
+.submenu li:first-child {
+    border-left: 1px solid #e0e0e0;
+}
+
+.submenu li:last-child {
+    border-right: 1px solid #e0e0e0;
+}
+
+.submenu {
+    position: absolute;     
+    height: 0px;            
+    overflow: hidden;       
+    transition: height .2s; 
+    -webkit-transition: height .2s; 
+    -moz-transition: height .2s; 
+    -o-transition: height .2s; 
+    width: 1280px;           
+    left: 0;   
+}
+
+
+.submenu a {
+	border-top: 1px solid #e0e0e0;
+	border-bottom: 1px solid #e0e0e0;
+	background: #e6f0ff;
+}
+
+.submenu li {
+    display: inline-block;
+}
+
+.topMenuLi:hover .submenu { 
+    height: 52px;    
+           
+}
+.submenuLink:hover {        
+    color: #fff;                 
+    background-color: #99c3ff; 
+    text-decoration-line: none;  
 }
 
 .category_title {
@@ -76,7 +109,7 @@
     flex-wrap: wrap;
     
     max-width: 1280px;
-    margin: 60px auto 40px;
+    margin: 80px auto 40px;
     padding-bottom: 5px;
     border-bottom: 2px solid #999;
 }
@@ -126,11 +159,11 @@
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+/*     grid-template-columns: repeat(3, 1fr); */
     gap: 20px;
     
-/*     grid-template-columns: repeat(4, 200px);
-    justify-content: space-between;  */
+	grid-template-columns: repeat(4, 200px);
+    justify-content: space-between;
 }
 
 .product-item {
@@ -202,26 +235,58 @@
     	<em style="font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">대여? 돼요!</em>
 	</div>
 	
-	<!-- 카테고리 미완 -->
+	<!-- 카테고리 메뉴 -->
 	<div class="category_tab" id="category_tab">
-		<nav class="category-nav">
-			<input id="check_btn1" type="checkbox" class="check_btn">
-			<label for="check_btn1">대분류</label>
-			<ul class="categorys">
-				<li data-id=0 class="category">소분류</li>
-				<li data-id=0 class="category">소분류</li>
-				<li data-id=0 class="category">소분류</li>
-				<li data-id=0 class="category">소분류</li>
-			</ul>
-		</nav>
-		<nav class="category-nav">
-			<input id="check_btn2" type="checkbox" class="check_btn">
-			<label for="check_btn2">대분류</label>
-			<ul class="categorys">
-				<li data-id=0 class="category">소분류</li>
-				<li data-id=0 class="category">소분류</li>
-				<li data-id=0 class="category">소분류</li>
-				<li data-id=0 class="category">소분류</li>
+		<nav class="category_nav">
+			<ul>
+				<li class="topMenuLi">
+	                <a class="menuLink" href="#">전체</a>
+	            </li>
+	            
+	            <li class="topMenuLi">
+	                <a class="menuLink" href="#">도서</a>
+	                <ul class="submenu">
+	                    <li><a href="#" class="submenuLink">소설</a></li>
+	                    <li><a href="#" class="submenuLink">비소설</a></li>
+	                    <li><a href="#" class="submenuLink">아동도서</a></li>
+	                    <li><a href="#" class="submenuLink">교육도서</a></li>
+	                    <li><a href="#" class="submenuLink">만화</a></li>
+	                </ul>
+	            </li>
+	            
+	            <li class="topMenuLi">
+	                <a class="menuLink" href="#">의류</a>
+	                <ul class="submenu">
+	                    <li><a href="#" class="submenuLink">남성의류</a></li>
+	                    <li><a href="#" class="submenuLink">여성의류</a></li>
+	                    <li><a href="#" class="submenuLink">아동의류</a></li>
+	                    <li><a href="#" class="submenuLink">신발</a></li>
+	                    <li><a href="#" class="submenuLink">액세서리</a></li>
+	                </ul>
+	            </li>
+	            
+	            <li class="topMenuLi">
+	                <a class="menuLink" href="#">생활/주방</a>
+	                <ul class="submenu">
+	                    <li><a href="#" class="submenuLink">가구</a></li>
+	                    <li><a href="#" class="submenuLink">주방가전</a></li>
+	                    <li><a href="#" class="submenuLink">침구</a></li>
+	                    <li><a href="#" class="submenuLink">장식품</a></li>
+	                    <li><a href="#" class="submenuLink">수납용품</a></li>
+	                </ul>
+	            </li>
+	            
+	            <li class="topMenuLi">
+	                <a class="menuLink" href="#">스포츠/야외활동</a>
+	                <ul class="submenu">
+	                    <li><a href="#" class="submenuLink">피트니스장비</a></li>
+	                    <li><a href="#" class="submenuLink">야외장비</a></li>
+	                    <li><a href="#" class="submenuLink">스포츠웨어</a></li>
+	                    <li><a href="#" class="submenuLink">자전거</a></li>
+	                    <li><a href="#" class="submenuLink">캠핑/하이킹</a></li>
+	                </ul>
+	            </li>
+
 			</ul>
 		</nav>
 	</div>
@@ -255,14 +320,12 @@
 	                    <img class="product_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
 	                    <div class="product_info">
 		                    <h5 style="text-align: left;">상품명</h5>
-		                    <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 5px;">
-		                    	<div>
-		                    		<span style="font-size: 24px; font-weight: bold;">1,000 </span>
-		                    		<span style="font-size: 20px; font-weight: 600;">원</span>
-		                    		<span> /일</span>
-		                    	</div>
-		                    	<div style="font-size: 18px;">대여가능</div>
-		                    </div>
+	                    	<div style="text-align: left; font-size: 18px;">대여가능</div>
+	                    	<div style="text-align: left;">
+	                    		<span style="font-size: 24px; font-weight: bold;">1,000 </span>
+	                    		<span style="font-size: 20px; font-weight: 600;">원</span>
+	                    		<span> /일</span>
+	                    	</div>
 		                    <div style="text-align: left; padding-bottom: 5px; font-size: 18px;">보증금 : 5,000 원</div>
 							<div style="text-align: left;">서울시 마포구&nbsp;·&nbsp;1일전</div>
 	                	</div>
@@ -294,11 +357,37 @@
 </main>
 
 <script type="text/javascript">
-document.querySelectorAll('.category-nav label').forEach(label => {
-	label.addEventListener('click', function () {
-		const checkbox = label.nextElementSibling;
-		checkbox.checked = !checkbox.checked;
-	});
+document.querySelectorAll('.menuLink').forEach(menuLink => {
+    menuLink.addEventListener('click', function (e) {
+        e.preventDefault(); // 기본 링크 이동 방지
+        const submenu = this.nextElementSibling; // 서브 메뉴 (ul)
+
+        // 이미 열려 있는 서브 메뉴는 닫기
+        const allSubmenus = document.querySelectorAll('.submenu');
+        allSubmenus.forEach(sub => {
+            if (sub !== submenu) {
+                sub.style.height = '0'; // 다른 서브 메뉴 닫기
+            }
+        });
+
+        // 해당 서브 메뉴 열기
+        if (submenu.style.height === '0px' || submenu.style.height === '') {
+            submenu.style.height = submenu.scrollHeight + 'px'; // 서브 메뉴 열기
+        } else {
+            submenu.style.height = '0'; // 서브 메뉴 닫기
+        }
+    });
+});
+
+//바깥 화면 클릭 시 서브 메뉴 닫기
+document.addEventListener('click', function(e) {
+    const clickedInsideMenu = e.target.closest('.category_nav'); // .category_nav 내부 클릭 여부
+    if (!clickedInsideMenu) {
+        const allSubmenus = document.querySelectorAll('.submenu');
+        allSubmenus.forEach(sub => {
+            sub.style.height = '0'; // 서브 메뉴 닫기
+        });
+    }
 });
 </script>
 
