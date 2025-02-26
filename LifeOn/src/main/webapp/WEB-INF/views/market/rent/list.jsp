@@ -10,68 +10,62 @@
 
 <style type="text/css">
 .category_tab {
-	display: flex;
-	justify-content: space-between;
-
-    flex-wrap: wrap;
-    
     max-width: 1280px;
     margin: 60px auto 40px;
+    
+	display: flex;
+	flex-direction: row;
+    flex-wrap: wrap;
 }
+
+.check_btn { display: none; }
+.categorys { display: none; }
+.check_btn:checked ~ .categorys {
+    display: flex;
+    left: 90px;
+    top: 400px;
+} 
 
 .category-nav {
-	min-width: 1280px;
-	
-	display: flex;
-  	justify-content: space-between;
-  	padding: 8px;
-}
-
-.category-nav ul {
-	padding: 0;
-	margin: 0;
-	
-	display: flex;
-	list-style: none;
-}
-
-.category {
 	width: 150px;
-
-	flex: 1;
-	text-align: center;
-	padding: 10px;
-	border: 1px solid #e0e0e0;
+    padding: 10px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+   	border: 1px solid #e0e0e0;
 	border-left: none;
+	list-style: none;
 	cursor: pointer;
 }
 
-.category:first-child {
+.category-nav:first-child, .categorys li:first-child {
 	border-left: 1px solid #e0e0e0;
 }
 
-.category:hover {
+.categorys {
+	max-width: 1280px;
+    position: absolute;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.categorys li {
+    padding: 10px;
+	width: 150px;
+	
+	display: flex;
+    justify-content: center;
+    border: 1px solid #e0e0e0;
+    border-left: none;
+}
+
+.category-nav nav:hover, .categorys li:hover {
 	background-color: #99c3ff;
 	color: #fff;
 	text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-}
-
-.subcategory {
-	margin-top: 10px;
-	background-color: #99c3ff;
-	width: 100%;
-	top: 100%;
-	left: 0;
-	display: flex;
-}
-
-.subcategory li {
-	padding: 8px;
-	border-bottom: 1px solid #e0e0e0;
-}
-
-.subcategory li:last-child {
-	border-bottom: none;
 }
 
 .category_title {
@@ -161,6 +155,7 @@
     top: 120px;
     align-self: flex-start;
     margin-left: auto;
+    margin-bottom: 50px;
 }
 
 .view_item {
@@ -207,34 +202,26 @@
     	<em style="font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">대여? 돼요!</em>
 	</div>
 	
+	<!-- 카테고리 미완 -->
 	<div class="category_tab" id="category_tab">
 		<nav class="category-nav">
-			<ul class="category-sub">
-				<li data-id=0 class="category">전체</li>
-				<li data-id=1 class="category">전자제품
-					<ul class="subcategory" style="display: none;">
-						<li>하위 항목 1</li>
-						<li>하위 항목 2</li>
-					</ul>
-				</li>
-				<li data-id=2 class="category">도서
-					<ul class="subcategory" style="display: none;">
-						<li>하위 항목 1</li>
-						<li>하위 항목 2</li>
-					</ul>
-				</li>
-				<li data-id=3 class="category">생활/주방
-					<ul class="subcategory" style="display: none;">
-						<li>하위 항목 1</li>
-						<li>하위 항목 2</li>
-					</ul>
-				</li>
-				<li data-id=4 class="category">스포츠/야외활동
-					<ul class="subcategory" style="display: none;">
-						<li>하위 항목 1</li>
-						<li>하위 항목 2</li>
-					</ul>
-				</li>
+			<input id="check_btn1" type="checkbox" class="check_btn">
+			<label for="check_btn1">대분류</label>
+			<ul class="categorys">
+				<li data-id=0 class="category">소분류</li>
+				<li data-id=0 class="category">소분류</li>
+				<li data-id=0 class="category">소분류</li>
+				<li data-id=0 class="category">소분류</li>
+			</ul>
+		</nav>
+		<nav class="category-nav">
+			<input id="check_btn2" type="checkbox" class="check_btn">
+			<label for="check_btn2">대분류</label>
+			<ul class="categorys">
+				<li data-id=0 class="category">소분류</li>
+				<li data-id=0 class="category">소분류</li>
+				<li data-id=0 class="category">소분류</li>
+				<li data-id=0 class="category">소분류</li>
 			</ul>
 		</nav>
 	</div>
@@ -267,36 +254,20 @@
 	                <div class="product-item">
 	                    <img class="product_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
 	                    <div class="product_info">
-		                    <h3 style="text-align: left;">상품명</h3>
+		                    <h5 style="text-align: left;">상품명</h5>
 		                    <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 5px;">
 		                    	<div>
-		                    		<span style="font-size: 28px; font-weight: bold;">1,000 </span>
-		                    		<span style="font-size: 24px; font-weight: 600;">원</span>
+		                    		<span style="font-size: 24px; font-weight: bold;">1,000 </span>
+		                    		<span style="font-size: 20px; font-weight: 600;">원</span>
 		                    		<span> /일</span>
 		                    	</div>
-		                    	<h5 style="margin: 0;">대여가능</h5>
+		                    	<div style="font-size: 18px;">대여가능</div>
 		                    </div>
-		                    <div style="text-align: left; padding-bottom: 5px;"><h5 style="margin: 0;">보증금 : 5,000 원</h5></div>
+		                    <div style="text-align: left; padding-bottom: 5px; font-size: 18px;">보증금 : 5,000 원</div>
 							<div style="text-align: left;">서울시 마포구&nbsp;·&nbsp;1일전</div>
 	                	</div>
 	                </div>
 	                
-	                <div class="product-item">
-	                    <img class="product_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
-	                    <div class="product_info">
-		                    <h3 style="text-align: left;">상품명</h3>
-		                    <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 5px;">
-		                    	<div>
-		                    		<span style="font-size: 28px; font-weight: bold;">1,000 </span>
-		                    		<span style="font-size: 24px; font-weight: 600;">원</span>
-		                    		<span> /일</span>
-		                    	</div>
-		                    	<h5 style="margin: 0;">대여가능</h5>
-		                    </div>
-		                    <div style="text-align: left; padding-bottom: 5px;"><h5 style="margin: 0;">보증금 : 5,000 원</h5></div>
-							<div style="text-align: left;">서울시 마포구&nbsp;·&nbsp;1일전</div>
-	                	</div>
-	                </div>
 
 	            </div>
     		</div>
@@ -312,7 +283,7 @@
 		  			<img class="view_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
 		  			<img class="view_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
 				</div>
-				<button type="button" class="top_btn" onclick="location.href='<c:url value=''/>'"><i class="bi bi-chevron-up"></i></button>
+				<a href="#"><button type="button" class="top_btn"><i class="bi bi-chevron-up"></i></button></a>
 	   		</div>
 		</div>
 		
@@ -323,23 +294,10 @@
 </main>
 
 <script type="text/javascript">
-document.querySelectorAll('.category').forEach(function(category) {
-	category.addEventListener('click', function() {
-	const subcategory = category.querySelector('.subcategory');
-	
-	// 모든 하위 메뉴를 숨김
-	document.querySelectorAll('.subcategory').forEach(function(sub) {
-		if (sub !== subcategory) {
-			sub.style.display = 'none';
-		}
-	});
-	
-	// 클릭한 카테고리의 하위 메뉴 토글
-	if (subcategory.style.display === 'block') {
-		subcategory.style.display = 'none';
-	} else {
-		subcategory.style.display = 'block';
-		}
+document.querySelectorAll('.category-nav label').forEach(label => {
+	label.addEventListener('click', function () {
+		const checkbox = label.nextElementSibling;
+		checkbox.checked = !checkbox.checked;
 	});
 });
 </script>
