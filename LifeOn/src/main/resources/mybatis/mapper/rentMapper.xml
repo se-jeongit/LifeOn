@@ -4,13 +4,13 @@
 <mapper namespace="com.sp.app.rent.mapper.RentMapper">
 
 	<!-- 대여물품 등록 -->
-	<insert id="insertRentProduct" parameterType="com.sp.app.admin.model.ProductManage">
+<!-- 	<insert id="insertRentProduct" parameterType="com.sp.app.admin.model.ProductManage">
 		INSERT INTO PRODUCT(pnum, ptype, pname, pct, pph, csn, num)
 			VALUES (product_seq.NEXTVAL, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
 			
 		INSERT INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
 			VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra}, #{prad}, #{prlp})
-	</insert>
+	</insert> -->
 	
 	<!-- 대여물품 수정 -->
 	
@@ -19,11 +19,11 @@
 	
 	
 	<!-- 리스트에 출력되는 물품개수 -->
-	<select id="dataCount" parameterType="map" resultType="Integer">
+<!-- 	<select id="dataCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*),0)
 		FROM PRODUCT_RENT
 		WRERE prs = '대여가능'
-	</select>
+	</select> -->
 	
 	<!-- 전체 물품 리스트 -->
 	
@@ -36,16 +36,16 @@
 	
 	<!-- 카테고리 상품 목록 -->
 	<!-- 대분류 카테고리 -->
-	<select id="listCategory" resultType="com.sp.app.rent.mapper.RentProduct">
+<!-- 	<select id="listCategory" resultType="com.sp.app.rent.mapper.RentProduct">
 		SELECT cbn, cbc
 		FROM CATEGORY_BIG	 
 	</select>
 	
-	<!-- 소분류 카테고리 -->
+	소분류 카테고리
 	<select id="listSubCategory" parameterType="long" resultType="com.sp.app.rent.mapper.RentProduct">
 		SELECT csn, csc, cbn
 		FROM CATEGORY_SMALL
 		WHERE cbn = #{cbn}	
-	</select>
+	</select> -->
 
 </mapper>
