@@ -28,6 +28,8 @@ public interface ProductManageService {
 	public List<ProductManage> listTogetherProduct(Map<String, Object> map);
 	public int dataCount2(Map<String, Object> map);
 	
+	public int dataCount3(Map<String, Object> map);
+	
 	public ProductManage findByPnum(long pnum);
 	
 	public void updateProductStatus();

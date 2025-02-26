@@ -251,7 +251,24 @@ public class ProductManageServiceImpl implements ProductManageService{
 		}
 		return result;
 	}
+	
+	
 
+	@Override
+	public int dataCount3(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = mapper.dataCount3(map);
+			
+			
+			
+		} catch (Exception e) {
+			log.info("dataCount2 : ", e);
+		}
+		return result;
+	}
+	
 	@Override
 	public ProductManage findByPnum(long pnum) {
 		ProductManage dto = null;
@@ -278,6 +295,7 @@ public class ProductManageServiceImpl implements ProductManageService{
 		}
 
 	}
+
 
 
 

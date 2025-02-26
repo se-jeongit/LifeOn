@@ -39,14 +39,17 @@ public class TogetherController {
 	
 	@GetMapping("main")
 	public String listShow (@RequestParam(name = "page", defaultValue = "1") int current_page,
+			@RequestParam(name = "csn", defaultValue = "0") int csn,
 			Model model, HttpServletRequest req) throws Exception {
+			System.out.println("Received csn: " + csn);  // csn 값 확인
 		try {
 			int size = 9;
 			int total_page = 0;
 			int dataCount = 0;
 			Map<String, Object> map = new HashMap<>();
+			map.put("csn", csn);
 			
-			dataCount = service.dataCount2(map);
+			dataCount = service.dataCount3(map);
 			total_page = paginateUtil.pageCount(dataCount, size);
 			current_page = Math.min(current_page, total_page);
 			
@@ -83,7 +86,7 @@ public class TogetherController {
 			model.addAttribute("paging", paging);
 			model.addAttribute("query", query);
 			model.addAttribute("articleUrl", articleUrl);
-			
+			model.addAttribute("csn", csn);
 			//카테고리 가져오기
 			List<ProductManage> bigCategory = service.listBigCategory();
 			model.addAttribute("bigCategory", bigCategory);

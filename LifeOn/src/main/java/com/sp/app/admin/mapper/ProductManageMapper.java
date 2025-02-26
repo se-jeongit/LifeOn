@@ -40,15 +40,20 @@ public interface ProductManageMapper {
 	//DELETE(공동구매)
 	public void deleteTogetherProduct(long pnum) throws SQLException;
 	
-	//재고 list
+	//재고 list(관리자)
 	public int dataCount(Map<String, Object> map);
 	public List<ProductManage> listProduct(Map<String, Object> map);
 	
-	//공동구매 list
+	//공동구매 list(관리자)
 	public int dataCount2(Map<String, Object> map);
 	public List<ProductManage> listTogetherProduct(Map<String, Object> map);
 	
 	public ProductManage findByPnum(long pnum);
+	
+	//공동구매 list(사용자)
+	public int dataCount3(Map<String, Object> map);
+	
+	
 	
 	//status 구매성공 업데이트
 	public void updateStatus(@Param("pnum") long pnum, @Param("status") String status);
