@@ -10,8 +10,8 @@
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
 
 <style type="text/css">
 body {
@@ -105,7 +105,7 @@ body {
   right: 12px; 
   top: 20%; 
   font-size: 20px;
-  color: #007bff;
+  color: #222;
   cursor: pointer;
 
 }
@@ -139,6 +139,21 @@ main {
        			 <i id="calendar-icon" class="bi bi-calendar-check calendar-icon"></i>
     		</div>
         </div>
+        
+        <div class="section">
+                <label for="label">카테고리</label>
+                <select id="bigCategory" name="cbn" class="dropdown" required onchange="categoryCheck();">
+                     <option>지역을 선택하세요</option>
+		                <option>밥/카페</option>
+		                <option>운동</option>
+		                <option>스터디</option>
+		                <option>문화생활</option>
+		                <option>기타</option>
+                    <c:forEach var="dto" items="${Category}">
+                        <option value="${dto.cbn}">${dto.cbc}</option>
+                    </c:forEach>
+                </select>
+            </div>
 
         <div class="section">
             <label class="label" for="location">지역</label>
@@ -246,36 +261,17 @@ document.addEventListener('DOMContentLoaded', function () {
         allowInput: true,
         locale: "ko",
         onReady: function () {
-            // flatpickr의 input 요소에 직접 스타일을 적용하여 파란색 강조를 제거합니다.
-            const flatpickrInputs = document.querySelectorAll('.flatpickr-input');
-            flatpickrInputs.forEach(function(input) {
-                input.style.outline = 'none';  // 포커스 아웃라인 제거
-                input.style.boxShadow = 'none';  // 박스 쉐도우 제거
-                input.style.borderColor = '#ccc'; // 강조된 경계선 색상 변경
+        	 // 달력 아이콘 클릭 시 달력 열리도록 설정
+            document.getElementById("calendar-icon").addEventListener("click", function() {
+                meetingDatePicker.open(); // flatpickr 달력 열기
             });
-
-            // flatpickr 팝업의 스타일도 추가적으로 수정
-            const flatpickrCalendars = document.querySelectorAll('.flatpickr-calendar');
-            flatpickrCalendars.forEach(function(calendar) {
-                calendar.style.zIndex = '9999'; // 팝업 우선순위 지정 (다른 UI 요소 위로 표시)
-            });
-
-            // flatpickr의 인풋이 포커스를 받을 때 발생하는 파란색 강조 제거
-            const inputWrapper = document.querySelector('.flatpickr-wrapper');
-            if (inputWrapper) {
-                inputWrapper.style.outline = 'none'; // 인풋 래퍼에서의 아웃라인 제거
-            }
         }
+        }
+        
     });
 
-    // 달력 아이콘 클릭 이벤트를 따로 추가
-    const calendarIcon = document.getElementById('calendar-icon');
-    if (calendarIcon) {
-        calendarIcon.addEventListener('click', function() {
-            // flatpickr 팝업을 강제로 열기
-            meetingDatePicker.open();
-        });
-    }
+   
+  
 });
 </script>
 

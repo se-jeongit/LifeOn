@@ -33,7 +33,6 @@ main {
   .meeting__header {
     display: grid;
     flex-direction: column;
-    grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
     font-size: 14px;
   }
@@ -280,7 +279,7 @@ main {
 
 .category {
   padding: 8px 16px;
-  border-radius: 20px;
+  border-radius: 15px;
   cursor: pointer;
 }
 
@@ -343,6 +342,8 @@ main {
   justify-content: space-between;
   margin: 20px auto;
   width: 80%;
+  max-width: 1280px;
+
 }
 
 .region-category .select-box {
@@ -361,7 +362,7 @@ main {
 .toggle-switch {
   width: 40px;
   height: 20px;
-  background: #006aff;
+  background: #D9D9D9;
   border-radius: 10px;
   position: relative;
   cursor: pointer;
@@ -378,6 +379,9 @@ main {
   transition: 0.3s;
 }
 
+#toggle:checked + .toggle-switch {
+	background: #006aff;
+}
 #toggle:checked + .toggle-switch .toggle-button {
   left: 20px;
 }
@@ -389,7 +393,9 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center;
+  max-width : 1280px;
+  margin: 60px auto 20px;
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .meeting {

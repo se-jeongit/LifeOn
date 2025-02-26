@@ -40,7 +40,7 @@
           />
           <span class="icon icon-search" ><i class="bi bi-search" style="font-size: 16px; padding-top: 3px;"></i></span>
         </div>
-
+	
         <div class="category-container">
           <nav class="category-nav">
             <ul class="category-subcontainer">
@@ -59,20 +59,36 @@
             <label for="category"></label>
             <div class="select-box select-box--input select-box--round">
               <select id="select-box__options" class="dropdown">
-                <option>지역</option>
                 <option>서울</option>
-                <option>인천/경기</option>
-                <option>경남/부산/울산</option>
-                <option>충청/대전/세종</option>
-                <option>전라/광주</option>
-                <option>강원</option>
-                <option>경북/대구</option>
-                <option>제주</option>
+                <option>금천구</option>
+                <option>관악구</option>
+                <option>구로구</option>
+                <option>강서구</option>
+                <option>강북구</option>
+                <option>강남구</option>
+                <option>강동구</option>
+                <option>광진구</option>
+                <option>노원구</option>
+                <option>도봉구</option>
+                <option>동작구</option>
+                <option>동대문구</option>
+                <option>마포구</option>
+                <option>서초구</option>
+                <option>송파구</option>
+                <option>성동구</option>
+                <option>성북구</option>
+                <option>서대문구</option>
+                <option>양천구</option>
+                <option>영등포구</option>
+                <option>용산구</option>
+                <option>종로구</option>
+                <option>중구</option>
+                <option>중랑구</option>
             </select>
             </div>
           </div>
           <div class="meeting-activate-option">
-            <span>모집중만 보기</span>
+            <span>모집완료 제외</span>
             <input type="checkbox" id="toggle" checked hidden />
             <label for="toggle" class="toggle-switch">
               <span class="toggle-button"></span>
@@ -81,8 +97,8 @@
         </div>
       </header>
       
-      	<div style="display: flex; justify-content: flex-end;">
-          <button class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/write';">글쓰기</button>
+      	<div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1280px;">
+          <button class="btn" onclick="location.href='${pageContext.request.contextPath}/city/meeting/write';">글쓰기</button>
         </div>
 
       <section class="main__content" >
@@ -108,18 +124,16 @@
                 <h3 class="meeting__title" th:text="${meeting.title}">제목</h3>
               </div>
               
-                  <div
-                    class="meeting__status meeting__status--on"
-                    th:if="${!meeting.isClosed}"
-                  >
-                    모집중
-                  </div>
-                  <div
-                    class="meeting__status meeting__status--off"
-                    th:if="${meeting.isClosed}"
-                  >
-                    모집완료
-                  </div>
+                <div class="status-box" style="font-size: 15px; font-weight: bold; margin-left: auto;">
+				    <div class="meeting__status ${dto.status eq '모집완료' ? 'meeting__status--off' : 'meeting__status--on'}">
+				       	모집중 ${dto.status}
+				    </div>
+				
+				    <c:if test="${dto.status eq '모집중'}">
+				        <p style="font-size: 22px">남은 수량 : ${dto.ptq}개</p>
+				    </c:if>
+				</div>
+				
                   <div class="meeting__info-detail-more" >
                     <div>
 						<i class="tip_icon bi bi-bookmark"></i>
@@ -137,6 +151,20 @@
       </section>
 
     </main>
+    
+<script type="text/javascript">
+document.querySelectorAll('.category').forEach(function(category) {
+	category.addEventListener('click', function() {
+	
+	document.querySelectorAll('.category').forEach(function(c) {
+	      c.classList.remove('selected');
+	    });
+
+	    // 클릭한 카테고리에 selected 클래스 추가
+	    category.classList.add('selected');
+	});
+});
+</script>
 
 <footer class="mt-auto py-2 text-center w-100" style="background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
