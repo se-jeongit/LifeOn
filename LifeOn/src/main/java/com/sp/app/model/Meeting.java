@@ -29,6 +29,9 @@ public class Meeting {
 	private String reg_date;
 	private int blind;
 	
+	private int cbn;
+	private String cbc;
+	
 	private int hitCount;
 	private int boardLikeCount;
 	private int replyCount;

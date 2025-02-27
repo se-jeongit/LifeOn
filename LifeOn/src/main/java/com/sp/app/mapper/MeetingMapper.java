@@ -35,4 +35,6 @@ public interface MeetingMapper {
 	public void replyLike(Map<String, Object> map) throws Exception;
 	public Map<String, Object> replyLikeCount(Map<String, Object> map);
 	public Optional<Integer> memberReplyLiked(Map<String, Object> map);
+	
+	public List<Meeting> listCategory();
 }

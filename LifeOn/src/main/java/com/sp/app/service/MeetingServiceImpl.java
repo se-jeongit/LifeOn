@@ -36,6 +36,18 @@ public class MeetingServiceImpl implements MeetingService{
 		}
 	}
 	@Override
+	public List<Meeting> listCategory() {
+		List<Meeting> list = null;
+		
+		try {
+			list = mapper.listCategory();
+		} catch (Exception e) {
+			log.info("listCategory : ", e);
+		}
+		return list;
+	}
+	
+	@Override
 	public void updateBoard(Meeting dto) throws Exception {
 		// TODO Auto-generated method stub
 		

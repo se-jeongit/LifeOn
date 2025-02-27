@@ -1,5 +1,7 @@
 package com.sp.app.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
-import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.model.Meeting;
 import com.sp.app.model.SessionInfo;
 import com.sp.app.service.MeetingService;
@@ -36,7 +37,10 @@ public class MeetingController {
 	
 	@GetMapping("meeting/write")
 	public String writeForm(Model model) throws Exception {
+		List<Meeting> Category = service.listCategory();
+		
 		model.addAttribute("mode", "write");
+		model.addAttribute("Category", Category);
 		return "city/meeting/write";
 	}
 	
