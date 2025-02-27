@@ -4,24 +4,6 @@
 <mapper namespace="com.sp.app.admin.mapper.VisitorLogMapper">
 
 
-	<!-- 방문 로그 추가 (INSERT) -->
-	<insert id = "insertVisitorLog" parameterType="java.lang.String">
-		INSERT INTO visitor_logs(id, visit_date, session_id)
-		VALUES (visitor_logs_seq.NEXTVAL, CURRENT_TIMESTAMP, #{sessionId})
-	</insert>
-	
-	<!-- 오늘 방문자 수 조회 -->
-	<select id="countTodayVisitors" resultType="int">
-		SELECT COUNT(DISTINCT session_id)
-		FROM visitor_logs
-		WHERE TRUNC(visit_date) = TRUNC(SYSDATE)
-	</select>
-	
-	<select id="countTotalVisitors" resultType="int">
-		SELECT COUNT(DISTINCT session_id)
-		FROM visitor_logs
-	</select>
-	
 	<!--  총회원수 조회 -->
 	<select id="countTotalMembers" resultType="int">
 		SELECT COUNT(*) FROM member
@@ -32,6 +14,27 @@
 		SELECT COUNT(*)
 		FROM member
 		WHERE TRUNC(reg_date) = TRUNC(SYSDATE)
+	</select>
+	
+	<!-- 회원 연령대 -->
+	<select id="MemberAgeDistribution" resultType="map">
+		SELECT
+			CASE
+				WHEN age BETWEEN 10 AND 19 THEN '10대'
+				WHEN age BETWEEN 20 AND 29 THEN '20대'
+				WHEN age BETWEEN 30 AND 39 THEN '30대'
+           		WHEN age BETWEEN 40 AND 49 THEN '40대'
+          		WHEN age BETWEEN 50 AND 59 THEN '50대'
+            	WHEN age BETWEEN 60 AND 69 THEN '60대'
+            	ELSE '70대 이상'
+            END AS age_group,
+            COUNT(*) AS count
+        FROM (
+        	SELECT FLOOR((EXTRACT(YEAR FROM SYSDATE)- EXTRACT(YEAR FROM birth)) / 10) * 10 AS age
+        	FROM member_detail
+        )
+        GROUP BY age
+        ORDER BY age
 	</select>
 
 </mapper>

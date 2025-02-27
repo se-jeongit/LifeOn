@@ -2,6 +2,9 @@ package com.sp.app.admin.mapper;
 
 
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 
@@ -24,5 +27,9 @@ public interface VisitorLogMapper {
 	
 	// 오늘 가입한 회원
 	int countTodayNewMembers();
+	
+	// 회원 연령대
+	List<Map<String, Object>> MemberAgeDistribution();
+	
 	
 }

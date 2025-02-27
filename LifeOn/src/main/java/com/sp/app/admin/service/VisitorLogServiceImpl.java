@@ -1,5 +1,8 @@
 package com.sp.app.admin.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.sp.app.admin.mapper.VisitorLogMapper;
@@ -13,21 +16,6 @@ public class VisitorLogServiceImpl implements VisitorLogService {
 	private final VisitorLogMapper visitorLogMapper;
 
 	@Override
-	public void insertVisitorLog(String sessionId) {
-		visitorLogMapper.insertVisitorLog(sessionId);
-	}
-
-	@Override
-	public int countTodayVisitors() {
-		return visitorLogMapper.countTodayVisitors();
-	}
-
-	@Override
-	public int countTotalVisitors() {
-		return visitorLogMapper.countTotalVisitors();
-	}
-
-	@Override
 	public int countTotalMembers() {
 		return visitorLogMapper.countTotalMembers();
 	}
@@ -35,6 +23,11 @@ public class VisitorLogServiceImpl implements VisitorLogService {
 	@Override
 	public int countTodayNewMembers() {
 		return visitorLogMapper.countTodayNewMembers();
+	}
+
+	@Override
+	public List<Map<String, Object>> MemberAgeDistribution() {
+		return visitorLogMapper.MemberAgeDistribution();
 	}
 	
 	

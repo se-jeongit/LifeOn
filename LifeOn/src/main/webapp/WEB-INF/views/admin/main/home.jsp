@@ -112,25 +112,23 @@
 		</div>
 	</main>
 	<script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", function () {
-		// 누적 방문자
+	
+	document.addEventListener("DOMContentLoaded", function() {
+		//누적 방문자 수 가져오기
 		fetch('/admin/main/totalVisitors')
 			.then(response => response.json())
 			.then(data => {
 				document.getElementById('totalVisitors').innerText = data + "명";
+				
 			})
-			.catch(error => console.error('누적 방문자 수 가져오기 실패:', error));
-	});
+			.catch(error => console.error('누적 방문자 수 가져오기 실패 : ', error));
 	
-	
-	document.addEventListener("DOMContentLoaded", function () {
-		//오늘 방문자
 		fetch('/admin/main/todayVisitors')
 			.then(response => response.json())
 			.then(data => {
 				document.getElementById('todayVisitors').innerText = data + "명";
 			})
-			.catch(error => console.error("오늘 방문자수 가져오기 실패 ", error));
+			.catch(error => console.error('오늘 방문자 수 가져오기 실패 : ', error))
 	});
 	
 	document.addEventListener("DOMContentLoaded", function () {
@@ -153,6 +151,7 @@
             .catch(error => console.error('오늘 가입자 수 가져오기 실패:', error));
     });
 	
+	
 	document.addEventListener("DOMContentLoaded", function () {
 	    // 회원 연령대 (ECharts)
 	    var ageChart = echarts.init(document.getElementById('ageChart'));
@@ -166,7 +165,7 @@
 	        },
 	        xAxis: {
 	            type: 'category',
-	            data: ['10대', '20대', '30대', '40대', '50대', '60대', '70대']
+	            data: ['10대', '20대', '30대', '40대', '50대', '60대', '70대이상']
 	        },
 	        yAxis: {
 	            type: 'value'
@@ -186,6 +185,8 @@
 	        ageChart.resize();
 	    });
 	});
+	
+	
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	    // 남녀 성비 (ECharts)
@@ -319,6 +320,7 @@
 	        categoryChart.resize();
 	    });
 	});
+	
 	
 	
 	</script>
