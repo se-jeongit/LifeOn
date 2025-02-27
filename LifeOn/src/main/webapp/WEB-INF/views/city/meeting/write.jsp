@@ -130,8 +130,12 @@ main {
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
     <div class="container">
     	<div class="body-container">
-        <div class="header">모임 등록하기</div>
-
+        <h2> 모임 등록 </h2>
+        
+		<hr>
+		<form name="meetingForm" method="post" enctype="multipart/form-data">
+            <h4>📌 모임 정보 입력</h4>
+            
         <div class="section">
             <label class="label" for="meeting-date">날짜/시간</label>
              <div class="date-picker-container">
@@ -239,6 +243,7 @@ main {
             <button class="button cancel">취소</button>
             <button class="button submit">등록하기</button>
         </div>
+    </form>
     </div>
   </div>
 </main>
@@ -260,19 +265,13 @@ document.addEventListener('DOMContentLoaded', function () {
         minuteIncrement: 30,
         allowInput: true,
         locale: "ko",
-        onReady: function () {
-        	 // 달력 아이콘 클릭 시 달력 열리도록 설정
-            document.getElementById("calendar-icon").addEventListener("click", function() {
-                meetingDatePicker.open(); // flatpickr 달력 열기
-            });
-        }
-        }
-        
+    });
+   	 // 달력 아이콘 클릭 시 달력 열리도록 설정
+       document.getElementById("calendar-icon").addEventListener("click", function() {
+           meetingDatePicker.open(); // flatpickr 달력 열기
+            });  
     });
 
-   
-  
-});
 </script>
 
 </body>
