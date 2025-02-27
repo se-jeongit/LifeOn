@@ -40,7 +40,7 @@
 		                <a class="menuLink" onclick="location.href='<c:url value='/market/rent/main?cbn=${main.cbn}'/>'">${main.cbc}</a>
 		                <ul class="submenu">
 		                	<c:forEach var="sub" items="${main.listSub}">
-		                    	<li><a href="#" class="submenuLink"></a>${sub.csc}</li>
+		                    	<li class="submenuLink"><a href="#" class="subLink"></a>${sub.csc}</li>
 		                	</c:forEach>
 		                </ul>
 		            </li>
@@ -115,7 +115,7 @@
 </main>
 
 <script type="text/javascript">
-document.querySelectorAll('.menuLink').forEach(menuLink => {
+/* document.querySelectorAll('.menuLink').forEach(menuLink => {
     
     menuLink.addEventListener('click', function (e) {
         e.preventDefault(); // 기본 링크 이동 방지
@@ -149,7 +149,7 @@ document.addEventListener('click', function(e) {
             sub.style.height = '0'; // 서브 메뉴 닫기
         });
     }
-});
+}); */
 </script>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">

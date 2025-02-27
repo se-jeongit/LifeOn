@@ -65,11 +65,10 @@
 							
 							<tr>
 								<td colspan="2" style="border-bottom: none;">
-									<div class="row row-cols-6 img-box">
+									<div class="row row-cols-5 img-box">
 										<c:forEach var="vo" items="${listFile}">
-											<div class="col p-1">
-												<img src="${pageContext.request.contextPath}/uploadPath/daily/${vo.ssfname}"
-													class="imageViewer img-thumbnail w-100 h-100" style="max-height: 130px;">
+											<div class="col">
+												<img src="${pageContext.request.contextPath}/uploadPath/daily/${vo.ssfname}" class="imageViewer img-thumbnail w-100 h-100" style="max-height: 130px;">
 											</div>
 										</c:forEach>
 									</div>
@@ -77,7 +76,18 @@
 							</tr>
 							
 							<tr>
-								<td colspan="2" align="left" style="font-size: 12px; border-bottom: none;">
+								<td colspan="2" style="border-bottom: none;">
+									<c:forEach var="vo" items="${listFile}" varStatus="status">
+										<p class="border text-secondary m-0 p-2">
+											<i class="bi bi-folder2-open"></i> 이미지 다운로드 : 
+											<a href="${pageContext.request.contextPath}/lounge2/daily/download?fnum=${vo.fnum}">${vo.cpfname}</a>
+										</p>
+									</c:forEach>
+								</td>
+							</tr>
+							
+							<tr>
+								<td colspan="2" align="left" style="font-size: 12px;">
 									<div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap;">
 										<div>
 											<span>등록일 ${dto.reg_date}</span>
@@ -93,17 +103,6 @@
 											<button type="button" class="ssbtn" onclick="javascript:dialogReport();">신고하기</button>
 										</div>
 									</div>
-								</td>
-							</tr>
-		
-							<tr>
-								<td colspan="2">
-									<c:forEach var="vo" items="${listFile}" varStatus="status">
-										<p class="border text-secondary my-1 p-2">
-											<i class="bi bi-folder2-open"></i> 이미지 다운로드 : 
-											<a href="${pageContext.request.contextPath}/lounge2/daily/download?fnum=${vo.fnum}">${vo.cpfname}</a>
-										</p>
-									</c:forEach>
 								</td>
 							</tr>
 							
@@ -181,7 +180,7 @@
 
 </main>
 
-<!-- Modal -->
+<!-- 이미지 모달 -->
 <div class="modal fade" id="myDialogModal" tabindex="-1" aria-labelledby="myDialogModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -224,7 +223,7 @@ $(function(){
 		const $model = $('#myDialogModal .modal-body');
 		
 		let src = $(this).attr('src');
-		let s = "<img src='" + src + "' class='img-thumbnail w-100 h-100'>";
+		let s = "<img src='" + src + "' class='img-thumbnail w-100 h-100 style='border: none;'>";
 		$model.html(s);
 		
 		$('#myDialogModal').modal('show');
