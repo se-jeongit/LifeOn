@@ -114,21 +114,19 @@
 	<script type="text/javascript">
 	
 	document.addEventListener("DOMContentLoaded", function() {
-		//누적 방문자 수 가져오기
-		fetch('/admin/main/totalVisitors')
-			.then(response => response.json())
-			.then(data => {
-				document.getElementById('totalVisitors').innerText = data + "명";
-				
-			})
-			.catch(error => console.error('누적 방문자 수 가져오기 실패 : ', error));
-	
-		fetch('/admin/main/todayVisitors')
-			.then(response => response.json())
-			.then(data => {
-				document.getElementById('todayVisitors').innerText = data + "명";
-			})
-			.catch(error => console.error('오늘 방문자 수 가져오기 실패 : ', error))
+	    fetch('/admin/main/totalVisitors')
+	        .then(response => response.json())
+	        .then(data => {
+	            document.getElementById('totalVisitors').innerText = data + "명";
+	        })
+	        .catch(error => console.error('누적 방문자 수 가져오기 실패 : ', error));
+
+	    fetch('/admin/main/todayVisitors')
+	        .then(response => response.json())
+	        .then(data => {
+	            document.getElementById('todayVisitors').innerText = data + "명";
+	        })
+	        .catch(error => console.error('오늘 방문자 수 가져오기 실패 : ', error));
 	});
 	
 	document.addEventListener("DOMContentLoaded", function () {
