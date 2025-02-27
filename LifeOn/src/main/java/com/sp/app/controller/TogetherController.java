@@ -40,6 +40,7 @@ public class TogetherController {
 	@GetMapping("main")
 	public String listShow (@RequestParam(name = "page", defaultValue = "1") int current_page,
 			@RequestParam(name = "csn", defaultValue = "0") int csn,
+			HttpSession session,
 			Model model, HttpServletRequest req) throws Exception {
 			System.out.println("Received csn: " + csn);  // csn 값 확인
 		try {
@@ -48,6 +49,7 @@ public class TogetherController {
 			int dataCount = 0;
 			Map<String, Object> map = new HashMap<>();
 			map.put("csn", csn);
+
 			
 			dataCount = service.dataCount3(map);
 			total_page = paginateUtil.pageCount(dataCount, size);

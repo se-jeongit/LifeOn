@@ -56,38 +56,36 @@
            
             <div class="form-group">
                 <label for="ptp">상품 원가</label>
-                <input type="number" id="ptp" name="ptp" required value="${dto.ptp}">
+                <input type="number" name="ptp" required value="${dto.ptp}">
             </div>
             
             <div class="form-group">
                 <label for="ptsp">상품 판매가</label>
-                <input type="number" id="ptsp" name="ptsp" required value="${dto.ptsp}">
+                <input type="number" name="ptsp" required value="${dto.ptsp}">
             </div>
-           
-           
-           
-            <div class="form-group">
-                <label for="pttq">상품 목표 수량</label>
-                <input type="number" id="pttq" name="pttq" required value="${dto.pttq}">
-            </div>
-
+           			
+			<div class="form-group">
+			    <label for="pttq">상품 목표 수량</label>
+			    <input type="number"  name="pttq" required readonly value="${ptsq}" >
+			    <small class="text-muted">※ 목표 수량은 재고 수량과 동일합니다.</small>
+			</div>	
+			
             <div class="form-group">
                 <label for="ptsd">판매 시작일</label>
-                <input type="date" id="ptsd" name="ptsd" required value="${dto.ptsd}">
+                <input type="date"  name="ptsd" required value="${dto.ptsd}">
             </div>
 
             <div class="form-group">
                 <label for="pted">판매 종료일</label>
-                <input type="date" id="pted" name="pted" required value="${dto.pted}">
+                <input type="date"  name="pted" required value="${dto.pted}">
             </div>
 
             <div class="form-group">
                 <label for="ptdd">예상 발송일</label>
-                <input type="date" id="ptdd" name="ptdd" required value="${dto.ptdd}">
+                <input type="date" name="ptdd" required value="${dto.ptdd}">
             </div>
 			
-			<input type="hidden" id="pnum" name="pnum" value="${pnum}">
-			<input type="hidden" id="ptsq" name="ptsq" value="${ptsq}">  
+			<input type="hidden" name="pnum" value="${pnum}">
 			
             <button type="button" class="btn" onclick="productRegister();">${mode == "register" ? "상품 등록" : "상품 수정" }</button>
         </form>
@@ -103,7 +101,6 @@
 <script type="text/javascript">
 function productRegister(){
 	const f = document.productForm;
-	
 	
 	let str;
 	
@@ -147,15 +144,8 @@ function productRegister(){
 		alert("예상일을 입력하세요");
 		f.ptdd.focus();
 		return;
-	}
-	
-    let stock = parseInt(document.getElementById("ptsq").value);  // 현재 재고량
-    let quantity = parseInt(document.getElementById("pttq").value); // 입력된 공동구매 수량
-    if (quantity > stock) {
-        alert("공동구매 수량이 현재 재고보다 많을 수 없습니다.");
-        quantityInput.focus();
-        return;
-    }
+	}	
+
 	
     let start = f.ptsd.value;
     let end = f.pted.value;
@@ -180,8 +170,9 @@ function productRegister(){
     	return;
     }
     
-    f.action = '${pageContext.request.contextPath}/admin/productManage/${mode}';
-    f.submit();	
+   // f.action = '${pageContext.request.contextPath}/admin/productManage/${mode}';
+    //f.submit();	
+
 }
 
 </script>

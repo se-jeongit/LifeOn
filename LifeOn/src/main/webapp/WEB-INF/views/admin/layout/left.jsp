@@ -46,7 +46,7 @@ $(function(){
 	<ul id="js-menu" class="menu">
 		<li class="menu--item" style="height: 380px; padding: 25px; background: #006AFF;">
 			<div class="profile" style="width: 150px; height: 150px; border-radius: 70%; position: relative; overflow: hidden;">
-				<img src="${pageContext.request.contextPath}/dist/images/profile.png" class="profileImage" style="width: 100%; height: 100%; object-fit: cover;" name="profileImage" id="profileImage" alt="프로필">
+				<img src="${sessionScope.member.profile_image}" class="profileImage" style="width: 100%; height: 100%; object-fit: cover;" name="profileImage" id="profileImage" alt="프로필">
 			</div>
 			<div style="color: #FFF; padding: 30px 10px 10px 10px; line-height: 2;">
 				<p style="font-size: 18px; font-weight: 600; margin: 0px;">관리자 님</p>

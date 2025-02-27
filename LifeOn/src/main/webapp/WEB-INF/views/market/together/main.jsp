@@ -207,63 +207,113 @@
 <jsp:include page="/WEB-INF/views/layout/footerResources.jsp"/>
 
 <script type="text/javascript">
+
 $(document).ready(function () {
+    // URL에서 csn 파라미터 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentCsn = urlParams.get('csn');
+    
+    // csn 값이 0이거나 없으면 localStorage 초기화 (전체보기 또는 새로운 진입)
+    if (!currentCsn || currentCsn === "0") {
+        localStorage.removeItem('selectedCbn');
+        localStorage.removeItem('selectedCsn');
+        
+        // 모든 선택 상태 초기화
+        $(".subcategory-toggle").removeClass("active");
+        $(".small-category").removeClass("selected");
+        $(".filter-category .subcategory").slideUp();
+    } else {
+        // csn 파라미터가 있으면 localStorage에 저장
+        localStorage.setItem('selectedCsn', currentCsn);
+        
+        // 해당 csn이 어떤 대분류에 속하는지 찾기 위해 필요하다면 서버에 요청할 수 있음
+        // 지금은 간단히 기존 저장된 대분류를 사용
+    }
+    
+    // 저장된 대분류가 있으면 해당 버튼 클릭 (상태 복원)
+    const savedCbn = localStorage.getItem('selectedCbn');
+    if (savedCbn && currentCsn && currentCsn !== "0") {
+        const categoryBtn = $('.subcategory-toggle[data-category-id="' + savedCbn + '"]');
+        if (categoryBtn.length) {
+            setTimeout(function() {
+                categoryBtn.trigger('click');
+            }, 100);
+        }
+    }
+    
     // 대분류 클릭 시 소분류 가져오기
     $(".subcategory-toggle").click(function (e) {
         e.preventDefault();
         let cbn = $(this).data("category-id"); // 선택한 대분류 ID
         let subCategoryList = $("#smallCategory-" + cbn);
-
-
+        
+        // 클릭한 대분류 ID 저장
+        localStorage.setItem('selectedCbn', cbn);
+        
         // 🔹 기존에 선택된 대분류 색상 초기화
         $(".subcategory-toggle").removeClass("active");
         $(this).addClass("active"); // 현재 클릭한 대분류 강조
-
+        
         // 🔹 기존에 열린 다른 소분류 닫기
         $(".filter-category .subcategory").not(subCategoryList).slideUp();
-
+        
         // 🔹 현재 클릭한 소분류가 이미 열려있으면 닫기
         if (subCategoryList.is(":visible")) {
             subCategoryList.slideUp();
             return;
         }
-
+        
         let url = '${pageContext.request.contextPath}/market/together/smallCategories';
-
+        
         // 🔹 AJAX 요청으로 소분류 가져오기
         $.post(url, { cbn: cbn }, function (data) {
-
-
             if (data.length > 0) {
                 let subCategories = "";
                 $.each(data, function (index, category) {
-
-                    subCategories += "<li><a href='${pageContext.request.contextPath}/market/together/main?csn=" +category.csn+ "' class='small-category' data-category-id='" + category.csn + "'>" + category.csc + "</a></li>";
+                    subCategories += "<li><a href='${pageContext.request.contextPath}/market/together/main?csn=" + category.csn + "' class='small-category' data-category-id='" + category.csn + "'>" + category.csc + "</a></li>";
                 });
-                console.log(subCategories);  // subCategories의 내용이 올바르게 만들어졌는지 확인
+                console.log(subCategories);
                 subCategoryList.html(subCategories);
+                
+                // 가져온 후 펼치기
+                subCategoryList.slideDown();
+                
+                // 저장된 csn이 있으면 해당 소분류 강조
+                const savedCsn = localStorage.getItem('selectedCsn');
+                if (savedCsn) {
+                    const selectedSubcategory = subCategoryList.find('.small-category[data-category-id="' + savedCsn + '"]');
+                    if (selectedSubcategory.length) {
+                        selectedSubcategory.addClass('selected');
+                    }
+                }
             } else {
                 subCategoryList.html("<li>소분류 없음</li>");
+                subCategoryList.slideDown();
             }
-            subCategoryList.slideDown(); // 가져온 후 펼치기
         }, "json").fail(function (xhr, status, error) {
             console.error("소분류 불러오기 실패:", error);
         });
     });
-
+    
     // 🔹 소분류 클릭 시 색상 적용
     $(document).on("click", ".small-category", function (e) {
-        //e.preventDefault();
-
         // 기존 선택 해제
         $(".small-category").removeClass("selected");
-
+        
         // 현재 선택한 소분류 강조
         $(this).addClass("selected");
+        
+        // 선택한 소분류 ID 저장
+        const csn = $(this).data("category-id");
+        localStorage.setItem('selectedCsn', csn);
+    });
+    
+    // 전체보기 링크 처리 (만약 별도로 있다면)
+    $(".all-categories-link").click(function() {
+        localStorage.removeItem('selectedCbn');
+        localStorage.removeItem('selectedCsn');
     });
 });
-
-
 
 
 </script>
