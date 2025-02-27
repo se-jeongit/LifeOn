@@ -48,6 +48,19 @@ public class MeetingServiceImpl implements MeetingService{
 	}
 	
 	@Override
+	public Meeting findByCategory(long categoryNum) {
+		 Meeting dto = null;
+		
+		try {
+			dto = mapper.findByCategory(categoryNum);
+		} catch (Exception e) {
+			log.info("findByCategory : ", e);
+		}
+		
+		return dto;
+	}
+	
+	@Override
 	public void updateBoard(Meeting dto) throws Exception {
 		// TODO Auto-generated method stub
 		
@@ -59,18 +72,40 @@ public class MeetingServiceImpl implements MeetingService{
 	}
 	@Override
 	public List<Meeting> listBoard(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Meeting> list = null;
+
+		try {
+			list = mapper.listBoard(map);
+			
+		} catch (Exception e) {
+			log.info("listBoard : ", e);
+		}
+
+		return list;
 	}
 	@Override
 	public int dataCount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+
+		try {
+			result = mapper.dataCount(map);
+		} catch (Exception e) {
+			log.info("dataCount : ", e);
+		}
+
+		return result;
 	}
 	@Override
-	public Meeting findById(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public Meeting findById(long num) {
+		Meeting dto = null;
+
+		try {
+			dto = mapper.findById(num);
+		} catch (Exception e) {
+			log.info("findById : ", e);
+		}
+
+		return dto;
 	}
 	@Override
 	public void updateHitCount(long num) throws Exception {

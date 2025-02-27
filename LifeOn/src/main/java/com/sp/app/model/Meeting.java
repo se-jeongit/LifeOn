@@ -25,7 +25,6 @@ public class Meeting {
 	private String age;
 	private String person_c;
 	private String ipaddr;
-	private String bdtype;
 	private String reg_date;
 	private int blind;
 	

@@ -11,7 +11,7 @@ public interface MeetingService {
 	public void deleteBoard(String bdtype, long psnum, String nickname, int grade) throws Exception;
 	public List<Meeting> listBoard(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
-	public Meeting findById(Map<String, Object> map);
+	public Meeting findById(long num);
 	public void updateHitCount(long num) throws Exception;	
 	
 	// 스크랩
@@ -29,6 +29,7 @@ public interface MeetingService {
 	public void replyLike(Map<String, Object> map) throws Exception;
 	public Map<String, Object> replyLikeCount(Map<String, Object> map);
 	
+	public Meeting findByCategory(long categoryNum);
 	public List<Meeting> listCategory();
 
 	

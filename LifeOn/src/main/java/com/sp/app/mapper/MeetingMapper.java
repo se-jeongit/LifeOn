@@ -19,7 +19,7 @@ public interface MeetingMapper {
 	public int dataCount(Map<String, Object> map);
 	public List<Meeting> listBoard(Map<String, Object> map);
 
-	public Meeting findById(Map<String, Object> map);
+	public Meeting findById(long num);
 	public void updateHitCount(long num) throws SQLException;
 	
 	public void boardLike(Map<String, Object> map) throws Exception;
@@ -37,4 +37,5 @@ public interface MeetingMapper {
 	public Optional<Integer> memberReplyLiked(Map<String, Object> map);
 	
 	public List<Meeting> listCategory();
+	public Meeting findByCategory(long categoryNum);
 }

@@ -2,15 +2,23 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sp.app.mapper.MeetingMapper">
-
 	
+	<select id="meetingSeq" resultType="Long">
+		SELECT meeting_seq.NEXTVAL FROM dual
+	</select>
+	<!--
 	<insert id="insertBoard" parameterType="com.sp.app.model.Meeting">
 		INSERT INTO GROUP_BOARD (psnum, num, subject, content, bdtype, hitCount, ipaddr, ies, loca, loca_d,
 					gender, age, person_c, reg_date, blind)
-		VALUES (#{psnum}, #{num}, #{subject}, #{content}, #{bdtype}, 0, #{ipaddr}, #{ies}, #{loca}, #{loca_d},
+		VALUES (product_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{bdtype}, 0, #{ipaddr}, #{ies}, #{loca}, #{loca_d},
 				#{gender}, #{age}, #{person_c}, SYSDATE, 0)
 	</insert>
+		-->
+	<!--  -상품번호, 상품유형, 상품명, 상품내용, 사진, 회원번호 -->
 	
-
+	<select id="listCategory" resultType="com.sp.app.model.Meeting">
+		SELECT cbn, cbc
+		FROM GROUP_CATEGORY	 
+	</select>
 	
 </mapper>

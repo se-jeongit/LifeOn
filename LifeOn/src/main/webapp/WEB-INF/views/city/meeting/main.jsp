@@ -20,36 +20,24 @@
 </header>
 
   <main class="min-vh-100">
-      <div class="banner-container">
-      	<div class="banner">
-      		<img alt="" src="/images/banner-pc.png">
-      		<img alt="" src="/images/banner-pc-1.png">
-      		<img alt="" src="/images/banner-pc-2.png">
-      	</div>
-   		<div class="banner__btn banner__btn--left icon icon-arrow-left"></div>
-    	<div class="banner__btn banner__btn--right icon icon-arrow-right"></div>
-      </div>
-      
-
+ 
    <div class="search-bar">
-          <input
-            id="search-bar-input"
-            class="search-content"
-            type="text"
-            placeholder="원하는 모임을 찾아보세요!"
-          />
+          <input id="search-bar-input" class="search-content" type="text" placeholder="원하는 모임을 찾아보세요!"/>
           <span class="icon icon-search" ><i class="bi bi-search" style="font-size: 16px; padding-top: 3px;"></i></span>
         </div>
-	
+		
+		<!-- 카테고리 -->
         <div class="category-container">
           <nav class="category-nav">
-            <ul class="category-subcontainer">
-              <li data-id=0 class="category selected">전체</li>
-              <li data-id=1 class="category">밥/카페</li>
-              <li data-id=2 class="category">운동</li>
-              <li data-id=3 class="category">스터디</li>
-              <li data-id=4 class="category">문화생활</li>
-              <li data-id=5 class="category">기타</li>
+            <ul>
+            <li class="category-subcontainer">
+	                <a class="category selected" onclick="location.href='<c:url value='/city/meeting/main'/>'">전체</a>
+	            </li>
+	            
+	             <c:forEach var="main" items="${listCategory}">
+		            <li class="category-subcontainer">
+		                <a class="category selected" onclick="location.href='<c:url value='/city/meeting/main?cbn=${main.cbn}'/>'">${main.cbc}</a>
+              </c:forEach>
             </ul>
           </nav>
         </div>
@@ -102,37 +90,27 @@
         </div>
 
       <section class="main__content" >
-        <ul id="meetings" class="meetings">
-          <li th:each="meeting : ${meetings}" th:attr="data-id=${meeting.id}">
-            <a class="meeting" th:href="@{/meeting/{id}(id = ${meeting.id})}">
+        <div class="meetings">
+       	 <c:forEach var="dto" items="${list}">
+  
               <div class="meeting__header">
                 <div class="meeting__info-detail-more">
-                  <span class="meeting__category" th:text="${meeting.category}"
-                    >카테고리</span
-                  >
-                  <span
-                    class="meeting__region add-deco-img-left deco-img-location"
-                    th:text="${meeting.region}"
-                    ><i class="bi bi-geo-alt"></i>지역</span
-                  >
+                
+                  <span class="meeting__category">${dto.cbn}</span>
+                  
+                  <span class="meeting__location"><i class="bi bi-geo-alt"></i>{dto.loca}</span>
                  
-                  <span class="meeting__date" th:text="${meeting.startedAt}"
-                    ><i class="bi bi-calendar-check"></i>11.01(일)</span
-                  >
+                  <span class="meeting__date"><i class="bi bi-calendar-check"></i>${dto.reg_date}</span>
                 
                 </div>
-                <h3 class="meeting__title" th:text="${meeting.title}">제목</h3>
+                <h3 class="meeting__title">${dto.subject}</h3>
               </div>
               
-                <div class="status-box" style="font-size: 15px; font-weight: bold; margin-left: auto;">
-				    <div class="meeting__status ${dto.status eq '모집완료' ? 'meeting__status--off' : 'meeting__status--on'}">
-				       	모집중 ${dto.status}
-				    </div>
-				
-				    <c:if test="${dto.status eq '모집중'}">
-				        <p style="font-size: 22px">남은 수량 : ${dto.ptq}개</p>
-				    </c:if>
-				</div>
+			 <div class="status-box" style="font-size: 15px; font-weight: bold; margin-left: auto;">
+			    <div class="meeting__status ${dto.status eq '모집완료' ? 'meeting__status--off' : 'meeting__status--on'}">
+			       	모집중 ${dto.status}
+			    </div>
+			</div>
 				
                   <div class="meeting__info-detail-more" >
                     <div>
@@ -144,10 +122,9 @@
 						<span>${dto.replyCount}&nbsp;&nbsp;</span>
 					</div>
                   </div>
-           
-            </a>
-          </li>
-        </ul>
+         
+          	</c:forEach>
+  		</div>
       </section>
 
     </main>

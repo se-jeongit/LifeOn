@@ -148,16 +148,19 @@ main {
                 <label for="label">카테고리</label>
                 <select id="bigCategory" name="cbn" class="dropdown" required onchange="categoryCheck();">
                      <option>지역을 선택하세요</option>
-		                <option>밥/카페</option>
-		                <option>운동</option>
-		                <option>스터디</option>
-		                <option>문화생활</option>
-		                <option>기타</option>
                     <c:forEach var="dto" items="${Category}">
                         <option value="${dto.cbn}">${dto.cbc}</option>
                     </c:forEach>
                 </select>
             </div>
+            
+            <div class="section">
+            <label class="label" for="status">모집 상태</label>
+	            <select id="status" class="dropdown">
+	                <option>모집중</option>
+	                <option>모집 마감</option>
+	            </select>
+	        </div>
 
         <div class="section">
             <label class="label" for="location">지역</label>
@@ -194,6 +197,7 @@ main {
             <label class="label" for="detail-location">상세 장소</label>
             <input type="text" id="detail-location" class="input-box" placeholder="상세 장소를 입력하세요">
         </div>
+        
 
         <div class="section">
             <label class="label" for="age-group">연령대</label>

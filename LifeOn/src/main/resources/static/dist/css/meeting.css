@@ -197,38 +197,6 @@ main {
     font-weight: var(--bold);
   }
  
- /* 배너 스타일 */
-.banner-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.banner {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-.banner img {
-  width: 100%;
-  height: auto;
-}
-
-.banner__btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
-
-.banner__btn--left {
-  left: 10px;
-}
-
-.banner__btn--right {
-  right: 10px;
-}
-
 /* 검색 바 스타일 */
 .search-bar {
   display: flex;
