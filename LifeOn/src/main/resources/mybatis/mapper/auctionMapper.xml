@@ -180,7 +180,7 @@
     <!--  경매 상품 낙찰한 회원 및 가격 등록 -->
     <insert id="insertProductBiddingSuccess" parameterType="map">
         INSERT INTO PRODUCT_AUCTION_SUCCESSBID(PNUM, PASP, PASD, NUM)
-        VALUES (#{pnum}, #{price},SYSDATE,#{userId})
+        VALUES (#{pnum}, #{fp},SYSDATE,#{userId})
     </insert>
 
 

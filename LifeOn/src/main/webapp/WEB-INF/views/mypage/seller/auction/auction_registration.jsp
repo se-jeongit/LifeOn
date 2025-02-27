@@ -16,6 +16,7 @@
     <style>
         .write-content {
             width: 800px;
+
         }
 
         .write-form {
@@ -25,6 +26,16 @@
         .input-name {
             width: 200px;
             height: 30px;
+        }
+
+        .body_content {
+
+            width: 850px;
+            padding: 20px;
+            margin: 80px 0px;
+            border: 1px solid #e9e9e9;
+            border-radius: 8px;
+            display: inline-table;
         }
 
         .input-price {
@@ -78,19 +89,28 @@
         }
 
         .select-box {
-            width: 100px;
+            width: 80px;
             height: 30px;
         }
+
+        .filebox .upload-name2 {
+            display: inline-block;
+            width: 100%;
+            height: 40px;
+            padding: 0 10px;
+            vertical-align: middle;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            color: #777;
+            cursor: default;
+        }
+
     </style>
 
     <script !src="">
-        document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.querySelector('input[name="startDate"]').setAttribute('min', today);
-            document.querySelector('input[name="endDate"]').setAttribute('min', today);
-        });
 
-        document.addEventListener('DOMContentLoaded', function() {
+        //  TODO  : 시간이 정시가 되면 분은 0이 나오고 시가 1증가 되어야하는데 변하지 않음
+        document.addEventListener('DOMContentLoaded', function () {
             const now = new Date();
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
@@ -98,67 +118,131 @@
             const stTT = document.getElementById('stTT');
             const stHH = document.getElementById('stHH');
             const stMM = document.getElementById('stMM');
+
             const edTT = document.getElementById('edTT');
             const edHH = document.getElementById('edHH');
             const edMM = document.getElementById('edMM');
 
+            const startDateInput = document.querySelector('input[name="startDate"]');
+            const endDateInput = document.querySelector('input[name="endDate"]');
+
+            const today = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+
+            startDateInput.setAttribute('min', today);
+            endDateInput.setAttribute('min', today);
 
             if (currentHour >= 12) {
                 stTT.querySelector('option[value="am"]').disabled = true;
                 edTT.querySelector('option[value="am"]').disabled = true;
             }
 
-            function updateOptions(timeSelect, hourSelect, minuteSelect) {
+
+            stTT.value = currentHour >= 12 ? 'pm' : 'am';
+            edTT.value = currentHour >= 12 ? 'pm' : 'am';
+
+            stHH.value = currentHour % 12 || 12;
+            stMM.value = (Math.ceil(currentMinute / 5) * 5) % 60 + 5;
+            console.log(stMM.value);
+            // TODO : 시간이 정시가 되면 분은 0이 나오고 시가 1증가 되어야하는데 변하지 않음
+
+            // let stDate = new Date(dateSt + 'T' + dateStHH + ':' + dateStMM + ':00');
+            //
+            // const currentHour = now.getHours();
+            // const currentMinute = now.getMinutes();
+
+            // if (stMM === '0') {
+            //     stHH.value = (parseInt(stHH.value, 10) + 1) % 12 || 12;
+            //     if (stHH.value === 12) {
+            //         stTT.value = stTT.value === 'am' ? 'pm' : 'am';
+            //     }
+            // }
+            //
+            edHH.value = currentHour % 12 || 12;
+            edMM.value = (Math.ceil(currentMinute / 5) * 5) % 60 + 10;
+            //
+            // //let edDate = new Date(dateEd + 'T' + dateEdHH + ':' + dateEdMM + ':00');
+            //
+            // if (edMM === '0') {
+            //     edHH.value = (parseInt(edHH.value, 10) + 1) % 12 || 12;
+            //     if (edHH.value === 12) {
+            //         edTT.value = edTT.value === 'am' ? 'pm' : 'am';
+            //     }
+            // }
+
+
+            stTT.addEventListener('change', function () {
+                updateOptions('st',stTT, stHH, stMM, startDateInput);
+            });
+            stHH.addEventListener('change', function () {
+                updateOptions('st',stTT, stHH, stMM, startDateInput);
+            });
+
+            edTT.addEventListener('change', function () {
+                updateOptions('ed',edTT, edHH, edMM, endDateInput);
+            });
+            edHH.addEventListener('change', function () {
+                updateOptions('ed',edTT, edHH, edMM, endDateInput);
+            });
+
+            startDateInput.addEventListener('change', function () {
+                updateOptions('st',stTT, stHH, stMM, startDateInput);
+            });
+
+            endDateInput.addEventListener('change', function () {
+                updateOptions('ed',edTT, edHH, edMM, endDateInput);
+            });
+
+            updateOptions('st',stTT, stHH, stMM, startDateInput);
+            updateOptions('ed',edTT, edHH, edMM, endDateInput);
+
+            function updateOptions(re,timeSelect, hourSelect, minuteSelect, dateInput) {
                 const selectedTT = timeSelect.value;
+                let selectedDate = new Date(dateInput.min);
+                if (dateInput.value) {
+                    selectedDate = new Date(dateInput.value);
+                }
+                const isToday = selectedDate.toDateString() === new Date().toDateString();
+
+
                 Array.from(hourSelect.options).forEach(option => {
-                    const hour = parseInt(option.value, 10);
-                    if ((selectedTT === 'am' && hour < currentHour % 12) || (selectedTT === 'pm' && hour < (currentHour % 12 || 12))) {
+                    let hour = parseInt(option.value, 10);
+
+                    hour = selectedTT ==='pm' ? hour + 12 : hour;
+
+                    if (isToday && (hour < currentHour)) {
                         option.disabled = true;
                     } else {
                         option.disabled = false;
                     }
                 });
+
+                let curMin  = re === 'st' ? currentMinute+5 : currentMinute+10;
+                curMin = curMin >= 55 ? curMin - 60 : curMin;
 
                 Array.from(minuteSelect.options).forEach(option => {
                     const minute = parseInt(option.value, 10);
-                    if (selectedTT === (currentHour >= 12 ? 'pm' : 'am') && parseInt(hourSelect.value, 10) === (currentHour % 12 || 12) && minute-10 < currentMinute) {
+                    let  hour = parseInt(hourSelect.value, 10);
+                    hour = selectedTT ==='pm' ? hour + 12 : hour;
+                    console.log(minute, ' 현재 :',curMin);
+                    if (isToday &&  (hour === currentHour) && minute < curMin) {
                         option.disabled = true;
                     } else {
                         option.disabled = false;
                     }
                 });
+
+                if (!isToday) {
+                    timeSelect.querySelector('option[value="am"]').disabled = false;
+                }
             }
 
-            stHH.value = currentHour % 12 || 12;
-            stMM.value = Math.ceil(currentMinute / 5) * 5+10;
-            edHH.value = currentHour % 12 || 12;
-            edMM.value = Math.ceil(currentMinute / 5) * 5+10;
 
-            // 오전/오후 설정
-            document.getElementById('stTT').value = currentHour >= 12 ? 'pm' : 'am';
-            document.getElementById('edTT').value = currentHour >= 12 ? 'pm' : 'am';
 
-            stTT.addEventListener('change', function() {
-                updateOptions(stTT, stHH, stMM);
-            });
-            stHH.addEventListener('change', function() {
-                updateOptions(stTT, stHH, stMM);
-            });
-
-            edTT.addEventListener('change', function() {
-                updateOptions(edTT, edHH, edMM);
-            });
-            edHH.addEventListener('change', function() {
-                updateOptions(edTT, edHH, edMM);
-            });
-
-            updateOptions(stTT, stHH, stMM);
-            updateOptions(edTT, edHH, edMM);
         });
 
 
-    </script>
 
+    </script>
 
 
 </head>
@@ -177,6 +261,29 @@
         const currentHour = now.getHours();
         const currentMinute = now.getMinutes();
 
+        let dateSt = f.startDate.value.trim();
+        let dateStHH = f.startDateHH.value.trim();
+        let dateStMM = f.startDateMM.value.trim();
+
+        let dateEd = f.endDate.value.trim();
+        let dateEdHH = f.endDateHH.value.trim();
+        let dateEdMM = f.endDateMM.value.trim();
+
+        let stTT = f.startDateTime.value.trim();
+        let edTT = f.endDateTime.value.trim();
+
+        if (stTT ==='pm' && dateStHH < 12) {
+            dateStHH = parseInt(dateStHH) + 12;
+        }
+
+        if (edTT ==='pm' && dateEdHH < 12) {
+            dateEdHH = parseInt(dateEdHH) + 12;
+        }
+
+
+        let stDate = new Date(dateSt + 'T' + dateStHH + ':' + dateStMM + ':00');
+        let edDate = new Date(dateEd + 'T' + dateEdHH + ':' + dateEdMM + ':00');
+
         str = f.prName.value.trim();
         if (!str) {
             alert('이름을 입력하세요.');
@@ -184,112 +291,93 @@
             return false;
         }
 
-        str = f.startDate.value.trim();
-        if (!str) {
-            alert('시작일을 입력하세요.');
-            f.startDate.focus();
-            return false;
-        } else if (str < now.toISOString().split('T')[0]) {
-            alert('시작일은 오늘 이후로 입력하세요.');
-            f.startDate.focus();
-            return false;
-        }
 
-        str = f.startDateTime.value.trim();
-        if (str === 'am' && currentHour >= 12) {
-            alert('오전은 현재시간 이후로 선택하세요.');
-            f.startDateTime.focus();
-            return false;
-        } else if (str === 'pm' && currentHour < 12) {
-            alert('오후는 현재시간 이후로 선택하세요.');
-            f.startDateTime.focus();
-            return false;
-        }
+        // if (!dateSt) {
+        //     alert('시작일을 입력하세요.');
+        //     f.startDate.focus();
+        //     return false;
+        // } else if (stDate < now) {
+        //     alert('시작일은 오늘 이후로 입력하세요.');
+        //     f.startDate.focus();
+        //     return false;
+        // }
+        //
+        // let hh = f.startDateHH.value.trim();
+        // str = f.startDateMM.value.trim();
+        // if (hh < (currentHour % 12 || 12) || (hh === (currentHour % 12 || 12) && str < Math.ceil(currentMinute / 5) * 5 + 5)) {
+        //     alert('시작분은 현재시간보다 10분 이후로 선택하세요.');
+        //     f.startDateMM.focus();
+        //     return false;
+        // }
+        //
+        // str = f.endDate.value.trim();
+        // if (!dateEd) {
+        //     alert('종료일을 입력하세요.');
+        //     f.endDate.focus();
+        //     return false;
+        // } else if (edDate < now) {
+        //     alert('종료일은 오늘 이후로 입력하세요.');
+        //     f.endDate.focus();
+        //     return false;
+        // }
+        //
+        // if (edDate <= stDate) {
+        //     alert('종료일은 시작일보다 늦거나 같을수 없습니다.');
+        //     f.endDate.focus();
+        //     return false;
+        // }
+        //
+        //
+        //
+        //
+        // str = f.sellBox.value.trim();
+        // if (str === 'none') {
+        //     alert('상품의 종류를 선택하세요.');
+        //     f.sellBox.focus();
+        //     return false;
+        // }
+        //
+        // str = f.prPrice.value.trim();
+        // if (!str) {
+        //     alert('가격을 입력하세요.');
+        //     f.prPrice.focus();
+        //     return false;
+        // }
+        //
+        // str = f.mainCategory.value.trim();
+        // if (str === 'none') {
+        //     alert('대분류를 선택하세요.');
+        //     f.mainCategory.focus();
+        //     return false;
+        // }
+        //
+        // str = f.subCategory.value.trim();
+        // if (str === 'none') {
+        //     alert('소분류를 선택하세요.');
+        //     f.subCategory.focus();
+        //     return false;
+        // }
+        //
+        // str = f.content.value.trim();
+        // if (!str || str === '<p><br></p>') {
+        //     alert('내용을 입력하세요.');
+        //     f.content.focus();
+        //     return false;
+        // }
 
-        str = f.startDateHH.value.trim();
-        if (str < (currentHour % 12 || 12)) {
-            alert('시작시간은 현재시간 이후로 선택하세요.');
-            f.startDateHH.focus();
-            return false;
-        }
+        // str = f.thumbnailFile.value.trim();
+        // if (!str) {
+        //     alert('대표이미지를 선택하세요.');
+        //     return false;
+        // }
+        //
+        // str = f.selectFile.value.trim();
+        // if (!str) {
+        //     alert('상품이미지를 선택하세요.');
+        //     return false;
+        // }
 
-        let hh = f.startDateHH.value.trim();
-        str = f.startDateMM.value.trim();
-        if (hh < (currentHour % 12 || 12) || (hh === (currentHour % 12 || 12) && str < Math.ceil(currentMinute / 5) * 5 + 5)) {
-            alert('시작분은 현재시간보다 10분 이후로 선택하세요.');
-            f.startDateMM.focus();
-            return false;
-        }
-
-        str = f.endDate.value.trim();
-        if (!str) {
-            alert('종료일을 입력하세요.');
-            f.endDate.focus();
-            return false;
-        } else if (str < now.toISOString().split('T')[0]) {
-            alert('종료일은 오늘 이후로 입력하세요.');
-            f.endDate.focus();
-            return false;
-        }
-
-        const startDate = new Date(f.startDate.value);
-        const endDate = new Date(f.endDate.value);
-        if (endDate < startDate) {
-            alert('종료일은 시작일보다 늦을 수 없습니다.');
-            f.endDate.focus();
-            return false;
-        }
-
-        str = f.endDateHH.value.trim();
-        if (str < (currentHour % 12 || 12)) {
-            alert('종료시간은 현재시간 이후로 선택하세요.');
-            f.endDateHH.focus();
-            return false;
-        }
-        hh = f.endDateHH.value.trim();
-        str = f.endDateMM.value.trim();
-        if (endDate.getTime() === startDate.getTime() && (hh < f.startDateHH.value.trim() || (hh === f.startDateHH.value.trim() && str < f.startDateMM.value.trim()))) {
-            alert('종료시간은 시작시간보다 늦을 수 없습니다.');
-            f.endDateMM.focus();
-            return false;
-        }
-
-        str = f.sellBox.value.trim();
-        if (str === 'none') {
-            alert('상품의 종류를 선택하세요.');
-            f.sellBox.focus();
-            return false;
-        }
-
-        str = f.prPrice.value.trim();
-        if (!str) {
-            alert('가격을 입력하세요.');
-            f.prPrice.focus();
-            return false;
-        }
-
-        str = f.mainCategory.value.trim();
-        if (str === 'none') {
-            alert('대분류를 선택하세요.');
-            f.mainCategory.focus();
-            return false;
-        }
-
-        str = f.subCategory.value.trim();
-        if (str === 'none') {
-            alert('소분류를 선택하세요.');
-            f.subCategory.focus();
-            return false;
-        }
-
-        str = f.content.value.trim();
-        if (!str || str === '<p><br></p>') {
-            alert('내용을 입력하세요.');
-            f.content.focus();
-            return false;
-        }
-
-        f.action = '${pageContext.request.contextPath}/lounge2/tip/${mode}';
+        f.action = '${pageContext.request.contextPath}/mypage/seller/${mode}';
         f.submit();
     }
 
@@ -297,10 +385,10 @@
 
 <main class="min-vh-100">
     <jsp:include page="/WEB-INF/views/mypage/left.jsp"/>
-    <div class="body-container" style="margin-left: 10%; margin-top: 20px;">
-        <div class="body-content" style="margin-left: 20%; margin-top: 20px;">
+    <div class="body-container" style="margin-left: 10%; margin-top: 50px;">
+        <div class="body_content" style="margin-left: 20%; margin-top: 50px;">
             <div class="write-content">
-                <div class="write-content" style="margin-top: 60px;">
+                <div class="write-content" style="margin-top: 20px;">
                     <div style="text-align: left; font-size: 30px;">
                         상품등록창
                     </div>
@@ -343,12 +431,12 @@
                                         상품의 종류
                                         <select name="sellBox" class="sell-select-box box-color">
                                             <option value="none">&nbsp;선택</option>
-                                            <option value="auction">&nbsp;경매</option>
-                                            <option value="rental">&nbsp;물품대여</option>
+                                            <option value="경매">&nbsp;경매</option>
+                                            <option value="물품대여">&nbsp;물품대여</option>
                                         </select>
                                     </label>
                             </span>
-                            <span style="font-size: 15px; padding-left: 172px;">
+                            <span style="font-size: 15px; padding-left: 214px;">
                                 종료일 :
                                  <label>
                                     <input type="date" name="endDate" class="input-date box-color"
@@ -363,7 +451,7 @@
                                         </c:forEach>
                                     </select>시
                                     <select name="endDateMM" id="edMM" class="hh-select-box box-color">
-                                        <c:forEach var="i" begin="0" end="50" step="5">
+                                        <c:forEach var="i" begin="0" end="55" step="5">
                                             <option value="${i}">${i}</option>
                                         </c:forEach>
                                     </select>분
@@ -373,18 +461,30 @@
                         <div class="price-box-prize">
                             <span> 상품의 가격
                                 <label>
-                                    <input type="text" name="prPrice" maxlength="50" class="input-price box-color" value="${prize.prName}">
+                                    <input type="text" name="prPrice" maxlength="50" class="input-price box-color"
+                                           value="${prize.prName}">
                                     원
                                 </label>
-                                 <span style="padding-left: 420px;">카테고리 분류</span>
+                                <span style="padding-left: 195px; font-size: 14px;">
+                                    거래유형
+                                    <label>
+                                        <select name="dealType" class="select-box box-color">
+                                            <option value="none">&nbsp;선택</option>
+                                            <option value="direct">&nbsp;직거래</option>
+                                            <option value="delivery">&nbsp;배송</option>
+                                        </select>
+                                    </label>
+                                </span>
+                                 <span style="padding-left: 125px;">카테고리 분류</span>
                             </span>
                         </div>
                         <div class="" style="text-align: left;">
                             <span style="padding-top: 20px; font-size: 20px;">상품설명 작성</span>
-                            <label style="padding-left: 340px; padding-bottom: 10px;">
+                            <label style="padding-left: 420px; padding-bottom: 10px;">
                                 대분류
-                                <select id="mainCategory" name="mainCategory" class="select-box box-color" style="font-size: 14px">
-                                    <option value="none">선택해주세요</option>
+                                <select id="mainCategory" name="mainCategory" class="select-box box-color"
+                                        style="font-size: 14px">
+                                    <option value="none">선택</option>
                                     <c:forEach var="big" items="${category.bigCategory}">
                                         <option value="${big.cbn}">${big.cbc}</option>
                                     </c:forEach>
@@ -392,8 +492,9 @@
                             </label>
                             <label>
                                 소분류
-                                <select id="subCategory" name="subCategory" class="select-box box-color" style="font-size: 14px">
-                                    <option value="none">선택해주세요</option>
+                                <select id="subCategory" name="subCategory" class="select-box box-color"
+                                        style="font-size: 14px">
+                                    <option value="none">선택</option>
                                 </select>
                             </label>
                             <span>
@@ -401,13 +502,24 @@
                                           style="height: 200px;">${prize.content}</textarea>
                             </span>
                         </div>
+
                         <div class="" style="text-align: left">
-                            <span >첨부파일</span>
+                            <span>대표이미지</span>
                             <span>
                                 <div class="filebox">
-                                    <input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly="readonly">
+                                    <input class="upload-name2" value="대표이미지" placeholder="대표이미지" readonly="readonly">
+                                    <label for="thumbnailImage">파일선택</label>
+                                    <input type="file" id="thumbnailImage" name="thumbnailFile" required accept="image/*">
+                                </div>
+                            </span>
+                        </div>
+                        <div class="" style="text-align: left">
+                            <span>상품이미지</span>
+                            <span>
+                                <div class="filebox">
+                                    <input class="upload-name" value="상품이미지" placeholder="상품이미지" readonly="readonly">
                                     <label for="file">파일선택</label>
-                                    <input type="file" id="file" name="selectFile" multiple>
+                                    <input type="file" id="file" name="selectFile" multiple accept="image/*">
                                 </div>
                             </span>
                         </div>
@@ -448,6 +560,8 @@
         </div>
     </div>
 
+    <%-- TODO 배송인지 직거래인지에 대한 내용을 jsp칸에 만들어서 추가해야함 --%>
+
     <c:if test="${mode=='update'}">
         <script type="text/javascript">
             $('.delete-file').click(function () {
@@ -473,26 +587,31 @@
         </script>
     </c:if>
 
+
     <script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/se2/js/service/HuskyEZCreator.js"
             charset="utf-8"></script>
     <script type="text/javascript">
         $("#file").on('change', function () {
-            var fileCount = $("#file")[0].files.length;
+            let fileCount = $("#file")[0].files.length;
             $(".upload-name").val(fileCount + "개 파일 선택됨");
         });
 
+        $("#thumbnailImage").on('change', function () {
+            let fileCount = $("#thumbnailImage")[0].files.length;
+            $(".upload-name2").val(fileCount + "개 파일 선택됨");
+        });
 
 
         const subcategories = {};
         // 예제 소분류 데이터
         <c:forEach var="small" items="${category.smallCategory}">
-            if (!subcategories["${small.cbn}"]) {
-                subcategories["${small.cbn}"] = [];
-            }
-            subcategories["${small.cbn}"].push({
-                csn: "${small.csn}",
-                csc: "${small.csc}"
-            });
+        if (!subcategories["${small.cbn}"]) {
+            subcategories["${small.cbn}"] = [];
+        }
+        subcategories["${small.cbn}"].push({
+            csn: "${small.csn}",
+            csc: "${small.csc}"
+        });
         </c:forEach>
 
         document.getElementById('mainCategory').addEventListener('change', function () {
@@ -500,7 +619,7 @@
             const subCategorySelect = document.getElementById('subCategory');
 
             // 기존 옵션 제거
-            subCategorySelect.innerHTML = '<option value="none">선택해주세요</option>';
+            subCategorySelect.innerHTML = '<option value="none">선택</option>';
 
             // 선택된 대분류에 따른 소분류 가져오기
             const selectedSubcategories = subcategories[mainCategoryId] || [];

@@ -46,6 +46,8 @@ public class FreeBoardController {
 	private final StorageService storageService;
 	private final PaginateUtil paginateUtil;
 	private final MyUtil myUtil;
+
+
 	
 	@GetMapping("daily")
 	public String dailyList() throws Exception {

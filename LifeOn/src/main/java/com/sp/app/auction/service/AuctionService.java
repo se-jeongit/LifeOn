@@ -63,7 +63,9 @@ public class AuctionService implements AuctionServiceInterface{
         List<String> prizeImg = mapper.findByPrizeImg(map);
 
         PrizeDetailRep result = mapper.findByPrize(map);
-        mapInToData(map, result.getPnum(), result.getStDate(), result.getEdDate(), result.getPrStatus(), result.getPrice());
+        mapInToData(map, result.getPnum(), result.getStDate(), result.getEdDate(),
+                result.getPrStatus(), result.getPrice(),result.getFinalP());
+
         result.setPrStatus(updatePrizeStatusMethod(map));
 
         result.setUpToDate(result.getUpToDate().substring(0, 16));
@@ -148,18 +150,21 @@ public class AuctionService implements AuctionServiceInterface{
 
     protected  void categoryRepeat(Map<String, Object> map, List<PrizeRep> prizeReps) {
         for (PrizeRep prizeRep : prizeReps) {
-            mapInToData(map, prizeRep.getPnum(), prizeRep.getStDate(), prizeRep.getEdDate(), prizeRep.getPrStatus(), prizeRep.getPrice());
+            mapInToData(map, prizeRep.getPnum(), prizeRep.getStDate(), prizeRep.getEdDate(),
+                    prizeRep.getPrStatus(), prizeRep.getPrice(),prizeRep.getFinalP());
+
             prizeRep.setPrStatus(updatePrizeStatusMethod(map));
         }
     }
 
 
-    protected  void mapInToData(Map<String, Object> map, long pnum, String stDate, String edDate, String prStatus, int price) {
+    protected  void mapInToData(Map<String, Object> map, long pnum, String stDate, String edDate, String prStatus, int price,int fp) {
         map.put("pnum", pnum);
         map.put("stDate", stDate);
         map.put("edDate", edDate);
         map.put("status", prStatus);
         map.put("price", Integer.parseInt(String.valueOf(price))); // price 를 숫자 형식으로 변환
+        map.put("fp", Integer.parseInt(String.valueOf(fp)));
     }
 
 
@@ -173,7 +178,7 @@ public class AuctionService implements AuctionServiceInterface{
                 && updateSchedule.updatePrize(map.get("edDate").toString())) {
             map.put("status", "마감");
             map.put("userId",findByUserId(map));
-
+            // TODO 마감시 Success 테이블에 값이 안들어가는데 아직 체크 안해봄
             updatePrizeStatus(map);
             mapper.insertProductBiddingSuccess(map);
             return "마감";
