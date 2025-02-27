@@ -54,6 +54,35 @@
         font-size: 24px;
         margin-bottom: 15px;
     }
+    
+.sold-out {
+    opacity: 0.5;
+    pointer-events: none;
+    position: relative;
+}
+
+.sold-out-overlay {
+    display: flex;  
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 40px;
+    font-weight: bold;
+    color: blue;  /* 파란색 */
+    background: rgba(255, 255, 255, 0.6); 
+    z-index: 10;
+    text-align: center;
+    padding: 10px;
+    flex-wrap: wrap; 
+}
+
+
+
 </style>
 </head>
 <body>
@@ -88,7 +117,7 @@
             			<td>${dto.ptsc}</td>
             			<td>${dto.cbc} / ${dto.csc}</td>
             			<td>${dto.ptsq}</td>
-            			<td>
+						<td class="${dto.ptsq == 0 ? 'sold-out' : ''}">
 						    <c:choose>
 						        <c:when test="${dto.asRegister == 'Y'}">
 						            <!-- 공동구매 상품 등록이 되어있는 경우 -->
@@ -101,7 +130,13 @@
 						            <button type="button" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register?pnum=${dto.pnum}&ptsq=${dto.ptsq}'" class="btn btn-primary mt-3">공동구매 등록</button>
 						        </c:otherwise>
 						    </c:choose>
+						
+						    <!-- 판매완료 오버레이 (dto.ptsq == 0일 때만 표시) -->
+						    <div class="sold-out-overlay" style="${dto.ptsq == 0 ? 'display:flex;' : 'display:none;'}">
+								판매처리 완료
+						    </div>
 						</td>
+
             		</tr>
             	</c:forEach>
             </tbody>

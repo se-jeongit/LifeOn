@@ -249,5 +249,17 @@ public class ProductManageController {
 	}
 	
 	
+	@GetMapping("saleComplete")
+	public String saleComplete(@RequestParam(name = "pnum") long pnum,
+			@RequestParam(name = "page", defaultValue = "1") String page) {
+		
+		try {
+			service.updateSaleComplete(pnum);
+		} catch (Exception e) {
+			log.info("saleComplete : ", e);
+		}
+		
+		return "redirect:/admin/productManage/list?=" + page;
+	}
 	
 }

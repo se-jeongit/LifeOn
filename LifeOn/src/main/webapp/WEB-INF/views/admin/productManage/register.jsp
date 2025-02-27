@@ -170,8 +170,8 @@ function productRegister(){
     	return;
     }
     
-   // f.action = '${pageContext.request.contextPath}/admin/productManage/${mode}';
-    //f.submit();	
+   f.action = '${pageContext.request.contextPath}/admin/productManage/${mode}';
+   f.submit();	
 
 }
 

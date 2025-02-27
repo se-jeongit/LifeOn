@@ -100,7 +100,11 @@
         border-radius: 5px;
         text-align: center;
     }
-    .recently-viewed h5 {
+    .recently-viewed2 {
+        background: #F7F9FA;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: center;
         font-weight: bold;
     }
     
@@ -129,7 +133,45 @@
     color: #006AFF;
     font-weight: bold;
 }
-  
+ 
+/* product-card2: aside 영역에 맞는 스타일 */
+.recently-viewed .product-card2 {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* 이미지 크기를 적당히 줄여서 보기 좋게 */
+.recently-viewed .product-card2 img {
+    width: 80%;   /* 이미지를 80% 크기로 조정 */
+    height: auto;
+    max-height: 100px;  /* 높이 제한 */
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* 상품 이름 스타일 */
+.recently-viewed .product-card2 .product-name {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: #333;
+}
+
+/* 간단한 가격 표시 */
+.recently-viewed .product-card2 .product-price {
+    font-size: 12px;
+    color: #ff5722;  /* 가격은 오렌지색으로 강조 */
+    margin-top: 5px;
+}
+ 
     
 </style>
 </head>
@@ -173,8 +215,8 @@
 	                    <div class="product-card">
                 			<a href="${articleUrl}?pnum=${dto.pnum}" class="product-card-link">
 	                        <img src="${pageContext.request.contextPath}/uploads/product/${dto.pph}" alt="상품 이미지">
-			            	</a>
 	                        <p class="mt-2 product-name"><strong>${dto.pname}</strong></p>
+			            	</a>
 	                        <div class="product-header">
 							    <p class="product-price"><del><fmt:formatNumber value="${dto.ptp}" type="currency"/></del></p>
 							    <p class="purchase-status ${dto.status eq '마감' ? 'closed-status' : ''}">${dto.status}</p>
@@ -192,10 +234,8 @@
         </section>
         
          <aside class="col-md-2">
+            <h5 class="recently-viewed2">최근 본 상품</h5>
             <div class="recently-viewed">
-                <h5>즐겨찾기</h5>
-                <h5>최근 본 상품</h5>
-                <p>최근 본 상품이 없습니다</p>
             </div>
         </aside>
         
@@ -207,6 +247,7 @@
 <jsp:include page="/WEB-INF/views/layout/footerResources.jsp"/>
 
 <script type="text/javascript">
+
 
 $(document).ready(function () {
     // URL에서 csn 파라미터 가져오기
@@ -315,8 +356,57 @@ $(document).ready(function () {
     });
 });
 
-
 </script>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // 상품 클릭 시 최근 본 상품 저장
+        $('.product-card-link').click(function() {
+            var pname = $(this).find('.product-name').text();  // 상품 이름
+            var pnum = $(this).attr('href').split('=')[1];      // 상품 번호 (URL에서 추출)
+            var imageSrc = $(this).find('img').attr('src');     // 상품 이미지 src
+
+            // 최근 본 상품 로컬 스토리지에 저장
+            var recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+            recentlyViewed.push({ pnum: pnum, pname: pname, image: imageSrc });
+
+            // 최대 5개까지만 저장
+            if (recentlyViewed.length > 5) {
+                recentlyViewed.shift(); // 가장 오래된 상품 삭제
+            }
+
+            localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+
+            // 최근 본 상품을 aside에 갱신
+            updateRecentlyViewed();
+        });
+
+        // 페이지 로드 시 최근 본 상품 불러오기
+        updateRecentlyViewed();
+
+        function updateRecentlyViewed() {
+            var recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+            var $recentlyViewedSection = $('.recently-viewed');
+            $recentlyViewedSection.empty();  // 이전 내용 삭제
+
+            if (recentlyViewed.length === 0) {
+                $recentlyViewedSection.append('<p>최근 본 상품이 없습니다</p>');
+            } else {
+                $.each(recentlyViewed, function(index, product) {
+                    var productHtml = '<div class="product-card2">' +
+                                        '<a href="${pageContext.request.contextPath}/market/together/detail?pnum=' + product.pnum + '" class="product-card-link">' +
+                                        '<img src="' + product.image + '" alt="상품 이미지">' +
+                                        '</a>' +
+                                        '<p class="mt-2 product-name"><strong>' + (product.pname || '상품명 없음') + '</strong></p>' +
+                                        '</div>';
+                    $recentlyViewedSection.prepend(productHtml);
+                });
+            }
+        }
+    });
+</script>
+
 
 
 

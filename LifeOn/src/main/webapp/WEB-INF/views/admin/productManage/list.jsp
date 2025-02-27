@@ -48,6 +48,13 @@
         background-color: #28a745;
         color: white;
     }
+    .disabled-btn {
+	    background-color: #ccc !important;
+	    color: #666 !important;
+	    cursor: not-allowed;
+	    border: 1px solid #aaa;
+	}
+    
     .sidebar {
         width: 250px;
         background: #007bff;
@@ -75,19 +82,66 @@
         font-size: 24px;
         margin-bottom: 15px;
     }
+    
+/* td 내부 요소들을 흐리게 만들고 클릭 방지 */
+.sold-out {
+    opacity: 0.5;
+    pointer-events: none;
+    position: relative;
+}
+
+/* ❌ + 판매처리 완료 텍스트를 td 전체에 꽉 채우기 */
+.sold-out-overlay {
+    display: none;  /* 초기에는 숨김 */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 60px;  /* X 아이콘 크기 */
+    font-weight: bold;
+    color: blue;  /* 파란색 */
+    background: rgba(255, 255, 255, 0.6); /* 반투명 흰 배경 */
+    z-index: 10;
+    text-align: center;
+}
+
+/* "판매처리 완료" 글씨 스타일 */
+.sold-out-overlay span {
+    font-size: 16px;  /* 글자 크기 줄임 */
+    color: blue;  /* 파란색 */
+    font-weight: bold;
+    margin-top: 5px;
+    white-space: nowrap; /* 줄 바꿈 방지 */
+}
+
+
+
+
+    
+    
+    
 </style>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const tabs = document.querySelectorAll(".status-tabs a");
-        /* tabs.forEach(tab => {
-            tab.addEventListener("click", function(e) {
-                e.preventDefault();
-                tabs.forEach(t => t.classList.remove("active"));
-                this.classList.add("active");
-            });
-        }); */
-    });
+
+<script type="text/javascript">
+function markAsSoldOut(pnum) {
+    // 판매완료 버튼 클릭 시 서버에 판매 완료 요청 보내기 (예시: GET 방식)
+    location.href = '${pageContext.request.contextPath}/admin/productManage/saleComplete?pnum=' + pnum;
+
+    // 서버가 처리된 후, 해당 td에 판매완료 효과 적용
+    var td = document.getElementById("product-container-" + pnum);
+    var overlay = document.getElementById("sold-out-overlay-" + pnum);
+
+    // 판매완료 효과 추가
+    td.classList.add("sold-out");  // td에 sold-out 클래스 추가
+    overlay.style.display = "flex";  // ❌ 아이콘과 "판매처리 완료" 보이기
+}
 </script>
+
+
 </head>
 <body>
 
@@ -105,6 +159,7 @@
 		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=bstatus" class="${schType == 'bstatus'?'active':''}">진행중</a>
 		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=cstatus" class="${schType == 'cstatus'?'active':''}">구매성공</a>
 		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=dstatus" class="${schType == 'dstatus'?'active':''}">구매실패</a>
+		    <a href="${pageContext.request.contextPath}/admin/productManage/list?schType=estatus" class="${schType == 'estatus'?'active':''}">판매완료</a>
 		</div>
 		
 
@@ -139,15 +194,38 @@
             			</td>
             			<td>${dto.pttq}개</td>
             			<td>${dto.totalOdq}개</td>
-            			<td>
-            				<button class="btn btn-order" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/update?pnum=${dto.pnum}&ptsq=${dto.ptsq}'">수정하기</button>
-                        	<c:if test="${dto.status eq '구매성공'}">
-    							<button class="btn btn-edit">판매완료</button>
-							</c:if>
-                        	<c:if test="${dto.status ne '구매성공'}">
-							    <button class="btn btn-delete" onclick="if(confirm('진짜 마감처리 하시겠습니까?')) location.href='${pageContext.request.contextPath}/admin/productManage/delete?pnum=${dto.pnum}'">마감처리</button>
-							</c:if>
-            			</td>
+<td class="${dto.status eq '판매완료' ? 'sold-out' : ''}">
+    <button class="btn btn-order" onclick="location.href='${pageContext.request.contextPath}/admin/productManage/update?pnum=${dto.pnum}&ptsq=${dto.ptsq}'">수정하기</button>
+
+    <c:if test="${dto.status eq '구매성공'}">
+        <!-- 판매완료 버튼 클릭 시 서버에서 판매처리 후 td 효과 적용 -->
+        <button class="btn btn-edit" onclick="markAsSoldOut(${dto.pnum})">판매완료</button>
+    </c:if>
+
+    <c:if test="${dto.status ne '구매성공'}">
+        <c:choose>
+            <c:when test="${dto.status eq '진행중'}">
+                <button class="btn btn-delete disabled-btn" disabled title="진행 중인 상품은 마감처리할 수 없습니다.">마감처리</button>
+            </c:when>
+            <c:otherwise>
+                <button class="btn btn-delete"
+                        onclick="if(confirm('진짜 마감처리 하시겠습니까?'))
+                                    location.href='${pageContext.request.contextPath}/admin/productManage/delete?pnum=${dto.pnum}'">
+                    마감처리
+                </button>
+            </c:otherwise>
+        </c:choose>
+    </c:if>
+
+    <div class="sold-out-overlay" style="${dto.status eq '판매완료' ? 'display:flex;' : 'display:none;'}">
+        ❌
+        <span>판매처리 완료</span>
+    </div> 
+</td>
+
+
+
+            			
             		</tr>
             	</c:forEach>
             </tbody>

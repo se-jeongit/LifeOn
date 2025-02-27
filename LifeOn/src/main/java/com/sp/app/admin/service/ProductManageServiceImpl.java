@@ -189,7 +189,23 @@ public class ProductManageServiceImpl implements ProductManageService{
 			log.info("deleteTogetherProduct : ", e);
 		}
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	@Override
+	public void updateSaleComplete(long pnum) throws Exception {
+		try {
+			ProductManage dto = findByPnum(pnum);
+			if(dto == null) {
+				return;
+			}
+			mapper.updateSaleComplete(pnum);
+			mapper.updateSaleStatus(pnum);
+		} catch (Exception e) {
+			log.info("updateSaleComplete : ", e);
+		}
+	}
 
+	
 	@Override
 	public List<ProductManage> listProduct(Map<String, Object> map) {
 		List<ProductManage> list = null;
@@ -295,6 +311,8 @@ public class ProductManageServiceImpl implements ProductManageService{
 		}
 
 	}
+
+
 
 
 

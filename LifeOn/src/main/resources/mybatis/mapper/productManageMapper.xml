@@ -68,6 +68,13 @@
 		WHERE pnum = #{pnum}
 	</delete>
 
+	<update id="updateSaleComplete" parameterType="Long">
+		UPDATE product_together_stock SET ptsq = 0
+		WHERE pnum = #{pnum}
+		
+	</update>
+	
+
 	<select id="dataCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*),0)
 		FROM product_together_stock
@@ -153,6 +160,10 @@
         <when test="schType == 'dstatus'">
             status = '구매실패'
         </when>
+        
+        <when test="schType == 'estatus'">
+            status = '판매완료'
+        </when>
         <otherwise>
         </otherwise>
     </choose>
@@ -195,6 +206,11 @@
 	    AND TO_CHAR(SYSDATE, 'YYYYMMDD') > TO_CHAR(pted, 'YYYYMMDD')
 	</update>
 	
+	<update id="updateSaleStatus" parameterType="Long">
+		UPDATE product_together
+		SET status = '판매완료'
+		WHERE pnum =#{pnum}
+	</update>
 	
 	
 </mapper>

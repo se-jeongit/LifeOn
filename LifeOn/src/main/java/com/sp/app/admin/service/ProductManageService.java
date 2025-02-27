@@ -20,6 +20,8 @@ public interface ProductManageService {
 	public void updateTogetherProduct(ProductManage dto) throws Exception;
 	public void deleteTogetherProduct(long pnum) throws Exception;
 	
+	public void updateSaleComplete(long pnum) throws Exception;
+	
 	public void updateTogtherQuantity(long pnum, int odq);
 	
 	public List<ProductManage> listProduct(Map<String, Object> map);
