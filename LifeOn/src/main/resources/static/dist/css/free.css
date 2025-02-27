@@ -303,3 +303,36 @@ label {
 .reportable td, .reportable th {
 	padding: 10px 15px;
 }
+
+.img-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 50px);
+	grid-gap: 5px;
+}
+
+.img-grid .item {
+    object-fit: cover;
+    width: 50px;
+    height: 50px;
+	cursor: pointer;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+}
+
+.img-box {
+	max-width: 600px;
+
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+}
+.img-box img {
+	width: 50px; height: 50px;
+	margin-right: 5px;
+	flex: 0 0 auto;
+	cursor: pointer;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+}

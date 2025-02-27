@@ -25,9 +25,9 @@ import com.sp.app.common.MyUtil;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.exception.StorageException;
-import com.sp.app.lounge.model.FreeBoard;
+import com.sp.app.lounge.model.FlowBoard;
 import com.sp.app.lounge.model.Reprt;
-import com.sp.app.lounge.service.FreeBoardService;
+import com.sp.app.lounge.service.FlowBoardService;
 import com.sp.app.model.SessionInfo;
 
 import jakarta.annotation.PostConstruct;
@@ -41,8 +41,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping(value = "/lounge2/*")
-public class FreeBoardController {
-	private final FreeBoardService service;
+public class FlowBoardController {
+	private final FlowBoardService service;
 	private final StorageService storageService;
 	private final PaginateUtil paginateUtil;
 	private final MyUtil myUtil;
@@ -51,11 +51,11 @@ public class FreeBoardController {
 	
 	@PostConstruct
 	public void init() {
-		uploadPath = storageService.getRealPath("/uploadPath/tip");
+		uploadPath = storageService.getRealPath("/uploadPath/daily");
 	}
 	
-	@GetMapping("tip")
-	public String tipList(@RequestParam(name = "page", defaultValue = "1") int current_page,
+	@GetMapping("daily")
+	public String dailyList(@RequestParam(name = "page", defaultValue = "1") int current_page,
 			@RequestParam(name = "schType", defaultValue = "all") String schType,
 			@RequestParam(name = "kwd", defaultValue = "") String kwd,
 			Model model,
@@ -85,12 +85,12 @@ public class FreeBoardController {
 			map.put("offset", offset);
 			map.put("size", size);
 			
-			List<FreeBoard> list = service.listBoard(map);
+			List<FlowBoard> list = service.listBoard(map);
 			
 			String cp = req.getContextPath();
 			String query = "page=" + current_page;
-			String listUrl = cp + "tip";
-			String articleUrl = cp + "tip/article";
+			String listUrl = cp + "daily";
+			String articleUrl = cp + "daily/article";
 			
 			if (! kwd.isBlank()) {
 				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
@@ -115,20 +115,20 @@ public class FreeBoardController {
 			model.addAttribute("query", query);
 			
 		} catch (Exception e) {
-			log.info("tipList : ", e);
+			log.info("dailyList : ", e);
 		}
 		
-		return "lounge2/tip/list";
+		return "lounge2/daily/list";
 	}
 	
-	@GetMapping("tip/write")
-	public String writeForm(Model model) throws Exception {
+	@GetMapping("daily/write")
+	public String dailyWriteForm(Model model) throws Exception {
 		model.addAttribute("mode", "write");
-		return "lounge2/tip/write";
+		return "lounge2/daily/write";
 	}
 	
-	@PostMapping("tip/write")
-	public String writeSubmit(FreeBoard dto,
+	@PostMapping("daily/write")
+	public String dailyWriteSubmit(FlowBoard dto,
 			HttpSession session, HttpServletRequest req) throws Exception {
 		
 		try {
@@ -138,7 +138,6 @@ public class FreeBoardController {
 			dto.setId(info.getId());
 			dto.setNickname(info.getNickName());
 			dto.setIpaddr(req.getRemoteAddr());
-			dto.setBdtype("tip");
 			
 			service.insertBoard(dto, uploadPath);
 			
@@ -146,11 +145,11 @@ public class FreeBoardController {
 			log.info("writeSubmit : ", e);
 		}
 		
-		return "redirect:/lounge2/tip";
+		return "redirect:/lounge2/daily";
 	}
 	
-	@GetMapping("tip/article/{psnum}")
-	public String article(
+	@GetMapping("daily/article/{psnum}")
+	public String dailyArticle(
 			@PathVariable(name = "psnum") long num,
 			@RequestParam(name = "page") String page,
 			@RequestParam(name = "schType", defaultValue = "all") String schType,
@@ -168,7 +167,7 @@ public class FreeBoardController {
 			
 			service.updateHitCount(num);
 			
-			FreeBoard dto = Objects.requireNonNull(service.findById(num));
+			FlowBoard dto = Objects.requireNonNull(service.findById(num));
 			
 			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
 			
@@ -180,10 +179,10 @@ public class FreeBoardController {
 			map.put("psnum", num);
 			map.put("num", info.getNum());
 			
-			FreeBoard prevDto = service.findByPrev(map);
-			FreeBoard nextDto = service.findByNext(map);
+			FlowBoard prevDto = service.findByPrev(map);
+			FlowBoard nextDto = service.findByNext(map);
 			
-			List<FreeBoard> listFile = service.listFile(num);
+			List<FlowBoard> listFile = service.listFile(num);
 			
 			boolean isMemberLiked = service.isMemberBoardLiked(map);
 			
@@ -201,18 +200,18 @@ public class FreeBoardController {
 			model.addAttribute("query", query);
 			model.addAttribute("page", page);
 			
-			return "lounge2/tip/article";
+			return "lounge2/daily/article";
 			
 		} catch (NullPointerException e) {
 		} catch (Exception e) {
-			log.info("article : ", e);
+			log.info("dailyArticle : ", e);
 		}
 		
-		return "redirect:/lounge2/tip?" + query;
+		return "redirect:/lounge2/daily?" + query;
 	}
 	
-	@GetMapping("tip/update")
-	public String updateForm(
+	@GetMapping("daily/update")
+	public String dailyUpdateForm(
 			@RequestParam(name = "psnum") long num,
 			@RequestParam(name = "page") String page,
 			Model model,
@@ -221,31 +220,31 @@ public class FreeBoardController {
 		try {
 			SessionInfo info = (SessionInfo) session.getAttribute("member");
 			
-			FreeBoard dto = Objects.requireNonNull(service.findById(num));
+			FlowBoard dto = Objects.requireNonNull(service.findById(num));
 			
 			if (! info.getNickName().equals(dto.getNickname())) {
-				return "redirect:/lounge2/tip?page=" + page;
+				return "redirect:/lounge2/daily?page=" + page;
 			}
 			
-			List<FreeBoard> listFile = service.listFile(num);
+			List<FlowBoard> listFile = service.listFile(num);
 			
 			model.addAttribute("dto", dto);
 			model.addAttribute("listFile", listFile);
 			model.addAttribute("page", page);
 			model.addAttribute("mode", "update");
 			
-			return "lounge2/tip/write";
+			return "lounge2/daily/write";
 			
 		} catch (NullPointerException e) {
 		} catch (Exception e) {
 			log.info("updateForm : ", e);
 		}
 		
-		return "redirect:/lounge2/tip/list?page=" + page;
+		return "redirect:/lounge2/daily/list?page=" + page;
 	}
 	
-	@PostMapping("tip/update")
-	public String updateSubmit(FreeBoard dto,
+	@PostMapping("daily/update")
+	public String dailyUpdateSubmit(FlowBoard dto,
 			@RequestParam(name = "page") String page,
 			HttpSession session) throws Exception {
 		try {
@@ -256,21 +255,21 @@ public class FreeBoardController {
 			service.updateBoard(dto, uploadPath);
 			
 		} catch (Exception e) {
-			log.info("updateSubmit : ", e);
+			log.info("dailyUpdateSubmit : ", e);
 		}
-		return "redirect:/lounge2/tip?page=" + page;
+		return "redirect:/lounge2/daily?page=" + page;
 	}
 	
 	@ResponseBody
-	@PostMapping("tip/deleteFile")
-	public Map<String, ?> deleteFile(@RequestParam(name = "fnum") long fileNum,
+	@PostMapping("daily/deleteFile")
+	public Map<String, ?> dailyDeleteFile(@RequestParam(name = "fnum") long fileNum,
 			HttpSession session) throws Exception {
 		Map<String, Object> model = new HashMap<>();
 		
 		String state = "false";
 		
 		try {
-			FreeBoard dto = Objects.requireNonNull(service.findByFileId(fileNum));
+			FlowBoard dto = Objects.requireNonNull(service.findByFileId(fileNum));
 			
 			service.deleteUploadFile(uploadPath, dto.getSsfname());
 			
@@ -292,8 +291,8 @@ public class FreeBoardController {
 		return model;
 	}
 	
-	@GetMapping("tip/delete")
-	public String deleteBoard(@RequestParam(name = "psnum") long num,
+	@GetMapping("daily/delete")
+	public String dailyDeleteBoard(@RequestParam(name = "psnum") long num,
 			@RequestParam(name = "schType", defaultValue = "all") String schType,
 			@RequestParam(name = "kwd", defaultValue = "") String kwd,
 			@RequestParam(name = "page") String page,
@@ -312,19 +311,19 @@ public class FreeBoardController {
 			service.deleteBoard(num, uploadPath, info.getNickName(), info.getGrade());
 			
 		} catch (Exception e) {
-			log.info("deleteBoard : ", e);
+			log.info("dailyDeleteBoard : ", e);
 		}
 		
-		return "redirect:/lounge2/tip?" + query;
+		return "redirect:/lounge2/daily?" + query;
 	}
 	
-	@GetMapping("tip/download")
-	public ResponseEntity<?> download(
+	@GetMapping("daily/download")
+	public ResponseEntity<?> dailyDownload(
 			@RequestParam(name = "fnum") long fileNum,
 			HttpServletRequest req) throws Exception {
 		
 		try {
-			FreeBoard dto = Objects.requireNonNull(service.findByFileId(fileNum));
+			FlowBoard dto = Objects.requireNonNull(service.findByFileId(fileNum));
 			
 			return storageService.downloadFile(uploadPath, dto.getSsfname(), dto.getCpfname());
 			
@@ -334,7 +333,7 @@ public class FreeBoardController {
 			log.info("download : ", e);
 		}
 		
-		String url = req.getContextPath() + "/lounge2/tip/downloadFailed";
+		String url = req.getContextPath() + "/lounge2/daily/downloadFailed";
 		
 		return ResponseEntity
 				.status(HttpStatus.FOUND)
@@ -342,14 +341,14 @@ public class FreeBoardController {
 				.build();
 	}
 	
-	@GetMapping("tip/downloadFailed")
-	public String downloadFailed() {
+	@GetMapping("daily/downloadFailed")
+	public String dailyDownloadFailed() {
 		return "error/downloadFailure";
 	}
 	
 	@ResponseBody
-	@PostMapping("tip/insertBoardLike")
-	public Map<String, ?> insertBoardLike(
+	@PostMapping("daily/insertBoardLike")
+	public Map<String, ?> dailyInsertBoardLike(
 			@RequestParam(name = "psnum") long num,
 			@RequestParam(name = "memberLiked") boolean memberLiked,
 			HttpSession session) {
@@ -386,9 +385,9 @@ public class FreeBoardController {
 		return model;
 	}
 	
-	@PostMapping("tip/boardBlind")
+	@PostMapping("daily/boardBlind")
 	@ResponseBody
-	public Map<String, Object> boardBlind(Reprt dto, HttpSession session) {
+	public Map<String, Object> dailyBoardBlind(Reprt dto, HttpSession session) {
 		Map<String, Object> model = new HashMap<>();
 		
 		String state = "true";
@@ -412,9 +411,9 @@ public class FreeBoardController {
 		return model;
 	}
 	
-	@PostMapping("tip/insertReply")
+	@PostMapping("daily/insertReply")
 	@ResponseBody
-	public Map<String, Object> insertReply(FreeBoard dto, HttpSession session) {
+	public Map<String, Object> dailyInsertReply(FlowBoard dto, HttpSession session) {
 		Map<String, Object> model = new HashMap<>();
 		
 		String state = "true";
@@ -434,8 +433,8 @@ public class FreeBoardController {
 		return model;
 	}
 		
-	@GetMapping("tip/listReply")
-	public String listReply(FreeBoard dto,
+	@GetMapping("daily/listReply")
+	public String dailyListReply(FlowBoard dto,
 			@RequestParam(name = "rpnum") long num,
 			@RequestParam(name = "pageNo", defaultValue = "1") int current_page,
 			Model model,
@@ -466,7 +465,7 @@ public class FreeBoardController {
 			map.put("offset", offset);
 			map.put("size", size);
 			
-			List<FreeBoard> listReply = service.listReply(map);
+			List<FlowBoard> listReply = service.listReply(map);
 			
 			String paging = paginateUtil.pagingMethod(current_page, total_page, "listPage");
 			
@@ -477,18 +476,18 @@ public class FreeBoardController {
 			model.addAttribute("paging", paging);
 			
 		} catch (Exception e) {
-			log.info("listReply : ", e);
+			log.info("dailyListReply : ", e);
 			
 			resp.sendError(406);
 			throw e;
 		}
 		
-		return "lounge2/tip/listReply";
+		return "lounge2/daily/listReply";
 	}
 	
 	@ResponseBody
-	@PostMapping("tip/deleteReply")
-	public Map<String, ?> deleteReply(@RequestParam Map<String, Object> paramMap) {
+	@PostMapping("daily/deleteReply")
+	public Map<String, ?> dailyDeleteReply(@RequestParam Map<String, Object> paramMap) {
 		Map<String , Object> model = new HashMap<>();
 		
 		String state = "true";
@@ -504,8 +503,8 @@ public class FreeBoardController {
 	}
 	
 	@ResponseBody
-	@PostMapping("tip/insertReplyLike")
-	public Map<String, ?> insertReplyLike(
+	@PostMapping("daily/insertReplyLike")
+	public Map<String, ?> dailyInsertReplyLike(
 			@RequestParam Map<String, Object> paramMap,
 			HttpSession session) {
 		
@@ -539,8 +538,8 @@ public class FreeBoardController {
 	}
 	
 	@ResponseBody
-	@PostMapping("tip/replyBlind")
-	public Map<String, ?> replyBlind(
+	@PostMapping("daily/replyBlind")
+	public Map<String, ?> dailyReplyBlind(
 			@RequestParam Map<String, Object> paramMap,
 			HttpSession session) {
 		

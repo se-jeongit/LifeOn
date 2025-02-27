@@ -11,8 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FreeBoard {
-	// HYBRID_BOARD
+public class FlowBoard {
+	// FREE_BOARD
     private long psnum; // 글번호
     private long num; // 회원번호
     private String id; // 회원아이디
@@ -23,30 +23,29 @@ public class FreeBoard {
     private String reg_date; // 글등록일
     private String uddate; // 글수정일
     private String ipaddr; // ip주소
-    private String bdtype;
     
     private int blind; // 0: Default, 1: 블라인드처리
     private int hitCount; // 조회수
     
-    // 댓글갯수 HYBRID_BOARD_REPLY
+    // 댓글갯수 FREE_BOARD_REPLY,
     private int replyCount;
-    // 즐겨찾기개수 HYBRID_BOARD_FAV
+    // 즐겨찾기개수 FREE_BOARD_FAV
     private int boardLikeCount;
 	
-    // 파일 HYBRID_FILE
+    // 파일 FREE_BOARD_FILE
     private long fnum; // 파일번호
 	private String ssfname; // 서버에 저장된 파일명
 	private String cpfname; // 클라이언트가 올린 파일명(원본파일명)
 	private List<MultipartFile> selectFile;
 	
-	// 댓글 HYBRID_BOARD_REPLY
+	// 댓글 FREE_BOARD_REPLY
 	private long rpnum; // 댓글번호
 	private String rpcontent; // 댓글내용
 	private String rpreg_date; // 댓글등록일
 	private int rpblind; // 0: Default, 1: 블라인드처리
 	private int rplike; // 0: 싫어요, 1: 좋아요
 	
-	// 댓글좋아요 HYBRID_BOARD_LIKE
+	// 댓글좋아요 FREE_BOARD_LIKE
 	private int likeCount;
 	private int disLikeCount;
 	
