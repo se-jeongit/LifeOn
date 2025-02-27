@@ -3,32 +3,113 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sp.app.rent.mapper.RentMapper">
 
+	<!-- 상품번호 -->
+	<select id="productSeq" resultType="Long">
+		SELECT product_seq.NEXTVAL FROM dual
+	</select>
+	
 	<!-- 대여물품 등록 -->
-<!-- 	<insert id="insertRentProduct" parameterType="com.sp.app.admin.model.ProductManage">
+<!-- 	<insert id="insertRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
 		INSERT INTO PRODUCT(pnum, ptype, pname, pct, pph, csn, num)
 			VALUES (product_seq.NEXTVAL, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
 			
 		INSERT INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
 			VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra}, #{prad}, #{prlp})
+	</insert>
+
+	<insert id="insertRentProductFile" parameterType="com.sp.app.rent.model.RentProduct">
+		INSERT INTO PRODUCT_PICTURE (ppnum, ssfname, ppp, pnum)
+	    	VALUES (product_picture_seq.NEXTVAL, #{ssfname, jdbcType=VARCHAR}, #{ppp, jdbcType=VARCHAR}, #{pnum})
 	</insert> -->
 	
-	<!-- 대여물품 수정 -->
+	<sql id="searchSql">
+		<choose>
+			<!-- 상품명 -->
+			<when test="schType == 'productName'">
+				INSTR(pname, #{kwd}) &gt; 0
+			</when>
+			<!-- 상품등록날짜 -->
+			<when test="schType == 'reg_date'">
+				(TO_CHAR(prd, 'YYYY-MM-DD') = #{kwd}
+			    	OR TO_CHAR(prd, 'YYYYMMDD') = #{kwd})
+			</when>
+			<!-- 대여상태 -->
+			<when test="schType == 'status'">
+				INSTR(prs, #{kwd}) &gt; 0
+			</when>
+			<!-- 거래위치 -->
+			<when test="schType == 'addr'">
+				INSTR(pra, #{kwd}) &gt; 0
+			</when>
+			<otherwise>
+				INSTR(${schType}, #{kwd}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
 	
+	<!-- 대여물품 수정 -->
+<!-- 	<update id="updateRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
+		UPDATE PRODUCT SET pname = #{pname}, pct = #{pct}, pph = #{pph}, csn = #{csn}
+		WHERE pnum = #{pnum}
+		
+		UPDATE PRODUCT_RENT SET prp = #{prp}, prs = #{prs}, pra = #{pra}, prad = #{prlp}, prad = #{prlp}
+		WHERE pnum = #{pnum} 
+	</update> -->
 	
 	<!-- 대여물품 삭제 -->
+<!-- 	<delete id="deleteBoard" parameterType="Long">
+		DELETE FROM PRODUCT
+		WHERE psnum = #{psnum}
+	</delete> -->
 	
+	<!-- 사진파일(리스트, 찾기, 삭제) -->
+<!-- 	<select id="listProductFile" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT fnum, ssfname, cpfname, psnum
+		FROM PRODUCT_PICTURE
+		WHERE psnum = #{psnum}    
+	</select>
+	
+	<select id="findByFileId" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT ppnum, ppp, pnum
+		FROM PRODUCT_PICTURE
+	    WHERE ppnum = #{ppnum}
+	</select>
+	
+	<delete id="deleteRentProductFile" parameterType="Map">
+		DELETE FROM PRODUCT_PICTURE
+		WHERE ${field} = #{pnum}
+	</delete> -->
 	
 	<!-- 리스트에 출력되는 물품개수 -->
-<!-- 	<select id="dataCount" parameterType="map" resultType="Integer">
-		SELECT NVL(COUNT(*),0)
-		FROM PRODUCT_RENT
-		WRERE prs = '대여가능'
-	</select> -->
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM PRODUCT_RENT pr
+		JOIN PRODUCT p ON pr.pnum = p.pnum
+		<where>
+			<if test="kwd != null and kwd != '' ">
+				<include refid="searchSql"/>
+			</if>
+			<!-- 카테고리 관련 WHERE 문 필요 -->
+		</where>
+	</select>
 	
 	<!-- 전체 물품 리스트 -->
+	<select id="listRentProduct" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT p.pnum, pname, pct, pph, p.num, cbn, c.csn, csc, prp, prd, prs, pra, prlp
+		FROM PRODUCT p
+		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
+		JOIN CATEGORY_SMALL c ON p.csn = c.csn
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="searchSql"/>
+			</if>
+		</where>
+		ORDER BY pnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
 	
 	
-	<!-- 선택한 물품 보기 -->
+	<!-- 물품 상세 보기 -->
 	
 	
 	<!-- 이전 물품, 다음 물품 -->
@@ -36,16 +117,16 @@
 	
 	<!-- 카테고리 상품 목록 -->
 	<!-- 대분류 카테고리 -->
-<!-- 	<select id="listCategory" resultType="com.sp.app.rent.mapper.RentProduct">
+	<select id="listCategory" resultType="com.sp.app.rent.model.RentProduct">
 		SELECT cbn, cbc
 		FROM CATEGORY_BIG	 
 	</select>
 	
-	소분류 카테고리
-	<select id="listSubCategory" parameterType="long" resultType="com.sp.app.rent.mapper.RentProduct">
+	<!-- 소분류 카테고리 -->
+	<select id="listSubCategory" parameterType="long" resultType="com.sp.app.rent.model.RentProduct">
 		SELECT csn, csc, cbn
 		FROM CATEGORY_SMALL
-		WHERE cbn = #{cbn}	
-	</select> -->
+		WHERE cbn = #{cbn}
+	</select>
 
 </mapper>

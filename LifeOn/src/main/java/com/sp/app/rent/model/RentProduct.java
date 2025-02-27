@@ -13,24 +13,28 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RentProduct {
 	// 상품정보 통합테이블 PRODUCT
-	private long pnum; // 상품번호 // PRODCUT_PICTURE
+	private long pnum; // 상품번호 // PRODUCT_PICTURE
 	private String ptype; // 상품유형 : 물품대여
 	private String pname; // 상품명
 	private String pct; // 상품내용
 	private String pph; // 썸네일사진 : 파일경로저장
+	private MultipartFile pphFile;
 	
 	private long num; // 회원번호
 	
 	// 카테고리 테이블
 	// CATEGORY_BIG
-	private int cbn; // 카테고리 대분류 번호 // CATEGORY_SMALL
+	private long cbn; // 카테고리 대분류 번호 // CATEGORY_SMALL
 	private String cbc; // 카테고리 대분류 상세
 	
 	// CATEGORY_SMALL
-	private int csn; // 카테고리 소분류 번호 // PRODUCT
+	private long csn; // 카테고리 소분류 번호 // PRODUCT
 	private String csc; // 카테고리 소분류 상세
 	
-	// 상품사진 테이블 PRODCUT_PICTURE
+	// 하위 카테고리
+	private List<RentProductSub> listSub;
+	
+	// 상품사진 테이블 PRODUCT_PICTURE
 	private long ppnum; // 상품사진번호
 	private String ppp; // 서버에 저장된 파일경로
 	private List<MultipartFile> selectFile;

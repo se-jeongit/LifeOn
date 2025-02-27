@@ -37,7 +37,7 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 		excludePaths.add("/lounge2/tip");
 		excludePaths.add("/lounge2/daily");
 		
-		excludePaths.add("/market/rent/list");
+		excludePaths.add("/market/rent/main");
 		
 		registry.addInterceptor(new LoginCheckInterceptor())
 			.excludePathPatterns(excludePaths);
