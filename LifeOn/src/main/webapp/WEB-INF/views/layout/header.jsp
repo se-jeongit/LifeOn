@@ -171,7 +171,7 @@
 		});
 	});
 	
-	/*
+	/**
 	document.addEventListener("DOMContentLoaded", function () {
 	    function increaseViewCount(category) {
 	    	let url = '/layout/'+category;
@@ -189,8 +189,8 @@
 	        });
 	    });
 	});
+	**/
 	
-	*/
 	
 </script>
 
