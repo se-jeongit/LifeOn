@@ -13,4 +13,7 @@ public interface VisitorLogService {
 	
 	//회원 연령대
 	List<Map<String, Object>> MemberAgeDistribution();
+	
+	//남녀 성비
+	List<Map<String, Object>> getGenderRatio();
 }

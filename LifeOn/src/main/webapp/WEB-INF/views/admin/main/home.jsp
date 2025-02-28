@@ -150,95 +150,117 @@
     });
 	
 	
-	document.addEventListener("DOMContentLoaded", function () {
-	    // 회원 연령대 (ECharts)
-	    var ageChart = echarts.init(document.getElementById('ageChart'));
+	document.addEventListener("DOMContentLoaded", function() {
+		//회원 연령대 (ECharts)
+		var ageChart = echarts.init(document.getElementById('ageChart'));
+		
+		// 서버에서 연령대 데이터 가져오기
+		fetch('/admin/main/memberAgeDistribution')
+			.then(response => response.json())
+			.then(data => {
+				//서버에서 받은 데이터를 차트 형식에 맞게 변환
+				const ageLabels = data.map(item => item.AGE_GROUP); 
+				const ageValues = data.map(item => item.COUNT);
+				 var option = {
+			                title: {
+			                    text: '회원 연령대 분포'
+			                },
+			                tooltip: {
+			                    trigger: 'axis'
+			                },
+			                xAxis: {
+			                    type: 'category',
+			                    data: ageLabels
+			                },
+			                yAxis: {
+			                    type: 'value'
+			                },
+			                series: [
+			                    {
+			                        name: '회원 수',
+			                        data: ageValues,
+			                        type: 'line',
+			                        smooth: true,
+			                        itemStyle: {
+			                            color: '#007bff'
+			                        }
+			                    }
+			                ]
+			            };
 
-	    var option = {
-	        title: {
-	            text: ''
-	        },
-	        tooltip: {
-	            trigger: 'axis'
-	        },
-	        xAxis: {
-	            type: 'category',
-	            data: ['10대', '20대', '30대', '40대', '50대', '60대', '70대이상']
-	        },
-	        yAxis: {
-	            type: 'value'
-	        },
-	        series: [
-	            {
-	                data: [150, 230, 224, 218, 135, 147, 260],
-	                type: 'line'
-	            }
-	        ]
-	    };
-
-	    ageChart.setOption(option);
-
-	    // 창 크기 변경 시 차트 크기 자동 조정
-	    window.addEventListener('resize', function() {
+			            ageChart.setOption(option);
+			})
+			.catch(error => console.error('연령대 데이터 가져오기 실패:', error));
+		window.addEventListener('resize', function() {
 	        ageChart.resize();
 	    });
 	});
 	
-	
-	
 	document.addEventListener("DOMContentLoaded", function () {
-	    // 남녀 성비 (ECharts)
 	    var genderChart = echarts.init(document.getElementById('genderChart'));
 
-	    var option = {
-	        tooltip: {
-	            trigger: 'item'
-	        },
-	        legend: {
-	            top: '5%',
-	            left: 'center'
-	        },
-	        series: [
-	            {
-	                name: '회원 성비',
-	                type: 'pie',
-	                radius: ['40%', '70%'], // 도넛 형태
-	                avoidLabelOverlap: false,
-	                itemStyle: {
-	                    borderRadius: 10,
-	                    borderColor: '#fff',
-	                    borderWidth: 2
+	    fetch('/admin/main/genderRatio')
+	        .then(response => response.json())
+	        .then(data => {
+	            console.log("📌 남녀 성비 데이터:", data); // JSON 데이터 확인
+
+	            // 📌 데이터 변환
+	            const genderLabels = data.map(item => item.GENDER_GROUP);
+	            const genderValues = data.map(item => item.COUNT);
+
+	            var option = {
+	                tooltip: {
+	                    trigger: 'item'
 	                },
-	                label: {
-	                    show: false,
-	                    position: 'center'
+	                legend: {
+	                    top: '5%',
+	                    left: 'center'
 	                },
-	                emphasis: {
-	                    label: {
-	                        show: true,
-	                        fontSize: 20,
-	                        fontWeight: 'bold'
+	                series: [
+	                    {
+	                        name: '회원 성비',
+	                        type: 'pie',
+	                        radius: ['40%', '70%'], // 도넛 형태
+	                        avoidLabelOverlap: false,
+	                        itemStyle: {
+	                            borderRadius: 10,
+	                            borderColor: '#fff',
+	                            borderWidth: 2
+	                        },
+	                        label: {
+	                            show: false,
+	                            position: 'center'
+	                        },
+	                        emphasis: {
+	                            label: {
+	                                show: true,
+	                                fontSize: 20,
+	                                fontWeight: 'bold'
+	                            }
+	                        },
+	                        labelLine: {
+	                            show: false
+	                        },
+	                        data: genderLabels.map((label, index) => ({
+	                            name: label,
+	                            value: genderValues[index]
+	                        }))
 	                    }
-	                },
-	                labelLine: {
-	                    show: false
-	                },
-	                data: [
-	                    { value: 1048, name: '남자' }, // 변경된 부분
-	                    { value: 735, name: '여자' }  // 변경된 부분
 	                ]
-	            }
-	        ]
-	    };
+	            };
 
-	    genderChart.setOption(option);
+	            genderChart.setOption(option);
+	        })
+	        .catch(error => console.error('남녀 성비 데이터 가져오기 실패:', error));
 
-	    // 창 크기 변경 시 차트 크기 자동 조정
+	    // 📌 창 크기 변경 시 차트 크기 자동 조정
 	    window.addEventListener('resize', function() {
 	        genderChart.resize();
 	    });
 	});
 	
+	/*
+	//카테고리별 조회수 
 	document.addEventListener("DOMContentLoaded", function () {
 	    // 초기 데이터 생성
 	    const data = [];
@@ -318,7 +340,46 @@
 	        categoryChart.resize();
 	    });
 	});
-	
+	*/
+	 document.addEventListener("DOMContentLoaded", function () {
+         var categoryChart = echarts.init(document.getElementById('categoryChart'));
+
+         function updateCategoryChart() {
+             fetch('/admin/main/viewCounts')
+                 .then(response => response.json())
+                 .then(data => {
+                     console.log("📌 카테고리별 조회수:", data);
+
+                     // 📌 데이터 변환
+                     const categories = Object.keys(data);
+                     const viewCounts = Object.values(data);
+
+                     var option = {
+                         xAxis: {
+                             type: 'category',
+                             data: categories
+                         },
+                         yAxis: {
+                             type: 'value'
+                         },
+                         series: [
+                             {
+                                 name: '조회수',
+                                 type: 'bar',
+                                 data: viewCounts
+                             }
+                         ]
+                     };
+
+                     categoryChart.setOption(option);
+                 })
+                 .catch(error => console.error('카테고리별 조회수 데이터 가져오기 실패:', error));
+         }
+
+         // ✅ 차트 업데이트 실행
+         updateCategoryChart();
+
+     });
 	
 	
 	</script>

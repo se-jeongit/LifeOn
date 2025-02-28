@@ -51,24 +51,24 @@
 		<!-- 카테고리 메뉴 -->
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav flex-nowrap">
-				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="/">홈</a>
+				<li class="nav-item" >
+					<a class="nav-link" data-category="home" aria-current="page" href="/">홈</a>
 				</li>
 				
-				<li class="nav-item">
-					<a class="nav-link" href="<c:url value='/lounge1/room'/>">라운지</a>
+				<li class="nav-item" >
+					<a class="nav-link" data-category="rounge"  href="<c:url value='/lounge1/room'/>">라운지</a>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="<c:url value='/market/together/main'/>">마켓</a>
+				<li class="nav-item" >
+					<a class="nav-link" data-category="market" href="<c:url value='/market/together/main'/>">마켓</a>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="<c:url value='/city/meeting/main'/>">지역정보</a>
+				<li class="nav-item" >
+					<a class="nav-link" data-category="regioninfo" href="<c:url value='/city/meeting'/>">지역정보</a>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="<c:url value='/policy/list'/>">정책정보</a>
+				<li class="nav-item" >
+					<a class="nav-link" data-category="policyinfo" href="<c:url value='/policy/list'/>">정책정보</a>
 				</li>
 			</ul>
 		</div>
@@ -170,7 +170,26 @@
 			
 		});
 	});
-		
+	
+	
+	document.addEventListener("DOMContentLoaded", function () {
+	    function increaseViewCount(category) {
+	    	let url = '/layout/'+category;
+	        fetch(url, { method: 'POST' })
+	            .then(() => console.log(`📌 ${category} 조회수 증가`))
+	            .catch(error => console.error('조회수 증가 실패:', error));
+	    }
+
+	    // ✅ `<li>` 클릭 시 조회수 증가
+	    document.querySelectorAll(".nav-link").forEach(item => {
+	        item.addEventListener("click", function (event) {
+	            event.preventDefault(); // 기본 링크 동작 방지 (href 이동 X)
+	            const category = this.dataset.category;
+	            increaseViewCount(category);
+	        });
+	    });
+	});
+	
 </script>
 
 <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="false" aria-labelledby="loginModalLabel" aria-hidden="true">
