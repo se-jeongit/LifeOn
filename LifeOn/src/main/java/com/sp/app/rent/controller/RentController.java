@@ -1,6 +1,5 @@
 package com.sp.app.rent.controller;
 
-import java.awt.print.Printable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -10,18 +9,19 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
+import com.sp.app.model.SessionInfo;
 import com.sp.app.rent.model.RentProduct;
 import com.sp.app.rent.service.RentService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,7 +58,7 @@ public class RentController {
 			kwd = URLDecoder.decode(kwd, "utf-8");
 			
 			List<RentProduct> listCategory = service.listCategory(); 
-			 List<RentProduct> listSubCategory = service.listSubCategory(categoryNum);
+			List<RentProduct> listSubCategory = service.listSubCategory(categoryNum);
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("cbn", categoryNum);
@@ -121,21 +121,31 @@ public class RentController {
 		return "market/rent/main";
 	}
 	
-	@ResponseBody
-	@GetMapping("main/{cbn}")
-	public Map<String, ?> listSubCategory(
-			@PathVariable(name = "cbn") long categoryNum) throws Exception {
-		Map<String, Object> model = new HashMap<String, Object>();
+	@GetMapping("write")
+	public String writeForm(Model model) throws Exception {
+		model.addAttribute("mode", "write");
+		return "market/rent/write";
+	}
+	
+	@PostMapping("write")
+	public String writeSubmit(RentProduct dto,
+			Model model, HttpSession session, HttpServletRequest req) throws Exception {
 		
 		try {
-			List<RentProduct> listSubCategory = service.listSubCategory(categoryNum);
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
 			
-			model.put("listSubCategory", listSubCategory);
+			dto.setNum(info.getNum());
+			
+			List<RentProduct> listCategory = service.listCategory();
+			
+			model.addAttribute("listCategory", listCategory);
+			
+			service.insertRentProduct(dto, uploadPath);
 			
 		} catch (Exception e) {
-			log.info("listSubCategory : ", e);
+			log.info("writeSubmit : ", e);
 		}
 		
-		return model;
+		return "redirect:/market/rent/main";
 	}
 }

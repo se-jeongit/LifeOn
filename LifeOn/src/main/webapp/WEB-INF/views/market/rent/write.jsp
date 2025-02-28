@@ -9,9 +9,43 @@
 <title>LifeOn</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/market.css" type="text/css">
 
+<script type="text/javascript">
+function check() {
+    const f = document.rentForm;
+    let str;
+    
+    str = f.pname.value.trim();
+    if(! str) {
+        alert('물품명을 입력하세요.');
+        f.pname.focus();
+        return false;
+    }
+    
+    oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", [])
+    str = f.pct.value.trim();
+    if(! str || str === '<p><br></p>') {
+        alert('물품상세설명을 입력하세요.');
+        oEditors.getById["ir1"].exec("FOCUS")
+        return false;
+    }
+	
+    str = f.pphFile.value;
+    if(! f.pphFile.value) {
+        alert('썸네일 이미지를 등록해주세요.');
+        f.pphFile.focus();
+        return false;
+    }
+
+    f.action = '${pageContext.request.contextPath}/market/rent/${mode}';
+    
+    return true;
+}
+</script>
 </head>
 <body>
 
@@ -20,141 +54,135 @@
 	<jsp:include page="/WEB-INF/views/market/layout/menu.jsp"/>
 </header>
 	
-<script type="text/javascript">
-function check() {
-    const f = document.freeForm;
-    let str;
-    
-    str = f.subject.value.trim();
-    if(! str) {
-        alert('제목을 입력하세요.');
-        f.subject.focus();
-        return false;
-    }
-    
-	if(f.subject.length > 300) {
-		alert('제목은 30자 이하만 가능합니다.');
-		f.subject.focus();
-		return false;
-	}
-
-    str = f.content.value.trim();
-    if(! str || str === '<p><br></p>') {
-        alert('내용을 입력하세요.');
-        f.content.focus();
-        return false;
-    }
-    
-	if(f.content.length > 300) {
-		alert('내용은 약 1300자 이하만 가능합니다.');
-		f.content.focus();
-		return false;
-	}
-
-    f.action = '${pageContext.request.contextPath}/lounge2/tip/${mode}';
-    f.submit();
-    // return true;
-}
-</script>
-	
 <main class="min-vh-100">
 	<!-- 배너 -->
     <div class="body-title">
-    	<em style="font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">알짜배기 팁! 생활 속 아이디어를 공유해요!</em>
+    	<em style="font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">방치되고 있는 물건을 빌려주세요!</em>
 	</div>
 	
 	<div class="body-container">
-		<div class="body-content" style="justify-content: center;">
-			
-			<div class="main_content" style="width: 40%">
-				<form name="freeForm" class="freeForm" method="post" enctype="multipart/form-data">
-					<table class="table write-form">
-						<tr>
-							<td scope="row" style="vertical-align: middle;">제&emsp;목</td>
-							<td>
-								<input type="text" name="subject" maxlength="100" class="free-control" placeholder="제목을 작성해주세요." value="${dto.subject}">
-								<input type="hidden" class="form-control-plaintext" value="${sessionScope.member.nickName}">
-							</td>
-						</tr>
-	
-						<tr>
-							<td scope="row" style="padding-top: 20px;">내&emsp;용</td>
-							<td>
-								<textarea name="content" id="ir1" placeholder="내용을 작성해주세요." class="free-control" style="width: 100%; height: 400px;">${dto.content}</textarea>
-							</td>
-						</tr>
+		<div class="rent_container">
+			<form name="rentForm" class="rentForm" method="post" enctype="multipart/form-data">
+				<table class="table rent_table">
+					<tr>
+						<td scope="row">물품명</td>
+						<td colspan="2">
+							<div>
+								<input type="text" name="pname" maxlength="100" class="rent-control" placeholder="물품명을 입력해주세요" value="${dto.pname}">
+								<input type="hidden" class="form-control-plaintext" value="${sessionScope.member.num}">
+	                        </div>
+						</td>
 						
-						<tr>
-							<td scope="row" style="vertical-align: middle;">첨부파일</td>
-							<td>
-							<div class="filebox">
-								<input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly="readonly">
-							    <label for="file">파일선택</label> 
-							    <input type="file" id="file" name="selectFile" multiple>
-							</div>
-							</td>
-						</tr>
-						
-						<c:if test="${mode == 'update'}">
-							<c:forEach var="vo" items="${listFile}">
-								<tr> 
-									<td scope="row" style="vertical-align: middle;">첨부된파일</td>
-									<td>
-										<p class="free-control">
-											<span class="delete-file" data-fileNum="${vo.fnum}"><i class="bi bi-trash"></i></span> 
-											${vo.cpfname}
-										</p>
-									</td>
-								  </tr>
-							</c:forEach>
-						</c:if>
-					</table>
+	                   	<td>
+	                        <div style="display: flex; justify-content: flex-start;">
+		                        <select class="rent-select">
+			                    	<option value="" disabled selected>대분류 선택</option>
+		                        	<c:forEach var="main" items="${listCategory}">
+			                            <option value="">${main.cbc}</option>
+			                    	</c:forEach>
+	                        	</select>
+		                        <select class="rent-select">
+		                            <option value="" disabled selected>소분류 선택</option>
+		                            <c:forEach var="main" items="${listCategory}">
+		                          		<c:forEach var="sub" items="${main.listSub}">
+		                            		<option value="">${sub.csc}</option>
+		                            	</c:forEach>
+		                            </c:forEach>
+		                        </select>
+	                        </div>
+						</td>
+					</tr>
+
+					<tr>
+						<td scope="row" style="vertical-align: top; padding-top: 20px;">상세설명</td>
+						<td colspan="3">
+							<textarea name="pct" id="ir1" placeholder="물품상세설명을 작성해주세요." class="form-control" style="width: 100%; height: 400px;">${dto.pct}</textarea>
+						</td>
+					</tr>
 					
-					<table class="table table-borderless">
-	 					<tr>
-							<td class="text-center">
-								<button type="button" class="ssbtn" onclick="check();">${mode=='update'?'수정완료':'등록완료'}&nbsp;<i class="bi bi-check2"></i></button>
-								<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/tip';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
-
-								<c:if test="${mode == 'update'}">
-									<input type="hidden" name="num" value="${dto.num}">
-									<input type="hidden" name="psnum" value="${dto.psnum}">
-									<input type="hidden" name="page" value="${page}">
-								</c:if>
+					<tr>
+						<td scope="row" style="vertical-align: top; padding-top: 20px;">썸네일이미지</td>
+						<td width="10%" style="vertical-align: top;">
+							<div class="thumbnail-wrap">
+								<div class="thumbnail">
+								 	<img src=""  class="thumbnailImage" name="thumbnailImage" id="thumbnailImage" alt="썸네일">
+			                        <input type="file" name="pphFile" id="pphFile" accept="image/*" style="display: none;">
+								</div>
+							</div>
+						</td>
+						<td scope="row" width="15%" style="vertical-align: top; padding-top: 20px;">추가이미지</td>
+						<td colspan="3">
+							<div class="img-grid"><img class="item img-add rounded" src="${pageContext.request.contextPath}/dist/images/add_photo.png"></div>
+							<input type="file" name="selectFile" accept="image/*" multiple style="display: none;" class="rent-control">
+						</td>
+					</tr>
+					
+					<tr>
+					</tr>
+					
+					<c:if test="${mode=='update'}">
+						<tr>
+							<td scope="row">등록이미지</td>
+							<td colspan="3"> 
+								<div class="img-box">
+									<c:forEach var="vo" items="${listFile}">
+										<img src="${pageContext.request.contextPath}/uploadPath/rent/${vo.ppp}"
+											class="delete-img"
+											data-fileNum="${vo.ppnum}">
+									</c:forEach>
+								</div>
 							</td>
 						</tr>
-					</table>
-				</form>
-			</div>
-
+					</c:if>
+					
+				</table>
+				
+				<table class="table table-borderless">
+					<tr>
+						<td class="text-center" colspan="3">
+							<button type="button" class="ssbtn" onclick="check();">${mode=='update'?'수정완료':'등록완료'}&nbsp;<i class="bi bi-check2"></i></button>
+							<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/market/rent/main';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
+	
+							<c:if test="${mode == 'update'}">
+								<input type="hidden" name="num" value="${dto.num}">
+								<input type="hidden" name="psnum" value="${dto.psnum}">
+								<input type="hidden" name="page" value="${page}">
+							</c:if>
+						</td>
+					</tr>
+				</table>
+			</form>
 		</div>
 	</div>
-	
-	<c:if test="${mode=='update'}">
-		<script type="text/javascript">
-			$('.delete-file').click(function(){
-				if(! confirm('선택한 파일을 삭제 하시겠습니까 ? ')) {
+</main>
+
+<c:if test="${mode=='update'}">
+	<script type="text/javascript">
+		$(function(){
+			$('.delete-img').click(function(){
+				if(! confirm('이미지를 삭제 하시겠습니까 ?')) {
 					return false;
 				}
 				
-				let $tr = $(this).closest('tr');
-				let fnum = $(this).attr('data-fileNum');
-				let url = '${pageContext.request.contextPath}/lounge2/tip/deleteFile';
-				
+				let $img = $(this);
+				let ppnum = $img.attr('data-fileNum');
+				let url = '${pageContext.request.contextPath}/market/rent/deleteFile';
+
 				$.ajaxSetup({ beforeSend: function(e) { e.setRequestHeader('AJAX', true); } });
-				$.post(url, {fnum: fnum}, function(data){
-					$($tr).remove();
+				$.post(url, {ppnum:ppnum}, function(data){
+					$img.remove();
 				}, 'json').fail(function(jqXHR){
 					console.log(jqXHR.responseText);
 				});
+
 			});
-		</script>
-	</c:if>
+		});
+	</script>
+</c:if>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/dist/vendor/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript">
-
-/* var oEditors = [];
+var oEditors = [];
 nhn.husky.EZCreator.createInIFrame({
 	oAppRef: oEditors,
 	elPlaceHolder: 'ir1',
@@ -162,7 +190,7 @@ nhn.husky.EZCreator.createInIFrame({
 	fCreator: 'createSEditor2',
 	fOnAppLoad: function(){
 		// 로딩 완료 후
-		oEditors.getById['ir1'].setDefaultFont('돋음', 12);
+		oEditors.getById['ir1'].setDefaultFont('돋움', 12);
 	},
 });
 
@@ -177,14 +205,128 @@ function submitContents(elClickedObj) {
 		
 	} catch(e) {
 	}
-} */
+}
+</script>
 
-$("#file").on('change', function() {
-    var fileCount = $("#file")[0].files.length;
-    $(".upload-name").val(fileCount + "개 파일 선택됨");
+<script type="text/javascript">
+$(function() {
+    let imgName = '${dto.ppnum}';
+    
+    // 초기 썸네일 설정
+    if (imgName) {
+        let imgSrc = '${pageContext.request.contextPath}/uploadPath/rent/${vo.ppp}';
+        $('#thumbnailImage').attr('src', imgSrc);  // img 태그의 src 속성으로 이미지 설정
+    } else {
+        $('#thumbnailImage').attr('src', '${pageContext.request.contextPath}/dist/images/add_photo.png');
+    }
+    
+    // 이미지 클릭 시 파일 선택 창 열기
+    $('#thumbnailImage').click(function(){
+        $('form[name=rentForm] input[name=pphFile]').trigger('click');
+    });
+    
+    // 파일 선택 후 이미지 변경
+    $('form[name=rentForm] input[name=pphFile]').change(function(){
+        let file = this.files[0];
+        
+        // 파일이 없으면 초기 이미지
+        if (! file) {
+            $('#thumbnailImage').attr('src', '${pageContext.request.contextPath}/dist/images/add_photo.png');
+            return false;
+        }
+        
+        // 이미지 파일만 처리
+        if (! file.type.match('image.*')) {
+            this.focus();
+            return false;
+        }
+        
+        // 선택된 파일을 미리보기로 설정
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            $('#thumbnailImage').attr('src', e.target.result);  // 미리보기 이미지로 설정
+        }
+        reader.readAsDataURL(file);
+    });
+});
+
+window.addEventListener('load', () => {
+	const dateELS = document.querySelectorAll('form input[type=date]');
+	dateELS.forEach( inputEL => inputEL.addEventListener('keydown', e => e.preventDefault()) );
+});
+  
+window.addEventListener('DOMContentLoaded', evt => {
+	var sel_files = [];
+	
+	const viewerEL = document.querySelector('.rent_table .img-grid');
+	const imgAddEL = document.querySelector('.rent_table .img-add');
+	const inputEL = document.querySelector('form[name=rentForm] input[name=selectFile]');
+	
+	imgAddEL.addEventListener('click', ev => {
+		inputEL.click();
+	});
+	
+	inputEL.addEventListener('change', ev => {
+		if(! ev.target.files) {
+			let dt = new DataTransfer();
+			for(let f of sel_files) {
+				dt.items.add(f);
+			}
+			document.rentForm.selectFile.files = dt.files;
+			
+	    	return;
+	    }
+		
+        for(let file of ev.target.files) {
+        	sel_files.push(file);
+        	
+        	let node = document.createElement('img');
+        	node.classList.add('item', 'img-item');
+        	node.setAttribute('data-filename', file.name);
+
+        	const reader = new FileReader();
+            reader.onload = e => {
+            	node.setAttribute('src', e.target.result);
+            };
+			reader.readAsDataURL(file);
+        	
+			viewerEL.appendChild(node);
+        }
+		
+		let dt = new DataTransfer();
+		for(let f of sel_files) {
+			dt.items.add(f);
+		}
+		
+		document.rentForm.selectFile.files = dt.files;		
+	});
+	
+	viewerEL.addEventListener('click', (e)=> {
+		if(e.target.matches('.img-item')) {
+			if(! confirm('선택한 파일을 삭제 하시겠습니까 ?')) {
+				return false;
+			}
+			
+			let filename = e.target.getAttribute('data-filename');
+			
+		    for(let i = 0; i < sel_files.length; i++) {
+		    	if(filename === sel_files[i].name){
+		    		sel_files.splice(i, 1);
+		    		break;
+				}
+		    }
+		
+			let dt = new DataTransfer();
+			for(let f of sel_files) {
+				dt.items.add(f);
+			}
+			document.rentForm.selectFile.files = dt.files;
+			
+			e.target.remove();
+		}
+	});	
 });
 </script>
-</main>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
