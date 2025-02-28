@@ -14,5 +14,8 @@ public interface PointRecordMapper {
 	public int totalPoint(long num);
 
 	void insertAuctionPoint(Map<String, Object> map);
-
+	
+	public void insertPointCharge(Map<String, Object> map);
+	public void insertCardPayment(Map<String, Object> map);
+	
 }
