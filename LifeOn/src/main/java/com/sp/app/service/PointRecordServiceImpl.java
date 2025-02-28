@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sp.app.mapper.PointRecordMapper;
 import com.sp.app.model.PointRecord;
@@ -57,6 +59,18 @@ public class PointRecordServiceImpl implements PointRecordService {
 		}
 		
 		return result;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	@Override
+	public void insertChargeAndCard(Map<String, Object> map) {
+		try {
+			mapper.insertPointCharge(map);
+			mapper.insertCardPayment(map);
+		} catch (Exception e) {
+			log.info("insertChargeAndCard : ", e);
+		}
+		
 	}
 
 

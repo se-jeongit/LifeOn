@@ -1,6 +1,5 @@
 package com.sp.app.controller;
 
-import java.sql.Struct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +7,15 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sp.app.common.PaginateUtil;
+import com.sp.app.model.Member;
 import com.sp.app.model.PointRecord;
 import com.sp.app.model.SessionInfo;
+import com.sp.app.service.MemberService;
 import com.sp.app.service.PointRecordService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PointRecordController {
 	private final PointRecordService service;
 	private final PaginateUtil paginateUtil;
+	private final MemberService mservice;
 	
 	@GetMapping("mypage")
 	public String handlePoint(@RequestParam(name = "page", defaultValue = "1") int current_page,
@@ -46,6 +49,12 @@ public class PointRecordController {
 			
 			SessionInfo member = (SessionInfo) session.getAttribute("member");
 			map.put("num", member.getNum());
+			
+			//회원정보 가져오자
+			Member dto = mservice.findById(member.getId());
+			
+			model.addAttribute("dto2", dto);
+			
 			
 			totalPoint = service.totalPoint(member.getNum());
 			dataCount = service.dataCount(map);
@@ -92,5 +101,27 @@ public class PointRecordController {
 		
 		return "mypage/home";
 	}
+	
+	@PostMapping("charge")
+	public String charge(@RequestParam Map<String, Object> paramMap,
+			HttpSession session) {
+		try {
+			int totalPoint = 0;
+			SessionInfo member = (SessionInfo) session.getAttribute("member");
+			paramMap.put("num", member.getNum());
+			
+			totalPoint = service.totalPoint(member.getNum());
+			paramMap.put("totalPoint", totalPoint);
+			
+			service.insertChargeAndCard(paramMap);
+			
+		} catch (Exception e) {
+			log.info("charge : ", e);
+		}
+		
+		return "redirect:/point/mypage";
+	}
+	
+	
 	
 }

@@ -68,5 +68,15 @@
 		VALUES(POINT_RECORD_SEQ.nextval,#{prec},#{pret},#{prep},#{pretp},SYSDATE,#{userId})
 	</update>
 	
+	<insert id="insertPointCharge" parameterType="map">
+		INSERT INTO point_record(prnum, prec, pret, prep, pretp, prepd, num)
+		VALUES (point_record_seq.NEXTVAL,'충전','충전',#{account}, #{totalPoint}+#{account}, SYSDATE, #{num})
+	</insert>
+
+	<insert id="insertCardPayment" parameterType="map">
+		INSERT INTO point_card(pcanum, prnum, pcat, pcad)
+		VALUES (#{authNumber}, point_record_seq.CURRVAL ,#{payMethod},  TO_DATE(#{authDate}, 'YYYY-MM-DD HH24:MI:SS'))
+	</insert>
+	
 	
 </mapper>

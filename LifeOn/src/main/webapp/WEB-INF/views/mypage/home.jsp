@@ -88,7 +88,7 @@
             <div class="sejin-title">포인트 내역</div>
             <div class="sejin-point-box">
                 <div>나의 포인트 <strong>${totalPoint == 0 ? 0 : totalPoint}</strong></div>
-                <button class="btn btn-primary btn-sm">충전하기</button>
+                <a class="btn btn-primary btn-sm" href="javascript:dialogCharge();" title="충전하기">충전하기</a>
             </div>
             <form class="row" name="searchForm">
 	            <div class="sejin-filter">
@@ -117,15 +117,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                    	<c:forEach var="prize" items="${list}" varStatus="status">
+                    	<c:forEach var="dto" items="${list}" varStatus="status">
                     		<tr>
                     			<td>${dataCount - (page-1) * size - status.index}</td>
-                    			<td>${prize.pret}</td>
-                    			<td>${prize.prepd}</td>
-                    			<td>${prize.prec}</td>
-                    			<td>${prize.prevd}</td>
-                    			<td>${prize.prep}</td>
-                    			<td>${prize.pretp}</td>
+                    			<td>${dto.pret}</td>
+                    			<td>${dto.prepd}</td>
+                    			<td>${dto.prec}</td>
+                    			<td>${dto.prevd}</td>
+                    			<td>${dto.prep}</td>
+                    			<td>${dto.pretp}</td>                   			
                     		</tr>
                     	</c:forEach>
                     </tbody>
@@ -138,7 +138,10 @@
     </div>
 </main>
 
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script type="text/javascript">
+
+
 
 function searchList(){
 	const f = document.searchForm;
@@ -153,7 +156,111 @@ function searchList(){
 	
 }
 
+
+function dialogCharge(){
+	
+	$('#chargeModal').modal('show');	
+	
+}
+
+var IMP = window.IMP;
+IMP.init("imp63557241");
+function sendCharge(){
+	const f = document.accountForm;
+	
+	let payMethod = ''; // 결제유형
+	let cardName = '';  // 카드 이름
+	let authNumber = ''; // 승인번호
+	let authDate = ''; // 승인 날짜
+	
+	
+	let account = f.account.value;
+	let account_id = 'order_no_000'+  new Date().getTime() + Math.floor(1000 + Math.random() * 9000);
+	let email = '${dto2.email1}@${dto2.email2}';
+	let name = '${dto2.name}';
+	let tel = '${dto2.tel1}-${dto2.tel2}-${dto2.tel3}';
+	let addr = '${dto2.addr1}${dto2.addr1}';
+	let post = '${dto2.post}';
+	
+    IMP.request_pay({
+    	channelKey: "channel-key-9a4ac5fa-ac86-4a08-b419-398c08ec6ed3",
+    	pg : 'html5_inicis.INIpayTest', // 테스트 시 html5_inicis.INIpayTest 기재 
+        pay_method : 'card',
+        merchant_uid: account_id, // 상점에서 생성한 고유 주문번호
+        name : '포인트결제',
+        amount : account,                        
+        buyer_email : email,
+        buyer_name : name,
+        buyer_tel : tel,   // 필수 파라미터
+        buyer_addr : addr,
+        buyer_postcode : post,
+    }, function(resp) { // callback
+            if(resp.success) {
+      
+                 console.log(resp);
+                 
+                 payMethod = resp.pay_method; //point, card  문자열
+                 cardName = resp.card_name || '간편결제'; //문자열
+                 authNumber = resp.paid_at; //승인번호 숫자 
+                 authDate = new Date().toISOString().replace('T', ' ').slice(0, -5); // YYYY-MM-DD HH:mm:ss
+                 
+                 f.payMethod.value = payMethod;
+                 f.cardName.value = cardName;
+                 f.authNumber.value = authNumber;
+                 f.authDate.value = authDate;
+                 
+                 f.action = '${pageContext.request.contextPath}/point/charge';
+                 f.submit();
+                 
+            } else {
+                 alert('fail...');
+                 console.log(resp);
+            }
+    });
+    
+    
+	
+	
+}
+
 </script>
+
+	<div class="modal fade" id="chargeModal" tabindex="-1"
+			data-bs-backdrop="static" data-bs-keyboard="false" 
+			aria-labelledby="loginModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="loginViewerModalLabel">포인트 충전하기</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+	                <div class="p-3">
+	                    <form name="accountForm" action="" method="post" class="row g-3">
+	                    	<div class="mt-0">
+	                    		 <p class="form-control-plaintext">충전할 금액을 입력하세요!</p>
+	                    	</div>
+	                        <div class="mt-0">
+	                            <input type="text" name="account" class="form-control" placeholder="금액">
+	                        </div>
+
+	                        <div>
+	                        <input type="hidden" name="payMethod">
+                			<input type="hidden" name="cardName">
+                			<input type="hidden" name="authNumber">
+                			<input type="hidden" name="authDate">
+
+	                            <button type="button" class="btn btn-primary w-100" onclick="sendCharge();">충전하기</button>
+	                        </div>
+	                    </form>
+	                    <hr class="mt-3">
+	                </div>
+	        
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
