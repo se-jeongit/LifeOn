@@ -28,23 +28,19 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping(value = "/city/*")
+@RequestMapping(value = "/city/meeting/*")
 public class MeetingController {
 	private final MeetingService service;
 	private final StorageService storageService;
 	private final PaginateUtil paginateUtil;
 	private final MyUtil myUtil;
 	
-	@GetMapping("meeting")
-	public String meetingList() throws Exception {
-		return "city/meeting/main";
-	}
 	
 	@GetMapping("main")
 	public String MeetingList(
 			@RequestParam(name = "cbn", defaultValue = "0") long categoryNum,
 			@RequestParam(name = "page", defaultValue = "1") int current_page,
-			@RequestParam(name = "schType", defaultValue = "productName") String schType,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
 			@RequestParam(name = "kwd", defaultValue = "") String kwd,
 			Model model,
 			HttpServletRequest req) throws Exception {
@@ -119,7 +115,7 @@ public class MeetingController {
 		return "city/meeting/main";
 	}
 	
-	@GetMapping("meeting/write")
+	@GetMapping("write")
 	public String writeForm(Model model) throws Exception {
 		List<Meeting> Category = service.listCategory();
 		
@@ -128,7 +124,7 @@ public class MeetingController {
 		return "city/meeting/write";
 	}
 	
-	@PostMapping("meeting/write")
+	@PostMapping("write")
 	public String writeSubmit(Meeting dto,
 			HttpSession session,HttpServletRequest req) throws Exception {
 		

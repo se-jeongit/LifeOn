@@ -77,13 +77,13 @@
           </div>
           <div class="meeting-activate-option">
             <span>모집완료 제외</span>
-            <input type="checkbox" id="toggle" checked hidden />
+            <input type="checkbox" id="toggle" checked hidden= />
             <label for="toggle" class="toggle-switch">
               <span class="toggle-button"></span>
             </label>
           </div>
         </div>
-      </header>
+     
       
       	<div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1280px;">
           <button class="btn" onclick="location.href='${pageContext.request.contextPath}/city/meeting/write';">글쓰기</button>

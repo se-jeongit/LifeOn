@@ -10,7 +10,7 @@
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 </head>
 
 <style type="text/css">
@@ -67,13 +67,9 @@ body {
   font-size: 14px;
 }
 
-.date-picker-container {
-        position: relative; 
-    }
 
 .input-box::placeholder,
-.dropdown::placeholder,
-.date-picker::placeholder {
+.dropdown::placeholder {
   color: #888;
 }
 
@@ -119,7 +115,31 @@ main {
   padding-bottom: 50px; /* 모달과 푸터 사이 간격 */
 }
 </style>
+<script type="text/javascript">
+function check() {
+    const f = document.boardForm;
+    let str;
+	
+    str = f.subject.value.trim();
+    if( !str ) {
+        alert('제목을 입력하세요. ');
+        f.subject.focus();
+        return false;
+    }
 
+    str = f.content.value.trim();
+    if( !str || str === '<p><br></p>') {
+        alert('내용을 입력하세요. ');
+        f.content.focus();
+        return false;
+    }
+
+    f.action =  '${pageContext.request.contextPath}/city/meeting/${mode}';
+    f.submit();
+ 
+}
+
+</script>
 </head>
 <body>
 
@@ -127,7 +147,7 @@ main {
     <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 
-<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;">
+<main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 66px;" action="${pageContext.request.contextPath}/city/main/${bdtype}/write/${bdtype}">
     <div class="container">
     	<div class="body-container">
         <h2> 모임 등록 </h2>
@@ -139,15 +159,14 @@ main {
         <div class="section">
             <label class="label" for="meeting-date">날짜/시간</label>
              <div class="date-picker-container">
-       			 <input type="text" id="meeting-date" class="date-picker" placeholder="YYYY-MM-DD">
-       			 <i id="calendar-icon" class="bi bi-calendar-check calendar-icon"></i>
+       			 <input type="datetime-local" name="meeting-date" id="meeting-date"  class="date-picker" value="${dto.reg_date}">
     		</div>
         </div>
         
         <div class="section">
                 <label for="label">카테고리</label>
                 <select id="bigCategory" name="cbn" class="dropdown" required onchange="categoryCheck();">
-                     <option>지역을 선택하세요</option>
+                     <option value="" disabled selected>카테고리를 선택하세요</option>
                     <c:forEach var="dto" items="${Category}">
                         <option value="${dto.cbn}">${dto.cbc}</option>
                     </c:forEach>
@@ -156,97 +175,103 @@ main {
             
             <div class="section">
             <label class="label" for="status">모집 상태</label>
-	            <select id="status" class="dropdown">
-	                <option>모집중</option>
-	                <option>모집 마감</option>
+	            <select id="status" class="dropdown" name="status">
+	               <option value="" disabled selected>모집 상태</option>
+					<option value="모집 중" ${dto.ies == "모집 중" ? "selected" : ""}>모집 중</option>
+					<option value="모집 종료" ${dto.ies == "모집 종료" ? "selected" : ""}>모집 종료</option>
 	            </select>
 	        </div>
 
         <div class="section">
             <label class="label" for="location">지역</label>
-            <select id="location" class="dropdown">
-                <option>지역을 선택하세요</option>
-                <option>금천구</option>
-                <option>관악구</option>
-                <option>구로구</option>
-                <option>강서구</option>
-                <option>강북구</option>
-                <option>강남구</option>
-                <option>강동구</option>
-                <option>광진구</option>
-                <option>노원구</option>
-                <option>도봉구</option>
-                <option>동작구</option>
-                <option>동대문구</option>
-                <option>마포구</option>
-                <option>서초구</option>
-                <option>송파구</option>
-                <option>성동구</option>
-                <option>성북구</option>
-                <option>서대문구</option>
-                <option>양천구</option>
-                <option>영등포구</option>
-                <option>용산구</option>
-                <option>종로구</option>
-                <option>중구</option>
-                <option>중랑구</option>
+            <select id="location" class="dropdown" name="location">
+            <option value="" disabled selected>지역을 선택하세요</option>
+                <option value="금천구" ${dto.loca == "금천구" ? "selected" : ""}>금천구</option>
+                <option value="관악구" ${dto.loca == "관악구" ? "selected" : ""}>관악구</option>
+                <option value="구로구" ${dto.loca == "구로구" ? "selected" : ""}>구로구</option>
+                <option value="강서구" ${dto.loca == "강서구" ? "selected" : ""}>강서구</option>
+                <option value="강북구" ${dto.loca == "강북구" ? "selected" : ""}>강북구</option>
+                <option value="강남구" ${dto.loca == "강남구" ? "selected" : ""}>강남구</option>
+                <option value="강동구" ${dto.loca == "강동구" ? "selected" : ""}>강동구</option>
+                <option value="광진구" ${dto.loca == "광진구" ? "selected" : ""}>광진구</option>
+                <option value="노원구" ${dto.loca == "노원구" ? "selected" : ""}>노원구</option>
+                <option value="도봉구" ${dto.loca == "도봉구" ? "selected" : ""}>도봉구</option>
+                <option value="동작구" ${dto.loca == "동작구" ? "selected" : ""}>동작구</option>
+                <option value="동대문구" ${dto.loca == "동대문구" ? "selected" : ""}>동대문구</option>
+                <option value="마포구" ${dto.loca == "마포구" ? "selected" : ""}>마포구</option>
+                <option value="서초구" ${dto.loca == "서초구" ? "selected" : ""}>서초구</option>
+                <option value="송파구" ${dto.loca == "송파구" ? "selected" : ""}>송파구</option>
+                <option value="성동구" ${dto.loca == "성동구" ? "selected" : ""}>성동구</option>
+                <option value="성북구" ${dto.loca == "성북구" ? "selected" : ""}>성북구</option>
+                <option value="서대문구" ${dto.loca == "서대문구" ? "selected" : ""}>서대문구</option>
+                <option value="양천구" ${dto.loca == "양천구" ? "selected" : ""}>양천구</option>
+                <option value="영등포구" ${dto.loca == "영등포구" ? "selected" : ""}>영등포구</option>
+                <option value="용산구" ${dto.loca == "용산구" ? "selected" : ""}>용산구</option>
+                <option value="종로구" ${dto.loca == "종로구" ? "selected" : ""}>종로구</option>
+                <option value="중구" ${dto.loca == "중구" ? "selected" : ""}>중구</option>
+                <option value="중랑구" ${dto.loca == "중랑구" ? "selected" : ""}>중랑구</option>
             </select>
         </div>
 
         <div class="section">
             <label class="label" for="detail-location">상세 장소</label>
-            <input type="text" id="detail-location" class="input-box" placeholder="상세 장소를 입력하세요">
+            <input type="text" id="detail-location" class="input-box" value="${dto.loca_d}"  placeholder="상세 장소를 입력하세요">
         </div>
         
 
         <div class="section">
             <label class="label" for="age-group">연령대</label>
-            <select id="age-group" class="dropdown">
-                <option>연령대를 선택하세요</option>
-                <option>상관 없음</option>
-                <option>20대</option>
-                <option>30대</option>
-                <option>40대</option>
-                <option>50대</option>
-                <option>60대 이상</option>
+            <select id="age-group" class="dropdown" name="age-group">
+                <option value="" disabled selected>연령대를 선택하세요</option>
+                <option value="나이 무관" ${dto.age == "나이 무관" ? "selected" : ""}>나이 무관</option>
+                <option value="20대" ${dto.age == "20대" ? "selected" : ""}>20대</option>
+                <option value="30대" ${dto.age == "30대" ? "selected" : ""}>30대</option>
+                <option value="40대" ${dto.age == "40대" ? "selected" : ""}>40대</option>
+                <option value="50대" ${dto.age == "50대" ? "selected" : ""}>50대</option>
+                <option value="60대 이상" ${dto.age == "60대 이상" ? "selected" : ""}>60대 이상</option>
 
             </select>
         </div>
 
         <div class="section">
             <label class="label" for="gender">성별</label>
-            <select id="gender" class="dropdown">
-                <option>성별을 선택하세요</option>
-                <option>상관없음</option>
-                <option>남성</option>
-                <option>여성</option>
+            <select id="gender" class="dropdown" name="gender">
+                <option value="" selected>성별 무관</option>
+				<option value="남자" ${dto.gender == "남자" ? "selected" : ""}>남자</option>
+				<option value="여자" ${dto.gender == "여자" ? "selected" : ""}>여자</option>
             </select>
         </div>
 
         <div class="section">
             <label class="label" for="participants">모집 인원</label>
-            <select id="participants" class="dropdown">
-                <option>모집 인원을 선택하세요</option>
-                <option>1~5명</option>
-                <option>6~10명</option>
-                <option>10명 이상</option>
+            <select id="participants" class="dropdown" name="participants">
+                <option value="" disabled selected>모집 인원을 선택하세요</option>
+                 <option value="1~5명" ${dto.person_c == "1~5명" ? "selected" : ""}>1~5명</option>
+                 <option value="6~10명" ${dto.person_c == "6~10명" ? "selected" : ""}>6~10명</option>
+                 <option value="10명 이상" ${dto.person_c == "10명 이상" ? "selected" : ""}>10명 이상</option>
             </select>
         </div>
 
         <div class="section">
             <label class="label" for="title">제목</label>
-            <input type="text" id="title" class="input-box" placeholder="제목을 입력하세요">
+            <input type="text" id="title" class="input-box" placeholder="제목을 입력하세요" value="${dto.subject}">
         </div>
 
         <div class="section">
             <label class="label" for="description">내용</label>
-            <textarea id="description" class="input-box" rows="4" placeholder="모임에 대해 소개해주세요."></textarea>
+            <textarea id="description" class="input-box" rows="4" placeholder="모임에 대해 소개해주세요.">${dto.content}</textarea>
         </div>
 
         <div class="button-group">
-            <button class="button cancel">취소</button>
-            <button class="button submit">등록하기</button>
-        </div>
+            <button class="button cancel" onclick="location.href='${pageContext.request.contextPath}/city/meeting/'${dto.cbn}';">${mode == "update" ? "수정취소" : "등록취소"}&nbsp;</button>
+            <button class="button submit" onclick="submitContents(this.form);">${mode == "update" ? "수정완료" : "등록완료"}&nbsp;</button>
+       
+			<c:if test="${mode == 'update'}">
+				<input type="hidden" name="num" value="${dto.num}">
+				<input type="hidden" name="psnum" value="${dto.psnum}">
+				<input type="hidden" name="page" value="${page}">
+			</c:if>
+		</div>
     </form>
     </div>
   </div>
@@ -261,20 +286,10 @@ main {
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script> 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const meetingDatePicker = flatpickr("#meeting-date", {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-        time_24hr: true,
-        minuteIncrement: 30,
-        allowInput: true,
-        locale: "ko",
-    });
-   	 // 달력 아이콘 클릭 시 달력 열리도록 설정
-       document.getElementById("calendar-icon").addEventListener("click", function() {
-           meetingDatePicker.open(); // flatpickr 달력 열기
-            });  
-    });
+window.addEventListener('DOMContentLoaded', () => {
+	const dateELS = document.querySelectorAll('form input[type=date]');
+	dateELS.forEach( inputEL => inputEL.addEventListener('keydown', e => e.preventDefault()) );
+});
 
 </script>
 

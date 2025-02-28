@@ -2,23 +2,76 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sp.app.mapper.MeetingMapper">
-	
+	<!--
 	<select id="meetingSeq" resultType="Long">
 		SELECT meeting_seq.NEXTVAL FROM dual
 	</select>
-	<!--
+	-->
 	<insert id="insertBoard" parameterType="com.sp.app.model.Meeting">
-		INSERT INTO GROUP_BOARD (psnum, num, subject, content, bdtype, hitCount, ipaddr, ies, loca, loca_d,
+		INSERT INTO GROUP_BOARD (psnum, num, subject, content, hitCount, ipaddr, ies, loca, loca_d,
 					gender, age, person_c, reg_date, blind)
-		VALUES (product_seq.NEXTVAL, #{num}, #{subject}, #{content}, #{bdtype}, 0, #{ipaddr}, #{ies}, #{loca}, #{loca_d},
+		VALUES (#{psnum}, #{num}, #{subject}, #{content}, 0, #{ipaddr}, #{ies}, #{loca}, #{loca_d},
 				#{gender}, #{age}, #{person_c}, SYSDATE, 0)
 	</insert>
-		-->
+	
 	<!--  -상품번호, 상품유형, 상품명, 상품내용, 사진, 회원번호 -->
 	
 	<select id="listCategory" resultType="com.sp.app.model.Meeting">
 		SELECT cbn, cbc
 		FROM GROUP_CATEGORY	 
+	</select>
+	
+	<sql id="searchSql">
+		<choose>
+			<when test="schType == 'all'">
+				(INSTR(subject, #{kwd}) &gt; 0
+			    	OR DBMS_LOB.INSTR(content, #{kwd}) &gt; 0 )
+			</when>
+			
+			<when test="schType == 'reg_date'">
+				(TO_CHAR(prd, 'YYYY-MM-DD') = #{kwd}
+			    	OR TO_CHAR(prd, 'YYYYMMDD') = #{kwd})
+			</when>
+			
+			<when test="schType == 'status'">
+				INSTR(ies, #{kwd}) &gt; 0
+			</when>
+			
+			<when test="schType == 'loca'">
+				INSTR(loca, #{kwd}) &gt; 0
+			</when>
+			<otherwise>
+				INSTR(${schType}, #{kwd}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM GROUP_BOARD gb
+		JOIN MEMBER m ON hb.num = m.num
+		<where>
+			<if test="kwd != null and kwd != '' ">
+				<include refid="searchSql"/>
+			</if>
+			<!-- 카테고리 관련 WHERE 문 필요 -->
+		</where>
+	</select>
+	
+	<select id="listBoard" parameterType="map" resultType="com.sp.app.model.Meeting">
+		SELECT gb.psnum, m.num, m.id, m.nickname, gb.subject, TO_CHAR(gb.reg_date, 'yyyy-mm-dd') as reg_date,
+		m.grade, m.profile_image, gb.hitCount, NVL(replyCount, 0) replyCount,
+		NVL(boardLikeCount, 0) boardLikeCount, 
+		FROM GROUP_BOARD gb
+		JOIN MEMBER m ON gb.num = m.num	
+		JOIN GROUP_CATEGORY g ON gb.csn = g.csn
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="searchSql"/>
+			</if>
+		</where>
+		ORDER BY gb.pnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 	
 </mapper>
