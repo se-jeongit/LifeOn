@@ -55,7 +55,6 @@
 	margin: 30px 0px;
 	
 	border: 1px solid #e0e0e0;
-	border-radius: 8px;
 	
 	display: inline-table;
 }
@@ -83,7 +82,6 @@
 	height: 262.83px;
 	padding-top: 5px;
 	overflow : hidden;
-	border-radius: 8px;
 	border: 1px solid #e0e0e0;
 	margin: 30px 20px;
 	
@@ -96,7 +94,6 @@
 	height: 262.83px;
 	padding-top: 5px;
 	overflow : hidden;
-	border-radius: 8px;
 	border: 1px solid #e0e0e0;
 	margin: 30px 20px;
 }
@@ -306,14 +303,14 @@ label {
 
 .img-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 50px);
+    grid-template-columns: repeat(auto-fill, 100px);
 	grid-gap: 5px;
 }
 
 .img-grid .item {
     object-fit: cover;
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
 	cursor: pointer;
 	border: 1px solid #e0e0e0;
 	border-radius: 10px;
@@ -329,7 +326,7 @@ label {
 	overflow-x: auto;
 }
 .img-box img {
-	width: 50px; height: 50px;
+	width: 100px; height: 100px;
 	margin-right: 5px;
 	flex: 0 0 auto;
 	cursor: pointer;

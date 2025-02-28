@@ -158,9 +158,9 @@
 .product-grid {
     display: grid;
 /*     grid-template-columns: repeat(3, 1fr); */
-    gap: 20px;
+    gap: 10px;
     
-	grid-template-columns: repeat(4, 200px);
+	grid-template-columns: repeat(4, 1fr);
     justify-content: space-between;
 }
 
@@ -212,4 +212,63 @@
 
 .top_btn:hover {
 	background: #f7f7f7;
+}
+
+.rent_container {
+    max-width: 1280px;
+    margin: 0 auto;
+	display: flex;
+}
+.rentForm {
+	width: 920px;
+	margin: 60px 0 80px;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #e0e0e0;
+}
+
+.rent-control {
+	border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin: 0;
+    vertical-align: baseline;
+    
+    width: 100%;
+    
+    resize: none;
+    min-height: calc(1.5em + .75rem + calc(var(--bs-border-width)* 2));
+}
+
+.rent_table td {
+	vertical-align: middle;
+}
+
+.rent-select {
+	border: 1px solid #e0e0e0;
+    padding: 11px;
+    margin: 0;
+    margin-left: 5px;
+    vertical-align: baseline;
+    width: 50%;
+}
+
+.thumbnail-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.thumbnail {
+	width: 100px;
+	height: 100px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	
+	position: relative;
+	overflow: hidden;
+}
+
+.thumbnailImage {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }

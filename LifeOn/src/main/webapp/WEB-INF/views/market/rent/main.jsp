@@ -53,7 +53,7 @@
 	<!-- 카테고리 타이틀-->
     <div class="category_title" id="category_title">
     	<div>
-        	<h2 style="margin: 0">전체</h2>
+        	<h3 style="margin: 0; font-weight: 500;">전체</h3>
 		</div>
         <div>
             <span>
@@ -67,12 +67,21 @@
 			<aside class="product_search" id="product_search">
 	            <!-- 검색 기능 -->
 	            <div class="search_box" style="display: flex;">
-	                <input type="text" class="search_input" id="search_input" placeholder="물품검색">
+	                <input type="text" class="search_input" id="search_input" placeholder="빌리고 싶은 물건을 찾아보세요.">
 	                <button class="search_btn" id="search_btn">검색</button>
 	            </div>
         	</aside>
         	
 			<div class="product_content">
+			<div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 20px;">
+				<div style="text-align: left;">
+					<h4 style="margin: 0; font-weight: 500;">물품대여</h4>
+					<span style="color: #999;">필요한 물건을 필요한 기간 동안 필려서 사용해보세요.</span>
+				</div>
+				<div>
+					<button class="ssbtn" onclick="location.href='<c:url value='write'/>'">물품등록</button>
+				</div>
+			</div>
 		        <!-- 상품 리스트 -->
 	            <div class="product-grid">
 	                <div class="product-item">
