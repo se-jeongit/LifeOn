@@ -9,26 +9,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LifeOn</title>
 
+    <%-- TODO 진행전, 중, 성공 ,실패 미완 --%>
+
     <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/menu3.css" type="text/css">
     <!-- <script type="text/javascript" src="${pageContext.request.contextPath}/dist/js/menu2.js"></script> -->
     <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
         p {
             margin: 0;
             padding: 0;
         }
 
-        .sejin-table th, .sejin-table td {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
 
-        .sejin-table th {
-            background: #EAEAEA;
-            font-size: 1.2rem;
-        }
+        .btn-seller {
+            width: 300px;
+            padding: 0;
 
+        }
 
         .table {
             width: 100%;
@@ -53,16 +55,79 @@
             border-radius: 5px;
         }
 
-        .low-stock {
-            color: red;
+
+        .wrapper {
+            display: flex;
+            padding: 20px 20px 20px 350px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .table td {
+            border: 1px solid #ddd;
+            padding: 5px 0 5px 0;
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-edit {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-order {
+
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-tabs {
+            display: flex;
+            gap: 15px;
+            font-size: 18px;
             font-weight: bold;
         }
 
-        .thumbnail {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
+        .status-tabs a {
+            text-decoration: none;
+            color: black;
+            padding: 5px 10px;
             border-radius: 5px;
+        }
+
+        .status-tabs a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
         }
 
         .search-date {
@@ -83,6 +148,9 @@
             font-weight: 100;
         }
 
+        .container-seller {
+            width: 1300px;
+        }
 
         .search-date::placeholder {
             color: #c8c8c8;
@@ -100,7 +168,22 @@
             background: rgba(29, 35, 39, 0.38);
             margin-left: 10px;
         }
+
+        .sell-btn {
+            display: flex;
+            padding: 30px 0 30px 0;
+            gap: 10px;
+            align-items: center;
+
+        }
+
     </style>
+
+    <script !src="">
+        function dateSearch() {
+            location.href = "${pageContext.request.contextPath}/mypage/seller/info?stDate=" + $(".search-date:eq(0)").val() + "&edDate=" + $(".search-date:eq(1)").val();
+        }
+    </script>
 
 </head>
 <body>
@@ -109,95 +192,135 @@
     <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 
-<main class="d-flex flex-column min-vh-100" style="padding-top: 54px; padding-left: 210px;">
-    <jsp:include page="/WEB-INF/views/mypage/left.jsp"/>
-    <div class="container d-flex flex-column align-items-center">
+<main class="wrapper">
+    <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
+    <div class="container-seller">
+        <h2>경매 상품목록</h2>
         <div class="d-flex flex-column align-items-start w-100">
             <div>
                 <p style="font-size: 30px; font-weight: 500;">판매내역</p>
             </div>
-            <div>
-                <p style="padding-top: 5px; margin-bottom: 0; font-size: 18px;">판매목록 | 전체 2건</p>
-            </div>
         </div>
-
         <div class="d-flex justify-content-between align-items-center w-100">
             <label style="padding-top: 10px; font-size: 13px;">
-                <input class="search-date" type="text" placeholder=" 시작일"> ~ <input class="search-date" type="text"
-                                                                                    placeholder=" 종료일">
-                <button class="search-date-btn">기간적용</button>
+                <div>
+                    등록일 기반 검색
+                </div>
+                <input class="search-date" type="date" value="${stDate}"> ~
+                <input class="search-date" type="date" value="${edDate}">
+                <button class="search-date-btn" onclick="dateSearch()">기간적용</button>
             </label>
             <div class="d-flex">
-                <label style="padding-top: 3px;">
-                    <select class="sell-select-box">
-                        <option value="all">&nbsp;전체</option>
-                        <option value="auction">&nbsp;경매</option>
-                        <option value="rental">&nbsp;물품대여</option>
-                    </select>
-                </label>
                 <button type="button" class="btn registration-btn"
                         onclick="location.href='<c:url value='/mypage/seller/registration'/>'">상품 등록
                 </button>
             </div>
         </div>
+
         <table class="table">
             <thead>
             <tr>
-                <th>썸네일</th>
-                <th>상품명</th>
-                <th>업체명</th>
-                <th>카테고리 (대 / 소)</th>
-                <th>현재 재고</th>
-                <th>공동구매 등록여부</th>
+                <th>번호</th>
+                <th>경매 상태</th>
+                <th>경매기간</th>
+                <th>상품</th>
+                <th>등록일</th>
+                <th>판매방법</th>
+                <th>비고</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td><img src="${pageContext.request.contextPath}/dist/images/profile.png" alt="상품 이미지"
-                         class="thumbnail"></td>
-                <td>유기농 사과</td>
-                <td>자연농원</td>
-                <td>과일 / 사과</td>
-                <td class="">20 개</td>
-                <td>
-                    <button type="button"
-                            onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'"
-                            class="btn btn-primary mt-3">공동구매 등록
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td><img src="${pageContext.request.contextPath}/dist/images/profile.png" class="thumbnail"></td>
-                <td>신선한 딸기</td>
-                <td>베리팜</td>
-                <td>과일 / 딸기</td>
-                <td class="low-stock">3 개</td>
-                <td>
-                    <button type="button"
-                            onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'"
-                            class="btn btn-primary mt-3">공동구매 등록
-                    </button>
-                </td>
-            </tr>
-            <tr>
-                <td><img src="${pageContext.request.contextPath}/dist/images/profile.png" class="thumbnail"></td>
-                <td>무항생제 계란</td>
-                <td>청정농장</td>
-                <td>유제품 / 계란</td>
-                <td>50 개</td>
-                <td>
-                    <button type="button"
-                            onclick="location.href='${pageContext.request.contextPath}/admin/productManage/register'"
-                            class="btn btn-primary mt-3">공동구매 등록
-                    </button>
-                </td>
-            </tr>
+            <c:forEach var="prize" items="${prizeList}" varStatus="status">
+                <tr>
+                    <td>${dataCount - (page-1) * size - status.index}</td>
+                    <td>[${prize.prStatus}]</td>
+                    <td class="date-check" data-st="${prize.stDate}" data-ed="${prize.edDate}">
+                        시작일 : ${prize.stDate}<br>
+                        종료일 : ${prize.edDate}<br><br>
+                        <p id="date-time">
+
+                        </p>
+                    </td>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/auction/prizeDetail?pnum=${prize.pnum}">
+                            <img src="${pageContext.request.contextPath}/uploads/seller/${prize.thumbnail}" alt="상품 이미지"
+                                 width="50">
+                            <br>${prize.prName}
+                            <br>현재가 : <fmt:formatNumber value="${prize.price}" type="currency"/>
+                            <br>낙찰가 : <fmt:formatNumber value="${prize.finalP}" type="currency"/>
+                        </a>
+                    </td>
+                    <td>${prize.upToDate}</td>
+                    <td>${prize.tradeType}</td>
+                    <td class="btn-seller">
+                        <div class="sell-btn">
+                            <c:if test="${prize.prStatus eq '진행중'}">
+                                <span style="padding-left: 10px;"></span>
+                            </c:if>
+                            <c:if test="${prize.prStatus ne '진행중'}">
+                                <span style="padding-left: 55px;"></span>
+                            </c:if>
+                            <button class="btn btn-order"
+                                    onclick="location.href='${pageContext.request.contextPath}/mypage/seller/seller-update?pnum=${prize.pnum}'">
+                                수정하기
+                            </button>
+                            <c:if test="${prize.prStatus eq '마감'}">
+                                <button class="btn btn-edit">판매완료</button>
+                            </c:if>
+                            <c:if test="${prize.prStatus eq '진행중'}">
+                                <button class="btn btn-delete"
+                                        onclick="if(confirm('진짜 낙찰처리 하시겠습니까?')) location.href='${pageContext.request.contextPath}/mypage/seller/bidding?pnum=${prize.pnum}'">
+                                    낙찰처리
+                                </button>
+                            </c:if>
+                            <c:if test="${prize.prStatus ne '마감'}">
+                                <button class="btn btn-delete"
+                                        onclick="if(confirm('진짜 경매를 취소 하시겠습니까?')) location.href='${pageContext.request.contextPath}/mypage/seller/seller-delete?pnum=${prize.pnum}'">
+                                    경매취소
+                                </button>
+                            </c:if>
+                        </div>
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
         </table>
+        <div class="page-navigation">
+            ${dataCount == 0 ? "상품목록이 없습니다." : paging}
+        </div>
     </div>
 </main>
 
+
 <script type="text/javascript">
+
+    $(function () {
+        $('.date-check').each(function (index, element) {
+            let stDate = $(element).data('st');
+            let edDate = $(element).data('ed');
+            let now = new Date();
+            let austDay = new Date(stDate);
+            let stRemainingTime = new Date(stDate) - now;
+            let edRemainingTime = new Date(edDate) - now;
+
+            if (stRemainingTime > 0) {
+                $(element).find('#date-time').countdown({
+                    until: austDay,
+                    format: 'dHMS',
+                    layout: '<span class="time-content">오픈시간</span> <br>' +
+                        '<span class="time">{dn}일 {hn}시간 {mn}분 {sn}초</span>'
+                });
+            } else if (edRemainingTime > 0) {
+                austDay = new Date(edDate);
+                $(element).find('#date-time').countdown({
+                    until: austDay,
+                    format: 'dHMS',
+                    layout: '<span class="time-content">마감시간</span> <br>' +
+                        '<span class="time">{dn}일 {hn}시간 {mn}분 {sn}초</span>'
+                });
+            }
+        });
+    });
 
 
 </script>

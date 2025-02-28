@@ -1,5 +1,6 @@
 package com.sp.app.mypage.service;
 
+import com.sp.app.auction.response.prize.PrizeDetailRep;
 import com.sp.app.common.StorageService;
 import com.sp.app.exception.StorageException;
 import com.sp.app.mapper.AuctionMapper;
@@ -9,19 +10,17 @@ import com.sp.app.mypage.controller.dto.response.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class SellerService implements SellerServiceInterFace {
 
-    private final AuctionMapper mapper;
+    private final AuctionMapper auctionMapper;
     private final SellerMapper sellerMapper;
     private final StorageService  storageService;
 
@@ -31,18 +30,19 @@ public class SellerService implements SellerServiceInterFace {
 
         CategoryResponse resp = new CategoryResponse();
 
-        resp.setSmallCategory(Optional.ofNullable(mapper.findByAllCategorySmall(new HashMap<>())).orElse(Collections.emptyList()));
-        resp.setBigCategory(Optional.ofNullable(mapper.findByAllCategoryBig()).orElse(Collections.emptyList()));
+        resp.setSmallCategory(Optional.ofNullable(auctionMapper.findByAllCategorySmall(new HashMap<>())).orElse(Collections.emptyList()));
+        resp.setBigCategory(Optional.ofNullable(auctionMapper.findByAllCategoryBig()).orElse(Collections.emptyList()));
 
         return resp;
     }
 
     @Override
+    @Transactional
     public void insertPrize(SellerRequest dto, String uploadPath) throws Exception {
         try {
             //TODO 썸네일 가공작업 해야함
 
-//            long seq = mapper.FreeBoardSeq();
+//            long seq = auctionMapper.FreeBoardSeq();
 //            dto.setPsnum(seq);?????
 
             String startDate;
@@ -51,16 +51,12 @@ public class SellerService implements SellerServiceInterFace {
             int startHour = Integer.parseInt(dto.getStartDateHH());
             int endHour = Integer.parseInt(dto.getEndDateHH());
 
-            if (dto.getStartDateTime().equalsIgnoreCase("pm") && startHour > 12) {
+            if (dto.getStartDateTime().equalsIgnoreCase("pm") && startHour < 12) {
                 startHour += 12;
-            } else if (dto.getStartDateTime().equalsIgnoreCase("am") && startHour <= 12) {
-                startHour = 0;
             }
 
-            if (dto.getEndDateTime().equalsIgnoreCase("pm") && endHour > 12) {
+            if (dto.getEndDateTime().equalsIgnoreCase("pm") && endHour < 12) {
                 endHour += 12;
-            } else if (dto.getEndDateTime().equalsIgnoreCase("am") && endHour <= 12) {
-                endHour = 0;
             }
 
             startDate = String.format("%s %02d:%02d:00", dto.getStartDate(), startHour, Integer.parseInt(dto.getStartDateMM()));
@@ -74,7 +70,7 @@ public class SellerService implements SellerServiceInterFace {
                 String filename = storageService.uploadFileToServer(dto.getThumbnailFile(), uploadPath);
                 dto.setThumbnail(filename);
 
-            //sellerMapper.insertPrize(dto);
+            sellerMapper.insertPrize(dto);
 
             if (! dto.getSelectFile().isEmpty()) {
                 insertFile(dto, uploadPath);
@@ -87,6 +83,54 @@ public class SellerService implements SellerServiceInterFace {
         }
     }
 
+    @Override
+    public List<PrizeDetailRep> findBySellerList(Map<String, Object> map) {
+
+        try {
+
+            return sellerMapper.findBySellerList(map);
+
+        }catch (Exception e) {
+            log.info("findBySellerList : ", e);
+        }
+
+        return null;
+    }
+
+    @Override
+    public int dataCount(Map<String, Object> map)throws Exception {
+        try {
+            return sellerMapper.dataCount(map);
+        }catch (Exception e) {
+            log.info("dataCount : ", e);
+        }
+        return 0;
+    }
+
+    @Override
+    public PrizeDetailRep findBySellerDetail(Map<String, Object> map) {
+        try {
+            return auctionMapper.findByPrize(map);
+        }catch (Exception e) {
+            log.info("findBySellerDetail : ", e);
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public void deleteSeller(long pNum) throws Exception {
+
+        try {
+            sellerMapper.deleteSeller(pNum);
+
+        }catch (Exception e) {
+            log.info("deleteSeller : ", e);
+            throw e;
+        }
+
+    }
+
 
     protected void insertFile(SellerRequest dto, String uploadPath) throws Exception {
         for (MultipartFile mf : dto.getSelectFile()) {
@@ -96,8 +140,8 @@ public class SellerService implements SellerServiceInterFace {
 
                 dto.setPicPath(saveFilename);
 
-                //mapper.updateFile(dto);
-//                sellerMapper.insertFile(dto);
+                //auctionMapper.updateFile(dto);
+                sellerMapper.insertFile(dto);
 
             } catch (NullPointerException e) {
             } catch (StorageException e) {

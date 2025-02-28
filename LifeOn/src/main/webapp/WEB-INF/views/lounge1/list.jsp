@@ -105,30 +105,30 @@
     
       <!-- 글리스트 -->
       <div class="photo-grid">
-        <c:forEach var="dto" items="${list}" varStatus="status">
+        <c:forEach var="prize" items="${list}" varStatus="status">
           <div class="photo-card">
             <div class="mx-3">
-              <div onclick="location.href='${articleUrl}/${dto.psnum}?${query}'">
+              <div onclick="location.href='${articleUrl}/${prize.psnum}?${query}'">
                 <table class="table table-hover m-0">		
-                  <img src="${pageContext.request.contextPath}/uploadPath/lounge1/${dto.ssfname}"> 
-                  <h5 class="ph_subject">${dto.subject}</h5>
+                  <img src="${pageContext.request.contextPath}/uploadPath/lounge1/${prize.ssfname}">
+                  <h5 class="ph_subject">${prize.subject}</h5>
                   <div style="display: flex; align-items: center;">
 					<div class="ph-info" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-						<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+						<img src="${pageContext.request.contextPath}${prize.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
                     </div>
 					<div>
-                      <span class='ph_userName'>${dto.nickname}</span>
+                      <span class='ph_userName'>${prize.nickname}</span>
                       <span>&nbsp;&nbsp;</span>
-                      <span>${dto.reg_date}</span>
+                      <span>${prize.reg_date}</span>
                       </div>
                     </div>
                     <div>
                       <i class="ph_icon bi bi-bookmark"></i>
-                      <span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
+                      <span>${prize.boardLikeCount}&nbsp;&nbsp;</span>
                       <i class="ph_icon bi bi-eye"></i>
-                      <span>${dto.hitCount}&nbsp;&nbsp;</span>
+                      <span>${prize.hitCount}&nbsp;&nbsp;</span>
                       <i class="ph_icon bi bi-chat-dots"></i>
-                      <span>${dto.replyCount}&nbsp;&nbsp;</span>
+                      <span>${prize.replyCount}&nbsp;&nbsp;</span>
                 	</div>
                 </table>
               </div>

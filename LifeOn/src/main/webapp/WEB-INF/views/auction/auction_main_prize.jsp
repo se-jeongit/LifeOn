@@ -33,16 +33,16 @@
             let austDay = new Date(stDate);
             let stRemainingTime = new Date(stDate) - now;
             let edRemainingTime = new Date(edDate) - now;
+
             if (stRemainingTime > 0) {
-                stDate = stDate.substring(0, 16);
                 $(element).find('.prize-name.remaining-time').countdown({
                     until: austDay,
                     format: 'dHMS',
                     layout: prName + '<span class="time-content">오픈시간</span>' +
-                        '<span class="time">' + stDate + '</span>'
+                        '<span class="time">{dn}일 {hn}시간 {mn}분 {sn}초</span>'
                 });
             } else if (edRemainingTime > 0) {
-                let austDay = new Date(edDate);
+                austDay = new Date(edDate);
                 $(element).find('.prize-name.remaining-time').countdown({
                     until: austDay,
                     format: 'dHMS',
@@ -188,7 +188,7 @@
                     <c:forEach var="out" items="${in}">
                         <span class="span-img" data-stdate="${out.stDate}"
                               data-prname="${out.prName}" data-eddate="${out.edDate}" onclick="prizeMove(${out.pnum})">
-                            <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지"
+                            <img src="${pageContext.request.contextPath}/uploads/seller/${out.thumbnail}" alt="상품 이미지"
                                  class="img-prize">
                             <div>
                                 <p class="prize-name remaining-time">

@@ -65,8 +65,8 @@
                 <label for="bigCategory">카테고리 (대)</label>
                 <select id="bigCategory" name="cbn" required onchange="categoryCheck();">
                     <option value="">카테고리를 선택하세요</option>
-                    <c:forEach var="dto" items="${bigCategory}">
-                        <option value="${dto.cbn}">${dto.cbc}</option>
+                    <c:forEach var="prize" items="${bigCategory}">
+                        <option value="${prize.cbn}">${prize.cbc}</option>
                     </c:forEach>
                 </select>
             </div>

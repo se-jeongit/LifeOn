@@ -2,15 +2,15 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
-<c:forEach var="dto" items="${listAnswer}">
+<c:forEach var="prize" items="${listAnswer}">
 	<div class="border-bottom m-1">
 		<div class="row p-1">
 			<div class="col-auto">
 				<div class="row reply-writer">
 					<div class="col-1"><i class="bi bi-person-circle text-muted icon"></i></div>
 					<div class="col ms-2 align-self-center">
-						<div class="name">${dto.nickName}</div>
-						<div class="date">${dto.reg_date}</div>
+						<div class="name">${prize.nickName}</div>
+						<div class="date">${prize.reg_date}</div>
 					</div>
 				</div>
 			</div>
@@ -18,12 +18,12 @@
 				<span class="reply-dropdown"><i class="bi bi-three-dots-vertical"></i></span>
 				<div class="reply-menu">
 					<c:choose>
-						<c:when test="${sessionScope.member.id==dto.userId}">
-							<div class="deleteReplyAnswer reply-menu-item" data-replyNum="${dto.replyNum}" data-parentNum="${dto.parentNum}">삭제</div>
-							<div class="hideReplyAnswer reply-menu-item" data-replyNum="${dto.replyNum}" data-showReply="${dto.showReply}">${dto.showReply==1?"숨김":"표시"}</div>
+						<c:when test="${sessionScope.member.id==prize.userId}">
+							<div class="deleteReplyAnswer reply-menu-item" data-replyNum="${prize.replyNum}" data-parentNum="${prize.parentNum}">삭제</div>
+							<div class="hideReplyAnswer reply-menu-item" data-replyNum="${prize.replyNum}" data-showReply="${prize.showReply}">${prize.showReply==1?"숨김":"표시"}</div>
 						</c:when>
 						<c:when test="">
-							<div class="deleteReplyAnswer reply-menu-item" data-replyNum="${dto.replyNum}" data-parentNum="${dto.parentNum}">삭제</div>
+							<div class="deleteReplyAnswer reply-menu-item" data-replyNum="${prize.replyNum}" data-parentNum="${prize.parentNum}">삭제</div>
 							<div class="blockReplyAnswer reply-menu-item">신고</div>
 						</c:when>
 						<c:otherwise>
@@ -35,8 +35,8 @@
 			</div>
 		</div>
 
-		<div class="p-2 ${dto.showReply==0?'text-primary text-opacity-50':''}">
-			${dto.content}
+		<div class="p-2 ${prize.showReply==0?'text-primary text-opacity-50':''}">
+			${prize.content}
 		</div>
 	</div>
 </c:forEach>

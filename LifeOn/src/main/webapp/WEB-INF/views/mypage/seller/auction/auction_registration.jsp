@@ -240,6 +240,7 @@
 
         });
 
+    //    TODO selectBox 가 업데이트(수정)로 넘어올시 안에 데이터를 넣는 함수가 필요
 
 
     </script>
@@ -292,78 +293,78 @@
         }
 
 
-        // if (!dateSt) {
-        //     alert('시작일을 입력하세요.');
-        //     f.startDate.focus();
-        //     return false;
-        // } else if (stDate < now) {
-        //     alert('시작일은 오늘 이후로 입력하세요.');
-        //     f.startDate.focus();
-        //     return false;
-        // }
-        //
-        // let hh = f.startDateHH.value.trim();
-        // str = f.startDateMM.value.trim();
-        // if (hh < (currentHour % 12 || 12) || (hh === (currentHour % 12 || 12) && str < Math.ceil(currentMinute / 5) * 5 + 5)) {
-        //     alert('시작분은 현재시간보다 10분 이후로 선택하세요.');
-        //     f.startDateMM.focus();
-        //     return false;
-        // }
-        //
-        // str = f.endDate.value.trim();
-        // if (!dateEd) {
-        //     alert('종료일을 입력하세요.');
-        //     f.endDate.focus();
-        //     return false;
-        // } else if (edDate < now) {
-        //     alert('종료일은 오늘 이후로 입력하세요.');
-        //     f.endDate.focus();
-        //     return false;
-        // }
-        //
-        // if (edDate <= stDate) {
-        //     alert('종료일은 시작일보다 늦거나 같을수 없습니다.');
-        //     f.endDate.focus();
-        //     return false;
-        // }
-        //
-        //
-        //
-        //
-        // str = f.sellBox.value.trim();
-        // if (str === 'none') {
-        //     alert('상품의 종류를 선택하세요.');
-        //     f.sellBox.focus();
-        //     return false;
-        // }
-        //
-        // str = f.prPrice.value.trim();
-        // if (!str) {
-        //     alert('가격을 입력하세요.');
-        //     f.prPrice.focus();
-        //     return false;
-        // }
-        //
-        // str = f.mainCategory.value.trim();
-        // if (str === 'none') {
-        //     alert('대분류를 선택하세요.');
-        //     f.mainCategory.focus();
-        //     return false;
-        // }
-        //
-        // str = f.subCategory.value.trim();
-        // if (str === 'none') {
-        //     alert('소분류를 선택하세요.');
-        //     f.subCategory.focus();
-        //     return false;
-        // }
-        //
-        // str = f.content.value.trim();
-        // if (!str || str === '<p><br></p>') {
-        //     alert('내용을 입력하세요.');
-        //     f.content.focus();
-        //     return false;
-        // }
+        if (!dateSt) {
+            alert('시작일을 입력하세요.');
+            f.startDate.focus();
+            return false;
+        } else if (stDate < now) {
+            alert('시작일은 오늘 이후로 입력하세요.');
+            f.startDate.focus();
+            return false;
+        }
+
+        let hh = f.startDateHH.value.trim();
+        str = f.startDateMM.value.trim();
+        if (hh < (currentHour % 12 || 12) || (hh === (currentHour % 12 || 12) && str < Math.ceil(currentMinute / 5) * 5 + 5)) {
+            alert('시작분은 현재시간보다 10분 이후로 선택하세요.');
+            f.startDateMM.focus();
+            return false;
+        }
+
+        str = f.endDate.value.trim();
+        if (!dateEd) {
+            alert('종료일을 입력하세요.');
+            f.endDate.focus();
+            return false;
+        } else if (edDate < now) {
+            alert('종료일은 오늘 이후로 입력하세요.');
+            f.endDate.focus();
+            return false;
+        }
+
+        if (edDate <= stDate) {
+            alert('종료일은 시작일보다 늦거나 같을수 없습니다.');
+            f.endDate.focus();
+            return false;
+        }
+
+
+
+
+        str = f.sellBox.value.trim();
+        if (str === 'none') {
+            alert('상품의 종류를 선택하세요.');
+            f.sellBox.focus();
+            return false;
+        }
+
+        str = f.prPrice.value.trim();
+        if (!str) {
+            alert('가격을 입력하세요.');
+            f.prPrice.focus();
+            return false;
+        }
+
+        str = f.mainCategory.value.trim();
+        if (str === 'none') {
+            alert('대분류를 선택하세요.');
+            f.mainCategory.focus();
+            return false;
+        }
+
+        str = f.subCategory.value.trim();
+        if (str === 'none') {
+            alert('소분류를 선택하세요.');
+            f.subCategory.focus();
+            return false;
+        }
+
+        str = f.content.value.trim();
+        if (!str || str === '<p><br></p>') {
+            alert('내용을 입력하세요.');
+            f.content.focus();
+            return false;
+        }
 
         // str = f.thumbnailFile.value.trim();
         // if (!str) {
@@ -400,14 +401,12 @@
                             <span style="flex-grow: 1;">
                                 <input type="text" name="prName" maxlength="100" class="input-name box-color"
                                        value="${prize.prName}">
-                                <input type="hidden" class="form-control-plaintext"
-                                       value="${sessionScope.member.nickName}">
                             </span>
                             <span style="font-size: 15px">
                                 시작일 :
                                 <label>
                                     <input type="date" name="startDate" class="input-date box-color"
-                                           value="${prize.startDate}" placeholder="">
+                                           value="${prize.stDate}" placeholder="">
                                    <select name="startDateTime" id="stTT" class="tt-select-box box-color">
                                         <option value="am">&nbsp;오전</option>
                                         <option value="pm" selected>&nbsp;오후</option>
@@ -440,7 +439,7 @@
                                 종료일 :
                                  <label>
                                     <input type="date" name="endDate" class="input-date box-color"
-                                           value="${prize.endDate}">
+                                           value="${prize.edDate}">
                                     <select name="endDateTime" id="edTT" class="tt-select-box box-color">
                                         <option value="am">&nbsp;오전</option>
                                         <option value="pm" selected>&nbsp;오후</option>
@@ -462,7 +461,7 @@
                             <span> 상품의 가격
                                 <label>
                                     <input type="text" name="prPrice" maxlength="50" class="input-price box-color"
-                                           value="${prize.prName}">
+                                           value="${prize.price}">
                                     원
                                 </label>
                                 <span style="padding-left: 195px; font-size: 14px;">
@@ -470,8 +469,8 @@
                                     <label>
                                         <select name="dealType" class="select-box box-color">
                                             <option value="none">&nbsp;선택</option>
-                                            <option value="direct">&nbsp;직거래</option>
-                                            <option value="delivery">&nbsp;배송</option>
+                                            <option value="직거래">&nbsp;직거래</option>
+                                            <option value="택배">&nbsp;택배</option>
                                         </select>
                                     </label>
                                 </span>
@@ -499,7 +498,7 @@
                             </label>
                             <span>
                                 <textarea name="content" placeholder="내용을 작성해주세요." class="free-control"
-                                          style="height: 200px;">${prize.content}</textarea>
+                                          style="height: 200px;">${prize.prContent}</textarea>
                             </span>
                         </div>
 
@@ -523,6 +522,7 @@
                                 </div>
                             </span>
                         </div>
+                    <%-- TODO 파일 올렸을때 업데이트관련 수정 필요 --%>
                         <c:if test="${mode == 'update'}">
                             <c:forEach var="vo" items="${listFile}">
                                 <div class="">
@@ -559,8 +559,6 @@
             </div>
         </div>
     </div>
-
-    <%-- TODO 배송인지 직거래인지에 대한 내용을 jsp칸에 만들어서 추가해야함 --%>
 
     <c:if test="${mode=='update'}">
         <script type="text/javascript">

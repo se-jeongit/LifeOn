@@ -139,7 +139,7 @@
     <!--  경매 마감 상품 업데이트  -->
     <update id="updateFinalPrizeStatus" parameterType="map">
         UPDATE PRODUCT_AUCTION
-        SET FP = #{price}, PAS = #{status}
+        SET FP = #{fp}, PAS = #{status}
         WHERE PNUM = #{pnum}
     </update>
 

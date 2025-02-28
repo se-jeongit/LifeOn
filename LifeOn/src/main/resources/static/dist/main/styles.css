@@ -1,0 +1,401 @@
+/* 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+body {
+    background-color: #fff;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 20px 20px 20px;
+}
+
+h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    color: #777;
+}
+
+.placeholder-image {
+    opacity: 0.2;
+    max-width: 100%;
+    height: auto;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-text {
+    font-size: 0.75rem;
+    color: #777;
+}
+
+/* 메인 배너 섹션 */
+.main-banner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.main-banner-left {
+    position: relative;
+    width: 100%;
+    height: 400px; /* 원하는 높이로 조정 */
+    overflow: hidden;
+    background-color: #f5f5f5; /* 기존 배경색 유지 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-banner-left .image-container {
+    width: 100%;
+    margin-top: 0; /* 기존 margin 제거 */
+}
+
+.main-banner-right {
+    background-color: #f5f5f5;
+    padding: 16px;
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-control.left {
+    left: 8px;
+}
+
+.carousel-control.right {
+    right: 8px;
+}
+
+.page-indicator {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.event-title {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+/* 메인 배너 왼쪽 슬라이더 스타일 */
+.image-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+}
+
+.slide {
+    min-width: 100%;
+    transition: transform 0.5s ease;
+}
+
+.slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slide-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.slide-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.slide-content .subtitle {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.slider-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.indicator {
+    width: 30px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.indicator.active {
+    background-color: white;
+}
+
+/* 섹션 공통 스타일 */
+.section {
+    margin-bottom: 40px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.more-btn {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* 1인가구 필 제시함 섹션 */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.product-card {
+    background-color: #f5f5f5;
+    padding: 16px;
+}
+
+.product-info {
+    font-size: 0.75rem;
+}
+
+.product-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.product-description {
+    margin-top: 8px;
+    color: #777;
+}
+
+/* 마감임박 공동구매상품 섹션 */
+.group-buy-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.group-buy-card {
+    background-color: #f5f5f5;
+    padding: 16px;
+    position: relative;
+}
+
+.day-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background-color: white;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.discount {
+    color: #e53e3e;
+    font-weight: bold;
+    font-size: 0.75rem;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #777;
+    font-size: 0.75rem;
+}
+
+/* 지역정보 섹션 */
+
+/* 지역정보 및 추천 지역모임 섹션 */
+.local-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.local-info,
+.local-meetings {
+    background-color: #f9f9f9;
+    padding: 16px;
+    flex: 1;
+}
+
+.local-content {
+    margin-top: 16px;
+}
+
+.local-info h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.local-list,
+.meeting-list {
+    list-style: none;
+}
+
+.local-list li,
+.meeting-list li {
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+}
+
+.local-list li {
+    display: flex;
+    justify-content: space-between;
+}
+
+.meeting-list li p:first-child {
+    font-weight: 500;
+}
+
+/* 추천 지역모임 섹션 */
+
+/* 지역새소식 섹션 */
+.local-news {
+    position: relative;
+    height: 128px;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.news-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+}
+
+.news-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+}
+
+.news-content h3 {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* 광역정보 섹션 */
+.regional-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.regional-card {
+    background-color: #f5f5f5;
+    height: 128px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 반응형 스타일 */
+@media (min-width: 768px) {
+    .main-banner {
+        flex-direction: row;
+    }
+
+    .main-banner-left {
+        flex: 1;
+        height: 400px; /* 원하는 높이로 조정 */
+    }
+
+    .main-banner-right {
+        width: 33.333%;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .group-buy-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .regional-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* 반응형 스타일 수정 */
+    .local-section {
+        flex-direction: row;
+    }
+
+    .local-info,
+    .local-meetings {
+        width: 50%;
+    }
+}
+

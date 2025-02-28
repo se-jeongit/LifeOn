@@ -117,15 +117,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                    	<c:forEach var="dto" items="${list}" varStatus="status">
+                    	<c:forEach var="prize" items="${list}" varStatus="status">
                     		<tr>
                     			<td>${dataCount - (page-1) * size - status.index}</td>
-                    			<td>${dto.pret}</td>
-                    			<td>${dto.prepd}</td>
-                    			<td>${dto.prec}</td>
-                    			<td>${dto.prevd}</td>
-                    			<td>${dto.prep}</td>
-                    			<td>${dto.pretp}</td>                   			
+                    			<td>${prize.pret}</td>
+                    			<td>${prize.prepd}</td>
+                    			<td>${prize.prec}</td>
+                    			<td>${prize.prevd}</td>
+                    			<td>${prize.prep}</td>
+                    			<td>${prize.pretp}</td>
                     		</tr>
                     	</c:forEach>
                     </tbody>

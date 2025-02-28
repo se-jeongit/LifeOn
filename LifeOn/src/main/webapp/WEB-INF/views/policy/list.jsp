@@ -93,20 +93,20 @@
 						</thead>
 
 						<tbody>
-							<c:forEach var="dto" items="${list}" varStatus="status">
+							<c:forEach var="prize" items="${list}" varStatus="status">
 								<tr>
 									<td>${dataCount - (page-1) * size - status.index}</td>
 									<td class="left">
 										<div class="text-wrap">
-											<a href="${pageContext.request.contextPath}/policy/article/${dto.psnum}?${query}" class="text-reset">${dto.subject}</a>
+											<a href="${pageContext.request.contextPath}/policy/article/${prize.psnum}?${query}" class="text-reset">${prize.subject}</a>
 										</div>
 									</td>
-									<td>${dto.nickname}</td>
-									<td>${dto.reg_date}</td>
-									<td>${dto.hitcount}</td>
+									<td>${prize.nickname}</td>
+									<td>${prize.reg_date}</td>
+									<td>${prize.hitcount}</td>
 									<td>
-										<c:if test="${not empty dto.savefilename}">
-											<a href="${pageContext.request.contextPath}/policy/download?psnum=${dto.psnum}" class="text-reset"><i class="bi bi-file-arrow-down"></i></a>
+										<c:if test="${not empty prize.savefilename}">
+											<a href="${pageContext.request.contextPath}/policy/download?psnum=${prize.psnum}" class="text-reset"><i class="bi bi-file-arrow-down"></i></a>
 										</c:if>
 									</td>
 								</tr>

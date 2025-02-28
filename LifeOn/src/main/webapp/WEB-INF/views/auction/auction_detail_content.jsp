@@ -106,7 +106,7 @@
 </style>
 
 <div style="display: flex; padding-top: 5px; margin: 10px auto; width: 1130px;">
-    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="detail-thumbnail-prize">
+    <img src="${pageContext.request.contextPath}/uploads/seller/${prize.thumbnail}" alt="이미지" class="detail-thumbnail-prize">
     <div style="margin-left: 70px;">
         <div style="display: flex;">
             <p style="font-size: 35px; font-weight: 600; width: 330px">${prize.prName} </p>
@@ -176,10 +176,12 @@
 
         <div style="padding-top: 100px;">
             <h2 style="color: #6E6E6E">상품이미지</h2>
-            <div style=" text-align: center;">
-                <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="이미지" class="detail-img-prize"
-                     style="margin: 0 auto;">
-            </div>
+            <c:forEach var="img" items="${prize.prImgList}">
+                <div style=" text-align: center; padding-top: 20px; ">
+                    <img src="${pageContext.request.contextPath}/uploads/seller/${img}" alt="이미지" class="detail-img-prize"
+                         style="margin: 0 auto;">
+                </div>
+            </c:forEach>
         </div>
 
     </div>
@@ -239,11 +241,10 @@
         let stRemainingTime = new Date(stDate) - now;
         let edRemainingTime = new Date(edDate) - now;
         if (stRemainingTime > 0) {
-            stDate = stDate.substring(0, 16);
             $('.time-Text2').countdown({
                 until: austDay,
                 format: 'dHMS',
-                layout: '<span class="time">' + stDate + '</span>'
+                layout: '<span class="time">{dn}일 {hn}시간 {mn}분 {sn}초</span>'
             });
         } else if (edRemainingTime > 0) {
             let austDay = new Date(edDate);
