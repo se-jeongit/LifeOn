@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sp.app.admin.model.ProductManage;
 import com.sp.app.admin.service.ProductManageService;
 import com.sp.app.common.PaginateUtil;
+import com.sp.app.model.SessionInfo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -61,6 +62,13 @@ public class TogetherController {
 			map.put("offset", offset);
 			map.put("size", size);
 			
+			SessionInfo info = (SessionInfo)session.getAttribute("member"); 
+			//관심상품때문에 보내야됨
+			if (info != null) { 
+	            map.put("num", info.getNum());
+	        } else {
+	            map.put("num", 0);
+	        }
 			String cp = req.getContextPath();
 			String listUrl = cp + "/market/together/main";
 			String query = "page=" + current_page;
@@ -142,11 +150,45 @@ public class TogetherController {
 	}
 	
 	
+	@ResponseBody //map 을 json 형태로 알아서 변경 개꿀
+	@PostMapping("add")
+	public Map<String, Object> addLikeProduct(@RequestParam(name = "pnum") long pnum,
+			HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		String state = "fail";
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			long num = info.getNum();
+			service.insertLikeProduct(pnum, num);
+			state = "success";
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		map.put("state", state);
+		
+		return map;
+	}
 	
 	
 	
-	
-	
+	@ResponseBody
+	@PostMapping("cancel")
+	public Map<String, Object> cancelLikeProduct(@RequestParam(name = "pnum") long pnum,
+			HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		String state = "fail";
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			long num = info.getNum();
+			service.deleteLikeProduct(pnum, num);
+			state = "success";
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		map.put("state", state);
+		
+		return map;
+	}
 	
 	
 	

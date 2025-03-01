@@ -53,7 +53,7 @@
     
     <update id="updateMemberAuthority" parameterType="map">
     	UPDATE member
-    	SET block = #{block},
+    	SET block = #{memberBlock},
     		mod_date = sysdate
     	WHERE num = #{memberNum}    
     </update>

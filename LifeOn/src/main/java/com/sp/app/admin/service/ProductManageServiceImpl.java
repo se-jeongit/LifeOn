@@ -237,12 +237,28 @@ public class ProductManageServiceImpl implements ProductManageService{
 	@Override
 	public List<ProductManage> listTogetherProduct(Map<String, Object> map) {
 		List<ProductManage> list = null;
-		
+		List<Long> likeList = null;
+		//Set<Long> likeList = new HashSet<>(likeList); 성능향상할거면 set으로
 		try {
 			list = mapper.listTogetherProduct(map);
 			
-			for(ProductManage dto : list) {  //팔린수량 설정
+			long num = 0;
+			if (map.get("num") != null) {
+			        num = ((Number) map.get("num")).longValue(); // ✅ 안전한 변환
+			}
+			
+			if(num > 0) {				
+				likeList = mapper.likedProduct(num);
+			}
+			
+			for(ProductManage dto : list) {  //팔린수량 설정, liked 설정 
 				dto.setTotalOdq(odmapper.getTotalOdq(dto.getPnum()));
+				
+				if (num > 0) {
+			        dto.setLiked(likeList.contains(dto.getPnum()));
+			    } else {
+			        dto.setLiked(false); 
+			    }
 			}
 			
 			
@@ -310,6 +326,26 @@ public class ProductManageServiceImpl implements ProductManageService{
 			log.info("공동구매 상태 자동 업데이트 실행됨! (테스트)");
 		}
 
+	}
+
+	@Override
+	public void insertLikeProduct(long pnum, long num) {
+		try {
+			mapper.insertLikeProduct(pnum, num);
+		} catch (Exception e) {
+			log.info("insertLikeProduct : ", e);
+		}
+		
+	}
+
+	@Override
+	public void deleteLikeProduct(long pnum, long num) {
+		try {
+			mapper.deleteLikeProduct(pnum, num);
+		} catch (Exception e) {
+			log.info("insertLikeProduct : ", e);
+		}
+		
 	}
 
 

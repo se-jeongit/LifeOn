@@ -52,5 +52,6 @@ public class ProductManage {
 	private String asRegister; // Y/N 재고에는 등록되었지만 공동구매에 등록된 상품인지 아닌지 확인하기 위한 컬럼
 	
 	private int totalOdq; //팔린수량
+	private boolean liked; //관심상품
 	
 }

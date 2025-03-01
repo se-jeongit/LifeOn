@@ -170,7 +170,7 @@
 						</div>
 						<div class="mb-3">
 							<label for="memberBlock" class="form-label">활성화 상태</label> <select
-								class="form-select" id="memberBlock" name="block">
+								class="form-select" id="memberBlock" name="memberBlock">
 								<option value="0">활성화</option>
 								<option value="1">비활성화</option>
 							</select>

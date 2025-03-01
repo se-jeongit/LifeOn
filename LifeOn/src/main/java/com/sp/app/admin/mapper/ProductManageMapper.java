@@ -68,6 +68,12 @@ public interface ProductManageMapper {
 	public void updateStatusIng();
 	public void updateStatusFail();
 	
+	//관심상품
+	public void insertLikeProduct(@Param("pnum") long pnum, @Param("num") long num);
+	public void deleteLikeProduct(@Param("pnum") long pnum, @Param("num") long num);
+	
+	public List<Long> likedProduct(long num);
+	
 	
 	
 }
