@@ -64,7 +64,7 @@
 				</li>
 
 				<li class="nav-item" >
-					<a class="nav-link" data-category="regioninfo" href="<c:url value='/city/meeting/main'/>">지역정보</a>
+					<a class="nav-link" data-category="regioninfo" href="<c:url value='/city/meeting'/>">지역정보</a>
 				</li>
 
 				<li class="nav-item" >
@@ -171,7 +171,7 @@
 		});
 	});
 	
-	/**
+	
 	document.addEventListener("DOMContentLoaded", function () {
 	    function increaseViewCount(category) {
 	    	let url = '/layout/'+category;
@@ -183,13 +183,13 @@
 	    // ✅ `<li>` 클릭 시 조회수 증가
 	    document.querySelectorAll(".nav-link").forEach(item => {
 	        item.addEventListener("click", function (event) {
-	            event.preventDefault(); // 기본 링크 동작 방지 (href 이동 X)
+	           
 	            const category = this.dataset.category;
 	            increaseViewCount(category);
 	        });
 	    });
 	});
-	**/
+	
 	
 	
 </script>
