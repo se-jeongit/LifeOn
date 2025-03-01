@@ -2,16 +2,16 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sp.app.mapper.MeetingMapper">
-	<!--
+	
 	<select id="meetingSeq" resultType="Long">
 		SELECT meeting_seq.NEXTVAL FROM dual
 	</select>
-	-->
+	
 	<insert id="insertBoard" parameterType="com.sp.app.model.Meeting">
-		INSERT INTO GROUP_BOARD (psnum, num, subject, content, hitCount, ipaddr, ies, loca, loca_d,
-					gender, age, person_c, reg_date, blind)
-		VALUES (#{psnum}, #{num}, #{subject}, #{content}, 0, #{ipaddr}, #{ies}, #{loca}, #{loca_d},
-				#{gender}, #{age}, #{person_c}, SYSDATE, 0)
+		INSERT INTO GROUP_BOARD (psnum, num, subject, content, hitCount, idaddr, ies, loca, loca_d,
+					gender, age, cbn, person_c, reg_date, blind)
+		VALUES (#{psnum}, #{num}, #{subject}, #{content}, 0, #{idaddr}, #{ies}, #{loca}, #{loca_d},
+				#{gender}, #{age}, #{cbn}, #{person_c}, SYSDATE, 0)
 	</insert>
 	
 	<!--  -상품번호, 상품유형, 상품명, 상품내용, 사진, 회원번호 -->
@@ -49,7 +49,7 @@
 	<select id="dataCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*), 0)
 		FROM GROUP_BOARD gb
-		JOIN MEMBER m ON hb.num = m.num
+		JOIN MEMBER m ON gb.num = m.num
 		<where>
 			<if test="kwd != null and kwd != '' ">
 				<include refid="searchSql"/>
@@ -61,16 +61,27 @@
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.model.Meeting">
 		SELECT gb.psnum, m.num, m.id, m.nickname, gb.subject, TO_CHAR(gb.reg_date, 'yyyy-mm-dd') as reg_date,
 		m.grade, m.profile_image, gb.hitCount, NVL(replyCount, 0) replyCount,
-		NVL(boardLikeCount, 0) boardLikeCount, 
+		NVL(boardLikeCount, 0) boardLikeCount
 		FROM GROUP_BOARD gb
 		JOIN MEMBER m ON gb.num = m.num	
-		JOIN GROUP_CATEGORY g ON gb.csn = g.csn
+		JOIN GROUP_CATEGORY g ON gb.cbn = g.cbn
+		LEFT OUTER JOIN (
+			SELECT COUNT(*) replyCount, ps_num, rpblind
+			FROM GROUP_BOARD_REPLY
+			WHERE rpblind = 0
+			GROUP BY psnum, rpblind
+		) c ON gb.psnum = c.psnum
+		LEFT OUTER JOIN (
+			SELECT psnum, COUNT(*) boardLikeCount
+			FROM GROUP_BOARD_FAV
+			GROUP BY psnum
+		) gf ON gb.psnum = gf.psnum
 		<where>
 			<if test="kwd != null and kwd != ''">
 				<include refid="searchSql"/>
 			</if>
 		</where>
-		ORDER BY gb.pnum DESC
+		ORDER BY gb.psnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 	

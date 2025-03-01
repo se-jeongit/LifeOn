@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.sp.app.common.MyUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.mapper.MeetingMapper;
 import com.sp.app.model.Meeting;
@@ -19,12 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 public class MeetingServiceImpl implements MeetingService{
 	private final MeetingMapper mapper;
 	private final StorageService storageService;
-	private final MyUtil myUtil;
 	
 	@Override
 	public void insertBoard(Meeting dto) throws Exception {
 		try {
-			long seq = mapper.MeetingSeq();
+			long seq = mapper.meetingSeq();
 			dto.setPsnum(seq);
 			
 			mapper.insertBoard(dto);

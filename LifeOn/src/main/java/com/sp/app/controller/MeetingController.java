@@ -33,7 +33,6 @@ public class MeetingController {
 	private final MeetingService service;
 	private final StorageService storageService;
 	private final PaginateUtil paginateUtil;
-	private final MyUtil myUtil;
 	
 	
 	@GetMapping("main")
@@ -117,15 +116,17 @@ public class MeetingController {
 	
 	@GetMapping("write")
 	public String writeForm(Model model) throws Exception {
+		
 		List<Meeting> Category = service.listCategory();
 		
 		model.addAttribute("mode", "write");
 		model.addAttribute("Category", Category);
+		
 		return "city/meeting/write";
 	}
 	
 	@PostMapping("write")
-	public String writeSubmit(Meeting dto,
+	public String writeSubmit(Meeting dto, Model model,
 			HttpSession session,HttpServletRequest req) throws Exception {
 		
 		try {
@@ -142,6 +143,6 @@ public class MeetingController {
 			log.info("writeSubmit : ", e);
 		}
 		
-		return "redirect:/city/meeting";
+		return "redirect:/city/meeting/main";
 	}
 }

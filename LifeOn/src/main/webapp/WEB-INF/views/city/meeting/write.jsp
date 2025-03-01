@@ -109,10 +109,10 @@ body {
 main {
   flex: 1;
   display: flex;
-  justify-content: center; /* 중앙 정렬 */
-  align-items: center; /* 수직 중앙 정렬 */
-  padding-top: 50px; /* 헤더와 모달 사이 간격 */
-  padding-bottom: 50px; /* 모달과 푸터 사이 간격 */
+  justify-content: center; 
+  align-items: center; 
+  padding-top: 50px; 
+  padding-bottom: 50px; 
 }
 </style>
 <script type="text/javascript">
@@ -263,8 +263,8 @@ function check() {
         </div>
 
         <div class="button-group">
-            <button class="button cancel" onclick="location.href='${pageContext.request.contextPath}/city/meeting/'${dto.cbn}';">${mode == "update" ? "수정취소" : "등록취소"}&nbsp;</button>
-            <button class="button submit" onclick="submitContents(this.form);">${mode == "update" ? "수정완료" : "등록완료"}&nbsp;</button>
+            <button class="button cancel" onclick="location.href='${pageContext.request.contextPath}/city/meeting/main';">${mode == "update" ? "수정취소" : "등록취소"}&nbsp;</button>
+            <button class="button submit" onclick="submitContents(this.form);">${mode == "update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></button>
        
 			<c:if test="${mode == 'update'}">
 				<input type="hidden" name="num" value="${dto.num}">
