@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sp.app.admin.model.ProductManage;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.model.SessionInfo;
@@ -123,7 +125,12 @@ public class RentController {
 	
 	@GetMapping("write")
 	public String writeForm(Model model) throws Exception {
+		
+		List<RentProduct> listCategory = service.listCategory();
+		
+		model.addAttribute("listCategory", listCategory);
 		model.addAttribute("mode", "write");
+		
 		return "market/rent/write";
 	}
 	
@@ -136,10 +143,6 @@ public class RentController {
 			
 			dto.setNum(info.getNum());
 			
-			List<RentProduct> listCategory = service.listCategory();
-			
-			model.addAttribute("listCategory", listCategory);
-			
 			service.insertRentProduct(dto, uploadPath);
 			
 		} catch (Exception e) {
@@ -147,5 +150,11 @@ public class RentController {
 		}
 		
 		return "redirect:/market/rent/main";
+	}
+	
+	@ResponseBody
+	@PostMapping("listSubCategory")
+	public List<RentProduct> getSmallCategories(@RequestParam(name = "cbn") int categoryNum) {
+		return service.listSubCategory(categoryNum);
 	}
 }

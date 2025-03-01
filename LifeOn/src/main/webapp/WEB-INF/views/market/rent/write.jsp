@@ -42,8 +42,7 @@ function check() {
     }
 
     f.action = '${pageContext.request.contextPath}/market/rent/${mode}';
-    
-    return true;
+    f.submit()
 }
 </script>
 </head>
@@ -68,31 +67,61 @@ function check() {
 						<td scope="row">물품명</td>
 						<td colspan="2">
 							<div>
-								<input type="text" name="pname" maxlength="100" class="rent-control" placeholder="물품명을 입력해주세요" value="${dto.pname}">
+								<input type="text" name="pname" maxlength="100" class="rent-control" placeholder="물품명을 입력해주세요." value="${dto.pname}">
 								<input type="hidden" class="form-control-plaintext" value="${sessionScope.member.num}">
 	                        </div>
 						</td>
 						
 	                   	<td>
 	                        <div style="display: flex; justify-content: flex-start;">
-		                        <select class="rent-select">
-			                    	<option value="" disabled selected>대분류 선택</option>
+		                        <select class="rent-select" id="categoryNum" name="cbn" onchange="categoryCheck();">
+			                    	<option value="0" selected>대분류 선택</option>
 		                        	<c:forEach var="main" items="${listCategory}">
-			                            <option value="">${main.cbc}</option>
+			                            <option value="${main.cbn}">${main.cbc}</option>
 			                    	</c:forEach>
 	                        	</select>
-		                        <select class="rent-select">
+		                        <select class="rent-select" name="csn" id="subCategory">
 		                            <option value="" disabled selected>소분류 선택</option>
-		                            <c:forEach var="main" items="${listCategory}">
-		                          		<c:forEach var="sub" items="${main.listSub}">
-		                            		<option value="">${sub.csc}</option>
-		                            	</c:forEach>
-		                            </c:forEach>
 		                        </select>
 	                        </div>
 						</td>
 					</tr>
+					
+					<tr>
+						<td scope="row">대여비</td>
+						<td colspan="3" align="left">
+							<input type="number" name="prp" maxlength="100" class="rent-control" style="width: 237px;" placeholder="1일 기준 대여비를 입력해주세요." value="${dto.pname}">
+						</td>
+					</tr>
 
+					<tr>
+						<td scope="row">보증금</td>
+						<td colspan="3" align="left">
+							<div>
+								<input type="number" name="prlp" maxlength="100" class="rent-control" style="width: 237px;" placeholder="보증금을 입력해주세요." value="${dto.pname}">
+	                        </div>
+						</td>
+					</tr>
+					
+					<tr>
+						<td scope="row">거래장소</td>
+						<td colspan="3">
+							<div style="display: flex;">
+								<input type="text" name="pra" id="pra" maxlength="100" class="rent-control" style="width: 90%;" disabled="disabled" placeholder="거래하시는 장소를 검색해주세요." value="${dto.pname}">
+								<button class="ssbtn" type="button" style="margin-left: 3px; width: 10%; border-radius: 0px;" onclick="daumPostcode();">검색</button>
+	                        </div>
+						</td>
+					</tr>
+					
+					<tr>
+						<td scope="row">상세주소</td>
+						<td colspan="3">
+							<div>
+								<input type="text" name="prad" id="prad" maxlength="100" class="rent-control" placeholder="상세주소 또는 특이사항을 입력해주세요." value="${dto.pname}">
+	                        </div>
+						</td>
+					</tr>
+					
 					<tr>
 						<td scope="row" style="vertical-align: top; padding-top: 20px;">상세설명</td>
 						<td colspan="3">
@@ -205,6 +234,50 @@ function submitContents(elClickedObj) {
 		
 	} catch(e) {
 	}
+}
+</script>
+
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+function daumPostcode() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var fullAddr = ''; // 최종 주소 변수
+            var extraAddr = ''; // 조합형 주소 변수
+
+            // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                fullAddr = data.roadAddress;
+
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                fullAddr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+            if(data.userSelectedType === 'R'){
+                //법정동명이 있을 경우 추가한다.
+                if(data.bname !== ''){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있을 경우 추가한다.
+                if(data.buildingName !== ''){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+                fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('pra').value = fullAddr;
+
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById('prad').focus();
+        }
+    }).open();
 }
 </script>
 
@@ -326,6 +399,35 @@ window.addEventListener('DOMContentLoaded', evt => {
 		}
 	});	
 });
+
+function categoryCheck() {
+    let cbn = $('#categoryNum').val();
+
+    if (!cbn || cbn == 0) {
+        $('#subCategory').html("<option value=''>소분류 선택</option>");
+        $('#subCategory').prop("disabled", true);
+        return;
+    }
+    
+    let url = '${pageContext.request.contextPath}/market/rent/listSubCategory';
+
+    $.post(url, { cbn: cbn }, function(data) {
+        if (data.length > 0) {
+            let options = "<option value=''>소분류 선택</option>";
+            
+            $.each(data, function(index, category) {
+                options += "<option value='" + category.csn + "'>" + category.csc + "</option>";
+            });
+
+            $('#subCategory').html(options);
+            $('#subCategory').prop("disabled", false);
+        } else {
+            $('#subCategory').html("<option value=''>소분류 없음</option>");
+            $('#subCategory').prop("disabled", true);
+        }
+    }, 'json');
+    
+}
 </script>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
