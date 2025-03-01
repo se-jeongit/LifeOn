@@ -48,7 +48,7 @@
 			AND blind = 0 AND bdtype = #{bdtype}
 		</where>
 	</select>
-	
+
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.lounge.model.PhotoBoard">
 		SELECT hb.psnum, m.num, m.id, nickname, subject, content, TO_CHAR(hb.reg_date, 'yyyy-mm-dd') as reg_date, 
 				hb.blind, m.grade, m.profile_image, hitCount, NVL(replyCount, 0) replyCount, 
