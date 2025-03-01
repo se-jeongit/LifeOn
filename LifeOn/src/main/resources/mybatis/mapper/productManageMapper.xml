@@ -212,5 +212,21 @@
 		WHERE pnum =#{pnum}
 	</update>
 	
+	<insert id="insertLikeProduct">
+		INSERT INTO member_liked (mlnum, mlq, mld, num, pnum)
+		VALUES (MEMBER_LIKED_SEQ.NEXTVAL, 1, SYSDATE, #{num}, #{pnum})
+	</insert>
+	
+	<delete id="deleteLikeProduct">
+		DELETE FROM member_liked
+		WHERE num = #{num} AND pnum = #{pnum}
+	</delete>
+	
+	<select id="likedProduct" parameterType="Long" resultType="Long">
+		SELECT pnum
+		FROM member_liked
+		WHERE num=#{num}
+	</select>
+	
 	
 </mapper>
