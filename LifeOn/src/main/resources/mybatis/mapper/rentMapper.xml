@@ -9,18 +9,20 @@
 	</select>
 	
 	<!-- 대여물품 등록 -->
-<!-- 	<insert id="insertRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
-		INSERT INTO PRODUCT(pnum, ptype, pname, pct, pph, csn, num)
-			VALUES (product_seq.NEXTVAL, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
-			
-		INSERT INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
-			VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra}, #{prad}, #{prlp})
+	<insert id="insertRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
+		INSERT ALL
+			INTO PRODUCT(pnum, ptype, pname, pct, pph, csn, num)
+				VALUES (product_seq.NEXTVAL, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
+				
+			INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
+				VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra}, #{prad}, #{prlp})
+		SELECT * FROM dual     
 	</insert>
 
 	<insert id="insertRentProductFile" parameterType="com.sp.app.rent.model.RentProduct">
-		INSERT INTO PRODUCT_PICTURE (ppnum, ssfname, ppp, pnum)
-	    	VALUES (product_picture_seq.NEXTVAL, #{ssfname, jdbcType=VARCHAR}, #{ppp, jdbcType=VARCHAR}, #{pnum})
-	</insert> -->
+		INSERT INTO PRODUCT_PICTURE (ppnum, ppp, pnum)
+	    	VALUES (product_picture_seq.NEXTVAL, #{ppp, jdbcType=VARCHAR}, #{pnum})
+	</insert>
 	
 	<sql id="searchSql">
 		<choose>
