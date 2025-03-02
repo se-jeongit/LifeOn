@@ -129,6 +129,10 @@
 	margin-right: 5px;
 }
 
+.search_btn:hover {
+	background: #f8f9fa;
+}
+
 .product_group {
 	display: flex;
     max-width: 1280px;
@@ -271,5 +275,29 @@
 .thumbnailImage {
 	width: 100%;
 	height: 100%;
+	object-fit: cover;
+}
+
+.product-detail {
+	width: 920px;
+	margin: 40px 0 0;
+	display: flex;
+	border-top: 1px solid #e0e0e0;
+}
+
+.product-image {
+	width: 40%;
+	padding-top: 40px;
+}
+
+.product-info {
+	width: 60%;
+	padding-left: 40px;
+	padding-top: 40px;
+}
+
+.thumbnail-img {
+	width: 100%;
+	height: 300px;
 	object-fit: cover;
 }

@@ -65,10 +65,10 @@
 	</delete> -->
 	
 	<!-- 사진파일(리스트, 찾기, 삭제) -->
-<!-- 	<select id="listProductFile" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
-		SELECT fnum, ssfname, cpfname, psnum
+ 	<select id="listProductFile" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT ppnum, ppp, pnum
 		FROM PRODUCT_PICTURE
-		WHERE psnum = #{psnum}    
+		WHERE pnum = #{pnum}    
 	</select>
 	
 	<select id="findByFileId" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
@@ -80,7 +80,7 @@
 	<delete id="deleteRentProductFile" parameterType="Map">
 		DELETE FROM PRODUCT_PICTURE
 		WHERE ${field} = #{pnum}
-	</delete> -->
+	</delete>
 	
 	<!-- 리스트에 출력되는 물품개수 -->
 	<select id="dataCount" parameterType="map" resultType="Integer">
@@ -122,7 +122,7 @@
 	
 	<!-- 이전 물품, 다음 물품 -->
 	<select id="findByPrev" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
-		SELECT p.psnum, pname, pph, prp, prlp
+		SELECT p.pnum, pname, pph, prp, prlp
 		FROM PRODUCT p
 		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
 		<where>
@@ -130,13 +130,13 @@
 				<include refid="searchSql"/>
 			</if>
 		</where>
-		WHERE p.psum &gt; #{pnum} AND prs = '물품대여'
-		ORDER BY pnum ASC
+		WHERE p.pnum &gt; #{pnum}
+		ORDER BY p.pnum ASC
 		FETCH FIRST 1 ROWS ONLY
 	</select>
 	
 	<select id="findByNext" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
-		SSELECT p.psnum, pname, pph, prp, prlp
+		SELECT p.pnum, pname, pph, prp, prlp
 		FROM PRODUCT p
 		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
 		<where>
@@ -144,8 +144,8 @@
 				<include refid="searchSql"/>
 			</if>
 		</where>
-		WHERE p.pnum &lt; #{pnum} AND prs = '물품대여'
-		ORDER BY pnum DESC
+		WHERE p.pnum &lt; #{pnum}
+		ORDER BY p.pnum DESC
 		FETCH FIRST 1 ROWS ONLY
 	</select>
 	
