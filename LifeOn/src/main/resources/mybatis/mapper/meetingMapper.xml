@@ -54,13 +54,12 @@
 			<if test="kwd != null and kwd != '' ">
 				<include refid="searchSql"/>
 			</if>
-			<!-- 카테고리 관련 WHERE 문 필요 -->
 		</where>
 	</select>
 	
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.model.Meeting">
-		SELECT gb.psnum, m.num, gb.subject, TO_CHAR(mdate, 'YYYY-MM-DD') AS mdate,
-		m.grade, gb.hitCount, NVL(replyCount, 0) replyCount,
+		SELECT gb.psnum, m.num, gb.subject, gb.loca, TO_CHAR(mdate, 'YYYY-MM-DD') AS mdate,
+		m.grade, g.cbn, g.cbc, gb.hitCount, NVL(replyCount, 0) replyCount,
 		NVL(boardLikeCount, 0) boardLikeCount
 		FROM GROUP_BOARD gb
 		JOIN MEMBER m ON gb.num = m.num	
@@ -80,9 +79,33 @@
 			<if test="kwd != null and kwd != ''">
 				<include refid="searchSql"/>
 			</if>
+			 <if test="cbn > 0">
+       			 AND gb.cbn = #{cbn}
+    		</if>
 		</where>
 		ORDER BY gb.psnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select> 
+	
+	<select id="findById" parameterType="Long" resultType="com.sp.app.model.Meeting">
+		SELECT gb.psnum, gb.num, nickname, subject, content, hitCount, gb.reg_date, gb.blind,  m.profile_image,
+			   g.cbn, g.cbc, gb.loca, gb.loca_d, TO_CHAR(mdate, 'YYYY-MM-DD') AS mdate,
+			NVL(replyCount, 0) replyCount, NVL(boardLikeCount, 0) boardLikeCount
+		FROM GROUP_BOARD gb
+		JOIN MEMBER m ON gb.num = m.num
+		JOIN GROUP_CATEGORY g ON gb.cbn = g.cbn
+		LEFT OUTER JOIN (
+			SELECT COUNT(*) replyCount, psnum
+			FROM GROUP_BOARD_REPLY
+			GROUP BY psnum
+		) r ON gb.psnum = r.psnum
+		LEFT OUTER JOIN (
+			SELECT psnum, COUNT(*) boardLikeCount
+			FROM GROUP_BOARD_FAV
+			WHERE psnum = #{psnum}
+			GROUP BY psnum
+		) c ON gb.psnum = c.psnum
+		WHERE gb.psnum = #{psnum}
+	</select>
 	
 </mapper>

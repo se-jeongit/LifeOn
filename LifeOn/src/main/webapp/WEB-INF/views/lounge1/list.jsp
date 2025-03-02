@@ -62,9 +62,9 @@
 			<div class="body-title">
 				<em style="padding-bottom: 5px; font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">
 					<c:choose>
-						<c:when test="${bdtype == 'room'}">인테리어 꿀팁, 지금 바로 검색해보세요!</c:when>
+						<c:when test="${bdtype == 'room'}">인테리어 , 지금 바로 검색해보세요!</c:when>
 						<c:when test="${bdtype == 'recipe'}">자취 레시피, 지금 바로 검색해보세요!</c:when>
-						<c:otherwise>생활꿀팁, 지금 바로 검색해보세요!</c:otherwise>
+						<c:otherwise>, 지금 바로 검색해보세요!</c:otherwise>
 					</c:choose>
 				</em>
 				<div style="display: flex; justify-content: center; margin-top: 10px;">
@@ -103,36 +103,34 @@
 	        	</div>
 	        </div>
 	    
-	      <!-- 글리스트 -->
-	      <div class="photo-grid">
-	        <c:forEach var="prize" items="${list}" varStatus="status">
-	          <div class="photo-card" style="cursor: pointer;" onclick="location.href='${articleUrl}/${prize.psnum}?${query}'">
-	                <table class="table table-hover m-0">		
-	                  <img class="photo_img" src="${pageContext.request.contextPath}/uploadPath/lounge1/${prize.ssfname}">
-	                  <h5 class="ph_subject">${prize.subject}</h5>
-	                  <div class="" style="display: flex; align-items: center;">
-						<div class="ph-info" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-							<img src="${pageContext.request.contextPath}${prize.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-	                    </div>
+	    <!-- 글리스트 -->
+		<div class="photo-grid">
+			<c:forEach var="prize" items="${list}" varStatus="status">
+				<div class="photo-card" style="cursor: pointer;" onclick="location.href='${articleUrl}/${prize.psnum}?${query}'">
+					<div class="table table-hover m-0">		
+						<img class="photo_img" src="${pageContext.request.contextPath}/uploadPath/lounge1/${prize.ssfname}">
+						<h5 class="ph_subject">${prize.subject}</h5>
+						<div style="display: flex; justify-content: center; align-items: center;">
+							<div class="ph-info" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+								<img src="${pageContext.request.contextPath}${prize.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+							</div>
+							<span class='ph_userName'>${prize.nickname}</span>
+							<span>&nbsp;&nbsp;</span>
+							<span>${prize.reg_date}</span>
+						</div>
 						<div>
-	                      <span class='ph_userName'>${prize.nickname}</span>
-	                      <span>&nbsp;&nbsp;</span>
-	                      <span>${prize.reg_date}</span>
-	                      </div>
-	                    </div>
-	                    <div>
-	                      <i class="ph_icon bi bi-bookmark"></i>
-	                      <span>${prize.boardLikeCount}&nbsp;&nbsp;</span>
-	                      <i class="ph_icon bi bi-eye"></i>
-	                      <span>${prize.hitCount}&nbsp;&nbsp;</span>
-	                      <i class="ph_icon bi bi-chat-dots"></i>
-	                      <span>${prize.replyCount}&nbsp;&nbsp;</span>
-	                	</div>
-	                </table>
-	              </div>
-	          </div>
-	        </c:forEach>
-	      </div>
+							<i class="ph_icon bi bi-bookmark"></i>
+							<span>${prize.boardLikeCount}&nbsp;&nbsp;</span>
+							<i class="ph_icon bi bi-eye"></i>
+							<span>${prize.hitCount}&nbsp;&nbsp;</span>
+							<i class="ph_icon bi bi-chat-dots"></i>
+							<span>${prize.replyCount}&nbsp;&nbsp;</span>
+						</div>
+					</div>
+					
+				</div>
+			</c:forEach>
+		</div>
 	      
 	      <div class="page-navigation">
 	        ${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}

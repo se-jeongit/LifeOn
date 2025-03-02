@@ -5,10 +5,12 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +35,7 @@ public class MeetingController {
 	private final MeetingService service;
 	private final StorageService storageService;
 	private final PaginateUtil paginateUtil;
-	
+	private final MyUtil myUtil;
 	
 	@GetMapping("main")
 	public String MeetingList(
@@ -78,9 +80,9 @@ public class MeetingController {
 			String cp = req.getContextPath();
 			
 			String listUrl = cp + "/city/meeting/main";
-			String articleUrl = cp + "/city/meeting/article/" + "?page=" + current_page;
+			String articleUrl = cp + "/city/meeting/article";
 			
-			String query = "cbn=" + categoryNum;
+			String query = "page=" + current_page;
 			
 			if (! kwd.isBlank()) {
 				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
@@ -145,4 +147,60 @@ public class MeetingController {
 		
 		return "redirect:/city/meeting/main";
 	}
+	
+	@GetMapping("article/{psnum}")
+	public String article(
+			@PathVariable(name = "psnum") long num,
+			@RequestParam(name = "page") String page,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
+			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+			Model model,
+			HttpSession session) throws Exception {
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			if (! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			service.updateHitCount(num);
+			
+			Meeting dto = Objects.requireNonNull(service.findById(num));
+			
+			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("schType", schType);
+			map.put("kwd", kwd);
+			map.put("psnum", num);
+			map.put("num", info.getNum());
+			
+			// RentProduct prevDto = service.findByPrev(map);
+			// RentProduct nextDto = service.findByNext(map);
+			
+			boolean isMemberLiked = service.memberBoardLiked(map);
+			
+			model.addAttribute("psnum", num);
+			model.addAttribute("dto", dto);
+			//model.addAttribute("prevDto", prevDto);
+			//model.addAttribute("nextDto", nextDto)
+			model.addAttribute("isMemberLiked", isMemberLiked);
+			model.addAttribute("query", query);
+			model.addAttribute("page", page);
+			
+			return "city/meeting/article";
+			
+		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("article : ", e);
+		}
+		
+		return "redirect:/city/meeting/main?" + query;
+	}
+	
+	
 }

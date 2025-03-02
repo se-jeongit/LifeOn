@@ -87,11 +87,11 @@ main section {width: 100% !important;}
 										<div class="profile" style="margin: 5px; width: 35px; height: 35px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
 											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
 										</div>	
-										<div style="font-size: 16px;">${dto.nickname}</div>
+										<div style="font-size: 12px;">${dto.nickname}</div>
 									</div>
 								</td>
 								<td align="right">
-									${dto.reg_date} | 조회 ${dto.hitCount}
+									${dto.reg_date} |조회 ${dto.hitCount}
 								</td>
 							</tr>
 							
