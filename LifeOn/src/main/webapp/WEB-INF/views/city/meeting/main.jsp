@@ -98,17 +98,17 @@
                 
                   <span class="meeting__category">${dto.cbn}</span>
                   
-                  <span class="meeting__location"><i class="bi bi-geo-alt"></i>{dto.loca}</span>
+                  <span class="meeting__location"><i class="bi bi-geo-alt"></i>${dto.loca}</span>
                  
-                  <span class="meeting__date"><i class="bi bi-calendar-check"></i>${dto.reg_date}</span>
+                  <span class="meeting__date"><i class="bi bi-calendar-check"></i>${dto.mdate}</span>
                 
                 </div>
                 <h3 class="meeting__title">${dto.subject}</h3>
               </div>
               
 			 <div class="status-box" style="font-size: 15px; font-weight: bold; margin-left: auto;">
-			    <div class="meeting__status ${dto.status eq '모집완료' ? 'meeting__status--off' : 'meeting__status--on'}">
-			       	모집중 ${dto.status}
+			    <div class="meeting__status ${dto.ies eq '모집완료' ? 'meeting__status--off' : 'meeting__status--on'}">
+			       	모집중 ${dto.ies}
 			    </div>
 			</div>
 				

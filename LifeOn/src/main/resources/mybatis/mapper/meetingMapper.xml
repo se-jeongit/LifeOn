@@ -9,9 +9,9 @@
 	
 	<insert id="insertBoard" parameterType="com.sp.app.model.Meeting">
 		INSERT INTO GROUP_BOARD (psnum, num, subject, content, hitCount, idaddr, ies, loca, loca_d,
-					gender, age, cbn, person_c, reg_date, blind)
-		VALUES (#{psnum}, #{num}, #{subject}, #{content}, 0, #{idaddr}, #{ies}, #{loca}, #{loca_d},
-				#{gender}, #{age}, #{cbn}, #{person_c}, SYSDATE, 0)
+					gender, age, cbn, person_c, mdate, reg_date, blind)
+		VALUES (#{psnum}, #{num}, #{subject}, #{content}, 0, #{idaddr}, '모집중', #{loca}, #{loca_d},
+				#{gender}, #{age}, #{cbn}, #{person_c}, TO_DATE(#{mdate}, 'YYYY-MM-DD'), SYSDATE, 0)
 	</insert>
 	
 	<!--  -상품번호, 상품유형, 상품명, 상품내용, 사진, 회원번호 -->
@@ -59,14 +59,14 @@
 	</select>
 	
 	<select id="listBoard" parameterType="map" resultType="com.sp.app.model.Meeting">
-		SELECT gb.psnum, m.num, m.id, m.nickname, gb.subject, TO_CHAR(gb.reg_date, 'yyyy-mm-dd') as reg_date,
-		m.grade, m.profile_image, gb.hitCount, NVL(replyCount, 0) replyCount,
+		SELECT gb.psnum, m.num, gb.subject, TO_CHAR(mdate, 'YYYY-MM-DD') AS mdate,
+		m.grade, gb.hitCount, NVL(replyCount, 0) replyCount,
 		NVL(boardLikeCount, 0) boardLikeCount
 		FROM GROUP_BOARD gb
 		JOIN MEMBER m ON gb.num = m.num	
 		JOIN GROUP_CATEGORY g ON gb.cbn = g.cbn
 		LEFT OUTER JOIN (
-			SELECT COUNT(*) replyCount, ps_num, rpblind
+			SELECT COUNT(*) replyCount, psnum, rpblind
 			FROM GROUP_BOARD_REPLY
 			WHERE rpblind = 0
 			GROUP BY psnum, rpblind
@@ -83,6 +83,6 @@
 		</where>
 		ORDER BY gb.psnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
-	</select>
+	</select> 
 	
 </mapper>

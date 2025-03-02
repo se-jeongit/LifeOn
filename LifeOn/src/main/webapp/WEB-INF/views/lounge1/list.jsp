@@ -15,9 +15,9 @@
 <style type="text/css">
 .photo-card {
  border: 1px solid #E6E6E6;
- padding: 15px;
+ padding: 5px;
  text-align: center; 
- border-radius: 20px;
+ border-radius: 10px;
  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
  height: 100%;
 }

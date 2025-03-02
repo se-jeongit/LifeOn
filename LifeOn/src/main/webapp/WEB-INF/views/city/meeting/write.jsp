@@ -159,7 +159,7 @@ function check() {
         <div class="section">
             <label class="label" for="meeting-date">날짜/시간</label>
              <div class="date-picker-container">
-       			 <input type="datetime-local" name="meeting-date" id="meeting-date"  class="date-picker" value="${dto.reg_date}">
+       			 <input type="date" name="mdate" id="mdate"  class="date-picker" value="${dto.mdate}">
     		</div>
         </div>
         
@@ -175,16 +175,24 @@ function check() {
             
             <div class="section">
             <label class="label" for="status">모집 상태</label>
-	            <select id="status" class="dropdown" name="status">
-	               <option value="" disabled selected>모집 상태</option>
-					<option value="모집 중" ${dto.ies == "모집 중" ? "selected" : ""}>모집 중</option>
-					<option value="모집 종료" ${dto.ies == "모집 종료" ? "selected" : ""}>모집 종료</option>
+             <c:choose>
+		        <c:when test="${mode == 'write'}">
+		            <!-- 새 글 작성일 때는 모집 중으로 고정 -->
+		            <input type="hidden" name="ies" value="모집 중">
+		            <input type="text" class="input-box" value="모집 중" readonly>
+		        </c:when>
+		        <c:otherwise>
+		            <select id="status" class="dropdown" name="ies">
+	                <option value="모집 중" ${dto.ies == '모집 중' ? 'selected' : ''}>모집 중</option>
+	                <option value="모집 종료" ${dto.ies == '모집 종료' ? 'selected' : ''}>모집 종료</option>
 	            </select>
-	        </div>
+        </c:otherwise>
+    </c:choose>
+</div>
 
         <div class="section">
             <label class="label" for="location">지역</label>
-            <select id="location" class="dropdown" name="location">
+            <select id="loca" class="dropdown" name="loca">
             <option value="" disabled selected>지역을 선택하세요</option>
                 <option value="금천구" ${dto.loca == "금천구" ? "selected" : ""}>금천구</option>
                 <option value="관악구" ${dto.loca == "관악구" ? "selected" : ""}>관악구</option>
@@ -215,13 +223,13 @@ function check() {
 
         <div class="section">
             <label class="label" for="detail-location">상세 장소</label>
-            <input type="text" id="detail-location" class="input-box" value="${dto.loca_d}"  placeholder="상세 장소를 입력하세요">
+            <input type="text" id="detail-location" class="input-box" name="loca_d" value="${dto.loca_d}"  placeholder="상세 장소를 입력하세요">
         </div>
         
 
         <div class="section">
-            <label class="label" for="age-group">연령대</label>
-            <select id="age-group" class="dropdown" name="age-group">
+            <label class="label" for="age">연령대</label>
+            <select id="age" class="dropdown" name="age">
                 <option value="" disabled selected>연령대를 선택하세요</option>
                 <option value="나이 무관" ${dto.age == "나이 무관" ? "selected" : ""}>나이 무관</option>
                 <option value="20대" ${dto.age == "20대" ? "selected" : ""}>20대</option>
@@ -244,7 +252,7 @@ function check() {
 
         <div class="section">
             <label class="label" for="participants">모집 인원</label>
-            <select id="participants" class="dropdown" name="participants">
+            <select id="person_c" class="dropdown" name="person_c">
                 <option value="" disabled selected>모집 인원을 선택하세요</option>
                  <option value="1~5명" ${dto.person_c == "1~5명" ? "selected" : ""}>1~5명</option>
                  <option value="6~10명" ${dto.person_c == "6~10명" ? "selected" : ""}>6~10명</option>
@@ -254,12 +262,12 @@ function check() {
 
         <div class="section">
             <label class="label" for="title">제목</label>
-            <input type="text" id="title" class="input-box" placeholder="제목을 입력하세요" value="${dto.subject}">
+            <input type="text" id="subject" class="input-box" name="subject" placeholder="제목을 입력하세요" value="${dto.subject}">
         </div>
 
         <div class="section">
             <label class="label" for="description">내용</label>
-            <textarea id="description" class="input-box" rows="4" placeholder="모임에 대해 소개해주세요.">${dto.content}</textarea>
+            <textarea id="content" class="input-box" name="content" rows="4" placeholder="모임에 대해 소개해주세요.">${dto.content}</textarea>
         </div>
 
         <div class="button-group">

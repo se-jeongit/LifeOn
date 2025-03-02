@@ -133,9 +133,9 @@ public class MeetingController {
 			SessionInfo info = (SessionInfo)session.getAttribute("member");
 			
 			dto.setNum(info.getNum());
-			dto.setId(info.getId());
 			dto.setNickname(info.getNickName());
-			dto.setIpaddr(req.getRemoteAddr());
+			dto.setIdaddr(req.getRemoteAddr());
+			dto.setPsnum(dto.getPsnum());
 			
 			service.insertBoard(dto);
 			
