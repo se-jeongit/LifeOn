@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.sp.app.model.LikeProduct;
 import com.sp.app.model.PointRecord;
 
 @Mapper
@@ -17,5 +18,8 @@ public interface PointRecordMapper {
 	
 	public void insertPointCharge(Map<String, Object> map);
 	public void insertCardPayment(Map<String, Object> map);
+	
+	public int dataCount2(Map<String, Object> map);
+	public List<LikeProduct> listLikeProduct(Map<String, Object> map);
 	
 }

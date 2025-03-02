@@ -100,7 +100,7 @@
 						<a href="<c:url value='/'/>" title="즐겨찾기"><i class="bi bi-bookmark" style="font-size: 28px;"></i></a>
 					</div>	
 					<div class="px-2 py-1" style="height: 40px;">
-						<a href="<c:url value='/'/>" title="관심상품"><i class="bi bi-heart" style="font-size: 28px;"></i></a>
+						<a href="<c:url value='/likeProduct/list'/>" title="관심상품"><i class="bi bi-heart" style="font-size: 28px;"></i></a>
 					</div>
 					
 					<form name="profileForm" method="post" enctype="multipart/form-data">

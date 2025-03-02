@@ -61,7 +61,7 @@
         text-align: left;
     }
     .sejin-table th {
-        background: #EAEAEA;
+        background: #99c3ff;
         font-size: 1.2rem;
     }
     .sejin-dropdown {
@@ -85,7 +85,7 @@
     <jsp:include page="/WEB-INF/views/mypage/left.jsp"/>
     <div class="container d-flex flex-column align-items-center">
         <div class="sejin-container">
-            <div class="sejin-title">포인트 내역</div>
+            <div class="sejin-title" style="color: #99c3ff">포인트 내역</div>
             <div class="sejin-point-box">
                 <div>나의 포인트 <strong>${totalPoint == 0 ? 0 : totalPoint}</strong></div>
                 <a class="btn btn-primary btn-sm" href="javascript:dialogCharge();" title="충전하기">충전하기</a>

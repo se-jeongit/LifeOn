@@ -192,7 +192,21 @@ public class TogetherController {
 	
 	
 	
+	@GetMapping("cancel")
+	public String cancelLikeProduct2(@RequestParam(name = "pnum") long pnum,
+			HttpSession session) {
 	
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			long num = info.getNum();
+			service.deleteLikeProduct(pnum, num);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+		return "redirect:/likeProduct/list";
+	}
 	
 	
 	

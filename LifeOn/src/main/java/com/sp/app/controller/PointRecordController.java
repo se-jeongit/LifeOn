@@ -94,7 +94,7 @@ public class PointRecordController {
 			model.addAttribute("query", query);
 			
 		} catch (Exception e) {
-			log.info("list : ", e);
+			log.info("mypage : ", e);
 		}
 		
 		

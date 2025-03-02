@@ -76,7 +76,7 @@ $(function(){
 		</li>
 		
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="관심상품">
+	        <a href="<c:url value='/likeProduct/list' />" class="menu--link" title="관심상품">
 				<span class="menu--label">관심상품</span>
 			</a>
 		</li>
