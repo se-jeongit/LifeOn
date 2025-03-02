@@ -110,7 +110,7 @@
                 </table>
             </div>
             <div class="page-navigation">
-				${dataCount == 0 ? "포인트 내역이 없습니다" : paging}
+				${dataCount == 0 ? "관심상품이 없습니당" : paging}
 			</div>
         </div>
     </div>
