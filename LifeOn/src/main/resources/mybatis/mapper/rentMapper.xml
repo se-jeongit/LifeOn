@@ -15,7 +15,7 @@
 				VALUES (product_seq.NEXTVAL, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
 				
 			INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
-				VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra}, #{prad}, #{prlp})
+				VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra, jdbcType=VARCHAR}, #{prad}, #{prlp})
 		SELECT * FROM dual     
 	</insert>
 
@@ -112,10 +112,42 @@
 	
 	
 	<!-- 물품 상세 보기 -->
-	
+	<select id="findById" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT p.pnum, pname, pct, pph, p.num, cbn, c.csn, csc, prp, prd, prs, pra, prlp
+		FROM PRODUCT p
+		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
+		JOIN CATEGORY_SMALL c ON p.csn = c.csn
+		WHERE p.pnum = #{pnum}
+	</select>
 	
 	<!-- 이전 물품, 다음 물품 -->
+	<select id="findByPrev" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT p.psnum, pname, pph, prp, prlp
+		FROM PRODUCT p
+		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="searchSql"/>
+			</if>
+		</where>
+		WHERE p.psum &gt; #{pnum} AND prs = '물품대여'
+		ORDER BY pnum ASC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
 	
+	<select id="findByNext" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
+		SSELECT p.psnum, pname, pph, prp, prlp
+		FROM PRODUCT p
+		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="searchSql"/>
+			</if>
+		</where>
+		WHERE p.pnum &lt; #{pnum} AND prs = '물품대여'
+		ORDER BY pnum DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
 	
 	<!-- 카테고리 상품 목록 -->
 	<!-- 대분류 카테고리 -->

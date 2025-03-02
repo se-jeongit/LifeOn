@@ -15,6 +15,22 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/market.css" type="text/css">
 
 <script type="text/javascript">
+function inputNumberFormat(obj) {
+    obj.value = comma(uncomma(obj.value));
+}
+
+function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function uncomma(str) {
+    str = String(str);
+    return str.replace(/[^\d]+/g, '');
+}
+</script>
+
+<script type="text/javascript">
 function check() {
     const f = document.rentForm;
     let str;
@@ -23,6 +39,70 @@ function check() {
     if(! str) {
         alert('물품명을 입력하세요.');
         f.pname.focus();
+        return false;
+    }
+    
+    str = f.csn.value;
+    if(! str) {
+        alert('카테고리를 선택해주세요.');
+        f.csn.focus();
+        return false;
+    }
+    
+    str = uncomma(f.prp.value);
+    if(! str) {
+        alert('대여비를 입력해주세요.');
+        f.prp.focus();
+        return false;
+    }
+    
+    if (parseInt(str) < 0) {
+        alert('0원 이상의 금액만 가능합니다.');
+        f.prp.focus();
+        return false;
+    }
+    
+    if (parseInt(str) % 10 !== 0) {
+        alert('1원 단위는 입력이 불가능 합니다.');
+        f.prp.focus();
+        return false;
+    }
+    
+    if (str.includes('.')) {
+        alert('소수점은 입력이 불가능 합니다.');
+        f.prp.focus();
+        return false;
+    }
+    
+    str = uncomma(f.prlp.value);
+    if(! str) {
+        alert('보증금를 입력해주세요.');
+        f.prlp.focus();
+        return false;
+    }
+    
+    if (parseInt(str) < 0) {
+        alert('0원 이상의 금액만 가능합니다.');
+        f.prlp.focus();
+        return false;
+    }
+    
+    if (parseInt(str) % 10 !== 0) {
+        alert('1원 단위는 입력이 불가능 합니다.');
+        f.prlp.focus();
+        return false;
+    }
+    
+    if (str.includes('.')) {
+        alert('소수점은 입력이 불가능 합니다.');
+        f.prlp.focus();
+        return false;
+    }
+    
+    str = f.pra.value;
+    if(! str) {
+        alert('거래장소를 검색해주세요.');
+        document.getElementById("addr_btn").focus();
         return false;
     }
     
@@ -40,7 +120,10 @@ function check() {
         f.pphFile.focus();
         return false;
     }
-
+	
+    f.prp.value = uncomma(f.prp.value);
+    f.prlp.value = uncomma(f.prlp.value);
+    
     f.action = '${pageContext.request.contextPath}/market/rent/${mode}';
     f.submit()
 }
@@ -90,7 +173,7 @@ function check() {
 					<tr>
 						<td scope="row">대여비</td>
 						<td colspan="3" align="left">
-							<input type="number" name="prp" maxlength="100" class="rent-control" style="width: 237px;" placeholder="1일 기준 대여비를 입력해주세요." value="${dto.pname}">
+							<input type="text" name="prp" class="rent-control price_input" style="width: 237px;" placeholder="1일 기준 대여비를 입력해주세요." value="${dto.prp}" onkeyup="inputNumberFormat(this)">
 						</td>
 					</tr>
 
@@ -98,7 +181,7 @@ function check() {
 						<td scope="row">보증금</td>
 						<td colspan="3" align="left">
 							<div>
-								<input type="number" name="prlp" maxlength="100" class="rent-control" style="width: 237px;" placeholder="보증금을 입력해주세요." value="${dto.pname}">
+								<input type="text" name="prlp" class="rent-control price_input" style="width: 237px;" placeholder="보증금을 입력해주세요." value="${dto.prlp}" onkeyup="inputNumberFormat(this)">
 	                        </div>
 						</td>
 					</tr>
@@ -107,8 +190,8 @@ function check() {
 						<td scope="row">거래장소</td>
 						<td colspan="3">
 							<div style="display: flex;">
-								<input type="text" name="pra" id="pra" maxlength="100" class="rent-control" style="width: 90%;" disabled="disabled" placeholder="거래하시는 장소를 검색해주세요." value="${dto.pname}">
-								<button class="ssbtn" type="button" style="margin-left: 3px; width: 10%; border-radius: 0px;" onclick="daumPostcode();">검색</button>
+								<input type="text" name="pra" id="pra" maxlength="100" class="rent-control" style="width: 90%;" placeholder="거래하시는 장소를 검색해주세요." value="${dto.pra}" readonly>
+								<button class="ssbtn" id="addr_btn" type="button" style="margin-left: 3px; width: 10%; border-radius: 0px;" onclick="daumPostcode();">검색</button>
 	                        </div>
 						</td>
 					</tr>
@@ -117,7 +200,7 @@ function check() {
 						<td scope="row">상세주소</td>
 						<td colspan="3">
 							<div>
-								<input type="text" name="prad" id="prad" maxlength="100" class="rent-control" placeholder="상세주소 또는 특이사항을 입력해주세요." value="${dto.pname}">
+								<input type="text" name="prad" id="prad" maxlength="100" class="rent-control" placeholder="상세주소 또는 특이사항을 입력해주세요. (선택사항)" value="${dto.prad}">
 	                        </div>
 						</td>
 					</tr>
@@ -151,7 +234,7 @@ function check() {
 					
 					<c:if test="${mode=='update'}">
 						<tr>
-							<td scope="row">등록이미지</td>
+							<td scope="row">등록된 추가이미지</td>
 							<td colspan="3"> 
 								<div class="img-box">
 									<c:forEach var="vo" items="${listFile}">
@@ -403,7 +486,7 @@ window.addEventListener('DOMContentLoaded', evt => {
 function categoryCheck() {
     let cbn = $('#categoryNum').val();
 
-    if (!cbn || cbn == 0) {
+    if (! cbn || cbn == 0) {
         $('#subCategory').html("<option value=''>소분류 선택</option>");
         $('#subCategory').prop("disabled", true);
         return;

@@ -5,16 +5,17 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sp.app.admin.model.ProductManage;
 import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.model.SessionInfo;
@@ -86,9 +87,9 @@ public class RentController {
 			String cp = req.getContextPath();
 			
 			String listUrl = cp + "/market/rent/main";
-			String articleUrl = cp + "/market/rent/article/" + "?page=" + current_page;
+			String articleUrl = cp + "/market/rent/article";
 			
-			String query = "cbn=" + categoryNum;
+			String query = "page=" + current_page;
 			
 			if (! kwd.isBlank()) {
 				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
@@ -156,5 +157,64 @@ public class RentController {
 	@PostMapping("listSubCategory")
 	public List<RentProduct> getSmallCategories(@RequestParam(name = "cbn") int categoryNum) {
 		return service.listSubCategory(categoryNum);
+	}
+	
+	@GetMapping("article/{pnum}")
+	public String article(
+			@PathVariable(name = "pnum") long productNum,
+			@RequestParam(name = "page") String page,
+			@RequestParam(name = "schType", defaultValue = "productName") String schType,
+			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+			Model model,
+			HttpSession session) throws Exception {
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			if (! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			RentProduct dto = Objects.requireNonNull(service.findById(productNum));
+			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("schType", schType);
+			map.put("kwd", kwd);
+			map.put("pnum", productNum);
+			map.put("num", info.getNum());
+			
+			RentProduct prevDto = service.findByPrev(map);
+			RentProduct nextDto = service.findByNext(map);
+			
+			List<RentProduct> listFile = service.listProductFile(productNum);
+			
+			// TODO 상품찜 구현
+			// boolean productLiked = service.productLiked(map);
+			
+			
+			
+			model.addAttribute("dto", dto);
+			model.addAttribute("prevDto", prevDto);
+			model.addAttribute("nextDto", nextDto);
+			model.addAttribute("listFile", listFile);
+			
+			// model.addAttribute("productLiked", productLiked);
+			
+			model.addAttribute("pnum", productNum);
+
+			model.addAttribute("query", query);
+			model.addAttribute("page", page);
+			
+			return "market/rent/article";
+			
+		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("article : ", e);
+		}
+		
+		return "redirect:/market/rent/main?" + query;
 	}
 }
