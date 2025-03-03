@@ -46,19 +46,29 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public Map<String, Object> getReportDetail(Long repan) {
-		Map<String, Object> reportDetail = mapper.findReportDetail(repan);
+		List<Map<String, Object>> reportDetail = mapper.findReportDetail(repan);
 		
 		
 		if(reportDetail == null || reportDetail.isEmpty()) {
-			reportDetail = new HashMap<>();
-			reportDetail.put("title", "제목 없음");
-			reportDetail.put("author", "익명");
-			reportDetail.put("content", "내용 없음");
+			return null;
 		}
 		
-		return reportDetail;
+		return reportDetail.get(0);
 	}
 
+	@Override
+	public int deletePost(Long psnum) throws Exception {
+		int result = 0;
+		try {
+			result = mapper.deletePost(psnum);
+		} catch (Exception e) {
+			log.info("result : " , e);
+		}
+		
+		return result;
+	}
+
+	
 	
 	
 }

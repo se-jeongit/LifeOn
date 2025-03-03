@@ -21,5 +21,10 @@
 		JOIN member m ON m.num = hb.num 
 		WHERE r.repan = #{repan}
 	</select>
+	
+	<delete id="deletePost" parameterType="long">
+		DELETE FROM hybrid_board
+		WHERE psnum = ${psnum}
+	</delete>
 
 </mapper>

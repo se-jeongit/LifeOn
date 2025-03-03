@@ -14,5 +14,5 @@ public interface ReportService {
 	
 	public Map<String, Object> getReportDetail(Long repan);
 	
-
+	public int deletePost(Long psnum) throws Exception;
 }

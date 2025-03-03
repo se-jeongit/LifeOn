@@ -176,7 +176,13 @@
 	        });
 	    });
 	});
-
+	
+	document.addEventListener("DOMContentLoaded", function () {
+		document.getElementById("deletePostBtn").addEventListener("click", function () {
+			let psnum = this.dataset.psnum;
+			console.log("🗑 삭제할 게시글 번호:", psnum);
+		});
+	});
 	
 	</script>
 	<jsp:include page="/WEB-INF/views/admin/layout/footer.jsp" />

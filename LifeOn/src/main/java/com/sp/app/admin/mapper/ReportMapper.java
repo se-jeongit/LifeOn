@@ -1,5 +1,6 @@
 package com.sp.app.admin.mapper;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ public interface ReportMapper {
 	public int dataCount(Map<String, Object> map);
 
 	
-	public Map<String, Object> findReportDetail(@Param("repan") Long repan);
+	public List<Map<String, Object>> findReportDetail(@Param("repan") Long repan);
 	
+	public int deletePost(@Param("psnum") Long psnum) throws SQLException;
 }

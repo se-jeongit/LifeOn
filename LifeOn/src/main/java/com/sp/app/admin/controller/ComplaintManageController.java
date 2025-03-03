@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sp.app.admin.model.Report;
 import com.sp.app.admin.service.ReportService;
 import com.sp.app.common.PaginateUtil;
-import com.sp.app.lounge.model.FreeBoard;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -74,10 +72,7 @@ public class ComplaintManageController {
 	
 	@GetMapping("reportDetail")
 	@ResponseBody
-	public Map<String, Object> getReportDetail(FreeBoard dto, @RequestParam(name="repan") Long repan,
-			HttpSession session) {
-		
-		
+	public Map<String, Object> getReportDetail(@RequestParam(name="repan") Long repan) {
 		
 		Map<String, Object> reportDetail = service.getReportDetail(repan);
 		
@@ -90,11 +85,32 @@ public class ComplaintManageController {
 		}
 		
 
-		System.out.println("📌 최종 반환 데이터: " + reportDetail);
 		return reportDetail;
 	}
 	
+	/*
+	@GetMapping("delete")
+	@ResponseBody
+	public Map<String, Object> deletePost(@RequestParam(name="psnum") Long psnum) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		
+		try {
+			int result = service.deletePost(psnum);
+			if (result > 0) {
+				map.put("success", true);
+				map.put("message", "게시글이 삭제되었습니다.");
+			} else {
+				map.put("success", false);
+				map.put("message", "게시글이 존재하지 않거나 이미삭제되었습니다.");
+			}
+		} catch (Exception e) {
+			log.info("게시글 삭제중 오류 발생", e);
+		}
+		
+		
+		
+		return map;
+	}
 	
-	
-	
+	*/
 }
