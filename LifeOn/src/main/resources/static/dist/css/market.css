@@ -287,13 +287,64 @@
 
 .product-image {
 	width: 40%;
-	padding-top: 40px;
+	padding-top: 30px;
 }
 
 .product-info {
 	width: 60%;
 	padding-left: 40px;
-	padding-top: 40px;
+	padding-top: 30px;
+}
+
+.tab_item {
+	width: 100%;
+}
+
+.tab_content {
+	height: 200px;
+	clear: both;
+	overflow: hidden;
+	position: relative;
+	z-index: 1;
+}
+
+/* 슬라이드 스타일 */
+li { list-style: none; }
+
+.best_list {
+	display: flex;
+    position: relative;
+    padding: 0px;
+    margin-left: 15px;
+    margin-bottom: 0;
+    transition: left 0.5s ease;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.best_list li:not(:last-child) {
+	margin-right: 30px;
+}
+
+.best img {
+	width: 200px;
+	height: 200px;
+	object-fit: cover;
+}
+
+.controls {
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+}
+
+.controls span {
+	cursor: pointer;
+	z-index: 100;
 }
 
 .thumbnail-img {

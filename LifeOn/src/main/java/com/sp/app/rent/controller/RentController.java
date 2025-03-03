@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,6 +101,10 @@ public class RentController {
 			
 			String paging = paginateUtil.paging(current_page, total_page, listUrl);
 			
+			boolean isMemberLiked = service.isMemberProductLiked(map);
+			
+			model.addAttribute("isMemberLiked", isMemberLiked);
+			
 			model.addAttribute("listCategory", listCategory);
 			model.addAttribute("listSubCategory", listSubCategory);
 			model.addAttribute("list", list);
@@ -186,22 +191,18 @@ public class RentController {
 			map.put("pnum", productNum);
 			map.put("num", info.getNum());
 			
-			RentProduct prevDto = service.findByPrev(map);
-			RentProduct nextDto = service.findByNext(map);
+			List<RentProduct> memberProduct = service.findByMemberProduct(map);
 			
 			List<RentProduct> listFile = service.listProductFile(productNum);
 			
-			// TODO 상품찜 구현
-			// boolean productLiked = service.productLiked(map);
-			
-			
+			boolean isMemberLiked = service.isMemberProductLiked(map);
 			
 			model.addAttribute("dto", dto);
-			model.addAttribute("prevDto", prevDto);
-			model.addAttribute("nextDto", nextDto);
+			model.addAttribute("memberProduct", memberProduct);
+			model.addAttribute("memberProductSize", memberProduct.size());
 			model.addAttribute("listFile", listFile);
 			
-			// model.addAttribute("productLiked", productLiked);
+			model.addAttribute("isMemberLiked", isMemberLiked);
 			
 			model.addAttribute("pnum", productNum);
 
@@ -216,5 +217,44 @@ public class RentController {
 		}
 		
 		return "redirect:/market/rent/main?" + query;
+	}
+	
+	@ResponseBody
+	@PostMapping("insertProductLike")
+	public Map<String, ?> insertBoardLike(
+			@RequestParam(name = "pnum") long productNum,
+			@RequestParam(name = "memberLiked") boolean memberLiked,
+			HttpSession session) {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		int productLikeCount = 0;
+		
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("pnum", productNum);
+			map.put("num", info.getNum());
+			map.put("nickname", info.getNickName());
+			
+			if (memberLiked) {
+				service.deleteMemberLikeProduct(map);
+			} else {
+				service.insertMemberLikeProduct(map); 
+			}
+			
+			productLikeCount = service.productLikeCount(productNum);
+			
+		} catch (DuplicateKeyException e) {
+			state ="liked";
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
+		model.put("productLikeCount", productLikeCount);
+		
+		return model;
 	}
 }

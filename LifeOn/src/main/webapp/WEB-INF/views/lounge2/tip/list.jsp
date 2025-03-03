@@ -142,24 +142,24 @@ function elapsedText(date) {
 													${dto.content}
 										        </div>
 										        <div style="display: flex; justify-content: space-between; align-items: center;">
-														<div style="display: flex; align-items: center;">
-															<div class="profile" style="margin: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-																<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-															</div>	
-															<span class='tip_userName'>${dto.nickname}</span>
-															<span>&nbsp;·&nbsp;</span>
-														
-	                                    					<span id="result-${dto.psnum}"></span>
-					                                    	<script type="text/javascript">
-						                                    	document.addEventListener("DOMContentLoaded", function() {
-						                                            const dateStr = "${dto.reg_date}".trim();
-						                                            const date = new Date(dateStr);
-						                                            const id = "result-${dto.psnum}";
-		
-						                                        	document.getElementById(id).innerText = elapsedText(date);
-						                                    	});
-					                                    	</script>
-														</div>
+													<div style="display: flex; align-items: center;">
+														<div class="profile" style="margin: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+															<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+														</div>	
+														<span class='tip_userName'>${dto.nickname}</span>
+														<span>&nbsp;·&nbsp;</span>
+													
+                                    					<span id="result-${dto.psnum}"></span>
+				                                    	<script type="text/javascript">
+					                                    	document.addEventListener("DOMContentLoaded", function() {
+					                                            const dateStr = "${dto.reg_date}".trim();
+					                                            const date = new Date(dateStr);
+					                                            const id = "result-${dto.psnum}";
+	
+					                                        	document.getElementById(id).innerText = elapsedText(date);
+					                                    	});
+				                                    	</script>
+													</div>
 													<div>
 														<i class="tip_icon bi bi-bookmark"></i>
 														<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>

@@ -113,15 +113,22 @@
 	
 	<!-- 물품 상세 보기 -->
 	<select id="findById" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
-		SELECT p.pnum, pname, pct, pph, p.num, cbn, c.csn, csc, prp, prd, prs, pra, prlp
+		SELECT p.pnum, pname, pct, pph, p.num, cbn, c.csn, csc, prp, prd, prs, pra, prad, prlp, nickname, profile_image, NVL(productLikeCount, 0) productLikeCount
 		FROM PRODUCT p
+		JOIN MEMBER m ON p.num = m.num
 		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
 		JOIN CATEGORY_SMALL c ON p.csn = c.csn
+		LEFT OUTER JOIN (
+			SELECT pnum, COUNT(*) productLikeCount
+			FROM MEMBER_LIKED
+			WHERE pnum = #{pnum}
+			GROUP BY pnum
+		) l ON p.pnum = l.pnum
 		WHERE p.pnum = #{pnum}
 	</select>
 	
-	<!-- 이전 물품, 다음 물품 -->
-	<select id="findByPrev" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
+	<!-- 판매자가 파는 물품리스트 -->
+	<select id="findByMemberProduct" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
 		SELECT p.pnum, pname, pph, prp, prlp
 		FROM PRODUCT p
 		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
@@ -130,23 +137,31 @@
 				<include refid="searchSql"/>
 			</if>
 		</where>
-		WHERE p.pnum &gt; #{pnum}
+		WHERE p.pnum != #{pnum} AND num = #{num}
 		ORDER BY p.pnum ASC
-		FETCH FIRST 1 ROWS ONLY
 	</select>
 	
-	<select id="findByNext" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
-		SELECT p.pnum, pname, pph, prp, prlp
-		FROM PRODUCT p
-		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
-		<where>
-			<if test="kwd != null and kwd != ''">
-				<include refid="searchSql"/>
-			</if>
-		</where>
-		WHERE p.pnum &lt; #{pnum}
-		ORDER BY p.pnum DESC
-		FETCH FIRST 1 ROWS ONLY
+	<!-- 대여상품 찜하기 -->
+	<insert id="insertMemberLikeProduct" parameterType="map">
+		INSERT INTO MEMBER_LIKED (mlnum, mlq, mld, num, pnum)
+		VALUES (member_liked_seq.NEXTVAL, 1, SYSDATE, #{num}, #{pnum})
+	</insert>
+	
+	<delete id="deleteMemberLikeProduct" parameterType="map">
+		DELETE FROM MEMBER_LIKED
+		WHERE num = #{num} AND pnum = #{pnum}
+	</delete>
+	
+	<select id="productLikeCount" parameterType="Long" resultType="Integer">
+		SELECT COUNT(*)
+		FROM MEMBER_LIKED
+		WHERE pnum = #{pnum}
+	</select>
+	
+	<select id="memberProductLiked" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT pnum, num
+		FROM MEMBER_LIKED
+		WHERE pnum = #{pnum, jdbcType=BIGINT} AND num = #{num, jdbcType=BIGINT}
 	</select>
 	
 	<!-- 카테고리 상품 목록 -->

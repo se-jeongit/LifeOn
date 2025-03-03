@@ -122,14 +122,22 @@ function elapsedText(date) {
 	            <div class="product-grid">
 	            	<c:forEach var="dto" items="${list}" varStatus="status">
 		                <div class="product-item" id="${dto.pnum}" onclick="location.href='<c:url value='${articleUrl}/${dto.pnum}?${query}'/>'" style="cursor: pointer;">
-		                    <c:if test="${empty dto.pph}">
-		                    	<img class="product_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
-		                    </c:if>
-		                    <c:if test="${not empty dto.pph}">
-		                    	<img class="product_img" src="${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}" alt="물품사진">
-		                    </c:if>
+		                    <div style="width: 100%; height: 160px; border-bottom: 1px solid #e0e0e0;">
+			                    <c:if test="${empty dto.pph}">
+			                    	<img class="product_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
+			                    </c:if>
+			                    <c:if test="${not empty dto.pph}">
+			                    	<img class="product_img" src="${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}" alt="물품사진">
+			                    </c:if>
+		                    </div>
 		                    <div class="product_info">
-				                <h5 class="product_name" style="text-align: left;">${dto.pname}</h5>
+		                    	<div style="display: flex; justify-content: space-between; align-items: center;">
+					                <h5 class="product_name" style="text-align: left;">${dto.pname}</h5>
+					                <button type="button" class="btnSendProductLike" style="margin-bottom: 8px; border: none; background: #fff; font-size: 20px;" title="찜하기" onclick="event.stopPropagation();">
+										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
+										<span class="insertLike" data-pNum="${dto.pnum}"></span>
+									</button>
+		                    	</div>
 		                    	<div style="text-align: left; font-size: 16px; font-weight: bold; color: #006AFF">${dto.prs}</div>
 			                    	<div style="text-align: left;">
 			                    		<span style="font-size: 20px; font-weight: bold;"><fmt:formatNumber value="${dto.prp}"/></span>
@@ -302,6 +310,42 @@ $(document).ready(function() {
             });
         }
     }
+});
+
+$(function() {
+	$('.btnSendProductLike').click(function() {
+		const $i = $(this).find('i');
+		let memberLiked = $i.hasClass('bi-suit-heart-fill');
+		let msg = memberLiked ? '찜을 취소하시겠습니까?' : '찜을 하시겠습니까?';
+		
+		if (! confirm(msg)) {
+			return false;
+		}
+		
+		let url = '${pageContext.request.contextPath}/market/rent/insertProductLike';
+		let pnum = $(this).attr('data-pNum');
+		let params = {pnum: pnum, memberLiked: memberLiked};
+		
+		const fn = function(data) {
+			let state = data.state;
+			// alert(state);
+			
+			if (state === "true") {
+				if (memberLiked) {
+					$i.removeClass('bi-suit-heart-fill redColor').addClass('bi-suit-heart');
+				} else {
+					$i.removeClass('bi-suit-heart').addClass('bi-suit-heart-fill redColor');
+				}
+				
+			} else if (state == "liked") {
+				alert('찜은 한번만 가능합니다.');
+			} else {
+				alert('처리가 실패 했습니다.');
+			}
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
 });
 </script>
 
