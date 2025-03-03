@@ -99,17 +99,7 @@ main section {width: 100% !important;}
     							<td colspan="2" valign="top" height="200" style="border-bottom: none;">
 							         ${dto.content}
 							    </td>
-							</tr>
-						<!--  
-							<tr>
-								<td colspan="2" class="text-center p-3" style="border-bottom: none;">
-									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기">
-										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill' : 'bi-bookmark'}"></i>
-										&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
-									</button>
-								</td>
-							</tr>
-							-->
+							    
 							<tr>
 								<td colspan="2" align="right" style="font-size: 12px; border-bottom: none;">
 									<div style="display: flex; justify-content: flex-end; align-items: flex-end; flex-wrap: wrap;">

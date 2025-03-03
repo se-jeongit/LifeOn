@@ -8,7 +8,7 @@ import com.sp.app.model.Meeting;
 public interface MeetingService {
 	public void insertBoard(Meeting dto) throws Exception;
 	public void updateBoard(Meeting dto) throws Exception;
-	public void deleteBoard(String bdtype, long psnum, String nickname, int grade) throws Exception;
+	public void deleteBoard(long psnum, String nickname, long num) throws Exception;
 	public List<Meeting> listBoard(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
 	public Meeting findById(long num);

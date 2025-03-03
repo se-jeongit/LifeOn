@@ -86,7 +86,7 @@
         </div>
      
       
-      	<div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 980px;">
+      	<div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1100px;">
           <button class="btn" onclick="location.href='${pageContext.request.contextPath}/city/meeting/write';">글쓰기</button>
         </div>
 
@@ -99,15 +99,22 @@
                 <div class="meeting__info-detail-more">
                   <span class="meeting__category">${dto.cbc}</span>
                   <span class="meeting__location"><i class="bi bi-geo-alt"></i>${dto.loca}</span>
-                  <span class="meeting__date"><i class="bi bi-calendar-check"></i>&nbsp;&nbsp;${dto.mdate}</span>
+                  <span class="meeting__date"><i class="bi bi-calendar-check"></i>&nbsp;${dto.mdate}</span>
       
                 </div>
                 <h5 class="meeting__title">${dto.subject}</h5>
               </div>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
+              
+              <div class="meeting_infos">
+              	<span class="meeting__category">#${dto.age}</span>
+              	<span class="meeting__category">#${dto.gender}</span>
+              	<span class="meeting__category">#${dto.person_c}</span>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: left;">
 				 <div class="status-box" style="font-size: 10px; font-weight: bold;">
 				    <div class="meeting__status ${dto.ies eq '모집완료' ? 'meeting__status--off' : 'meeting__status--on'}">
-				       	모집중 ${dto.ies}
+				       	${dto.ies}
 				    </div>
 				</div>
 				

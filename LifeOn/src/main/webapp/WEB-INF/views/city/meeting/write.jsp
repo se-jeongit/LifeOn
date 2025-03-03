@@ -26,10 +26,10 @@ body {
   width: 70%; 
   padding: 30px;
   background-color: #fff;
-  border: 1px solid #ccc; /* 외부 테두리 */
-  border-radius: 10px; /* 둥근 테두리 */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 */
-  margin: 0 auto; /* 수평 중앙 정렬 */
+  border: 1px solid #ccc; 
+  border-radius: 10px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  margin: 0 auto; 
 }
 
 .box-container {
@@ -37,7 +37,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgba(0, 0, 0, 0.1); /* 배경을 어둡게 */
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .header {
   font-size: 24px;
@@ -166,10 +166,10 @@ function check() {
         <div class="section">
                 <label for="label">카테고리</label>
                 <select id="bigCategory" name="cbn" class="dropdown" required onchange="categoryCheck();">
-                     <option value="" disabled selected>카테고리를 선택하세요</option>
-                    <c:forEach var="dto" items="${Category}">
-                        <option value="${dto.cbn}">${dto.cbc}</option>
-                    </c:forEach>
+                     <option value="" disabled ${dto.cbn == '' ? 'selected' : ''}>카테고리를 선택하세요</option>
+                     <c:forEach var="category" items="${Category}">
+				        <option value="${category.cbn}" ${category.cbn == dto.cbn ? 'selected' : ''}>${category.cbc}</option>
+				    </c:forEach>
                 </select>
             </div>
             
@@ -244,7 +244,7 @@ function check() {
         <div class="section">
             <label class="label" for="gender">성별</label>
             <select id="gender" class="dropdown" name="gender">
-                <option value="" selected>성별 무관</option>
+                <option value="성별무관" selected>성별 무관</option>
 				<option value="남자" ${dto.gender == "남자" ? "selected" : ""}>남자</option>
 				<option value="여자" ${dto.gender == "여자" ? "selected" : ""}>여자</option>
             </select>
@@ -272,7 +272,7 @@ function check() {
 
         <div class="button-group">
             <button class="button cancel" onclick="location.href='${pageContext.request.contextPath}/city/meeting/main';">${mode == "update" ? "수정취소" : "등록취소"}&nbsp;</button>
-            <button class="button submit" onclick="submitContents(this.form);">${mode == "update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></button>
+            <button class="button submit" onclick="button submit">${mode == "update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></i></button>
        
 			<c:if test="${mode == 'update'}">
 				<input type="hidden" name="num" value="${dto.num}">

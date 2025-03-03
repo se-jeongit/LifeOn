@@ -1,5 +1,6 @@
 package com.sp.app.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import com.sp.app.common.StorageService;
 import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.mapper.MeetingMapper;
 import com.sp.app.model.Meeting;
+import com.sp.app.rent.model.RentProduct;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,12 +65,38 @@ public class MeetingServiceImpl implements MeetingService{
 	
 	@Override
 	public void updateBoard(Meeting dto) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			
+			mapper.updateBoard(dto);
+			
+		} catch (Exception e) {
+			log.info("updateBoard : ", e);
+			
+			throw e;
+		}
 		
 	}
 	@Override
-	public void deleteBoard(String bdtype, long psnum, String nickname, int grade) throws Exception {
-		// TODO Auto-generated method stub
+	public void deleteBoard(long psnum, String nickname, long num) throws Exception {
+			try {
+			
+				Meeting dto = findById(psnum);
+				
+				if (dto == null || (dto.getNum() != num)) {
+				    return;
+				}
+				
+				Map<String, Object> map = new HashMap<>();
+				map.put("psnum", psnum);
+				
+				
+				mapper.deleteBoard(psnum);
+				
+			} catch (Exception e) {
+				log.info("deleteBoard : ", e);
+				
+				throw e;
+			}
 		
 	}
 	@Override

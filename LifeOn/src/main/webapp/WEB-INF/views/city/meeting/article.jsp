@@ -11,6 +11,7 @@
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/meeting.css" type="text/css">
 
 </head>
 <body>
@@ -54,26 +55,49 @@
 							</tr>
 							
 							<td colspan="2" style="word-wrap: break-word;">
-							 <span class="meeting__category">${dto.cbc}</span>
+							 <span class="meeting__category">[${dto.cbc}]</span>
                   			 <span class="meeting__location"><i class="bi bi-geo-alt"></i>${dto.loca_d}</span>
-                  			 <span class="meeting__date">&nbsp;${dto.mdate}</span>
+                  			 <span class="meeting__date"><i class="bi bi-calendar-check"></i>&nbsp;${dto.mdate}</span>
                   			 </td>
                   			 
 							
 							<tr>
-								<td colspan="2" valign="top" height="200" style="border-bottom: none;">
+								<td colspan="2" valign="top" height="200" style="border-bottom: none; padding-top: 30px;">
 									${dto.content}
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2" align="left" style="font-size: 12px; border-bottom: none;">
-									<div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap;">
-										<div>
-										<button type="button" class="ssbtn btnSendBoardLike" title="즐겨찾기">
-										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill buleColor' : 'bi-bookmark'}"></i>
-										&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
-										</button>
-											<button type="button" class="ssbtn" onclick="javascript:dialogReport();">신고하기</button>
+								<td colspan="2" align="right" style="font-size: 12px; border-bottom: none;">
+							        <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; flex-wrap: wrap;">							        
+							            <button class="apply-btn" id="applyBtn">참여하기</button>
+							            
+							            <div class="modal-overlay" id="modalOverlay">
+								        <div class="modal-container">
+								            <div class="modal-header">
+								                <button class="close-btn" id="closeBtn">✕</button>
+								            </div>
+								            <div class="modal-content">
+								                <h2>"제목"</h2>
+								                <p>참여하시겠습니까?</p>
+								            </div>
+								            <div class="modal-actions">
+								                <button class="cancel-btn" id="cancelBtn">참여취소</button>
+								                <button class="confirm-btn" id="confirmBtn">참여하기</button>
+								            </div>
+								        </div>
+								    </div>
+							               
+						            <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 20px;">
+						                <div class="meeting_infos">
+						              	<span class="meeting__category">#${dto.age}</span>
+						              	<span class="meeting__category">#${dto.gender}</span>
+						              	<span class="meeting__category">#${dto.person_c}</span>
+						              </div>
+						                <button type="button" class="ssbtn btnSendBoardLike" title="즐겨찾기">
+						                    <i class="bi ${isMemberLiked ? 'bi-bookmark-fill likeColor' : 'bi-bookmark'}"></i>
+						                    	&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
+						               		 </button>
+						                <button type="button" class="ssbtn" onclick="javascript:dialogReport();">신고하기</button>
 										</div>
 									</div>
 								</td>
@@ -105,6 +129,7 @@
 					
 					<table class="table table-borderless">
 						<tr>
+							<hr style="border: 1px solid #e0e0e0;">
 							<td class="text-start">
 								<c:choose>
 									<c:when test="${sessionScope.member.nickName == dto.nickname}">
@@ -119,7 +144,7 @@
 								</c:choose>
 							</td>
 							<td class="text-end">
-								<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/city/meeting?${query}';">리스트</button>
+								<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/city/meeting/main';">리스트</button>
 							</td>
 						</tr>
 					</table>
@@ -154,7 +179,7 @@
 
 </main>
 
-<%-- <c:if test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
+<c:if test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
 	<script type="text/javascript">
 		function deleteOk() {
 			if (confirm('게시글을 삭제 하시겠습니까?')) {
@@ -164,8 +189,33 @@
 			}
 		}
 	</script>
-</c:if>
+	
+<script>
+  document.getElementById('applyBtn').addEventListener('click', function() {
+      document.getElementById('modalOverlay').classList.add('modal-show');
+  });
 
+  document.getElementById('closeBtn').addEventListener('click', function() {
+      document.getElementById('modalOverlay').classList.remove('modal-show');
+  });
+
+  document.getElementById('cancelBtn').addEventListener('click', function() {
+      document.getElementById('modalOverlay').classList.remove('modal-show');
+  });
+
+  document.getElementById('confirmBtn').addEventListener('click', function() {
+      document.getElementById('modalOverlay').classList.remove('modal-show');
+      alert('참여 신청이 완료되었습니다!');
+  });
+
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+          this.classList.remove('modal-show');
+      }
+  });
+</script>
+</c:if>
+<%-- 
 <script type="text/javascript">
 function dialogReport() {
 	let memberNum = '${sessionScope.member.num}';
@@ -229,7 +279,7 @@ $(function() {
         	return false;
         }
 
-		let url = '${pageContext.request.contextPath}/city/meeting/boardBlind';
+		let url = '${pageContext.request.contextPath}/lounge2/tip/boardBlind';
 		let repan = '${dto.psnum}';
 		let params = {repan: repan, repr: repr};
 		
@@ -332,17 +382,17 @@ $(function() {
 			            <p style="text-align: center; margin: 0; padding: 10px; padding-top: 15px; color: #999; border-top: 1px solid #e0e0e0;">신고하게 된 사유를 자세히 작성해주시면 관리자의 결정에 도움이 됩니다.</p>
           			</div>
         		</form>
-      		</div>
+      		</div> --%>
       		
-      		<div class="modal-footer" style="display: flex; justify-content: center;">
+      		<!-- <div class="modal-footer" style="display: flex; justify-content: center;">
         		<button type="button" class="ssbtn" id="submitReport">신고하기</button>
         		<button type="button" class="ssbtn" data-bs-dismiss="modal" aria-label="Close" onclick="reset();">닫기</button>
-      		</div>
+      		</div> -->
     	</div>
   	</div>
 </div>
- --%>
-<!-- <script type="text/javascript">
+
+<script type="text/javascript">
 $(function() {
     $('.reply').on('click', '.reply-dropdown', function() {
         const $menu = $(this).next('.reply-menu');
@@ -370,13 +420,8 @@ $(function() {
 	$('.btnSendBoardLike').click(function() {
 		const $i = $(this).find('i');
 		let memberLiked = $i.hasClass('bi-bookmark-fill');
-		let msg = memberLiked ? '게시글 즐겨찾기를 취소하시겠습니까?' : '게시글 즐겨찾기를 하시겠습니까?';
 		
-		if (! confirm(msg)) {
-			return false;
-		}
-		
-		let url = '${pageContext.request.contextPath}/lounge2/tip/insertBoardLike';
+		let url = '${pageContext.request.contextPath}/city/meeting/boardLike';
 		let psnum = '${dto.psnum}';
 		let params = {psnum: psnum, memberLiked: memberLiked};
 		
@@ -410,7 +455,7 @@ $(function() {
 });
 
 function listPage(page) {
-	let url = '${pageContext.request.contextPath}/lounge2/tip/listReply';
+	let url = '${pageContext.request.contextPath}/city/meeting/listReply';
 	let rpnum = '${dto.rpnum}';
 	let psnum = '${dto.psnum}';
 	let params = {rpnum: rpnum, pageNo: page, psnum: psnum};
@@ -442,7 +487,7 @@ $(function(){
 			return false;
 		}
 		
-		let url = '${pageContext.request.contextPath}/lounge2/tip/insertReply';
+		let url = '${pageContext.request.contextPath}/city/meeting/reply';
 		let params = {rpnum: rpnum, rpcontent: rpcontent, psnum: psnum, num: num};
 		
 		const fn = function(data) {
@@ -470,7 +515,7 @@ $(function() {
 		let rpnum = $(this).attr('data-replyNum');
 		let page = $(this).attr('data-pageNo');
 		
-		let url = '${pageContext.request.contextPath}/lounge2/tip/deleteReply';
+		let url = '${pageContext.request.contextPath}/city/meeting/deleteReply';
 		let params = {rpnum: rpnum, mode: 'reply'};
 		
 		const fn = function(data) {
@@ -489,7 +534,7 @@ $(function() {
 		let memberLiked = $btn.parent('span').attr('data-memberLiked');
 		
 		if (memberLiked !== '-1') {
-			alert('댓글 공감 여부는 한번만 가능합니다.');
+			alert('댓글 공감은 한번만 가능합니다.');
 			return false;
 		}
 		
@@ -502,7 +547,7 @@ $(function() {
 			return false;
 		}
 		
-		let url = '${pageContext.request.contextPath}/lounge2/tip/insertReplyLike';
+		let url = '${pageContext.request.contextPath}/city/meeting/replyLike';
 		let params = {rpnum: rpnum, rplike: rplike};
 		
 		const fn = function(data) {
@@ -532,7 +577,7 @@ $(function() {
 	});
 });
 
-$(function() {
+/* $(function() {
 	$('.reply').on('click', '.blindReply', function() {	
 		let $menu = $(this);
 		
@@ -565,9 +610,10 @@ $(function() {
 		
 		ajaxRequest(url, 'post', params, 'json', fn);
 	});
-});
+}); */
 
-</script> -->
+</script>
+
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
 	<jsp:include page="/WEB-INF/views/layout/footer.jsp"/>
