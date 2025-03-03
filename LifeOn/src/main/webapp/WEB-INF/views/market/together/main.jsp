@@ -55,6 +55,9 @@
 	}
     .product-discount {
         color: red;
+        display: flex; 
+        justify-content: space-between;
+        align-items: center;
         font-size: 20px;
         font-weight: bold;
         text-align: left; 
@@ -165,12 +168,7 @@
     color: #333;
 }
 
-/* 간단한 가격 표시 */
-.recently-viewed .product-card2 .product-price {
-    font-size: 12px;
-    color: #ff5722;  /* 가격은 오렌지색으로 강조 */
-    margin-top: 5px;
-}
+
  
     
 </style>
@@ -219,9 +217,21 @@
 			            	</a>
 	                        <div class="product-header">
 							    <p class="product-price"><del><fmt:formatNumber value="${dto.ptp}" type="currency"/></del></p>
-							    <p class="purchase-status ${dto.status eq '마감' ? 'closed-status' : ''}">${dto.status}</p>
+							    <p class="purchase-status ${dto.status eq '마감' ? 'closed-status' : ''}">${dto.status}</p>						
 							</div>
-	    					<p class="product-discount"><fmt:formatNumber value="${dto.ptsp}" type="currency"/></p>
+	    					<p class="product-discount">
+		    					<fmt:formatNumber value="${dto.ptsp}" type="currency"/>	    
+								<a title="관심상품" class="heart-icon" data-product-id="${dto.pnum}">
+								    <c:choose>
+								        <c:when test="${dto.liked}">
+								            <i class="bi bi-heart-fill" style="font-size: 28px; color: hotpink;"></i>
+								        </c:when>
+								        <c:otherwise>
+								            <i class="bi bi-heart" style="font-size: 28px; color: black;"></i>
+								        </c:otherwise>
+								    </c:choose> 
+								</a>
+	    					</p>
 	                        <p class="product-info">시작일 : ${dto.ptsd} - 종료일 : ${dto.pted}</p>
 	                        <p class="product-info">남은수량 : ${dto.ptq}개 &nbsp;&nbsp;&nbsp;예상 발송일 : ${dto.ptdd}</p>
 	                    </div>
@@ -247,6 +257,41 @@
 <jsp:include page="/WEB-INF/views/layout/footerResources.jsp"/>
 
 <script type="text/javascript">
+var contextPath = "${pageContext.request.contextPath}";
+
+$(document).ready(function () {
+    $(".heart-icon").click(function () {
+        let icon = $(this).find("i"); // 클릭한 하트 아이콘 가져오기
+        let pnum = $(this).data("product-id"); // 상품 ID 가져오기
+        let isLiked = icon.hasClass("bi-heart-fill"); // 현재 상태 확인
+
+        let url = isLiked 
+            ? contextPath + '/market/together/cancel'
+            : contextPath + '/market/together/add'; 
+
+        $.post(url, { pnum: pnum }, function (response) {
+            if (response.state === "success") {
+                // UI 업데이트 (하트 변경)
+                icon.toggleClass("bi-heart bi-heart-fill");
+                if (icon.hasClass("bi-heart-fill")) {
+                    icon.css("color", "hotpink"); 
+                } else {
+                    icon.css("color", ""); 
+                }
+            } else if(response.state === "fail"){
+            	alert("실패 다시 시도해주세요.");
+            } else {
+                alert("알수 없는 오류");
+            }
+        }, "json")
+        .fail(function (xhr, status, error) {
+            console.error("관심상품 처리 실패:", error);
+        });
+            
+    });
+});
+
+
 
 
 $(document).ready(function () {
@@ -256,7 +301,6 @@ $(document).ready(function () {
     
     // csn 값이 0이거나 없으면 localStorage 초기화 (전체보기 또는 새로운 진입)
     if (!currentCsn || currentCsn === "0") {
-        localStorage.removeItem('selectedCbn');
         localStorage.removeItem('selectedCsn');
         
         // 모든 선택 상태 초기화

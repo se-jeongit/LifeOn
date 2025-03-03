@@ -26,8 +26,13 @@ public interface RentService {
 	public List<RentProduct> listRentProduct(Map<String, Object> map); // 전체 물품 리스트
 	
 	public RentProduct findById(long productNum); // 선택한 물품정보 보기
-	public RentProduct findByPrev(Map<String, Object> map); // 이전 물품
-	public RentProduct findByNext(Map<String, Object> map); // 다음 물품
+	public List<RentProduct> findByMemberProduct(Map<String, Object> map); // 판매자가 파는 물품리스트
+	
+	// 대여물품 찜하기
+	public void insertMemberLikeProduct(Map<String, Object> map) throws Exception;
+	public void deleteMemberLikeProduct(Map<String, Object> map) throws Exception;
+	public int productLikeCount(long num);
+	public boolean isMemberProductLiked(Map<String, Object> map);
 	
 	// 상품 카테고리 목록
 	public RentProduct findByCategory(long categoryNum);

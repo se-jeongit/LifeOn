@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sp.app.mapper.PointRecordMapper;
+import com.sp.app.model.LikeProduct;
 import com.sp.app.model.PointRecord;
 
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,34 @@ public class PointRecordServiceImpl implements PointRecordService {
 			log.info("insertChargeAndCard : ", e);
 		}
 		
+	}
+
+
+	@Override
+	public int dataCount2(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = mapper.dataCount2(map);
+		} catch (Exception e) {
+			log.info("dataCount : ", e);
+		}
+		
+		return result;
+	}
+
+
+	@Override
+	public List<LikeProduct> listLikeProduct(Map<String, Object> map) {
+		List<LikeProduct> list = null;
+		
+		try {
+			list = mapper.listLikeProduct(map);
+		} catch (Exception e) {
+			log.info("listPoint : ", e);
+		}
+	
+		return list;
 	}
 
 

@@ -29,6 +29,12 @@ public class VisitorLogServiceImpl implements VisitorLogService {
 	public List<Map<String, Object>> MemberAgeDistribution() {
 		return visitorLogMapper.MemberAgeDistribution();
 	}
+
+	@Override
+	public List<Map<String, Object>> getGenderRatio() {
+		return visitorLogMapper.getGenderRatio();
+
+	}
 	
 	
 }

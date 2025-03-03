@@ -36,4 +36,8 @@ public interface ProductManageService {
 	
 	public void updateProductStatus();
 	
+	public void insertLikeProduct(long pnum, long num);
+	public void deleteLikeProduct(long pnum, long num);
+	
+	
 }

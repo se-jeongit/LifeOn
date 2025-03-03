@@ -87,11 +87,11 @@ main section {width: 100% !important;}
 										<div class="profile" style="margin: 5px; width: 35px; height: 35px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
 											<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
 										</div>	
-										<div style="font-size: 16px;">${dto.nickname}</div>
+										<div style="font-size: 12px;">${dto.nickname}</div>
 									</div>
 								</td>
 								<td align="right">
-									${dto.reg_date} | 조회 ${dto.hitCount}
+									${dto.reg_date} |조회 ${dto.hitCount}
 								</td>
 							</tr>
 							
@@ -99,17 +99,7 @@ main section {width: 100% !important;}
     							<td colspan="2" valign="top" height="200" style="border-bottom: none;">
 							         ${dto.content}
 							    </td>
-							</tr>
-						<!--  
-							<tr>
-								<td colspan="2" class="text-center p-3" style="border-bottom: none;">
-									<button type="button" class="btn btn-outline-primary btnSendBoardLike" title="즐겨찾기">
-										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill' : 'bi-bookmark'}"></i>
-										&nbsp;&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
-									</button>
-								</td>
-							</tr>
-							-->
+							    
 							<tr>
 								<td colspan="2" align="right" style="font-size: 12px; border-bottom: none;">
 									<div style="display: flex; justify-content: flex-end; align-items: flex-end; flex-wrap: wrap;">

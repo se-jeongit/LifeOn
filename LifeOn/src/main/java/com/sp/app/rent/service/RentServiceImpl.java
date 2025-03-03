@@ -207,29 +207,66 @@ public class RentServiceImpl implements RentService {
 	}
 
 	@Override
-	public RentProduct findByPrev(Map<String, Object> map) {
-		RentProduct dto = null;
+	public List<RentProduct> findByMemberProduct(Map<String, Object> map) {
+		List<RentProduct> list = null;
 		
 		try {
-			dto = mapper.findByPrev(map);
+			list = mapper.findByMemberProduct(map);
 		} catch (Exception e) {
 			log.info("findByPrev : ", e);
 		}
 		
-		return dto;
+		return list;
+	}
+	
+	@Override
+	public void insertMemberLikeProduct(Map<String, Object> map) throws Exception {
+		try {
+			mapper.insertMemberLikeProduct(map);
+		} catch (Exception e) {
+			log.info("insertMemberLikeProduct : ", e);
+			
+			throw e;
+		}
 	}
 
 	@Override
-	public RentProduct findByNext(Map<String, Object> map) {
-		RentProduct dto = null;
-		
+	public void deleteMemberLikeProduct(Map<String, Object> map) throws Exception {
 		try {
-			dto = mapper.findByNext(map);
+			mapper.deleteMemberLikeProduct(map);
 		} catch (Exception e) {
-			log.info("findByNext : ", e);
+			log.info("deleteMemberLikeProduct : ", e);
+			
+			throw e;
+		}	
+	}
+
+	@Override
+	public int productLikeCount(long num) {
+		int result = 0;
+		try {
+			result = mapper.productLikeCount(num);
+		} catch (Exception e) {
+			log.info("productLikeCount : ", e);
 		}
 		
-		return dto;
+		return result;
+	}
+
+	@Override
+	public boolean isMemberProductLiked(Map<String, Object> map) {
+		boolean result = false;
+		
+		try {
+			RentProduct dto = mapper.memberProductLiked(map);
+			if (dto != null) {
+				result = true;
+			}
+		} catch (Exception e) {
+			log.info("isMemberProductLiked : ", e);
+		}
+		
+		return result;
 	}
 
 	@Override

@@ -83,11 +83,11 @@ function elapsedText(date) {
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="prize" items="${list}" varStatus="status">
+						<c:forEach var="dto" items="${list}" varStatus="status">
 		              		<tr>
 								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${prize.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${prize.subject}
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
 									</div>
 								</td>
 		              		</tr>
@@ -100,11 +100,11 @@ function elapsedText(date) {
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="prize" items="${list}" varStatus="status">
+						<c:forEach var="dto" items="${list}" varStatus="status">
 		              		<tr>
 								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${prize.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${prize.subject}
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
 									</div>
 								</td>
 		              		</tr>
@@ -127,46 +127,46 @@ function elapsedText(date) {
 				
 				<!-- 글리스트 -->
 				<div>
-					<c:forEach var="prize" items="${list}" varStatus="status">
+					<c:forEach var="dto" items="${list}" varStatus="status">
 						<div class="mx-3">
-					  		<div onclick="location.href='<c:url value='${articleUrl}/${prize.psnum}?${query}'/>'" style="cursor: pointer;">
+					  		<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="cursor: pointer;">
 								<table class="table table-hover m-0" style="table-layout: fixed;">
 									<tbody>
 									 	<tr>
 									 		<td>
 											 	<h4 class="tip_subject">
-												 	${prize.subject}
+												 	${dto.subject}
 												</h4>
 		
 											 	<div class="tip_content">
-													${prize.content}
+													${dto.content}
 										        </div>
 										        <div style="display: flex; justify-content: space-between; align-items: center;">
-														<div style="display: flex; align-items: center;">
-															<div class="profile" style="margin: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-																<img src="${pageContext.request.contextPath}${prize.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-															</div>	
-															<span class='tip_userName'>${prize.nickname}</span>
-															<span>&nbsp;·&nbsp;</span>
-														
-	                                    					<span id="result-${prize.psnum}"></span>
-					                                    	<script type="text/javascript">
-						                                    	document.addEventListener("DOMContentLoaded", function() {
-						                                            const dateStr = "${prize.reg_date}".trim();
-						                                            const date = new Date(dateStr);
-						                                            const id = "result-${prize.psnum}";
-		
-						                                        	document.getElementById(id).innerText = elapsedText(date);
-						                                    	});
-					                                    	</script>
-														</div>
+													<div style="display: flex; align-items: center;">
+														<div class="profile" style="margin: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+															<img src="${pageContext.request.contextPath}${dto.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+														</div>	
+														<span class='tip_userName'>${dto.nickname}</span>
+														<span>&nbsp;·&nbsp;</span>
+													
+                                    					<span id="result-${dto.psnum}"></span>
+				                                    	<script type="text/javascript">
+					                                    	document.addEventListener("DOMContentLoaded", function() {
+					                                            const dateStr = "${dto.reg_date}".trim();
+					                                            const date = new Date(dateStr);
+					                                            const id = "result-${dto.psnum}";
+	
+					                                        	document.getElementById(id).innerText = elapsedText(date);
+					                                    	});
+				                                    	</script>
+													</div>
 													<div>
 														<i class="tip_icon bi bi-bookmark"></i>
-														<span>${prize.boardLikeCount}&nbsp;&nbsp;</span>
+														<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
 														<i class="tip_icon bi bi-eye"></i>
-														<span>${prize.hitCount}&nbsp;&nbsp;</span>
+														<span>${dto.hitCount}&nbsp;&nbsp;</span>
 														<i class="tip_icon bi bi-chat-dots"></i>
-														<span>${prize.replyCount}&nbsp;&nbsp;</span>
+														<span>${dto.replyCount}&nbsp;&nbsp;</span>
 													</div>
 												</div>
 											</td>
@@ -192,11 +192,11 @@ function elapsedText(date) {
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="prize" items="${list}" varStatus="status">
+						<c:forEach var="dto" items="${list}" varStatus="status">
 		              		<tr>
 								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${prize.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${prize.subject}
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
 									</div>
 								</td>
 		              		</tr>
@@ -210,11 +210,11 @@ function elapsedText(date) {
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="prize" items="${list}" varStatus="status">
+						<c:forEach var="dto" items="${list}" varStatus="status">
 		              		<tr>
 								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${prize.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${prize.subject}
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+										${dto.subject}
 									</div>
 								</td>
 		              		</tr>

@@ -13,9 +13,12 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 
 <style type="text/css">
+     
     .detail-img-prize {
-        width: 800px;
-        height: 400px;
+        width: 1130px;
+        height: 600px;
+        border-radius: 5px;
+        border: 1px solid gray;
     }
 
     .head-main {
@@ -47,10 +50,11 @@
     }
     
     .wow img {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
+        width: 450px;
+        height: 650px;
+        object-fit: contain;
         border-radius: 5px;
+        border: 1px solid gray;
     }
     .closed-status {
     	color: red;
@@ -102,7 +106,7 @@
 </c:if>
 <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 84px;">
 	<div class="wow" style="display: flex; padding-top: 5px; margin: 10px auto; width: 1130px;">
-	    <img src="${pageContext.request.contextPath}/uploads/product/${dto.pph}" alt="이미지" class="detail-thumbnail-prize">
+	    <img src="${pageContext.request.contextPath}/uploads/product/${dto.pph}" alt="이미지">
 	    <div style="margin-left: 70px;">
 	        <div style="display: flex;">
 	            <p style="font-size: 35px; font-weight: 600; width: 330px">${dto.pname}</p>

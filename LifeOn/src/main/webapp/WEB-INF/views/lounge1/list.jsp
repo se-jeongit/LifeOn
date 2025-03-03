@@ -15,9 +15,9 @@
 <style type="text/css">
 .photo-card {
  border: 1px solid #E6E6E6;
- padding: 15px;
+ padding: 5px;
  text-align: center; 
- border-radius: 20px;
+ border-radius: 10px;
  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
  height: 100%;
 }
@@ -57,93 +57,89 @@
 	<jsp:include page="/WEB-INF/views/lounge2/layout/menu.jsp"/>
 </header>
 
-<main class="container d-flex flex-column min-vh-100 align-items-center" style="padding-top: 50px;">
- <div class="row w-100">
-  <section class="col-md-6 mx-auto" style="width: 100%;">
-  			<h2>
-			<c:choose>
-				<c:when test="${bdtype == 'room'}">인테리어</c:when> 
-				<c:when test="${bdtype == 'recipe'}">자취 레시피</c:when> 
-			</c:choose>
-			</h2>
-			
-			<div style="display: flex; justify-content: center; margin-top: 30px;">
-	   			<div>
-				   	<form name="searchForm" style="display: inline-flex; align-items: center;">
-						<select name="schType" class="myselect">
-							<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
-							<option value="nickname" ${schType=="nickname"?"selected":""}>작성자</option>
-							<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
-							<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
-							<option value="content" ${schType=="content"?"selected":""}>내용</option>
-						</select>
-						<!-- 검색상자 -->
-						<input type="search" name=kwd value="${kwd}" class="searchBox" placeholder="검색어를 입력해주세요.">
-						<!-- 검색버튼 -->
-				   		<button class="mybtn" style="margin-right: 2px;" onclick="searchList();">검색&nbsp;<i class="bi bi-search"></i></button>
-					   	<!-- 새로고침 버튼 -->
-						<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}';" title="새로고침">초기화&nbsp;<i class="bi bi-arrow-repeat"></i></button>
-			   		</form>
+<main class="min-vh-100">
+
+			<div class="body-title">
+				<em style="padding-bottom: 5px; font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">
+					<c:choose>
+						<c:when test="${bdtype == 'room'}">인테리어 , 지금 바로 검색해보세요!</c:when>
+						<c:when test="${bdtype == 'recipe'}">자취 레시피, 지금 바로 검색해보세요!</c:when>
+						<c:otherwise>, 지금 바로 검색해보세요!</c:otherwise>
+					</c:choose>
+				</em>
+				<div style="display: flex; justify-content: center; margin-top: 10px;">
+					<div>
+						<form name="searchForm" style="display: inline-flex; align-items: center;">
+							<select name="schType" class="myselect">
+								<option value="all" ${schType=="all"?"selected":""}>제목+내용</option>
+								<option value="nickname" ${schType=="nickname"?"selected":""}>작성자</option>
+								<option value="reg_date" ${schType=="reg_date"?"selected":""}>등록일</option>
+								<option value="subject" ${schType=="subject"?"selected":""}>제목</option>
+								<option value="content" ${schType=="content"?"selected":""}>내용</option>
+							</select>
+							<!-- 검색상자 -->
+							<input type="search" name="kwd" value="${kwd}" class="searchBox" placeholder="어떤 정보를 찾고 있나요?">
+							<!-- 검색버튼 -->
+							<button class="mybtn" style="margin-right: 2px;" onclick="searchList();">검색&nbsp;<i class="bi bi-search"></i></button>
+						</form>
+					</div>
 				</div>
 			</div>
-	
-    <div class="main_content">
-      <!-- 상단메뉴 -->
-      <div class="main_menu">
-        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px;" >
-          <p style="margin: 0;">총 게시글 ${dataCount}개 (${page} / ${total_page} 페이지)</p>
-        </div>
-        
-        <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
-        </div>
-        </div>
-        </div>
-        <div style=" display: flex; justify-content: flex-end;">
-          <button class="btn" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/write';">글쓰기</button>
-        </div>
-        </section>
-    
-      <!-- 글리스트 -->
-      <div class="photo-grid">
-        <c:forEach var="prize" items="${list}" varStatus="status">
-          <div class="photo-card">
-            <div class="mx-3">
-              <div onclick="location.href='${articleUrl}/${prize.psnum}?${query}'">
-                <table class="table table-hover m-0">		
-                  <img src="${pageContext.request.contextPath}/uploadPath/lounge1/${prize.ssfname}">
-                  <h5 class="ph_subject">${prize.subject}</h5>
-                  <div style="display: flex; align-items: center;">
-					<div class="ph-info" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
-						<img src="${pageContext.request.contextPath}${prize.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
-                    </div>
-					<div>
-                      <span class='ph_userName'>${prize.nickname}</span>
-                      <span>&nbsp;&nbsp;</span>
-                      <span>${prize.reg_date}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <i class="ph_icon bi bi-bookmark"></i>
-                      <span>${prize.boardLikeCount}&nbsp;&nbsp;</span>
-                      <i class="ph_icon bi bi-eye"></i>
-                      <span>${prize.hitCount}&nbsp;&nbsp;</span>
-                      <i class="ph_icon bi bi-chat-dots"></i>
-                      <span>${prize.replyCount}&nbsp;&nbsp;</span>
-                	</div>
-                </table>
-              </div>
-            </div>
-          </div>
-        </c:forEach>
-      </div>
-      
-      <div class="page-navigation">
-        ${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
-      </div>
-      
-    </div> <!-- .main_content -->
-	<!-- .col-md-6 -->
-	<!-- .row -->
+			
+	<div class="body-container">
+	    <div class="main_content">
+		      <!-- 상단메뉴 -->
+		      <div class="main_menu">
+			        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px;" >
+			          <p style="margin: 0;">총 게시글 ${dataCount}개 (${page} / ${total_page} 페이지)</p>
+			        </div>
+			        
+			        <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
+			        </div>
+			        <div style=" display: flex; justify-content: flex-end;">
+			          <button class="ssbtn" text-align: right onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}/write';">글쓰기&nbsp;
+			          <i class="bi bi-pencil"></i></button>
+			        </div>
+	        	</div>
+	        </div>
+	    
+	    <!-- 글리스트 -->
+		<div class="photo-grid">
+			<c:forEach var="prize" items="${list}" varStatus="status">
+				<div class="photo-card" style="cursor: pointer;" onclick="location.href='${articleUrl}/${prize.psnum}?${query}'">
+					<div class="table table-hover m-0">		
+						<img class="photo_img" src="${pageContext.request.contextPath}/uploadPath/lounge1/${prize.ssfname}">
+						<h5 class="ph_subject">${prize.subject}</h5>
+						<div style="display: flex; justify-content: center; align-items: center;">
+							<div class="ph-info" style="margin-right: 5px; width: 25px; height: 25px; border-radius: 50%; border: 1px solid #e0e0e0; position: relative; overflow: hidden;">
+								<img src="${pageContext.request.contextPath}${prize.profile_image}" class="profileImage" style="width: 100%; height: 100%;" name="profileImage" id="profileImage" alt="프로필">
+							</div>
+							<span class='ph_userName'>${prize.nickname}</span>
+							<span>&nbsp;&nbsp;</span>
+							<span>${prize.reg_date}</span>
+						</div>
+						<div>
+							<i class="ph_icon bi bi-bookmark"></i>
+							<span>${prize.boardLikeCount}&nbsp;&nbsp;</span>
+							<i class="ph_icon bi bi-eye"></i>
+							<span>${prize.hitCount}&nbsp;&nbsp;</span>
+							<i class="ph_icon bi bi-chat-dots"></i>
+							<span>${prize.replyCount}&nbsp;&nbsp;</span>
+						</div>
+					</div>
+					
+				</div>
+			</c:forEach>
+		</div>
+	      
+	      <div class="page-navigation">
+	        ${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
+	      </div>
+	      
+	    <!-- .main_content -->
+		<!-- .col-md-6 -->
+		<!-- .row -->
+		</div>
 </main>
 
 <footer class="mt-auto py-2 text-center w-100" style="background: #F7F9FA;">

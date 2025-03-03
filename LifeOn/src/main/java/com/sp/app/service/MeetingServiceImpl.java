@@ -1,5 +1,6 @@
 package com.sp.app.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.StorageService;
+import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.mapper.MeetingMapper;
 import com.sp.app.model.Meeting;
+import com.sp.app.rent.model.RentProduct;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +27,7 @@ public class MeetingServiceImpl implements MeetingService{
 	@Override
 	public void insertBoard(Meeting dto) throws Exception {
 		try {
-			long seq = mapper.MeetingSeq();
+			long seq = mapper.meetingSeq();
 			dto.setPsnum(seq);
 			
 			mapper.insertBoard(dto);
@@ -62,12 +65,38 @@ public class MeetingServiceImpl implements MeetingService{
 	
 	@Override
 	public void updateBoard(Meeting dto) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			
+			mapper.updateBoard(dto);
+			
+		} catch (Exception e) {
+			log.info("updateBoard : ", e);
+			
+			throw e;
+		}
 		
 	}
 	@Override
-	public void deleteBoard(String bdtype, long psnum, String nickname, int grade) throws Exception {
-		// TODO Auto-generated method stub
+	public void deleteBoard(long psnum, String nickname, long num) throws Exception {
+			try {
+			
+				Meeting dto = findById(psnum);
+				
+				if (dto == null || (dto.getNum() != num)) {
+				    return;
+				}
+				
+				Map<String, Object> map = new HashMap<>();
+				map.put("psnum", psnum);
+				
+				
+				mapper.deleteBoard(psnum);
+				
+			} catch (Exception e) {
+				log.info("deleteBoard : ", e);
+				
+				throw e;
+			}
 		
 	}
 	@Override
@@ -109,59 +138,152 @@ public class MeetingServiceImpl implements MeetingService{
 	}
 	@Override
 	public void updateHitCount(long num) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			mapper.updateHitCount(num);
+		} catch (Exception e) {
+			log.info("updateHitCount : ", e);
+			
+		}
 		
 	}
 	@Override
 	public void boardLike(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			mapper.boardLike(map);
+		} catch (Exception e) {
+			log.info("boardLike : ", e);
+			
+			throw e;
+		}
 		
 	}
 	@Override
 	public void deleteBoardLike(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			mapper.deleteBoardLike(map);
+		} catch (Exception e) {
+			log.info("deleteBoardLike : ", e);
+			
+			throw e;
+		}		
 		
 	}
 	@Override
 	public int boardLikeCount(long num) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		try {
+			result = mapper.boardLikeCount(num);
+		} catch (Exception e) {
+			log.info("boardLikeCount : ", e);
+		}
+		
+		return result;
 	}
 	@Override
 	public boolean memberBoardLiked(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result = false;
+		
+		try {
+			Meeting dto = mapper.memberBoardLiked(map);
+			if (dto != null) {
+				result = true;
+			}
+		} catch (Exception e) {
+			log.info("memberBoardLiked : ", e);
+		}
+		
+		return result;
 	}
 	@Override
 	public void reply(Meeting dto) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			mapper.reply(dto);
+		} catch (Exception e) {
+			log.info("reply : ", e);
+			
+			throw e;
+		}
 		
 	}
 	@Override
 	public int replyCount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		
+		try {
+			result = mapper.replyCount(map);
+		} catch (Exception e) {
+			log.info("replyCount : ", e);
+		}
+		
+		return result;
 	}
 	@Override
 	public List<Meeting> listReply(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Meeting> list = null;
+		
+		try {
+			list = mapper.listReply(map);
+			
+			for (Meeting dto : list) {
+				dto.setRpcontent(myUtil.htmlSymbols(dto.getRpcontent()));
+				
+				map.put("rpnum", dto.getRpnum());
+				map.put("psnum", dto.getPsnum());
+				dto.setNickname(dto.getNickname());
+				dto.setMemberLiked(memberReplyLiked(map));
+			}
+			
+		} catch (Exception e) {
+			log.info("listReply : ", e);
+		}
+		
+		return list;
+	}
+	
+	protected int memberReplyLiked(Map<String, Object> map) {
+		int result = -1;
+		
+		try {
+			result = mapper.memberReplyLiked(map).orElse(-1);
+		} catch (Exception e) {
+			log.info("userReplyLiked : ", e);
+		}
+		
+		return result;
 	}
 	@Override
 	public void deleteReply(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			mapper.deleteReply(map);
+		} catch (Exception e) {
+			log.info("deleteReply : ", e);
+			
+			throw e;
+		}
 		
 	}
 	@Override
 	public void replyLike(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
+		try {
+			mapper.replyLike(map);
+		} catch (Exception e) {
+			log.info("replyLike : ", e);
+			
+			throw e;
+		}
 		
 	}
 	@Override
 	public Map<String, Object> replyLikeCount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		Map<String, Object> countMap = null;
+		
+		try {
+			countMap = mapper.replyLikeCount(map);
+		} catch (Exception e) {
+			log.info("replyLikeCount : ", e);
+		}
+		return countMap;
+		}
 }
 	
 	

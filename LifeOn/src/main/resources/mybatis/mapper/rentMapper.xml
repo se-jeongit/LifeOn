@@ -9,18 +9,20 @@
 	</select>
 	
 	<!-- 대여물품 등록 -->
-<!-- 	<insert id="insertRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
-		INSERT INTO PRODUCT(pnum, ptype, pname, pct, pph, csn, num)
-			VALUES (product_seq.NEXTVAL, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
-			
-		INSERT INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
-			VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra}, #{prad}, #{prlp})
+	<insert id="insertRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
+		INSERT ALL
+			INTO PRODUCT(pnum, ptype, pname, pct, pph, csn, num)
+				VALUES (product_seq.NEXTVAL, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
+				
+			INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
+				VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra, jdbcType=VARCHAR}, #{prad}, #{prlp})
+		SELECT * FROM dual     
 	</insert>
 
 	<insert id="insertRentProductFile" parameterType="com.sp.app.rent.model.RentProduct">
-		INSERT INTO PRODUCT_PICTURE (ppnum, ssfname, ppp, pnum)
-	    	VALUES (product_picture_seq.NEXTVAL, #{ssfname, jdbcType=VARCHAR}, #{ppp, jdbcType=VARCHAR}, #{pnum})
-	</insert> -->
+		INSERT INTO PRODUCT_PICTURE (ppnum, ppp, pnum)
+	    	VALUES (product_picture_seq.NEXTVAL, #{ppp, jdbcType=VARCHAR}, #{pnum})
+	</insert>
 	
 	<sql id="searchSql">
 		<choose>
@@ -63,10 +65,10 @@
 	</delete> -->
 	
 	<!-- 사진파일(리스트, 찾기, 삭제) -->
-<!-- 	<select id="listProductFile" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
-		SELECT fnum, ssfname, cpfname, psnum
+ 	<select id="listProductFile" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT ppnum, ppp, pnum
 		FROM PRODUCT_PICTURE
-		WHERE psnum = #{psnum}    
+		WHERE pnum = #{pnum}    
 	</select>
 	
 	<select id="findByFileId" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
@@ -78,7 +80,7 @@
 	<delete id="deleteRentProductFile" parameterType="Map">
 		DELETE FROM PRODUCT_PICTURE
 		WHERE ${field} = #{pnum}
-	</delete> -->
+	</delete>
 	
 	<!-- 리스트에 출력되는 물품개수 -->
 	<select id="dataCount" parameterType="map" resultType="Integer">
@@ -110,10 +112,57 @@
 	
 	
 	<!-- 물품 상세 보기 -->
+	<select id="findById" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT p.pnum, pname, pct, pph, p.num, cbn, c.csn, csc, prp, prd, prs, pra, prad, prlp, nickname, profile_image, NVL(productLikeCount, 0) productLikeCount
+		FROM PRODUCT p
+		JOIN MEMBER m ON p.num = m.num
+		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
+		JOIN CATEGORY_SMALL c ON p.csn = c.csn
+		LEFT OUTER JOIN (
+			SELECT pnum, COUNT(*) productLikeCount
+			FROM MEMBER_LIKED
+			WHERE pnum = #{pnum}
+			GROUP BY pnum
+		) l ON p.pnum = l.pnum
+		WHERE p.pnum = #{pnum}
+	</select>
 	
+	<!-- 판매자가 파는 물품리스트 -->
+	<select id="findByMemberProduct" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT p.pnum, pname, pph, prp, prlp
+		FROM PRODUCT p
+		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
+		<where>
+			<if test="kwd != null and kwd != ''">
+				<include refid="searchSql"/>
+			</if>
+		</where>
+		WHERE p.pnum != #{pnum} AND num = #{num}
+		ORDER BY p.pnum ASC
+	</select>
 	
-	<!-- 이전 물품, 다음 물품 -->
+	<!-- 대여상품 찜하기 -->
+	<insert id="insertMemberLikeProduct" parameterType="map">
+		INSERT INTO MEMBER_LIKED (mlnum, mlq, mld, num, pnum)
+		VALUES (member_liked_seq.NEXTVAL, 1, SYSDATE, #{num}, #{pnum})
+	</insert>
 	
+	<delete id="deleteMemberLikeProduct" parameterType="map">
+		DELETE FROM MEMBER_LIKED
+		WHERE num = #{num} AND pnum = #{pnum}
+	</delete>
+	
+	<select id="productLikeCount" parameterType="Long" resultType="Integer">
+		SELECT COUNT(*)
+		FROM MEMBER_LIKED
+		WHERE pnum = #{pnum}
+	</select>
+	
+	<select id="memberProductLiked" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT pnum, num
+		FROM MEMBER_LIKED
+		WHERE pnum = #{pnum, jdbcType=BIGINT} AND num = #{num, jdbcType=BIGINT}
+	</select>
 	
 	<!-- 카테고리 상품 목록 -->
 	<!-- 대분류 카테고리 -->

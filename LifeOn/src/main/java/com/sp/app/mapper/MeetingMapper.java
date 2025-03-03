@@ -11,10 +11,10 @@ import com.sp.app.model.Meeting;
 
 @Mapper
 public interface MeetingMapper {
-	public long MeetingSeq();
+	public Long meetingSeq();
 	public void insertBoard(Meeting dto) throws SQLException;
 	public void updateBoard(Meeting dto) throws SQLException;
-	public void deleteBoard(Map<String, Object> map) throws SQLException;
+	public void deleteBoard(long psnum) throws SQLException;
 	
 	public int dataCount(Map<String, Object> map);
 	public List<Meeting> listBoard(Map<String, Object> map);

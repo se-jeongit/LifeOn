@@ -79,4 +79,20 @@
 	</insert>
 	
 	
+	<select id="dataCount2" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)
+		FROM member_liked
+		WHERE num = #{num}
+	</select>
+	
+	<select id="listLikeProduct" parameterType="map" resultType="com.sp.app.model.LikeProduct">
+		select p.pnum, pname, pph
+		FROM product p
+		JOIN member_liked ml ON p.pnum = ml.pnum
+		WHERE ml.num = #{num}
+		ORDER BY mlnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+	
+	
 </mapper>

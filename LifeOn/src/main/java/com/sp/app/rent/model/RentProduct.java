@@ -2,6 +2,7 @@ package com.sp.app.rent.model;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
@@ -21,6 +22,14 @@ public class RentProduct {
 	private MultipartFile pphFile;
 	
 	private long num; // 회원번호
+	private String nickname; // 회원닉네임
+	private String profile_image; // 회원프로필
+	
+    // 찜개수 MEMBER_LIKED
+    private int productLikeCount;
+	
+	@Value("-1") // 초기값
+	private int memberLiked;
 	
 	// 카테고리 테이블
 	// CATEGORY_BIG

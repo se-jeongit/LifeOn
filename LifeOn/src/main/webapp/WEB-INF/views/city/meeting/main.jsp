@@ -30,24 +30,25 @@
         <div class="category-container">
           <nav class="category-nav">
             <ul>
-            <li class="category-subcontainer">
-	                <a class="category selected" onclick="location.href='<c:url value='/city/meeting/main'/>'">전체</a>
-	            </li>
-	            
-	             <c:forEach var="main" items="${listCategory}">
-		            <li class="category-subcontainer">
-		                <a class="category selected" onclick="location.href='<c:url value='/city/meeting/main?cbn=${main.cbn}'/>'">${main.cbc}</a>
-              </c:forEach>
-            </ul>
-          </nav>
-        </div>
+			    <li class="category-subcontainer">
+			        <a class="category ${empty param.cbn ? 'selected' : ''}" href="<c:url value='/city/meeting/main'/>">전체</a>
+			    </li>
+    
+		    <c:forEach var="main" items="${listCategory}">
+		        <li class="category-subcontainer">
+		            <a class="category ${param.cbn eq main.cbn ? 'selected' : ''}" href="<c:url value='/city/meeting/main?cbn=${main.cbn}'/>">${main.cbc}</a>
+		        </li>
+   			</c:forEach>
+		</ul>
+	</nav>
+</div>
 
         <div class="meeting__options">
           <div class="region-category">
             <label for="category"></label>
             <div class="select-box select-box--input select-box--round">
               <select id="select-box__options" class="dropdown">
-                <option>서울</option>
+              	<option>지역 선택</option>
                 <option>금천구</option>
                 <option>관악구</option>
                 <option>구로구</option>
@@ -77,54 +78,58 @@
           </div>
           <div class="meeting-activate-option">
             <span>모집완료 제외</span>
-            <input type="checkbox" id="toggle" checked hidden />
+            <input type="checkbox" id="toggle" checked hidden="hidden" />
             <label for="toggle" class="toggle-switch">
               <span class="toggle-button"></span>
             </label>
           </div>
         </div>
-      </header>
+     
       
-      	<div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1280px;">
+      	<div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1100px;">
           <button class="btn" onclick="location.href='${pageContext.request.contextPath}/city/meeting/write';">글쓰기</button>
         </div>
 
-      <section class="main__content" >
-        <div class="meetings">
+      <section class="main__content">
        	 <c:forEach var="dto" items="${list}">
+        	<div class="meetings">
   
+              <div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="cursor: pointer;">
               <div class="meeting__header">
                 <div class="meeting__info-detail-more">
-                
-                  <span class="meeting__category">${dto.cbn}</span>
-                  
-                  <span class="meeting__location"><i class="bi bi-geo-alt"></i>{dto.loca}</span>
-                 
-                  <span class="meeting__date"><i class="bi bi-calendar-check"></i>${dto.reg_date}</span>
-                
+                  <span class="meeting__category">${dto.cbc}</span>
+                  <span class="meeting__location"><i class="bi bi-geo-alt"></i>${dto.loca}</span>
+                  <span class="meeting__date"><i class="bi bi-calendar-check"></i>&nbsp;${dto.mdate}</span>
+      
                 </div>
-                <h3 class="meeting__title">${dto.subject}</h3>
+                <h5 class="meeting__title">${dto.subject}</h5>
               </div>
               
-			 <div class="status-box" style="font-size: 15px; font-weight: bold; margin-left: auto;">
-			    <div class="meeting__status ${dto.status eq '모집완료' ? 'meeting__status--off' : 'meeting__status--on'}">
-			       	모집중 ${dto.status}
-			    </div>
-			</div>
+              <div class="meeting_infos">
+              	<span class="meeting__category">#${dto.age}</span>
+              	<span class="meeting__category">#${dto.gender}</span>
+              	<span class="meeting__category">#${dto.person_c}</span>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: left;">
+				 <div class="status-box" style="font-size: 10px; font-weight: bold;">
+				    <div class="meeting__status ${dto.ies eq '모집완료' ? 'meeting__status--off' : 'meeting__status--on'}">
+				       	${dto.ies}
+				    </div>
+				</div>
 				
-                  <div class="meeting__info-detail-more" >
-                    <div>
+                  <div>
 						<i class="tip_icon bi bi-bookmark"></i>
 						<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
 						<i class="tip_icon bi bi-eye"></i>
 						<span>${dto.hitCount}&nbsp;&nbsp;</span>
 						<i class="tip_icon bi bi-chat-dots"></i>
 						<span>${dto.replyCount}&nbsp;&nbsp;</span>
-					</div>
                   </div>
-         
+                  </div>
+                  </div>
+                  </div>
           	</c:forEach>
-  		</div>
       </section>
 
     </main>

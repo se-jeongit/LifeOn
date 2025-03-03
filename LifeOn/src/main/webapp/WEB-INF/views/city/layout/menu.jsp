@@ -68,7 +68,7 @@ $(function(){
 
 <div class="nav-scroller">
 	<nav class="container nav" aria-label="navigation">
-		<a class="nav-link sub-link" href="<c:url value='/city/area'/>">지역</a>
-		<a class="nav-link sub-link" aria-current="page" href="<c:url value='/city/meeting'/>">모임</a>
+		<a class="nav-link sub-link" href="<c:url value='/city/area/main'/>">지역</a>
+		<a class="nav-link sub-link" aria-current="page" href="<c:url value='/city/meeting/main'/>">모임</a>
 	</nav>
 </div>
