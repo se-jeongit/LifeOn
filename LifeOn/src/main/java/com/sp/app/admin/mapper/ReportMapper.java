@@ -1,0 +1,20 @@
+package com.sp.app.admin.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import com.sp.app.admin.model.Report;
+
+@Mapper
+public interface ReportMapper {
+	
+	public List<Report> listReport(Map<String, Object> map);
+	public int dataCount(Map<String, Object> map);
+
+	
+	public Map<String, Object> findReportDetail(@Param("repan") Long repan);
+	
+}
