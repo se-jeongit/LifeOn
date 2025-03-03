@@ -3,6 +3,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sp.app.mapper.AuctionMapper">
 
+    <!--  썸네일 미완  -->
+    <select id="findByInterior" resultType="com.sp.app.model.LendingPage">
+        SELECT PSNUM as num,SUBJECT as subject, NICKNAME as nickname
+        FROM HYBRID_BOARD h
+                 JOIN MEMBER m ON h.NUM = m.NUM
+        WHERE BDTYPE = 'recipe'
+    </select>
+
+
+    <select id="findByEvent" resultType="com.sp.app.model.LendingPage">
+        SELECT EVNUM as num, TNAIL as thumbnail, SUBJECT as subject
+        FROM EVENT
+    </select>
+
+    <!--  썸네일 미완처리  -->
+    <select id="findByTip" resultType="com.sp.app.model.LendingPage">
+        SELECT PSNUM AS num,SUBJECT,
+               CONTENT, NICKNAME, h.REG_DATE
+        FROM HYBRID_BOARD h
+                 JOIN MEMBER m ON h.NUM = m.NUM
+
+    </select>
+
+    <!--  종료일 정렬  미-->
+    <select id="findByPrizeMain" resultType="com.sp.app.model.LendingPage">
+        SELECT pr.PNUM as num, PNAME as subject, PPH as thumbnail,
+               PTP AS priceOrCount, ptsp as disCountOrReview,
+               PTED AS regDate
+        FROM PRODUCT pr
+                 JOIN PRODUCT_TOGETHER together ON pr.PNUM = together.PNUM
+
+    </select>
+
+    <select id="findByRegion" resultType="com.sp.app.model.LendingPage">
+
+    </select>
+
+    <select id="findByRegionMeeting" resultType="com.sp.app.model.LendingPage">
+    </select>
+
+    <select id="findByPolicy" resultType="com.sp.app.model.LendingPage">
+
+
+    </select>
 
 
 </mapper>

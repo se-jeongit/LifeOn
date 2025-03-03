@@ -20,54 +20,66 @@
     <jsp:include page="/WEB-INF/views/layout/header.jsp"/>
 </header>
 
-<main class="container-main">
+<main class="container-home">
     <!-- 메인 배너 섹션 -->
     <div class="main-banner">
         <!-- 왼쪽 큰 배너 -->
         <div class="main-banner-left">
-            <div class="image-slider" id="imageSlider">
+            <!-- 슬라이드 컨테이너 -->
+            <div class="slider-container">
+                <!-- 슬라이드 1 -->
                 <div class="slide">
-                    <img src="placeholder5.jpg" alt="메인 이미지 1" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 1" class="slide-image">
                     <div class="slide-content">
-                        <h2>인터넷에서사람 계속 1</h2>
-                        <p class="subtitle">계속해서 사람 1</p>
+                        <h2>인테리어 게시판 1</h2>
+                        <p class="subtitle">작성자 : </p>
                     </div>
                 </div>
+
+                <!-- 슬라이드 2 -->
                 <div class="slide">
-                    <img src="placeholder5.jpg" alt="메인 이미지 2" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 2" class="slide-image">
                     <div class="slide-content">
-                        <h2>인터넷에서사람 계속 2</h2>
-                        <p class="subtitle">계속해서 사람 2</p>
+                        <h2>인테리어 게시판 2</h2>
+                        <p class="subtitle">작성자 :</p>
                     </div>
                 </div>
+
+                <!-- 슬라이드 3 -->
                 <div class="slide">
-                    <img src="placeholder5.jpg" alt="메인 이미지 3" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 3" class="slide-image">
                     <div class="slide-content">
-                        <h2>인터넷에서사람 계속 3</h2>
-                        <p class="subtitle">계속해서 사람 3</p>
+                        <h2>인테리어 게시판 3</h2>
+                        <p class="subtitle">작성자 : </p>
                     </div>
                 </div>
+
+                <!-- 슬라이드 4 -->
                 <div class="slide">
-                    <img src="placeholder5.jpg" alt="메인 이미지 4" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 4" class="slide-image">
                     <div class="slide-content">
-                        <h2>인터넷에서사람 계속 4</h2>
-                        <p class="subtitle">계속해서 사람 4</p>
+                        <h2>인테리어 게시판 4</h2>
+                        <p class="subtitle">작성자 :</p>
                     </div>
                 </div>
+
+                <!-- 슬라이드 5 -->
                 <div class="slide">
-                    <img src="placeholder5.jpg" alt="메인 이미지 5" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 5" class="slide-image">
                     <div class="slide-content">
-                        <h2>인터넷에서사람 계속 5</h2>
-                        <p class="subtitle">계속해서 사람 5</p>
+                        <h2>인테리어 게시판 5</h2>
+                        <p class="subtitle">작성자 : </p>
                     </div>
                 </div>
             </div>
-            <div class="slider-indicators" id="sliderIndicators">
-                <span class="indicator active" data-slide="0"></span>
-                <span class="indicator" data-slide="1"></span>
-                <span class="indicator" data-slide="2"></span>
-                <span class="indicator" data-slide="3"></span>
-                <span class="indicator" data-slide="4"></span>
+
+            <!-- 슬라이드 인디케이터 -->
+            <div class="slider-indicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
+                <span class="indicator" data-index="2"></span>
+                <span class="indicator" data-index="3"></span>
+                <span class="indicator" data-index="4"></span>
             </div>
         </div>
 
@@ -94,7 +106,7 @@
     <div class="section">
         <div class="section-header">
             <h2>1인가구 팁 게시판</h2>
-            <button class="more-btn">더보기</button>
+            <button class="more-btn" onclick="location.href='<c:url value='/lounge2/tip'/>'">더보기</button>
         </div>
 
         <div class="product-grid">
@@ -123,7 +135,7 @@
     <div class="section">
         <div class="section-header">
             <h2>마감임박 공동구매상품</h2>
-            <button class="more-btn">더보기</button>
+            <button class="more-btn" onclick="location.href='<c:url value='/market/together/main'/>'">더보기</button>
         </div>
 
         <div class="group-buy-grid">
@@ -168,7 +180,7 @@
         <div class="local-info">
             <div class="section-header">
                 <h2>지역정보</h2>
-                <button class="more-btn">더보기</button>
+                <button class="more-btn" onclick="location.href='<c:url value='/city/area'/>'">더보기</button>
             </div>
 
             <div class="local-content">
@@ -188,12 +200,27 @@
                     </li>
                 </ul>
             </div>
+            <!-- 지역 MBTI 섹션 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>지역 MBTI</h2>
+                </div>
+
+                <div class="local-news">
+                    <img src="placeholder.jpg" alt="지역 새소식 이미지" class="news-image">
+                    <div class="news-content">
+                        <h3>여기는 무엇인가?</h3>
+                        <p>4월 봄축제 개최합니다</p>
+                        <p class="info-text">행사 안내문구</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="local-meetings">
             <div class="section-header">
                 <h2>추천 지역모임</h2>
-                <button class="more-btn">더보기</button>
+                <button class="more-btn" onclick="location.href='<c:url value='/city/meeting'/>'">더보기</button>
             </div>
 
             <div class="local-content">
@@ -219,36 +246,19 @@
         </div>
     </div>
 
-
-    <!-- 지역새소식 섹션 -->
+    <!-- 정책정보 섹션 -->
     <div class="section">
         <div class="section-header">
-            <h2>지역새소식</h2>
-        </div>
-
-        <div class="local-news">
-            <img src="placeholder.jpg" alt="지역 새소식 이미지" class="news-image">
-            <div class="news-content">
-                <h3>여기는 무엇인가?</h3>
-                <p>4월 봄축제 개최합니다</p>
-                <p class="info-text">행사 안내문구</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 광역정보 섹션 -->
-    <div class="section">
-        <div class="section-header">
-            <h2>광역정보</h2>
-            <button class="more-btn">더보기</button>
+            <h2>정책정보</h2>
+            <button class="more-btn" onclick="location.href='<c:url value='/policy/list'/>'">더보기</button>
         </div>
 
         <div class="regional-info">
             <div class="regional-card">
-                <img src="placeholder.jpg" alt="광역정보 이미지 1" class="placeholder-image">
+                <img src="placeholder.jpg" alt="정책정보 이미지 1" class="placeholder-image">
             </div>
             <div class="regional-card">
-                <img src="placeholder.jpg" alt="광역정보 이미지 2" class="placeholder-image">
+                <img src="placeholder.jpg" alt="정책정보 이미지 2" class="placeholder-image">
             </div>
         </div>
     </div>

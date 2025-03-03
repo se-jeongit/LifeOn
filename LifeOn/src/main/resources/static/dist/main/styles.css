@@ -3,7 +3,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Noto Sans KR", sans-serif;
 }
 
 body {
@@ -12,10 +11,10 @@ body {
     line-height: 1.6;
 }
 
-.container-main {
+.container-home {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 120px 20px 20px 20px;
+    padding: 125px 0 100px 0;
 }
 
 h2 {
@@ -53,22 +52,92 @@ h2 {
     margin-bottom: 40px;
 }
 
+/* 메인 배너 왼쪽 */
 .main-banner-left {
     position: relative;
-    width: 100%;
-    height: 400px; /* 원하는 높이로 조정 */
+    background-color: #f5f5f5;
+    height: 400px;
     overflow: hidden;
-    background-color: #f5f5f5; /* 기존 배경색 유지 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-.main-banner-left .image-container {
+/* 슬라이더 컨테이너 */
+.slider-container {
+    position: relative;
     width: 100%;
-    margin-top: 0; /* 기존 margin 제거 */
+    height: 100%;
+    overflow: hidden;
 }
 
+/* 슬라이드 */
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slide-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 24px;
+    /*background-color: rgba(0, 0, 0, 0.5);*/
+    color: white;
+}
+
+.slide-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.slide-content .subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* 슬라이더 인디케이터 */
+.slider-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.indicator {
+    width: 30px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+    background-color: white;
+}
+
+/* 메인 배너 오른쪽 */
 .main-banner-right {
     background-color: #f5f5f5;
     padding: 16px;
@@ -119,71 +188,6 @@ h2 {
     right: 0;
     text-align: center;
     font-size: 0.875rem;
-}
-
-/* 메인 배너 왼쪽 슬라이더 스타일 */
-.image-slider {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    overflow: hidden;
-}
-
-.slide {
-    min-width: 100%;
-    transition: transform 0.5s ease;
-}
-
-.slide-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.slide-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 24px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-}
-
-.slide-content h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.slide-content .subtitle {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.slider-indicators {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-}
-
-.indicator {
-    width: 30px;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-}
-
-.indicator.active {
-    background-color: white;
 }
 
 /* 섹션 공통 스타일 */
@@ -269,8 +273,6 @@ h2 {
     font-size: 0.75rem;
 }
 
-/* 지역정보 섹션 */
-
 /* 지역정보 및 추천 지역모임 섹션 */
 .local-section {
     display: flex;
@@ -313,8 +315,6 @@ h2 {
 .meeting-list li p:first-child {
     font-weight: 500;
 }
-
-/* 추천 지역모임 섹션 */
 
 /* 지역새소식 섹션 */
 .local-news {
@@ -369,7 +369,6 @@ h2 {
 
     .main-banner-left {
         flex: 1;
-        height: 400px; /* 원하는 높이로 조정 */
     }
 
     .main-banner-right {
@@ -388,7 +387,6 @@ h2 {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    /* 반응형 스타일 수정 */
     .local-section {
         flex-direction: row;
     }
