@@ -11,11 +11,12 @@ public class LendingPage {
 
     private long num;
     private String nickname;
-
     private String subject;
     private String content;
-    private int priceOrCount;
-    private double disCountOrReview;
+    private String thumbnail;
+    private int price;
+    private int count;
+    private double disCountOrRw;
     private String regDate;
 
 

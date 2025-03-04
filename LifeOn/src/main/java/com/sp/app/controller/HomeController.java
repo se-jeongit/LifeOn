@@ -1,6 +1,7 @@
 package com.sp.app.controller;
 
 import com.sp.app.common.PaginateUtil;
+import com.sp.app.model.LendingPage;
 import com.sp.app.service.home.HomeService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,33 +22,25 @@ import java.util.Map;
 @Slf4j
 public class HomeController {
 
-	private final PaginateUtil paginateUtil;
-	private final HomeService homeService;
-	
-	@GetMapping("/")
-	public ModelAndView handleHome(Model model) {
-		ModelAndView mav = new ModelAndView("main/home");
-		int size = 12;
-		Map<String, Object> paginationMap = calculatePagination(new HashMap<>(), size, "auction");
+    private final PaginateUtil paginateUtil;
+    private final HomeService homeService;
+
+    @GetMapping("/")
+    public ModelAndView handleHome() {
+        ModelAndView mav = new ModelAndView("main/home");
+
+        List<LendingPage> list = homeService.findByPrizeMain();
+//        mav.addObject("interior", homeService.findByInterior());
+//        mav.addObject("event", homeService.findByEvent());
+        mav.addObject("prizeMain", list);
+//        mav.addObject("tip", homeService.findByTip());
+//        mav.addObject("region", homeService.findByRegion());
+//        mav.addObject("regionMeeting", homeService.findByRegionMeeting());
+//        mav.addObject("policy", homeService.findByPolicy());
 
 
-
-
-		return mav;
-	}
-
-
-
-	private Map<String, Object> calculatePagination(Map<String, Object> map, int size, String url) {
-		Map<String, Object> paginationMap = new HashMap<>();
-		int total_page = 0;
-
-
-		paginationMap.put("size", size);
-		paginationMap.put("total_page", total_page);
-
-		return paginationMap;
-	}
+        return mav;
+    }
 
 
 }

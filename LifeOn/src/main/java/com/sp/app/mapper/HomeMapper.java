@@ -10,15 +10,15 @@ import java.util.Map;
 public interface HomeMapper {
 
 
-    List<LendingPage> findByInterior(Map<String, Object> map);
-    List<LendingPage> findByEvent(Map<String, Object> map);
-    List<LendingPage> findByTip(Map<String, Object> map);
+    List<LendingPage> findByInterior();
+    List<LendingPage> findByEvent();
+    List<LendingPage> findByTip();
 
-    List<LendingPage> findByPrizeMain(Map<String, Object> map);
-    List<LendingPage> findByRegion(Map<String, Object> map);
-    List<LendingPage> findByRegionMeeting(Map<String, Object> map);
+    List<LendingPage> findByPrizeMain();
+    List<LendingPage> findByRegion();
+    List<LendingPage> findByRegionMeeting();
 
-    List<LendingPage> findByPolicy(Map<String, Object> map);
+    List<LendingPage> findByPolicy();
 
 
 }

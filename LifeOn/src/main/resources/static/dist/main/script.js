@@ -94,30 +94,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // 상품 카드 클릭 이벤트
-    const productCards = document.querySelectorAll(".product-card, .group-buy-card")
-
-    productCards.forEach((card) => {
-        card.addEventListener("click", () => {
-            alert("상품 상세 페이지로 이동합니다.")
-        })
-    })
-
-    // 지역 모임 클릭 이벤트
-    const meetingItems = document.querySelectorAll(".meeting-list li")
-
-    meetingItems.forEach((item) => {
-        item.addEventListener("click", function () {
-            const meetingTitle = this.querySelector("p:first-child").textContent
-            alert(`${meetingTitle} 모임 상세 페이지로 이동합니다.`)
-        })
-    })
-
-    // 지역 새소식 클릭 이벤트
-    const localNews = document.querySelector(".local-news")
-
-    localNews.addEventListener("click", () => {
-        alert("지역 새소식 상세 페이지로 이동합니다.")
-    })
 })
 

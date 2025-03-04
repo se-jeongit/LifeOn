@@ -29,7 +29,8 @@
             <div class="slider-container">
                 <!-- 슬라이드 1 -->
                 <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 1" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 1"
+                         class="slide-image">
                     <div class="slide-content">
                         <h2>인테리어 게시판 1</h2>
                         <p class="subtitle">작성자 : </p>
@@ -38,7 +39,8 @@
 
                 <!-- 슬라이드 2 -->
                 <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 2" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 2"
+                         class="slide-image">
                     <div class="slide-content">
                         <h2>인테리어 게시판 2</h2>
                         <p class="subtitle">작성자 :</p>
@@ -47,7 +49,8 @@
 
                 <!-- 슬라이드 3 -->
                 <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 3" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 3"
+                         class="slide-image">
                     <div class="slide-content">
                         <h2>인테리어 게시판 3</h2>
                         <p class="subtitle">작성자 : </p>
@@ -56,7 +59,8 @@
 
                 <!-- 슬라이드 4 -->
                 <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 4" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 4"
+                         class="slide-image">
                     <div class="slide-content">
                         <h2>인테리어 게시판 4</h2>
                         <p class="subtitle">작성자 :</p>
@@ -65,7 +69,8 @@
 
                 <!-- 슬라이드 5 -->
                 <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 5" class="slide-image">
+                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 5"
+                         class="slide-image">
                     <div class="slide-content">
                         <h2>인테리어 게시판 5</h2>
                         <p class="subtitle">작성자 : </p>
@@ -110,7 +115,7 @@
         </div>
 
         <div class="product-grid">
-            <% for(int i=1; i<=4; i++) { %>
+            <% for (int i = 1; i <= 4; i++) { %>
             <div class="product-card">
                 <div class="image-container">
                     <img src="placeholder.jpg" alt="제품 이미지 <%= i %>" class="placeholder-image">
@@ -139,39 +144,23 @@
         </div>
 
         <div class="group-buy-grid">
-            <div class="group-buy-card">
-                <div class="image-container">
-                    <img src="placeholder.jpg" alt="공동구매 상품 1" class="placeholder-image">
+            <c:forEach var="prizeMain" items="${prizeMain}">
+                <div class="group-buy-card">
+                    <a href="<c:url value='/market/together/detail?pnum=${prizeMain.num}'/>">
+                        <div class="image-container">
+                            <img src="${pageContext.request.contextPath}/uploads/product/${prizeMain.thumbnail}"
+                                 alt="${prizeMain.subject}" class="placeholder-image">
+                        </div>
+                        <div class="day-badge">D-${prizeMain.regDate == 0 ? 'Day' : prizeMain.regDate}</div>
+                        <div class="product-info-prize">
+                            <p>${prizeMain.subject}</p>
+                            <p class="discount"><fmt:formatNumber value="${prizeMain.disCountOrRw}" type="currency"/>원</p>
+                            <p class="original-price"><fmt:formatNumber value="${prizeMain.price}" type="currency"/>원</p>
+                            <span class="remaining-quantity">(${prizeMain.count}개 남음)</span>
+                        </div>
+                    </a>
                 </div>
-                <div class="day-badge">D-day</div>
-                <div class="product-info">
-                    <p>상품명 & 상세정보</p>
-                    <p class="discount">40% 할인 • 5,000원</p>
-                    <p class="original-price">8,500 원</p>
-                </div>
-            </div>
-            <div class="group-buy-card">
-                <div class="image-container">
-                    <img src="placeholder.jpg" alt="공동구매 상품 2" class="placeholder-image">
-                </div>
-                <div class="day-badge">D-1</div>
-                <div class="product-info">
-                    <p>상품명 & 상세정보</p>
-                    <p class="discount">35% 할인 • 5,000원</p>
-                    <p class="original-price">8,500 원</p>
-                </div>
-            </div>
-            <div class="group-buy-card">
-                <div class="image-container">
-                    <img src="placeholder.jpg" alt="공동구매 상품 3" class="placeholder-image">
-                </div>
-                <div class="day-badge">D-3</div>
-                <div class="product-info">
-                    <p>상품명 & 상세정보</p>
-                    <p class="discount">30% 할인 • 5,000원</p>
-                    <p class="original-price">8,500 원</p>
-                </div>
-            </div>
+            </c:forEach>
         </div>
     </div>
 
@@ -272,4 +261,5 @@
 
 <jsp:include page="/WEB-INF/views/layout/footerResources.jsp"/>
 </body>
+
 </html>

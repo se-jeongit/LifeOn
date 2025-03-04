@@ -1,39 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sp.app.mapper.AuctionMapper">
+<mapper namespace="com.sp.app.mapper.HomeMapper">
 
-    <!--  썸네일 미완  -->
     <select id="findByInterior" resultType="com.sp.app.model.LendingPage">
-        SELECT PSNUM as num,SUBJECT as subject, NICKNAME as nickname
-        FROM HYBRID_BOARD h
-                 JOIN MEMBER m ON h.NUM = m.NUM
-        WHERE BDTYPE = 'recipe'
+        SELECT num, subject, nickname, thumbnail
+        FROM (
+                 SELECT h.PSNUM as num, SUBJECT as subject, NICKNAME as nickname,
+                        SSFNAME AS thumbnail,
+                        ROW_NUMBER() OVER (PARTITION BY h.PSNUM ORDER BY SSFNAME) as rn
+                 FROM HYBRID_BOARD h
+                          JOIN MEMBER m ON h.NUM = m.NUM
+                          JOIN HYBRID_FILE f ON h.PSNUM = f.PSNUM
+                 WHERE BDTYPE = 'room'
+             ) subquery
+        WHERE rn = 1
+        ORDER BY thumbnail
+        FETCH FIRST 5 ROWS ONLY;
     </select>
 
 
     <select id="findByEvent" resultType="com.sp.app.model.LendingPage">
-        SELECT EVNUM as num, TNAIL as thumbnail, SUBJECT as subject
-        FROM EVENT
+        SELECT num, subject, thumbnail
+        FROM (
+            SELECT EVNUM as num, TNAIL as thumbnail, SUBJECT as subject,
+            ROW_NUMBER() OVER (PARTITION BY EVNUM ORDER BY TNAIL) as rn
+            FROM EVENT e
+            ) subquery
+        WHERE rn = 1
+        ORDER BY thumbnail
+        FETCH FIRST 3 ROWS ONLY;
     </select>
 
-    <!--  썸네일 미완처리  -->
     <select id="findByTip" resultType="com.sp.app.model.LendingPage">
-        SELECT PSNUM AS num,SUBJECT,
-               CONTENT, NICKNAME, h.REG_DATE
-        FROM HYBRID_BOARD h
-                 JOIN MEMBER m ON h.NUM = m.NUM
-
+        SELECT num, subject, content,nickname, reg_date,thumbnail
+        FROM (
+                 SELECT h.PSNUM as num, SUBJECT as subject, CONTENT AS content,NICKNAME as nickname,h.REG_DATE as reg_date,
+                        SSFNAME AS thumbnail,
+                        ROW_NUMBER() OVER (PARTITION BY h.PSNUM ORDER BY SSFNAME) as rn
+                 FROM HYBRID_BOARD h
+                          JOIN MEMBER m ON h.NUM = m.NUM
+                          JOIN HYBRID_FILE f ON h.PSNUM = f.PSNUM
+                 WHERE BDTYPE = 'tip'
+             ) subquery
+        WHERE rn = 1
+        ORDER BY thumbnail
+        FETCH FIRST 4 ROWS ONLY
     </select>
 
-    <!--  종료일 정렬  미-->
+    <!-- TODO  남은개수 카운트  미완-->
     <select id="findByPrizeMain" resultType="com.sp.app.model.LendingPage">
-        SELECT pr.PNUM as num, PNAME as subject, PPH as thumbnail,
-               PTP AS priceOrCount, ptsp as disCountOrReview,
-               PTED AS regDate
+        SELECT pr.PNUM as num,
+               PNAME   as subject,
+               PPH     as thumbnail,
+               PTP     AS price,
+               ptsp    as disCountOrRw,
+               PTED    AS regDate,
+                PTQ as count
         FROM PRODUCT pr
-                 JOIN PRODUCT_TOGETHER together ON pr.PNUM = together.PNUM
-
+        JOIN PRODUCT_TOGETHER together ON pr.PNUM = together.PNUM
+        ORDER BY ABS(SYSDATE - PTED)
+        FETCH FIRST 3 ROWS ONLY
     </select>
 
     <select id="findByRegion" resultType="com.sp.app.model.LendingPage">

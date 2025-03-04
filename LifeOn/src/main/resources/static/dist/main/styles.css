@@ -3,10 +3,19 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Noto Sans KR", sans-serif;
+}
+a {
+    text-decoration-line: none;
+    color: inherit; /* 기본 색상 유지 */
 }
 
+a:hover {
+    text-decoration-line: none;
+    color: inherit; /* 마우스를 올렸을 때 색상 유지 */
+}
 body {
-    background-color: #fff;
+    background-color: #FDFDFD;
     color: #333;
     line-height: 1.6;
 }
@@ -19,29 +28,33 @@ body {
 
 h2 {
     font-size: 1.25rem;
-    font-weight: 500;
+    font-weight: 600;
+    color: #2c3e50;
 }
 
 .subtitle {
     font-size: 0.875rem;
-    color: #777;
+    color: #6c757d;
 }
 
 .placeholder-image {
-    opacity: 0.2;
+    opacity: 1;
     max-width: 100%;
-    height: auto;
+    height: 200px;
+    transition: opacity 0.3s ease;
 }
 
 .image-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 .info-text {
     font-size: 0.75rem;
-    color: #777;
+    color: #6c757d;
 }
 
 /* 메인 배너 섹션 */
@@ -55,9 +68,11 @@ h2 {
 /* 메인 배너 왼쪽 */
 .main-banner-left {
     position: relative;
-    background-color: #f5f5f5;
+    background-color: #e9ecef;
     height: 400px;
     overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* 슬라이더 컨테이너 */
@@ -66,6 +81,7 @@ h2 {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    border-radius: 12px;
 }
 
 /* 슬라이드 */
@@ -76,7 +92,7 @@ h2 {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.8s ease;
 }
 
 .slide.active {
@@ -87,6 +103,13 @@ h2 {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
+    transform: scale(1.02); /* 약간의 확대 효과 */
+    transition: transform 8s ease; /* 슬라이드가 활성화되어 있는 동안 천천히 확대 */
+}
+
+.slide.active .slide-image {
+    transform: scale(1.08);
 }
 
 .slide-content {
@@ -98,87 +121,132 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: end;
-    padding: 24px;
-    /*background-color: rgba(0, 0, 0, 0.5);*/
+    padding: 32px;
     color: white;
+    z-index: 2;
 }
 
 .slide-content h2 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
     color: white;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    max-width: 70%;
+}
+
+.slide.active .slide-content h2 {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 .slide-content .subtitle {
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.5s ease 0.1s, opacity 0.5s ease 0.1s;
+    max-width: 60%;
+}
+
+.slide.active .slide-content .subtitle {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 /* 슬라이더 인디케이터 */
 .slider-indicators {
     position: absolute;
-    bottom: 20px;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 10px;
+    gap: 12px;
     z-index: 10;
 }
 
 .indicator {
-    width: 30px;
+    width: 36px;
     height: 4px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.4);
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.indicator:hover {
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .indicator.active {
     background-color: white;
+    width: 48px;
 }
 
 /* 메인 배너 오른쪽 */
 .main-banner-right {
-    background-color: #f5f5f5;
+    background-color: #e9ecef;
     padding: 16px;
     position: relative;
     min-height: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .carousel-control {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     border: none;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    z-index: 5;
+}
+
+.carousel-control:hover {
+    background-color: white;
+    transform: translateY(-50%) scale(1.1);
 }
 
 .carousel-control.left {
-    left: 8px;
+    left: 12px;
 }
 
 .carousel-control.right {
-    right: 8px;
+    right: 12px;
+}
+
+.carousel-control .arrow {
+    font-size: 1rem;
+    color: #333;
 }
 
 .page-indicator {
     position: absolute;
-    bottom: 8px;
-    right: 8px;
+    bottom: 12px;
+    right: 12px;
     font-size: 0.75rem;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 4px 8px;
-    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
 }
 
 .event-title {
@@ -187,90 +255,147 @@ h2 {
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 0.875rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2c3e50;
 }
 
 /* 섹션 공통 스타일 */
 .section {
-    margin-bottom: 40px;
+    margin-bottom: 48px;
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .more-btn {
-    font-size: 0.75rem;
-    padding: 4px 8px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    border-radius: 4px;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+    border-radius: 20px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    color: #495057;
+}
+
+.more-btn:hover {
+    background-color: #f8f9fa;
+    border-color: #ced4da;
+    color: #212529;
 }
 
 /* 1인가구 필 제시함 섹션 */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 20px;
 }
 
 .product-card {
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
     padding: 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid #e9ecef;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-color: #dee2e6;
 }
 
 .product-info {
     font-size: 0.75rem;
+    margin-top: 12px;
+}
+.product-info-prize{
+    font-size: 1.75rem;
+    margin-top: 12px;
 }
 
 .product-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .product-description {
     margin-top: 8px;
-    color: #777;
+    color: #6c757d;
+    font-size: 0.75rem;
+    line-height: 1.4;
 }
 
 /* 마감임박 공동구매상품 섹션 */
 .group-buy-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 20px;
 }
 
 .group-buy-card {
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
     padding: 16px;
     position: relative;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid #e9ecef;
+}
+
+.group-buy-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-color: #dee2e6;
 }
 
 .day-badge {
     position: absolute;
-    top: 16px;
-    right: 16px;
-    background-color: white;
-    padding: 4px 8px;
-    font-size: 0.75rem;
+    top: 12px;
+    right: 12px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 4px 10px;
+    font-size: 1.1rem;
     font-weight: bold;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .discount {
-    color: #e53e3e;
+    color: #e74c3c;
     font-weight: bold;
-    font-size: 0.75rem;
+    font-size: 1.75rem;
 }
-
+p{margin: 0;}
 .original-price {
     text-decoration: line-through;
-    color: #777;
-    font-size: 0.75rem;
+    color: #adb5bd;
+    font-size: 1.55rem;
+    margin-top: 2px;
+    display: inline; /* 같은 줄에 배치 */
+}
+.remaining-quantity {
+    text-decoration: none !important; /* 줄 없애기 */
+    color: #28a745; /* 텍스트 색상 */
+    font-weight: bold; /* 텍스트 굵기 */
+    font-size: 1.2rem; /* 텍스트 크기 */
+    margin-left: 8px; /* 왼쪽 여백 */
+    display: inline; /* 같은 줄에 배치 */
 }
 
 /* 지역정보 및 추천 지역모임 섹션 */
@@ -282,9 +407,11 @@ h2 {
 
 .local-info,
 .local-meetings {
-    background-color: #f9f9f9;
-    padding: 16px;
+    background-color: white;
+    padding: 20px;
     flex: 1;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .local-content {
@@ -292,8 +419,10 @@ h2 {
 }
 
 .local-info h3 {
-    font-size: 1rem;
-    margin-bottom: 8px;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #2c3e50;
+    font-weight: 600;
 }
 
 .local-list,
@@ -303,34 +432,64 @@ h2 {
 
 .local-list li,
 .meeting-list li {
-    margin-bottom: 8px;
-    font-size: 0.875rem;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    padding: 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.local-list li:hover,
+.meeting-list li:hover {
+    background-color: #f8f9fa;
 }
 
 .local-list li {
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid #f1f3f5;
+    padding-bottom: 10px;
+}
+
+.meeting-list li {
+    cursor: pointer;
+    border-bottom: 1px solid #f1f3f5;
+    padding-bottom: 10px;
 }
 
 .meeting-list li p:first-child {
-    font-weight: 500;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 4px;
 }
 
 /* 지역새소식 섹션 */
 .local-news {
     position: relative;
-    height: 128px;
+    height: 160px;
     background-color: #333;
     color: white;
-    border-radius: 4px;
+    border-radius: 12px;
     overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.local-news:hover {
+    transform: scale(1.02);
 }
 
 .news-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.5;
+    opacity: 0.6;
+    transition: opacity 0.3s ease, transform 0.5s ease;
+}
+
+.local-news:hover .news-image {
+    opacity: 0.7;
+    transform: scale(1.05);
 }
 
 .news-content {
@@ -338,27 +497,41 @@ h2 {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 16px;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
 }
 
 .news-content h3 {
-    font-weight: bold;
-    font-size: 1rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* 광역정보 섹션 */
 .regional-info {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 20px;
 }
 
 .regional-card {
-    background-color: #f5f5f5;
-    height: 128px;
+    background-color: #f8f9fa;
+    height: 140px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+}
+
+.regional-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-color: #dee2e6;
 }
 
 /* 반응형 스타일 */
