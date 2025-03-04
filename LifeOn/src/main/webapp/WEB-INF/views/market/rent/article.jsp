@@ -129,7 +129,7 @@
 		    	<div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0 0;">
 			    	<p style="color: #333; font-size: 24px; font-weight: 500; margin-bottom: 30px;">물품추가이미지</p>
 			    	<c:if test="${empty listFile}">
-						<p style="margin: 40px 0 0; color: #999; font-size: 16px;">추가된 물품 이미지가 없습니다.</p>
+						<p style="margin: 0 0 10px; color: #999; font-size: 16px;">추가된 물품 이미지가 없습니다.</p>
 					</c:if>
 					<c:if test="${not empty listFile}">
 						<div style="display: grid; grid-template-columns: repeat(4, 200px); justify-content: space-between; width: 890px;">

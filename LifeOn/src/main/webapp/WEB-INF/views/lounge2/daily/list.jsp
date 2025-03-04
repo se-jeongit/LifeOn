@@ -83,14 +83,16 @@ function elapsedText(date) {
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="dto" items="${list}" varStatus="status">
-		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${dto.subject}
-									</div>
-								</td>
-		              		</tr>
+						<c:forEach var="dto" items="${hitList}" varStatus="status">
+		              		<c:if test="${status.index < 5}">
+			              		<tr>
+									<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+										<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+											${dto.subject}
+										</div>
+									</td>
+			              		</tr>
+		              		</c:if>
 						</c:forEach>
 		            </table>
 				</div>
@@ -100,14 +102,16 @@ function elapsedText(date) {
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="dto" items="${list}" varStatus="status">
-		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${dto.subject}
-									</div>
-								</td>
-		              		</tr>
+						<c:forEach var="dto" items="${replyList}" varStatus="status">
+							<c:if test="${status.index < 5}">
+			              		<tr>
+									<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+										<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+											${dto.subject}
+										</div>
+									</td>
+			              		</tr>
+		              		</c:if>
 						</c:forEach>
 		            </table>
 				</div>
@@ -186,38 +190,22 @@ function elapsedText(date) {
 			</div>
 			
 			<aside class="sidebar" id="sidebar">
-				<div class="rightBox" style="margin-bottom: 10px;">
-					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
-						검색순위
-					</div>
-					
-					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="dto" items="${list}" varStatus="status">
-		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${dto.subject}
-									</div>
-								</td>
-		              		</tr>
-						</c:forEach>
-		            </table>
-				</div>
-				
-				<div class="rightBox" style="margin-top: 0;">
+				<div class="rightBox">
 					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
 						즐겨찾기순
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="dto" items="${list}" varStatus="status">
-		              		<tr>
-								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
-										${dto.subject}
-									</div>
-								</td>
-		              		</tr>
+						<c:forEach var="dto" items="${likeList}" varStatus="status">
+							<c:if test="${status.index < 10}">
+			              		<tr>
+									<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+										<div onclick="location.href='<c:url value='${articleUrl}/${dto.psnum}?${query}'/>'" style="padding-bottom:3px; text-align: left; cursor: pointer;">
+											${dto.subject}
+										</div>
+									</td>
+			              		</tr>
+		              		</c:if>
 						</c:forEach>
 		            </table>
 				</div>

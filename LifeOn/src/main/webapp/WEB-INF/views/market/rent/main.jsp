@@ -131,11 +131,10 @@ function elapsedText(date) {
 			                    </c:if>
 		                    </div>
 		                    <div class="product_info">
-		                    	<div style="display: flex; justify-content: space-between; align-items: center;">
-					                <h5 class="product_name" style="text-align: left;">${dto.pname}${isMemberLiked}${dto.pnum}</h5>
-					                <button type="button" class="btnSendProductLike" style="margin-bottom: 8px; border: none; background: #fff; font-size: 20px;" title="찜하기" onclick="event.stopPropagation();">
-										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
-										<span class="insertLike" data-pNum="${dto.pnum}"></span>
+		                    	<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+					                <h5 class="product_name" style="text-align: left;">${dto.pname}${dto.pnum}</h5>
+					                <button type="button" value="${dto.pnum}" class="btnSendProductLike" style="margin-bottom: 8px; border: none; background: #fff; font-size: 20px;" title="찜하기" onclick="event.stopPropagation();">
+										<i class="bi ${dto.memberLiked == 1 ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 									</button>
 		                    	</div>
 		                    	<div style="text-align: left; font-size: 16px; font-weight: bold; color: #006AFF">${dto.prs}</div>
@@ -343,7 +342,7 @@ $(function() {
 		}
 		
 		let url = '${pageContext.request.contextPath}/market/rent/insertProductLike';
-		let pnum = $(this).attr('data-pNum');
+		let pnum = $(this)[0].value;
 		let params = {pnum: pnum, memberLiked: memberLiked};
 		
 		const fn = function(data) {

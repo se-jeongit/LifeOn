@@ -87,11 +87,18 @@
 		SELECT NVL(COUNT(*), 0)
 		FROM PRODUCT_RENT pr
 		JOIN PRODUCT p ON pr.pnum = p.pnum
+		JOIN CATEGORY_SMALL s ON p.csn = s.csn
 		<where>
 			<if test="kwd != null and kwd != '' ">
 				<include refid="searchSql"/>
 			</if>
-			<!-- 카테고리 관련 WHERE 문 필요 -->
+			<!-- 카테고리 관련 WHERE 문 -->
+			<if test="cbn != 0 and cbn != null">
+            	cbn = #{cbn}
+        	</if>
+        	<if test="csn != 0 and csn != null">
+            	csn = #{csn}
+        	</if>
 		</where>
 	</select>
 	
@@ -105,6 +112,13 @@
 			<if test="kwd != null and kwd != ''">
 				<include refid="searchSql"/>
 			</if>
+			<!-- 카테고리 관련 WHERE 문 -->
+			<if test="cbn != 0 and cbn != null">
+            	cbn = #{cbn}
+        	</if>
+        	<if test="csn != 0 and csn != null">
+            	csn = #{csn}
+        	</if>
 		</where>
 		ORDER BY pnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY

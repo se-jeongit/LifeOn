@@ -52,6 +52,7 @@ public class RentController {
 			@RequestParam(name = "schType", defaultValue = "productName") String schType,
 			@RequestParam(name = "kwd", defaultValue = "") String kwd,
 			Model model,
+			HttpSession session,
 			HttpServletRequest req) throws Exception {
 		
 		try {
@@ -68,6 +69,8 @@ public class RentController {
 			map.put("cbn", categoryNum);
 			map.put("schType", schType);
 			map.put("kwd", kwd);
+			
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
 			
 			dataCount = service.dataCount(map);
 			if (dataCount != 0) {
@@ -93,17 +96,29 @@ public class RentController {
 			String query = "page=" + current_page;
 			
 			if (! kwd.isBlank()) {
-				 String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+				String qs = "schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
 				
 				listUrl += "?" + qs;
 				query += "&" + qs;
 			}
 			
+			if (info != null && info.getNum() > 0) {
+				map.put("num", info.getNum());
+
+				for (int i = 0; i < list.size(); i++) {
+					map.put("pnum", list.get(i).getPnum());
+					
+					boolean isMemberProductLiked = service.isMemberProductLiked(map);
+					
+					if (isMemberProductLiked) {
+						list.get(i).setMemberLiked(1);
+					} else {
+						list.get(i).setMemberLiked(-1);
+					}
+				}
+			}
+			
 			String paging = paginateUtil.paging(current_page, total_page, listUrl);
-			
-			boolean isMemberLiked = service.isMemberProductLiked(map);
-			
-			model.addAttribute("isMemberLiked", isMemberLiked);
 			
 			model.addAttribute("listCategory", listCategory);
 			model.addAttribute("listSubCategory", listSubCategory);
@@ -189,11 +204,12 @@ public class RentController {
 			map.put("schType", schType);
 			map.put("kwd", kwd);
 			map.put("pnum", productNum);
-			map.put("num", info.getNum());
+			map.put("num", dto.getNum());
 			
 			List<RentProduct> memberProduct = service.findByMemberProduct(map);
-			
 			List<RentProduct> listFile = service.listProductFile(productNum);
+			
+			map.put("num", info.getNum());
 			
 			boolean isMemberLiked = service.isMemberProductLiked(map);
 			

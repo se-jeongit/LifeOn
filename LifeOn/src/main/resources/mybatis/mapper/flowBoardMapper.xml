@@ -75,8 +75,21 @@
 			</if>
 			AND blind = 0
 		</where>
-		ORDER BY psnum DESC
-		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+		<choose>
+			<when test="sortCd == 'hit'">
+				ORDER BY hitCount DESC, psnum DESC
+			</when>
+			<when test="sortCd == 'reply'">
+				ORDER BY replyCount DESC, psnum DESC
+			</when>
+			<when test="sortCd == 'like'">
+				ORDER BY boardLikeCount DESC, psnum DESC
+			</when>
+			<otherwise>
+				ORDER BY psnum DESC
+				OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="findById" parameterType="Long" resultType="com.sp.app.lounge.model.FlowBoard">
