@@ -46,9 +46,8 @@
 }
 
 .report-click {
-    cursor: pointer; /* 마우스를 올리면 손 모양으로 변경 */
+	cursor: pointer; /* 마우스를 올리면 손 모양으로 변경 */
 }
-
 </style>
 
 </head>
@@ -98,7 +97,8 @@
 									<td>${report.repsucees}</td>
 									<td>${report.repsucboolean}</td>
 									<th>
-										<button class="btn">변경</button>
+										<button class="btn status-change-btn"
+											data-repan="${report.repan}">변경</button>
 									</th>
 								</tr>
 							</c:forEach>
@@ -142,7 +142,37 @@
 			</div>
 		</div>
 	</div>
-	
+
+	<!-- 상태 변경 모달 -->
+	<div id="statusChangeModal" class="modal fade" tabindex="-1"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">🚀 상태 변경</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="hiddenRepan">
+					<div class="mb-3">
+						<label for="statusSelect" class="form-label">처리 상태 선택:</label> <select
+							id="statusSelect" class="form-select">
+							<option value="미조치">미조치</option>
+							<option value="조치 완료">조치 완료</option>
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" id="updateStatusBtn">변경
+						완료</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<div class="pagenavigation" style="display: 80px;">${paging}</div>
 
@@ -167,6 +197,12 @@
 	                    document.getElementById("postAuthor").textContent = data.AUTHOR || "익명";
 	                    document.getElementById("postContent").innerHTML = data.CONTENT || "내용 없음";
 
+	                    //모달의 '삭제버튼'에 data-psnum 속성 동적으로 설정
+	                    let deleteButton = document.getElementById("deletePostBtn");
+	                    deleteButton.dataset.psnum = repan;
+	                    
+	                    
+	                    //모달 열기
 	                    var modal = new bootstrap.Modal(document.getElementById("reportModal"));
 	                    modal.show();
 	                })
@@ -180,8 +216,85 @@
 	document.addEventListener("DOMContentLoaded", function () {
 		document.getElementById("deletePostBtn").addEventListener("click", function () {
 			let psnum = this.dataset.psnum;
-			console.log("🗑 삭제할 게시글 번호:", psnum);
+			if(!confirm("정말 이 게시글을 삭제하시겠습니까?")) {
+				return;
+			}
+			
+			fetch("/admin/complaintManage/delete?psnum=" + psnum)
+				.then(response => response.json())
+				.then(data=> {
+					alert(data.message);
+					
+					if(data.success) {
+						var modal = document.getElementById("reportModal");
+						var modalInstance = bootstrap.Modal.getInstance(modal);
+						modalInstance.hide(); // 모달 닫기
+						
+					}
+				})
+				.catch(error => {
+        			console.error("❌ 게시글 삭제 오류:", error);
+        			alert("게시글 삭제 중 오류가 발생했습니다.");
+				});
+			});
+	});
+	document.addEventListener("DOMContentLoaded", function () {
+		// 상태변경 버튼 클릭 이벤트
+		document.querySelectorAll(".status-change-btn").forEach(button => {
+			button.addEventListener("click", function () {
+				let repan = this.dataset.repan;
+				
+				
+				document.getElementById("hiddenRepan").value = repan;
+				
+				let statusModal = new bootstrap.Modal(document.getElementById("statusChangeModal"));
+				statusModal.show();
+			});
 		});
+		
+		document.getElementById("updateStatusBtn").addEventListener("click", function () {
+		    let repan = document.getElementById("hiddenRepan").value;
+		    let status = document.getElementById("statusSelect").value;
+
+		    // ✅ 현재 날짜 및 시간 생성
+		    let now = new Date();
+			now.setHours(now.getHours() + 9);  // UTC → 한국시간(KST) 변환
+			let formattedDate = now.toISOString().replace("T", " ").substring(0, 19);
+
+		    console.log("🚀 변경할 신고 repan:", repan, "변경 상태:", status, "처리일:", formattedDate);
+
+
+		    fetch("/admin/complaintManage/updateStatus", {
+		        method: "POST",
+		        headers: {
+		            "Content-Type": "application/json"
+		        },
+		        body: JSON.stringify({ repan: repan, status: status, repsucees: formattedDate })
+		    })
+		    .then(response => response.json())
+		    .then(data => {
+		        alert(data.message);
+
+		        if (data.success) {
+		            var statusModal = document.getElementById("statusChangeModal");
+		            var modalInstance = bootstrap.Modal.getInstance(statusModal);
+		            modalInstance.hide();  // ✅ 모달 닫기
+
+		            // ✅ 같은 repan 값을 가진 모든 행을 찾아서 업데이트 (백틱 없이)
+		            document.querySelectorAll('[data-repan="' + repan + '"]').forEach(row => {
+		                row.closest("tr").querySelector("td:nth-child(6)").textContent = status;  // 상태 변경
+		                row.closest("tr").querySelector("td:nth-child(5)").textContent = formattedDate; // 처리일 변경
+		            });
+
+		            console.log("✅ 모든 관련 행 업데이트 완료!");
+		        }
+		    })
+		    .catch(error => {
+		        console.error("❌ 상태 변경 오류:", error);
+		        alert("상태 변경 중 오류가 발생했습니다.");
+		    });
+		});
+
 	});
 	
 	</script>

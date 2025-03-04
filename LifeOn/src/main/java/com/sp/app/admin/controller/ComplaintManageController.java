@@ -76,19 +76,21 @@ public class ComplaintManageController {
 		
 		Map<String, Object> reportDetail = service.getReportDetail(repan);
 		
-		
-		if(reportDetail == null) {
-			reportDetail = new HashMap<>();
-			reportDetail.put("title", "제목 없음");
-			reportDetail.put("author", "익명");
-			reportDetail.put("content", "내용 없음");
+		try {
+			if(reportDetail == null) {
+				reportDetail = new HashMap<>();
+				reportDetail.put("title", "제목 없음");
+				reportDetail.put("author", "익명");
+				reportDetail.put("content", "내용 없음");
+			}			
+		} catch (Exception e) {
 		}
-		
+
 
 		return reportDetail;
 	}
 	
-	/*
+	
 	@GetMapping("delete")
 	@ResponseBody
 	public Map<String, Object> deletePost(@RequestParam(name="psnum") Long psnum) throws Exception {
@@ -112,5 +114,5 @@ public class ComplaintManageController {
 		return map;
 	}
 	
-	*/
+	
 }
