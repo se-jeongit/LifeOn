@@ -160,27 +160,23 @@
         let quantity = parseInt(quantityInput.value);  // 선택된 수량
         let maxQuantity = parseInt(quantityInput.max);  // 최대 구매 가능 수량 (남은 재고량)
 
-        // 🚨 재고보다 많은 수량 입력 방지
         if (quantity > maxQuantity) {
             alert("남은 재고보다 많은 수량을 입력할 수 없습니다.");
             quantityInput.value = maxQuantity;  // 최대값으로 설정
             quantity = maxQuantity;
         }
 
-        // 🚨 1보다 작은 수량 입력 방지
+
         if (quantity < 1) {
             alert("구매 수량은 최소 1개 이상이어야 합니다.");
             quantityInput.value = 1;  // 최소값으로 설정
             quantity = 1;
         }
 
-        // 총 결제 금액 계산
         let totalPrice = price * quantity;
 
-        // 화면에 표시 (천 단위 콤마 적용)
         document.getElementById("totalPrice").innerText = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalPrice);
 
-        // hidden input에도 적용하여 서버로 전송
         document.getElementById("totalPriceInput").value = totalPrice;
     }
 </script>

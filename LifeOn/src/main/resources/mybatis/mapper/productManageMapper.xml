@@ -171,16 +171,20 @@
 	
 	
 	<select id="findByPnum" parameterType="Long" resultType="com.sp.app.admin.model.ProductManage">
-		SELECT p.pnum, p.pname, p.pph, p.pct, ts.ptsq, pp.ppp, 
-			pt.ptp, pt.ptsp, pt.ptq, pt.ptd, pt.status, pt.pttq,
-			TO_CHAR(pt.ptsd, 'YYYY-MM-DD') AS ptsd, 
-			TO_CHAR(pt.pted, 'YYYY-MM-DD') AS pted, 
-			TO_CHAR(pt.ptdd, 'YYYY-MM-DD') AS ptdd
+		SELECT p.pnum, p.pname, p.pph, p.pct, ts.ptsq, 
+		       LISTAGG(pp.ppp, ',') WITHIN GROUP (ORDER BY pp.ppp) AS ppp, 
+		       pt.ptp, pt.ptsp, pt.ptq, pt.ptd, pt.status, pt.pttq,
+		       TO_CHAR(pt.ptsd, 'YYYY-MM-DD') AS ptsd, 
+		       TO_CHAR(pt.pted, 'YYYY-MM-DD') AS pted, 
+		       TO_CHAR(pt.ptdd, 'YYYY-MM-DD') AS ptdd
 		FROM product p
 		JOIN product_together_stock ts ON p.pnum = ts.pnum
-		JOIN product_picture pp ON p.pnum = pp.pnum
+		LEFT JOIN product_picture pp ON p.pnum = pp.pnum
 		LEFT JOIN product_together pt ON p.pnum = pt.pnum
 		WHERE p.pnum = #{pnum}
+		GROUP BY p.pnum, p.pname, p.pph, p.pct, ts.ptsq, 
+		         pt.ptp, pt.ptsp, pt.ptq, pt.ptd, pt.status, pt.pttq, 
+		         pt.ptsd, pt.pted, pt.ptdd
 	
 	</select>
 	

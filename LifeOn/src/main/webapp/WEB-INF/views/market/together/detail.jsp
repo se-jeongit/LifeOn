@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
 <html>
@@ -159,9 +160,10 @@
 	
 	        <div style="padding-top: 100px;">
 	            <h2 style="color: #6E6E6E">상품이미지</h2>
-	            <div style=" text-align: center;">
-	                <img src="${pageContext.request.contextPath}/uploads/product/${dto.ppp}" alt="이미지" class="detail-img-prize" style="margin: 0 auto;">
-	            </div>
+	                <c:forEach var="img" items="${fn:split(dto.ppp, ',')}">
+				        <img src="${pageContext.request.contextPath}/uploads/product/${img}" 
+				             alt="상품 이미지" class="detail-img-prize" style="margin: 0 auto;">
+				    </c:forEach>
 	        </div>
 	
 	    </div>

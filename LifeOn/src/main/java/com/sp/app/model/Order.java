@@ -25,4 +25,7 @@ public class Order {
 	private int ods; //주문상세상태
 	private long pnum; //상품번호
 	
+	
+	//총포인트
+	private int totalPoint;
 }

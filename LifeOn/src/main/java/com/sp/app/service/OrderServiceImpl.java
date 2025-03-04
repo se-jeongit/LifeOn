@@ -1,5 +1,8 @@
 package com.sp.app.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +11,7 @@ import com.sp.app.admin.mapper.ProductManageMapper;
 import com.sp.app.admin.model.ProductManage;
 import com.sp.app.admin.service.ProductManageService;
 import com.sp.app.mapper.OrderMapper;
+import com.sp.app.mapper.PointRecordMapper;
 import com.sp.app.model.Order;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,8 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderMapper mapper;
 	private final ProductManageService productService;
 	private final ProductManageMapper mapper2;
+	private final PointRecordMapper pointmapper;
+	private final PointRecordService pointService;
 	
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
 	@Override
@@ -41,6 +47,21 @@ public class OrderServiceImpl implements OrderService {
 				pm.setStatus("구매성공");
 				mapper2.updateStatus(dto.getPnum(), pm.getStatus());
 			}
+			
+			
+			int totalPoint = 0;
+			totalPoint = pointService.totalPoint(dto.getNum());
+			dto.setTotalPoint(totalPoint);
+			
+			Map<String, Object> map = new HashMap<>();
+			
+			map.put("prep", -dto.getOp());
+			map.put("totalPoint", dto.getTotalPoint());
+			map.put("num", dto.getNum());
+			
+			pointmapper.insertTogetherPoint(map);
+			
+			
 		} catch (Exception e) {
 			log.info("insertOrder : " , e);
 			throw e;
