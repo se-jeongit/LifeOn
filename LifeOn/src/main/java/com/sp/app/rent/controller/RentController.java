@@ -219,6 +219,114 @@ public class RentController {
 		return "redirect:/market/rent/main?" + query;
 	}
 	
+	@GetMapping("update")
+	public String updateForm(
+			@RequestParam(name = "pnum") long productNum,
+			@RequestParam(name = "page") String page,
+			Model model,
+			HttpSession session) throws Exception {
+		
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			RentProduct dto = Objects.requireNonNull(service.findById(productNum));
+			
+			if (! info.getNickName().equals(dto.getNickname())) {
+				return "redirect:/market/rent/main?page=" + page;
+			}
+			
+			List<RentProduct> listFile = service.listProductFile(productNum);
+			
+			model.addAttribute("dto", dto);
+			model.addAttribute("listFile", listFile);
+			model.addAttribute("page", page);
+			model.addAttribute("mode", "update");
+			
+			return "market/rent/write";
+			
+		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			log.info("updateForm : ", e);
+		}
+		
+		return "redirect:/market/rent/main?page=" + page;
+	}
+	
+	@PostMapping("update")
+	public String updateSubmit(RentProduct dto,
+			@RequestParam(name = "page") String page,
+			HttpSession session) throws Exception {
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			dto.setNum(info.getNum());
+			dto.setNickname(info.getNickName());
+			service.updateRentProduct(dto, uploadPath);
+			
+		} catch (Exception e) {
+			log.info("updateSubmit : ", e);
+		}
+		return "redirect:/market/rent/main?page=" + page;
+	}
+	
+	@ResponseBody
+	@PostMapping("deleteFile")
+	public Map<String, ?> deleteFile(@RequestParam(name = "ppnum") long fileNum,
+			HttpSession session) throws Exception {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "false";
+		
+		try {
+			RentProduct dto = Objects.requireNonNull(service.findByFileId(fileNum));
+			
+			service.deleteUploadFile(uploadPath, dto.getPpp());
+			service.deleteUploadFile(uploadPath, dto.getPph());
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("field", "ppnum");
+			map.put("pnum", fileNum);
+				
+			service.deleteRentProductFile(map);
+			
+			state = "true";
+			
+		} catch (NullPointerException e) {
+			log.info("deleteFile : ", e);
+		} catch (Exception e) {
+			log.info("deleteFile : ", e);
+		}
+		
+		model.put("state", state);
+		return model;
+	}
+	
+	@GetMapping("delete")
+	public String deleteProduct(@RequestParam(name = "pnum") long productNum,
+			@RequestParam(name = "schType", defaultValue = "all") String schType,
+			@RequestParam(name = "kwd", defaultValue = "") String kwd,
+			@RequestParam(name = "page") String page,
+			HttpSession session) {
+		
+		String query = "page=" + page;
+		
+		try {
+			kwd = URLDecoder.decode(kwd, "utf-8");
+			if (! kwd.isBlank()) {
+				query += "&schType=" + schType + "&kwd=" + URLEncoder.encode(kwd, "utf-8");
+			}
+			
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			
+			service.deleteRentProduct(productNum, uploadPath, info.getNum());
+			
+		} catch (Exception e) {
+			log.info("deleteProduct : ", e);
+		}
+		
+		return "redirect:/market/rent/main?" + query;
+	}
+	
 	@ResponseBody
 	@PostMapping("insertProductLike")
 	public Map<String, ?> insertBoardLike(

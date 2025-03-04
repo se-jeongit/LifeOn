@@ -97,7 +97,7 @@ public class RentServiceImpl implements RentService {
 			}
 			
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("field", "fnum");
+			map.put("field", "ppnum");
 			map.put("pnum", productNum);
 			deleteRentProductFile(map);
 			

@@ -50,19 +50,19 @@
 	</sql>
 	
 	<!-- 대여물품 수정 -->
-<!-- 	<update id="updateRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
+ 	<update id="updateRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
 		UPDATE PRODUCT SET pname = #{pname}, pct = #{pct}, pph = #{pph}, csn = #{csn}
 		WHERE pnum = #{pnum}
 		
-		UPDATE PRODUCT_RENT SET prp = #{prp}, prs = #{prs}, pra = #{pra}, prad = #{prlp}, prad = #{prlp}
+		UPDATE PRODUCT_RENT SET prp = #{prp}, prs = #{prs}, pra = #{pra}, prad = #{prap}, prld = #{prlp}
 		WHERE pnum = #{pnum} 
-	</update> -->
+	</update>
 	
 	<!-- 대여물품 삭제 -->
-<!-- 	<delete id="deleteBoard" parameterType="Long">
+ 	<delete id="deleteRentProduct" parameterType="Long">
 		DELETE FROM PRODUCT
-		WHERE psnum = #{psnum}
-	</delete> -->
+		WHERE pnum = #{pnum}
+	</delete>
 	
 	<!-- 사진파일(리스트, 찾기, 삭제) -->
  	<select id="listProductFile" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">

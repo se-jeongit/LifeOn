@@ -278,6 +278,12 @@
 	object-fit: cover;
 }
 
+.thumbnail-img {
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+}
+
 .product-detail {
 	width: 920px;
 	margin: 40px 0 0;
@@ -311,7 +317,7 @@
 /* 슬라이드 스타일 */
 li { list-style: none; }
 
-.best_list {
+.product_list {
 	display: flex;
     position: relative;
     padding: 0px;
@@ -322,11 +328,11 @@ li { list-style: none; }
     overflow: hidden;
 }
 
-.best_list li:not(:last-child) {
+.product_list li:not(:last-child) {
 	margin-right: 30px;
 }
 
-.best img {
+.productImg img {
 	width: 200px;
 	height: 200px;
 	object-fit: cover;
@@ -345,10 +351,4 @@ li { list-style: none; }
 .controls span {
 	cursor: pointer;
 	z-index: 100;
-}
-
-.thumbnail-img {
-	width: 100%;
-	height: 300px;
-	object-fit: cover;
 }

@@ -63,41 +63,71 @@
         				<c:if test="${empty dto.prad}">
 		           			<div style="padding-top: 10px; margin-bottom: 5px; text-align: left; font-size: 18px;">보증금 : <fmt:formatNumber value="${dto.prlp}"/> 원</div>
 	        				<p style="margin: 0; text-align: left; font-size: 16px;">거래장소 : ${dto.pra}</p>
-		           			<div style="display: flex; justify-content: flex-end; align-items: center; padding-top: 38px;">
-		        				<button type="button" class="search_btn btnSendProductLike" style="padding: 8px 10px;" title="찜하기">
-									<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
-									&nbsp;<span id="productLikeCount">${dto.productLikeCount}</span>
-								</button>
-			            		<button class="search_btn" style="margin: 0">대여신청</button>
+		           			<div style="display: flex; justify-content: space-between; align-items: center; padding-top: 38px;">
+			           			<div style="display: flex;">
+			      					<c:choose>
+										<c:when test="${sessionScope.member.nickName == dto.nickname}">
+											<button type="button" class="search_btn" onclick="location.href='${pageContext.request.contextPath}/market/rent/update?pnum=${dto.pnum}&page=${page}';">수정</button>
+										</c:when>
+									</c:choose>
+									
+									<c:choose>
+										<c:when test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
+								    		<button type="button" class="search_btn" onclick="deleteOk();">삭제</button>
+										</c:when>
+									</c:choose>
+			           			</div>
+			           			<div>
+			        				<button type="button" class="search_btn btnSendProductLike" style="padding: 8px 10px;" title="찜하기">
+										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
+										&nbsp;<span id="productLikeCount">${dto.productLikeCount}</span>
+									</button>
+				            		<button class="search_btn" style="margin: 0">대여신청</button>
+				            	</div>
 		           			</div>
         				</c:if>
         				<c:if test="${not empty dto.prad}">
 		           			<div style="padding-top: 10px; margin-bottom: 5px; text-align: left; font-size: 18px;">보증금 : <fmt:formatNumber value="${dto.prlp}"/> 원</div>
 	        				<p style="margin: 0; text-align: left; font-size: 16px;">거래장소 : ${dto.pra}</p>
 	        				<p style="margin: 0; text-align: left; font-size: 16px;">상세정보 : ${dto.prad}</p>
-		           			<div style="display: flex; justify-content: flex-end; align-items: center; padding-top: 14px;">
-		        				<button type="button" class="search_btn btnSendProductLike" style="padding: 8px 10px;" title="찜하기">
-									<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
-									&nbsp;<span id="productLikeCount">${dto.productLikeCount}</span>
-								</button>
-			            		<button class="search_btn" style="margin: 0">대여신청</button>
+		           			<div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px;">
+			           			<div style="display: flex;">
+			      					<c:choose>
+										<c:when test="${sessionScope.member.nickName == dto.nickname}">
+											<button type="button" class="search_btn" onclick="location.href='${pageContext.request.contextPath}/market/rent/update?pnum=${dto.pnum}&page=${page}';">수정</button>
+										</c:when>
+									</c:choose>
+									
+									<c:choose>
+										<c:when test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
+								    		<button type="button" class="search_btn" onclick="deleteOk();">삭제</button>
+										</c:when>
+									</c:choose>
+			           			</div>
+			           			<div>
+			        				<button type="button" class="search_btn btnSendProductLike" style="padding: 8px 10px;" title="찜하기">
+										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
+										&nbsp;<span id="productLikeCount">${dto.productLikeCount}</span>
+									</button>
+				            		<button class="search_btn" style="margin: 0">대여신청</button>
+				            	</div>
 		           			</div>
-        					
         				</c:if>
+        				
            			</div>
         		</div>
     		</div>
     		
 		    <div class="product-detail">
 		    	<div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0;">
-			    	<p style="margin: 0 0 20px; color: #777; font-size: 24px; font-weight: 500;">상품소개</p>
+			    	<p style="margin: 0 0 20px; color: #333; font-size: 24px; font-weight: 500;">상품소개</p>
 	           		<p>${dto.pct}</p>
 		    	</div>
 		    </div>
 		    
 		    <div class="product-detail">
 		    	<div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0 0;">
-			    	<p style="color: #777; font-size: 24px; font-weight: 500;">상품이미지</p>
+			    	<p style="color: #333; font-size: 24px; font-weight: 500;">상품이미지</p>
 			    	<c:if test="${empty dto.ppp}">
 						<p style="margin: 20px 0 0; color: #999; font-size: 16px;">추가된 상품 이미지가 없습니다.</p>
 					</c:if>
@@ -113,16 +143,16 @@
 		    
 		    <div class="product-detail">
 		    	<div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0 60px;">
-			    	<p style="color: #777; font-size: 24px; font-weight: 500;">현재 판매자의 다른 대여물품</p>
+			    	<p style="color: #333; font-size: 24px; font-weight: 500;">현재 판매자의 다른 대여물품</p>
 					<c:if test="${empty memberProduct}">
-						<p style="margin: 30px 0 60px; color: #999; font-size: 16px;">판매자가 추가로 판매하는 대여물품이 없습니다.</p>
+						<p style="margin: 20px 0 60px; color: #999; font-size: 16px;">판매자가 추가로 판매하는 대여물품이 없습니다.</p>
 					</c:if>
 					<c:if test="${not empty memberProduct}">
 						<div class="tab_item">
 							<div class="tab_content">
 				               <div class="prod_detail_ct">
 									<div class="cont_wrap">
-										<ul class="best_list" id="best_list_1">
+										<ul class="product_list" id="product_list">
 											<c:forEach var="vo" items="${memberProduct}" varStatus="status">
 												<a href="${pageContext.request.contextPath}/market/rent/article/${vo.pnum}?${query}">
 													<img style="width: 200px; height: 200px; object-fit: cover;" src="${pageContext.request.contextPath}/uploadPath/rent/${vo.pph}" alt="물품사진">
@@ -147,8 +177,20 @@
 	</div>
 </main>
 
+<c:if test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
+	<script type="text/javascript">
+		function deleteOk() {
+			if (confirm('등록한 대여물품을 삭제 하시겠습니까?')) {
+				let qs = 'pnum=${dto.pnum}&${query}';
+				let url = '${pageContext.request.contextPath}/market/rent/delete?' + qs;
+				location.href = url;
+			}
+		}
+	</script>
+</c:if>
+
 <script type="text/javascript">
-const best_list_1 = document.querySelector('#best_list_1');
+const product_list = document.querySelector('#product_list');
 
 const prevBtn = document.querySelector('.prev');
 const nextBtn = document.querySelector('.next');
@@ -157,7 +199,7 @@ const nextBtn = document.querySelector('.next');
 const slideCount = '${memberProductSize}';
 
 if (slideCount < 5) {
-	best_list_1.style.marginLeft = '0px';
+	product_list.style.marginLeft = '0px';
 }
 
 /* 현재 인덱스 */
@@ -167,12 +209,12 @@ let slideWidth = 200;
 /* 이미지 간 간격 */
 let slideMargin = 30;
 /* 전체 너비 설정 */
-best_list_1.style.width = (slideWidth + slideMargin) * slideCount - slideMargin + 'px';
+product_list.style.width = (slideWidth + slideMargin) * slideCount - slideMargin + 'px';
 /* 초기화 */
-best_list_1.style.left = '0px';
+product_list.style.left = '0px';
 
 function moveSlideByButton (num) {
-	best_list_1.style.left = -num * 230 + 'px';
+	product_list.style.left = -num * 230 + 'px';
     currentIdx = num;
 }
 

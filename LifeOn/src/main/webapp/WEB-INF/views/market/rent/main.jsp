@@ -283,6 +283,8 @@ $(document).ready(function() {
         if (recentlyRentViewed.length > 3) {
         	recentlyRentViewed.shift(); // 가장 오래된 상품 삭제
         }
+        
+        
 
         localStorage.setItem('recentlyRentViewed', JSON.stringify(recentlyRentViewed));
 
@@ -309,6 +311,24 @@ $(document).ready(function() {
                 $recentlyRentViewedSection.prepend(productHtml);
             });
         }
+        
+        removeDeletedItemsFromLocalStorage();
+    }
+    
+ 	// 화면에서 사라진 상품을 로컬 스토리지에서 제거
+    function removeDeletedItemsFromLocalStorage() {
+        var recentlyRentViewed = JSON.parse(localStorage.getItem('recentlyRentViewed')) || [];
+        var $currentProductIds = $('.product-item').map(function() {
+            return $(this).attr("id");  // 화면에 남아 있는 상품의 pnum
+        }).get();
+
+        // 화면에 없는 상품을 로컬 스토리지에서 삭제
+        recentlyRentViewed = recentlyRentViewed.filter(function(product) {
+            return $currentProductIds.includes(product.pnum);
+        });
+
+        // 로컬 스토리지 업데이트
+        localStorage.setItem('recentlyRentViewed', JSON.stringify(recentlyRentViewed));
     }
 });
 
