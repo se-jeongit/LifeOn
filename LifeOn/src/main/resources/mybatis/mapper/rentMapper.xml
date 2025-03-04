@@ -12,10 +12,10 @@
 	<insert id="insertRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
 		INSERT ALL
 			INTO PRODUCT(pnum, ptype, pname, pct, pph, csn, num)
-				VALUES (product_seq.NEXTVAL, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
+				VALUES (#{pnum}, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
 				
 			INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
-				VALUES (product_seq.CURRVAL, #{prp}, SYSDATE, '대여가능', #{pra, jdbcType=VARCHAR}, #{prad}, #{prlp})
+				VALUES (#{pnum}, #{prp}, SYSDATE, '대여가능', #{pra, jdbcType=VARCHAR}, #{prad}, #{prlp})
 		SELECT * FROM dual     
 	</insert>
 

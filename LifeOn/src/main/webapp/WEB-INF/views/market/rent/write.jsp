@@ -257,7 +257,7 @@ function check() {
 	
 							<c:if test="${mode == 'update'}">
 								<input type="hidden" name="num" value="${dto.num}">
-								<input type="hidden" name="psnum" value="${dto.psnum}">
+								<input type="hidden" name="pnum" value="${dto.pnum}">
 								<input type="hidden" name="page" value="${page}">
 							</c:if>
 						</td>

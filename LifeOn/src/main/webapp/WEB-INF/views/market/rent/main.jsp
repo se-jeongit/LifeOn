@@ -132,7 +132,7 @@ function elapsedText(date) {
 		                    </div>
 		                    <div class="product_info">
 		                    	<div style="display: flex; justify-content: space-between; align-items: center;">
-					                <h5 class="product_name" style="text-align: left;">${dto.pname}</h5>
+					                <h5 class="product_name" style="text-align: left;">${dto.pname}${isMemberLiked}${dto.pnum}</h5>
 					                <button type="button" class="btnSendProductLike" style="margin-bottom: 8px; border: none; background: #fff; font-size: 20px;" title="찜하기" onclick="event.stopPropagation();">
 										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 										<span class="insertLike" data-pNum="${dto.pnum}"></span>
@@ -271,10 +271,12 @@ $(document).ready(function() {
         // 최근 본 상품 로컬 스토리지에 저장
         var recentlyRentViewed = JSON.parse(localStorage.getItem('recentlyRentViewed')) || [];
         
+        // 중복된 상품이 있으면 삭제
         for (var i = 0; i < recentlyRentViewed.length; i++) {
-        	if (recentlyRentViewed[i].pnum == pnum) {
-        		return false;
-        	}
+            if (recentlyRentViewed[i].pnum == pnum) {
+                recentlyRentViewed.splice(i, 1); // 중복된 상품 삭제
+                break;
+            }
         }
 
         recentlyRentViewed.push({ pnum: pnum, pname: pname, image: imageSrc });
@@ -283,8 +285,6 @@ $(document).ready(function() {
         if (recentlyRentViewed.length > 3) {
         	recentlyRentViewed.shift(); // 가장 오래된 상품 삭제
         }
-        
-        
 
         localStorage.setItem('recentlyRentViewed', JSON.stringify(recentlyRentViewed));
 

@@ -104,7 +104,7 @@
 										</c:when>
 									</c:choose>
 			           			</div>
-			           			<div>
+			           			<div style="display: flex;">
 			        				<button type="button" class="search_btn btnSendProductLike" style="padding: 8px 10px;" title="찜하기">
 										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 										&nbsp;<span id="productLikeCount">${dto.productLikeCount}</span>
@@ -127,23 +127,23 @@
 		    
 		    <div class="product-detail">
 		    	<div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0 0;">
-			    	<p style="color: #333; font-size: 24px; font-weight: 500;">상품이미지</p>
-			    	<c:if test="${empty dto.ppp}">
-						<p style="margin: 20px 0 0; color: #999; font-size: 16px;">추가된 상품 이미지가 없습니다.</p>
+			    	<p style="color: #333; font-size: 24px; font-weight: 500; margin-bottom: 30px;">물품추가이미지</p>
+			    	<c:if test="${empty listFile}">
+						<p style="margin: 40px 0 0; color: #999; font-size: 16px;">추가된 물품 이미지가 없습니다.</p>
 					</c:if>
-					<c:if test="${not empty dto.ppp}">
-						<div style="padding-top: 20px; display: grid; gap: 10px; grid-template-columns: repeat(4, 220px); justify-content: space-between; max-width: 920px;">
+					<c:if test="${not empty listFile}">
+						<div style="display: grid; grid-template-columns: repeat(4, 200px); justify-content: space-between; width: 890px;">
 							<c:forEach var="vo" items="${listFile}">
-								<img style="width: 100%; height: 200px; object-fit: cover;" src="${pageContext.request.contextPath}/uploadPath/rent/${vo.ppp}" alt="물품추가사진">
+								<img style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 20px;" src="${pageContext.request.contextPath}/uploadPath/rent/${vo.ppp}" alt="물품추가사진">
 							</c:forEach>
 						</div>
 					</c:if>
 		    	</div>
 		    </div>
 		    
-		    <div class="product-detail">
+		    <div class="product-detail" style="margin: 20px 0 0;">
 		    	<div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0 60px;">
-			    	<p style="color: #333; font-size: 24px; font-weight: 500;">현재 판매자의 다른 대여물품</p>
+			    	<p style="color: #333; font-size: 24px; font-weight: 500; margin-bottom: 30px;">현재 판매자의 다른 대여물품</p>
 					<c:if test="${empty memberProduct}">
 						<p style="margin: 20px 0 60px; color: #999; font-size: 16px;">판매자가 추가로 판매하는 대여물품이 없습니다.</p>
 					</c:if>
@@ -155,7 +155,7 @@
 										<ul class="product_list" id="product_list">
 											<c:forEach var="vo" items="${memberProduct}" varStatus="status">
 												<a href="${pageContext.request.contextPath}/market/rent/article/${vo.pnum}?${query}">
-													<img style="width: 200px; height: 200px; object-fit: cover;" src="${pageContext.request.contextPath}/uploadPath/rent/${vo.pph}" alt="물품사진">
+													<img class="productImg" src="${pageContext.request.contextPath}/uploadPath/rent/${vo.pph}" alt="물품사진">
 												</a>
 											</c:forEach>
 										</ul>
