@@ -56,8 +56,12 @@ public class HomeService implements HomeServiceInterFace{
                 if(content.length() > 50) {
                     lendingPage.setContent(content.substring(0, 50) + ".....");
                 }
-                if(subject.length() > 20) {
-                    lendingPage.setSubject(subject.substring(0, 20) + ".....");
+                if(subject.length() > 19) {
+                    // 띄어쓰기가 19번째에 있을경우 띄어쓰기를 제거하고 20자로 자르기
+                    if (subject.charAt(18) == ' ') {
+                        subject = subject.substring(0, 18) + subject.substring(19);
+                    }
+                    lendingPage.setSubject(subject.substring(0, 19) + "...");
                 }
                 lendingPage.setRegDate(removeTime(lendingPage.getRegDate()));
             }

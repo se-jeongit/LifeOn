@@ -3,7 +3,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Noto Sans KR", sans-serif;
 }
 
 a {
@@ -353,7 +352,9 @@ h2 {
 
 .tip-subject {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 900;
+/*   글씨 굵게 */
+
 }
 
 .product-description {
