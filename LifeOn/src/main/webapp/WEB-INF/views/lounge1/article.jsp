@@ -27,7 +27,7 @@ main section {width: 100% !important;}
     max-width: 100%; /* 부모 요소 크기를 넘지 않도록 */
     height: auto; /* 비율 유지 */
     display: block;
-    margin: 0 auto; /* 가운데 정렬 */
+    margin: center; /* 가운데 정렬 */
 }
 
 .freeForm {
