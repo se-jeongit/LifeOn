@@ -22,7 +22,7 @@ public class SellerService implements SellerServiceInterFace {
 
     private final AuctionMapper auctionMapper;
     private final SellerMapper sellerMapper;
-    private final StorageService  storageService;
+    private final StorageService storageService;
 
 
     @Override
@@ -40,10 +40,7 @@ public class SellerService implements SellerServiceInterFace {
     @Transactional
     public void insertPrize(SellerRequest dto, String uploadPath) throws Exception {
         try {
-            //TODO 썸네일 가공작업 해야함
 
-//            long seq = auctionMapper.FreeBoardSeq();
-//            dto.setPsnum(seq);?????
 
             String startDate;
             String endDate;
@@ -66,13 +63,13 @@ public class SellerService implements SellerServiceInterFace {
             dto.setEndDate(endDate);
 
 
-                //썸네일
-                String filename = storageService.uploadFileToServer(dto.getThumbnailFile(), uploadPath);
-                dto.setThumbnail(filename);
+            //썸네일
+            String filename = storageService.uploadFileToServer(dto.getThumbnailFile(), uploadPath);
+            dto.setThumbnail(filename);
 
             sellerMapper.insertPrize(dto);
 
-            if (! dto.getSelectFile().isEmpty()) {
+            if (!dto.getSelectFile().isEmpty()) {
                 insertFile(dto, uploadPath);
             }
 
@@ -90,7 +87,7 @@ public class SellerService implements SellerServiceInterFace {
 
             return sellerMapper.findBySellerList(map);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info("findBySellerList : ", e);
         }
 
@@ -98,10 +95,10 @@ public class SellerService implements SellerServiceInterFace {
     }
 
     @Override
-    public int dataCount(Map<String, Object> map)throws Exception {
+    public int dataCount(Map<String, Object> map) throws Exception {
         try {
             return sellerMapper.dataCount(map);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info("dataCount : ", e);
         }
         return 0;
@@ -111,7 +108,7 @@ public class SellerService implements SellerServiceInterFace {
     public PrizeDetailRep findBySellerDetail(Map<String, Object> map) {
         try {
             return auctionMapper.findByPrize(map);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info("findBySellerDetail : ", e);
         }
         return null;
@@ -124,7 +121,7 @@ public class SellerService implements SellerServiceInterFace {
         try {
             sellerMapper.deleteSeller(pNum);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info("deleteSeller : ", e);
             throw e;
         }
@@ -136,7 +133,7 @@ public class SellerService implements SellerServiceInterFace {
         for (MultipartFile mf : dto.getSelectFile()) {
             try {
 
-                String saveFilename =  Objects.requireNonNull(storageService.uploadFileToServer(mf, uploadPath));
+                String saveFilename = Objects.requireNonNull(storageService.uploadFileToServer(mf, uploadPath));
 
                 dto.setPicPath(saveFilename);
 

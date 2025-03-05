@@ -115,24 +115,26 @@
         </div>
 
         <div class="product-grid">
-            <% for (int i = 1; i <= 4; i++) { %>
-            <div class="product-card">
-                <div class="image-container">
-                    <img src="placeholder.jpg" alt="제품 이미지 <%= i %>" class="placeholder-image">
-                </div>
-                <div class="product-info">
-                    <div class="product-row">
-                        <span>제품 이름 제목</span>
-                        <span>가격: 10,000원</span>
+            <c:forEach var="tip" items="${tip}">
+                <a href="<c:url value='/lounge2/tip/article/${tip.num}?page=1'/>">
+                    <div class="product-card">
+                        <div class="image-container">
+                            <img src="${pageContext.request.contextPath}/uploadPath/tip/${tip.thumbnail}"
+                                 alt="${tip.subject}" class="placeholder-image">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-row tip-subject">
+                                <span>${tip.subject}</span>
+                            </div>
+                            <div class="product-row">
+                                <span>작성자 : ${tip.nickname}</span>
+                                <span>작성일 : ${tip.regDate}</span>
+                            </div>
+                            <p class="product-description">${tip.content}</p>
+                        </div>
                     </div>
-                    <div class="product-row">
-                        <span>평점: <%= i %>.0</span>
-                        <span>리뷰: <%= i * 10 %>개</span>
-                    </div>
-                    <p class="product-description">고객님들이 많이 찾는 제품입니다.</p>
-                </div>
-            </div>
-            <% } %>
+                </a>
+            </c:forEach>
         </div>
     </div>
 
@@ -154,8 +156,10 @@
                         <div class="day-badge">D-${prizeMain.regDate == 0 ? 'Day' : prizeMain.regDate}</div>
                         <div class="product-info-prize">
                             <p>${prizeMain.subject}</p>
-                            <p class="discount"><fmt:formatNumber value="${prizeMain.disCountOrRw}" type="currency"/>원</p>
-                            <p class="original-price"><fmt:formatNumber value="${prizeMain.price}" type="currency"/>원</p>
+                            <p class="discount"><fmt:formatNumber value="${prizeMain.disCountOrRw}"
+                                                                  type="currency"/>원</p>
+                            <p class="original-price"><fmt:formatNumber value="${prizeMain.price}"
+                                                                        type="currency"/>원</p>
                             <span class="remaining-quantity">(${prizeMain.count}개 남음)</span>
                         </div>
                     </a>
@@ -209,27 +213,20 @@
         <div class="local-meetings">
             <div class="section-header">
                 <h2>추천 지역모임</h2>
-                <button class="more-btn" onclick="location.href='<c:url value='/city/meeting'/>'">더보기</button>
+                <button class="more-btn" onclick="location.href='<c:url value='/city/meeting/main'/>'">더보기</button>
             </div>
 
             <div class="local-content">
                 <ul class="meeting-list">
-                    <li>
-                        <p>일요일에 공원에서 만나요!</p>
-                        <p class="info-text">3월 15일 오후 2시 • 참가자 12명</p>
-                    </li>
-                    <li>
-                        <p>동네 독서모임 신규 회원 모집합니다</p>
-                        <p class="info-text">매주 화요일 저녁 7시 • 참가자 8명</p>
-                    </li>
-                    <li>
-                        <p>같이 등산 가실 분!</p>
-                        <p class="info-text">3월 20일 오전 8시 • 참가자 5명</p>
-                    </li>
-                    <li>
-                        <p>주말 요리 클래스</p>
-                        <p class="info-text">3월 18일 오후 3시 • 참가자 10명</p>
-                    </li>
+                    <c:forEach var="meeting" items="${regionMeeting}">
+                        <li>
+                            <a href="<c:url value='/city/meeting/article/${meeting.num}?page=1'/>">
+                                <p style="font-size: 18px;">${meeting.subject}</p>
+                                <p class="info-text">모임일 ${meeting.regDate} • 참가자 ${meeting.thumbnail}</p>
+                                <p>${meeting.nickname}</p>
+                            </a>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
         </div>

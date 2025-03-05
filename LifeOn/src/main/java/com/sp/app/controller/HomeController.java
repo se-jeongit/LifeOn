@@ -29,14 +29,15 @@ public class HomeController {
     public ModelAndView handleHome() {
         ModelAndView mav = new ModelAndView("main/home");
 
-        List<LendingPage> list = homeService.findByPrizeMain();
+
 //        mav.addObject("interior", homeService.findByInterior());
 //        mav.addObject("event", homeService.findByEvent());
-        mav.addObject("prizeMain", list);
-//        mav.addObject("tip", homeService.findByTip());
+        mav.addObject("prizeMain", homeService.findByPrizeMain());
+        mav.addObject("tip", homeService.findByTip());
 //        mav.addObject("region", homeService.findByRegion());
-//        mav.addObject("regionMeeting", homeService.findByRegionMeeting());
+        mav.addObject("regionMeeting", homeService.findByRegionMeeting());
 //        mav.addObject("policy", homeService.findByPolicy());
+
 
 
         return mav;

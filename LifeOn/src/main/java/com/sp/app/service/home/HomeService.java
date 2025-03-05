@@ -48,7 +48,17 @@ public class HomeService implements HomeServiceInterFace{
     @Override
     public List<LendingPage> findByTip() {
         try {
-            return Optional.ofNullable(homeMapper.findByTip()).orElse(Collections.emptyList());
+            List<LendingPage> result = Optional.ofNullable(homeMapper.findByTip()).orElse(Collections.emptyList());
+
+            for (LendingPage lendingPage : result) {
+                String content = lendingPage.getContent();
+                if(content.length() > 50) {
+                    lendingPage.setContent(content.substring(0, 50) + ".....");
+                }
+                lendingPage.setRegDate(removeTime(lendingPage.getRegDate()));
+            }
+
+            return result;
         }catch (Exception e) {
             log.info("findByTip : {}", e.getMessage());
             return null;
@@ -89,7 +99,18 @@ public class HomeService implements HomeServiceInterFace{
     @Override
     public List<LendingPage> findByRegionMeeting() {
         try {
-            return Optional.ofNullable(homeMapper.findByRegionMeeting()).orElse(Collections.emptyList());
+
+            List<LendingPage> result = Optional.ofNullable(homeMapper.findByRegionMeeting()).orElse(Collections.emptyList());
+
+            for (LendingPage lendingPage : result) {
+                String content = lendingPage.getContent();
+                if(content.length() > 30) {
+                    lendingPage.setContent(content.substring(0, 30) + ".....");
+                }
+                lendingPage.setRegDate(removeTime(lendingPage.getRegDate()));
+            }
+
+            return result;
         }catch (Exception e) {
             log.info("findByRegionMeeting : {}", e.getMessage());
             return null;
@@ -105,4 +126,18 @@ public class HomeService implements HomeServiceInterFace{
             return null;
         }
     }
+
+
+    public String removeTime(String dateTimeStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, formatter);
+        return dateTime.toLocalDate().toString();
+    }
+
+
+
+
 }
+
+
+

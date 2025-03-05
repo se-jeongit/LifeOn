@@ -12,7 +12,8 @@
                  FROM HYBRID_BOARD h
                           JOIN MEMBER m ON h.NUM = m.NUM
                           JOIN HYBRID_FILE f ON h.PSNUM = f.PSNUM
-                 WHERE BDTYPE = 'room'
+                 WHERE BDTYPE = 'room' AND h.REG_DATE >= SYSDATE - 1
+                 ORDER BY ABS(SYSDATE - h.REG_DATE)
              ) subquery
         WHERE rn = 1
         ORDER BY thumbnail
@@ -26,6 +27,7 @@
             SELECT EVNUM as num, TNAIL as thumbnail, SUBJECT as subject,
             ROW_NUMBER() OVER (PARTITION BY EVNUM ORDER BY TNAIL) as rn
             FROM EVENT e
+            ORDER BY ABS(SYSDATE - REG_DATE)
             ) subquery
         WHERE rn = 1
         ORDER BY thumbnail
@@ -33,22 +35,22 @@
     </select>
 
     <select id="findByTip" resultType="com.sp.app.model.LendingPage">
-        SELECT num, subject, content,nickname, reg_date,thumbnail
+        SELECT num, subject, content,nickname, regDate,thumbnail
         FROM (
-                 SELECT h.PSNUM as num, SUBJECT as subject, CONTENT AS content,NICKNAME as nickname,h.REG_DATE as reg_date,
+                 SELECT h.PSNUM as num, SUBJECT as subject, CONTENT AS content,NICKNAME as nickname,h.REG_DATE as regDate,
                         SSFNAME AS thumbnail,
                         ROW_NUMBER() OVER (PARTITION BY h.PSNUM ORDER BY SSFNAME) as rn
                  FROM HYBRID_BOARD h
                           JOIN MEMBER m ON h.NUM = m.NUM
                           JOIN HYBRID_FILE f ON h.PSNUM = f.PSNUM
-                 WHERE BDTYPE = 'tip'
+                 WHERE BDTYPE = 'tip' AND h.REG_DATE >= SYSDATE - 1
+                 ORDER BY ABS(SYSDATE - h.REG_DATE)
              ) subquery
         WHERE rn = 1
         ORDER BY thumbnail
         FETCH FIRST 4 ROWS ONLY
     </select>
 
-    <!-- TODO  남은개수 카운트  미완-->
     <select id="findByPrizeMain" resultType="com.sp.app.model.LendingPage">
         SELECT pr.PNUM as num,
                PNAME   as subject,
@@ -59,6 +61,7 @@
                 PTQ as count
         FROM PRODUCT pr
         JOIN PRODUCT_TOGETHER together ON pr.PNUM = together.PNUM
+        WHERE PTED >= SYSDATE -1
         ORDER BY ABS(SYSDATE - PTED)
         FETCH FIRST 3 ROWS ONLY
     </select>
@@ -68,6 +71,16 @@
     </select>
 
     <select id="findByRegionMeeting" resultType="com.sp.app.model.LendingPage">
+
+        SELECT PSNUM    AS num,
+               SUBJECT  AS subject,
+               CONTENT  AS content,
+               MDATE AS regDate,
+               PERSON_C AS thumbnail,
+               IES      AS nickname
+        FROM GROUP_BOARD
+        WHERE MDATE >= SYSDATE-1 AND IES != '모집 종료'
+        ORDER BY ABS(SYSDATE - MDATE)
     </select>
 
     <select id="findByPolicy" resultType="com.sp.app.model.LendingPage">

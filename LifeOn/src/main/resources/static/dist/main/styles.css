@@ -53,7 +53,7 @@ h2 {
 }
 
 .info-text {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: #6c757d;
 }
 
@@ -331,6 +331,10 @@ h2 {
     display: flex;
     justify-content: space-between;
     margin-bottom: 6px;
+}
+.tip-subject{
+    font-size: 15px;
+    font-weight: 600;
 }
 
 .product-description {

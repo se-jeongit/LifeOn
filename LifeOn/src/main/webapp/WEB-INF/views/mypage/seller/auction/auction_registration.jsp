@@ -427,15 +427,13 @@
                         <div class="select-box-prize">
                             <span style="padding-right: 10px;">
                                     <label>
-                                        상품의 종류
-                                        <select name="sellBox" class="sell-select-box box-color">
-                                            <option value="none">&nbsp;선택</option>
-                                            <option value="경매">&nbsp;경매</option>
-                                            <option value="물품대여">&nbsp;물품대여</option>
-                                        </select>
+                                        상품의 가격
+                                        <input type="text" name="prPrice" maxlength="50" class="input-price box-color"
+                                               value="${prize.price}">
+                                    원
                                     </label>
                             </span>
-                            <span style="font-size: 15px; padding-left: 214px;">
+                            <span style="font-size: 15px; padding-left: 190px;">
                                 종료일 :
                                  <label>
                                     <input type="date" name="endDate" class="input-date box-color"
@@ -458,13 +456,8 @@
                             </span>
                         </div>
                         <div class="price-box-prize">
-                            <span> 상품의 가격
-                                <label>
-                                    <input type="text" name="prPrice" maxlength="50" class="input-price box-color"
-                                           value="${prize.price}">
-                                    원
-                                </label>
-                                <span style="padding-left: 195px; font-size: 14px;">
+                            <span>
+                                <span style="font-size: 14px;">
                                     거래유형
                                     <label>
                                         <select name="dealType" class="select-box box-color">
@@ -474,7 +467,7 @@
                                         </select>
                                     </label>
                                 </span>
-                                 <span style="padding-left: 125px;">카테고리 분류</span>
+                                 <span style="padding-left: 550px;">카테고리 분류</span>
                             </span>
                         </div>
                         <div class="" style="text-align: left;">
@@ -548,8 +541,7 @@
                                         class="bi bi-x"></i></button>
 
                                 <c:if test="${mode == 'update'}">
-                                    <input type="hidden" name="num" value="${prize.num}">
-                                    <input type="hidden" name="psnum" value="${prize.psnum}">
+                                    <input type="hidden" name="pnum" value="${prize.pnum}">
                                     <input type="hidden" name="page" value="${page}">
                                 </c:if>
                             </td>

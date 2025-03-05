@@ -148,7 +148,7 @@ public class SellerController {
 
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
-        map.put("pNum", pNum);
+        map.put("pnum", pNum);
 
         PrizeDetailRep prizeDetailRep = sellerService.findBySellerDetail(map);
         // TODO 이미지 파일 가져오기
@@ -158,6 +158,13 @@ public class SellerController {
         mav.addObject("mode", "update");
 
         return mav;
+    }
+
+    @PostMapping("/seller-update")
+    public ModelAndView registrationUpdate(@RequestParam(name = "pnum") long pNum, HttpSession session) {
+        ModelAndView mav = new ModelAndView("redirect:/mypage/seller/info");
+
+        return mav;       
     }
 
 
