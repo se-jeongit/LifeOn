@@ -155,17 +155,74 @@
 	<delete id="deleteReply" parameterType="map">
 		DELETE FROM policy_board_reply WHERE replyNum = #{replyNum}
 	</delete>
+	
+	  <select id="replyCount" parameterType="map" resultType="Integer">
+      	SELECT NVL(COUNT(*), 0)
+      	FROM policy_board_reply
+      	WHERE psnum = #{psnum} AND parentNum = 0 AND block =0
+      </select>
 
 	<!-- 댓글 목록 조회 -->
-	<select id="listReply" parameterType="map" resultType="com.sp.app.model.PolicyReply">
-		SELECT r.replyNum, r.userId, m.nickName, r.psnum,
-               r.content AS content,
-               r.reg_date, r.showReply
-		FROM policy_board_reply r
-		JOIN member m ON r.userId = m.id
-		WHERE psnum = #{psnum} AND r.parentNum = 0 AND r.block = 0
-		ORDER BY r.replyNum DESC
-		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
-	</select>
+	   <select id="listReply" parameterType="map" resultType="com.sp.app.model.PolicyReply">
+      	SELECT r.replyNum, r.userId, m.nickName, r.psnum,
+      		r.content, r.reg_date, r.showReply, 
+      		NVL(answerCount, 0) answerCount,
+      		NVL(likeCount, 0) likeCount,
+      		NVL(disLikeCount, 0) disLikeCount
+      	FROM policy_board_reply r
+      	JOIN member m ON r.userId = m.id
+      	LEFT OUTER JOIN (
+      		SELECT parentNum, COUNT(*) answerCount
+      		FROM policy_board_reply
+      		WHERE parentNum != 0 AND block = 0
+      		GROUP BY parentNum
+      	) a ON r.replyNum = a.parentNum
+      	LEFT OUTER JOIN (
+      		SELECT replyNum, COUNT(DECODE(replyLike, 1, 1)) likeCount,
+      			COUNT(DECODE(replyLike, 0, 1)) disLikeCount
+      		FROM policy_reply_like
+      		GROUP BY replyNum
+      	) c ON r.replyNum = c.replyNum
+      	WHERE psnum = #{psnum} AND r.parentNum = 0 AND r.block = 0
+      	ORDER BY r.replyNum DESC
+      	OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+      </select>
+	
+	 <!-- 댓글의 답글 -->
+      <select id="listReplyAnswer" parameterType="map" resultType="com.sp.app.model.PolicyReply">
+      	SELECT r.replyNum, r.psnum, r.userId, m.nickName, r.content, r.reg_date, r.parentNum, r.showReply
+      	FROM policy_board_reply r
+      	JOIN member m ON r.userId = m.id AND r.block = 0
+      	WHERE parentNum = #{parentNum}
+      	ORDER BY replyNum DESC 
+      </select>
+      
+      <select id="replyAnswerCount" parameterType="map" resultType="Integer">
+      	SELECT NVL(COUNT(*), 0)
+      	FROM policy_board_reply
+      	WHERE parentNum = #{parentNum} AND block = 0      
+      </select>
+      
+      <!-- 좋아요/ 싫어요 -->
+      <insert id="insertReplyLike" parameterType="map">
+      	INSERT INTO policy_reply_like(replyNum, userId, replyLike)
+      	VALUES(#{replyNum}, #{userId}, #{replyLike})
+      </insert>
+      
+      <select id="replyLikeCount" parameterType="map" resultType="map">
+      	SELECT COUNT(DECODE(replyLike, 1, 1)) likeCount,
+      		COUNT(DECODE(replyLike, 0, 1)) disLikeCount
+      	FROM policy_reply_like
+      	WHERE replyNum = #{replyNum}
+      </select>
+	
+	
+	<select id="userReplyLiked" parameterType="map" resultType="Integer">
+      	SELECT replyLike
+      	FROM policy_reply_like
+      	WHERE replyNum=#{replyNum} AND userId = #{userId}
+      </select>
+	
+
 
 </mapper>
