@@ -1,6 +1,6 @@
 package com.sp.app.admin.service;
 
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sp.app.admin.mapper.ReportMapper;
 import com.sp.app.admin.model.Report;
-import com.sp.app.lounge.model.FreeBoard;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +66,25 @@ public class ReportServiceImpl implements ReportService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public boolean updateStatus(String repan, String repsucboolean, String repsucees) {
+		try {
+			int updateRows = mapper.updateStatus(repan, repsucboolean, repsucees);
+			
+			if(updateRows > 0 ) {
+				System.out.println(updateRows + "행 업데이트 성공");
+				return true;
+			} else {
+				System.out.println(updateRows + "행 업데이트 실패");
+				return false;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	

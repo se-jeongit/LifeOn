@@ -26,5 +26,12 @@
 		DELETE FROM hybrid_board
 		WHERE psnum = ${psnum}
 	</delete>
+	
+	<update id="updateStatus">
+		UPDATE report
+		SET repsucboolean = #{repsucboolean},
+			repsucees = TO_DATE(#{repsucees}, 'YYYY-MM-DD HH24:MI:SS')
+		WHERE repan = #{repan}
+	</update>
 
 </mapper>

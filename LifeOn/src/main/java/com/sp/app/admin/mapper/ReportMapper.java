@@ -19,4 +19,7 @@ public interface ReportMapper {
 	public List<Map<String, Object>> findReportDetail(@Param("repan") Long repan);
 	
 	public int deletePost(@Param("psnum") Long psnum) throws SQLException;
+	
+	public int updateStatus(@Param("repan") String repan, @Param("repsucboolean") String repsucboolean, @Param("repsucees") String repsucees);
+	
 }

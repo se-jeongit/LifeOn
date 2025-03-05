@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -113,6 +115,41 @@ public class ComplaintManageController {
 		
 		return map;
 	}
+	
+	
+	@PostMapping("updateStatus")
+	@ResponseBody
+	public Map<String, Object> updateStatus(@RequestBody Map<String, Object> requestData) {
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			//요청 데이터 추출
+			String repan = (String) requestData.get("repan");
+			String repsucboolean = (String) requestData.get("repsucboolean"); //처리여부
+			String repsucees = (String) requestData.get("repsucees"); //처리일
+			
+			// 상태 업데이트 실행
+			boolean updateSuccess = service.updateStatus(repan, repsucboolean, repsucees);
+			
+			// 응답 데이터 구성
+			if(updateSuccess) {
+				response.put("success", true);
+				response.put("message", "상태가 성공적으로 업데이트 되었습니다.");
+			} else {
+				response.put("success", false);
+				response.put("message", "상태 업데이트에 실패했습니다.");
+				
+			}
+		} catch (Exception e) {
+	        e.printStackTrace(); // 서버 콘솔에 오류 출력
+	        response.put("success", false);
+	        response.put("message", "서버 오류가 발생했습니다.");
+		}
+		
+		return response;
+	}
+	
+	
 	
 	
 }

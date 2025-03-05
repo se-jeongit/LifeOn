@@ -254,14 +254,12 @@
 		
 		document.getElementById("updateStatusBtn").addEventListener("click", function () {
 		    let repan = document.getElementById("hiddenRepan").value;
-		    let status = document.getElementById("statusSelect").value;
+		    let repsucboolean = document.getElementById("statusSelect").value;
 
 		    // ✅ 현재 날짜 및 시간 생성
 		    let now = new Date();
 			now.setHours(now.getHours() + 9);  // UTC → 한국시간(KST) 변환
-			let formattedDate = now.toISOString().replace("T", " ").substring(0, 19);
-
-		    console.log("🚀 변경할 신고 repan:", repan, "변경 상태:", status, "처리일:", formattedDate);
+			let repsucees = now.toISOString().replace("T", " ").substring(0, 19);
 
 
 		    fetch("/admin/complaintManage/updateStatus", {
@@ -269,7 +267,7 @@
 		        headers: {
 		            "Content-Type": "application/json"
 		        },
-		        body: JSON.stringify({ repan: repan, status: status, repsucees: formattedDate })
+		        body: JSON.stringify({ repan: repan, repsucboolean: repsucboolean, repsucees: repsucees })
 		    })
 		    .then(response => response.json())
 		    .then(data => {
@@ -282,8 +280,8 @@
 
 		            // ✅ 같은 repan 값을 가진 모든 행을 찾아서 업데이트 (백틱 없이)
 		            document.querySelectorAll('[data-repan="' + repan + '"]').forEach(row => {
-		                row.closest("tr").querySelector("td:nth-child(6)").textContent = status;  // 상태 변경
-		                row.closest("tr").querySelector("td:nth-child(5)").textContent = formattedDate; // 처리일 변경
+		                row.closest("tr").querySelector("td:nth-child(6)").textContent = repsucboolean;  // 상태 변경
+		                row.closest("tr").querySelector("td:nth-child(5)").textContent = repsucees; // 처리일 변경
 		            });
 
 		            console.log("✅ 모든 관련 행 업데이트 완료!");
