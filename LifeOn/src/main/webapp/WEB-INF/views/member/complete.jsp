@@ -30,9 +30,23 @@
 						<p class="text-center">${message}</p>
 	                </div>
                        
-	                <div class="d-grid">
-						<button type="button" class="btn btn-lg btn-primary" onclick="location.href='${pageContext.request.contextPath}/';">메인화면 <i class="bi bi-check2"></i> </button>
-	                </div>
+					<c:choose>
+					    <c:when test="${title eq '주문실패'}">
+					        <div class="d-grid">
+					            <button type="button" class="btn btn-lg btn-danger" onclick="location.href='${pageContext.request.contextPath}/point/mypage';">
+					                충전하기 <i class="bi bi-wallet2"></i>
+					            </button>
+					        </div>
+					    </c:when>
+					    <c:otherwise>
+					        <div class="d-grid">
+					            <button type="button" class="btn btn-lg btn-primary" onclick="location.href='${pageContext.request.contextPath}/';">
+					                메인화면 <i class="bi bi-check2"></i>
+					            </button>
+					        </div>
+					    </c:otherwise>
+					</c:choose>
+						                          
                 </div>
             </div>
         </div>

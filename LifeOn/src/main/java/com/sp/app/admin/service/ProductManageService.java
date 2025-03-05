@@ -39,5 +39,9 @@ public interface ProductManageService {
 	public void insertLikeProduct(long pnum, long num);
 	public void deleteLikeProduct(long pnum, long num);
 	
+	public String checkStatus(long pnum);
+	public void updatePointRecord(long pnum);
+	
+	
 	
 }

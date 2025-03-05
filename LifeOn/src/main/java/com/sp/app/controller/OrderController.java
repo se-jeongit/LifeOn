@@ -17,6 +17,7 @@ import com.sp.app.model.Order;
 import com.sp.app.model.SessionInfo;
 import com.sp.app.service.MemberService;
 import com.sp.app.service.OrderService;
+import com.sp.app.service.PointRecordService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class OrderController {
 	private final MemberService memberService;
 	private final ProductManageService productService;
 	private final OrderService orderService;
+	private final PointRecordService pService;
 	
 	
 	@GetMapping("payment")
@@ -58,12 +60,26 @@ public class OrderController {
 	@PostMapping("payment")
 	public String paymentSubmit(Order dto,
 			final RedirectAttributes reAttr,
-			Model model) {
+			Model model,
+			HttpSession session) {
 		
 		try {
-			orderService.insertOrder(dto);
+			//주문들어와서 보유포인트보다 많게 주문할시 새로운창으로
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			int totalPoint = 0;
+			totalPoint = pService.totalPoint(info.getNum());
 			
 			StringBuilder sb = new StringBuilder();
+			if(dto.getOp()>totalPoint) {
+				sb.append("포인트가 부족합니다.<br>");
+				sb.append("결제를 실패했습니다.");
+				reAttr.addFlashAttribute("message", sb.toString());
+				reAttr.addFlashAttribute("title", "주문실패");
+				return "redirect:/member/complete";
+			}
+			
+			orderService.insertOrder(dto);
+			
 			sb.append("주문이 성공적으로 이루어졌습니다.<br>");
 			sb.append("축하합니다.<br>");
 			

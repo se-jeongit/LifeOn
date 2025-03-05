@@ -71,13 +71,13 @@
 	
 	<insert id="insertTogetherPoint" parameterType="map">
 		INSERT INTO point_record(prnum, prec, pret, prep, pretp, prepd, num)
-		VALUES(point_record_seq.NEXTVAL, '공동구매', '사용', #{prep}, #{totalPoint}+#{prep}, SYSDATE, #{num})
+		VALUES(point_record_seq.NEXTVAL, '공동구매', '사용', #{prep},  COALESCE(#{totalPoint}, 0) + #{prep}, SYSDATE, #{num})
 	</insert>
 	
 	
 	<insert id="insertPointCharge" parameterType="map">
 		INSERT INTO point_record(prnum, prec, pret, prep, pretp, prepd, num)
-		VALUES (point_record_seq.NEXTVAL,'충전','충전',#{account}, #{totalPoint}+#{account}, SYSDATE, #{num})
+		VALUES (point_record_seq.NEXTVAL,'충전','충전',#{account},  COALESCE(#{totalPoint}, 0) + #{account}, SYSDATE, #{num})
 	</insert>
 
 	<insert id="insertCardPayment" parameterType="map">
@@ -100,6 +100,11 @@
 		ORDER BY mlnum DESC
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
+	
+	
+
+	
+	
 	
 	
 </mapper>
