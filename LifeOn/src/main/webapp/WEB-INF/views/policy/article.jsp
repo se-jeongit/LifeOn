@@ -107,10 +107,12 @@
 					<table class="table table-borderless mb-2">
 						<tr>
 							<td width="50%">
+									<c:if test="${sessionScope.member.grade == 1}">
 										<button type="button" class="btn btn-light"
 											onclick="location.href='${pageContext.request.contextPath}/policy/update?psnum=${dto.psnum}&page=${page}';">수정</button>
 										<button type="button" class="btn btn-light"
 											onclick="deleteOk();">삭제</button>
+									</c:if>								
 							</td>
 							<td class="text-end">
 								<button type="button" class="btn"

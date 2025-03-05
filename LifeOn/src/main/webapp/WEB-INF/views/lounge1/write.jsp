@@ -38,6 +38,9 @@ td[scope="row"] {
 <script type="text/javascript">
 function check() {
     const f = document.boardForm;
+    
+    oEditors.getById['ir1'].exec('UPDATE_CONTENTS_FIELD', []);
+    
     let str;
 	
     str = f.subject.value.trim();
@@ -46,6 +49,12 @@ function check() {
         f.subject.focus();
         return false;
     }
+    
+    if(f.subject.length > 300) {
+		alert('제목은 30자 이하만 가능합니다.');
+		f.subject.focus();
+		return false;
+	}
 
     str = f.content.value.trim();
     if( !str || str === '<p><br></p>') {
@@ -53,6 +62,12 @@ function check() {
         f.content.focus();
         return false;
     }
+    
+    if(f.content.length > 300) {
+		alert('내용은 약 1300자 이하만 가능합니다.');
+		f.content.focus();
+		return false;
+	}
 
     f.action =  '${pageContext.request.contextPath}/lounge1/${bdtype}/${mode}';
     f.submit();
@@ -139,7 +154,7 @@ function check() {
 					<table class="table table-borderless">
 						<tr>
 							<td class="text-center">
-								<button type="button" class="btn btn-dark" onclick="submitContents(this.form);">${mode == "update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></i></button>
+								<button type="button" class="btn btn-dark" onclick="check();">${mode == "update" ? "수정완료" : "등록완료"}&nbsp;<i class="bi bi-check2"></i></button>
 								<button type="reset" class="btn btn-light">다시입력</button>
 								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/lounge1/${bdtype}';">${mode == "update" ? "수정취소" : "등록취소"}&nbsp;<i class="bi bi-x"></i></button>
 							
@@ -264,6 +279,7 @@ nhn.husky.EZCreator.createInIFrame({
 	fOnAppLoad: function(){
 		// 로딩 완료 후
 		oEditors.getById['ir1'].setDefaultFont('돋움', 12);
+		
 	},
 });
 
