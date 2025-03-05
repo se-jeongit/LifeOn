@@ -115,7 +115,7 @@ function check() {
     }
 	
     str = f.pphFile.value;
-    if(! f.pphFile.value) {
+    if(! f.pphFile.value && ${mode == 'write'}) {
         alert('썸네일 이미지를 등록해주세요.');
         f.pphFile.focus();
         return false;
@@ -157,15 +157,31 @@ function check() {
 						
 	                   	<td>
 	                        <div style="display: flex; justify-content: flex-start;">
-		                        <select class="rent-select" id="categoryNum" name="cbn" onchange="categoryCheck();">
-			                    	<option value="0" selected>대분류 선택</option>
-		                        	<c:forEach var="main" items="${listCategory}">
-			                            <option value="${main.cbn}">${main.cbc}</option>
-			                    	</c:forEach>
-	                        	</select>
-		                        <select class="rent-select" name="csn" id="subCategory">
-		                            <option value="" disabled selected>소분류 선택</option>
-		                        </select>
+	                        	<c:if test="${mode=='write'}">
+			                        <select class="rent-select" id="categoryNum" name="cbn" onchange="categoryCheck();">
+				                    	<option value="0" selected>대분류 선택</option>
+			                        	<c:forEach var="main" items="${listCategory}">
+				                            <option value="${main.cbn}">${main.cbc}</option>
+				                    	</c:forEach>
+		                        	</select>
+			                        <select class="rent-select" name="csn" id="subCategory">
+			                            <option value="" disabled selected>소분류 선택</option>
+			                        </select>
+	                        	</c:if>
+	                        	<c:if test="${mode=='update'}">
+	                        		<select class="rent-select" id="categoryNum" name="cbn" onchange="categoryCheck();">
+				                    	<option value="0" selected>대분류 선택</option>
+			                        	<c:forEach var="main" items="${listCategory}">
+				                            <option value="${main.cbn}" ${cbn==main.cbn?"selected":""}>${main.cbc}</option>
+				                    	</c:forEach>
+		                        	</select>
+			                        <select class="rent-select" name="csn" id="subCategory">
+			                            <option value="" disabled>소분류 선택</option>
+			                            <c:forEach var="sub" items="${listSubCategory}">
+			                            	<option value="${sub.csn}" ${csn==sub.csn?"selected":""}>${sub.csc}</option>
+			                    		</c:forEach>
+			                        </select>
+	                        	</c:if>
 	                        </div>
 						</td>
 					</tr>
@@ -233,15 +249,20 @@ function check() {
 					</tr>
 					
 					<c:if test="${mode=='update'}">
-						<tr>
+						<tr style="height: 116.5px;">
 							<td scope="row">등록된 추가이미지</td>
 							<td colspan="3"> 
 								<div class="img-box">
-									<c:forEach var="vo" items="${listFile}">
-										<img src="${pageContext.request.contextPath}/uploadPath/rent/${vo.ppp}"
-											class="delete-img"
-											data-fileNum="${vo.ppnum}">
-									</c:forEach>
+									<c:if test="${empty listFile}">
+										추가로 등록된 이미지가 없습니다.
+									</c:if>
+									<c:if test="${not empty listFile}">
+										<c:forEach var="vo" items="${listFile}">
+											<img src="${pageContext.request.contextPath}/uploadPath/rent/${vo.ppp}"
+												class="delete-img"
+												data-fileNum="${vo.ppnum}">
+										</c:forEach>
+									</c:if>
 								</div>
 							</td>
 						</tr>

@@ -61,15 +61,15 @@ function elapsedText(date) {
 		<nav class="category_nav">
 			<ul>
 				<li class="topMenuLi">
-	                <a class="menuLink" onclick="location.href='<c:url value='/market/rent/main'/>'">전체</a>
+	                <a class="menuLink" style="width: calc(1278px / ${listCategory.size() + 1});" onclick="location.href='<c:url value='/market/rent/main'/>'">전체</a>
 	            </li>
 	            
 	            <c:forEach var="main" items="${listCategory}">
 		            <li class="topMenuLi">
-		                <a class="menuLink" onclick="location.href='<c:url value='/market/rent/main?cbn=${main.cbn}'/>'">${main.cbc}</a>
+		                <a class="menuLink" style="width: calc(1278px / ${listCategory.size() + 1});" onclick="location.href='<c:url value='/market/rent/main?cbn=${main.cbn}'/>'">${main.cbc}</a>
 		                <ul class="submenu">
 		                	<c:forEach var="sub" items="${main.listSub}">
-		                    	<li class="submenuLink"><a href="#" class="subLink"></a>${sub.csc}</li>
+		                    	<li class="submenuLink" style="width: calc(1280px / ${main.listSub.size()});" onclick="location.href='<c:url value='/market/rent/main?csn=${sub.csn}'/>'"><a class="subLink" ></a>${sub.csc}</li>
 		                	</c:forEach>
 		                </ul>
 		            </li>
@@ -96,7 +96,7 @@ function elapsedText(date) {
 			<aside class="product_best" id=product_best>
 	       		<h5 style="margin: 0; padding: 10px 20px; text-align: left; font-weight: 600;">BEST</h5>
 	       		
-		       	<table class="table table-hover" style="table-layout: fixed; margin: 0;">
+		       	<table class="table" style="table-layout: fixed; margin: 0;">
 					<c:if test="${empty bestList}">
 		             		<tr>
 							<td style="padding: 15px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0; border-bottom: none;">
@@ -109,7 +109,7 @@ function elapsedText(date) {
 					<c:forEach var="dto" items="${bestList}" varStatus="status">
 		             		<c:if test="${status.index < 5}">
 		              		<tr>
-								<td style="padding: 0; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+								<td style="padding: 20px;; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
 									<div onclick="location.href='<c:url value='${articleUrl}/${dto.pnum}?${query}'/>'" style="cursor: pointer;">
 										<img class="bestProduct_img" src="${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}" alt="물품사진">
 									</div>
@@ -197,8 +197,8 @@ function elapsedText(date) {
 	                </c:forEach>
 	            </div>
 	            
-				<div class="page-navigation">
-					${dataCount == 0 ? "<p style='padding-top: 150px;'>등록된 대여물품이 없습니다.</p>" : paging}
+				<div class="page-navigation" style="margin-block: auto;">
+					${dataCount == 0 ? "등록된 대여물품이 없습니다." : paging}
 				</div>
     		</div>
     		

@@ -82,13 +82,13 @@ textarea:focus, input:focus { outline: none; }
 
 /* 로딩 */
 .typing-indicator {
-        width: 60px;
-        height: 30px;
-        position: absolute;
-        top: 50% !important;;
-        left: 50% !important;;
-        transform: translate(-50%, -50%) !important;;
-        z-index: 4;
+	width: 60px;
+	height: 30px;
+	position: absolute;
+	top: 50% !important;;
+	left: 50% !important;;
+	transform: translate(-50%, -50%) !important;;
+	z-index: 4;
 }
 
 .typing-circle {

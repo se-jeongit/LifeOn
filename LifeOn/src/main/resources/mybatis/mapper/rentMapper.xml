@@ -12,7 +12,7 @@
 	<insert id="insertRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
 		INSERT ALL
 			INTO PRODUCT(pnum, ptype, pname, pct, pph, csn, num)
-				VALUES (#{pnum}, '물품대여', #{pname}, #{pct}, #{pph}, #{csn}, #{num})
+				VALUES (#{pnum}, '물품대여', #{pname}, #{pct}, #{pph, jdbcType=VARCHAR}, #{csn}, #{num})
 				
 			INTO PRODUCT_RENT(pnum, prp, prd, prs, pra, prad, prlp)
 				VALUES (#{pnum}, #{prp}, SYSDATE, '대여가능', #{pra, jdbcType=VARCHAR}, #{prad}, #{prlp})
@@ -51,11 +51,13 @@
 	
 	<!-- 대여물품 수정 -->
  	<update id="updateRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
-		UPDATE PRODUCT SET pname = #{pname}, pct = #{pct}, pph = #{pph}, csn = #{csn}
-		WHERE pnum = #{pnum}
+		<![CDATA[
+		UPDATE PRODUCT SET pname = #{pname}, pct = #{pct}, pph = #{pph, jdbcType=VARCHAR}, csn = #{csn}
+		WHERE pnum = #{pnum};
 		
-		UPDATE PRODUCT_RENT SET prp = #{prp}, prs = #{prs}, pra = #{pra}, prad = #{prap}, prld = #{prlp}
-		WHERE pnum = #{pnum} 
+		UPDATE PRODUCT_RENT SET prp = #{prp}, pra = #{pra}, prad = #{prad}, prlp = #{prlp}
+		WHERE pnum = #{pnum};
+		]]>
 	</update>
 	
 	<!-- 대여물품 삭제 -->
@@ -97,7 +99,7 @@
             	cbn = #{cbn}
         	</if>
         	<if test="csn != 0 and csn != null">
-            	csn = #{csn}
+            	s.csn = #{csn}
         	</if>
 		</where>
 	</select>
@@ -117,7 +119,7 @@
             	cbn = #{cbn}
         	</if>
         	<if test="csn != 0 and csn != null">
-            	csn = #{csn}
+            	c.csn = #{csn}
         	</if>
 		</where>
 		ORDER BY pnum DESC

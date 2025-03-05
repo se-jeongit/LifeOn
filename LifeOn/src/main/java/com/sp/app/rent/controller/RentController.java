@@ -48,6 +48,7 @@ public class RentController {
 	@GetMapping("main")
 	public String RentList(
 			@RequestParam(name = "cbn", defaultValue = "0") long categoryNum,
+			@RequestParam(name = "csn", defaultValue = "0") long subCategoryNum,
 			@RequestParam(name = "page", defaultValue = "1") int current_page,
 			@RequestParam(name = "schType", defaultValue = "productName") String schType,
 			@RequestParam(name = "kwd", defaultValue = "") String kwd,
@@ -67,6 +68,7 @@ public class RentController {
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("cbn", categoryNum);
+			map.put("csn", subCategoryNum);
 			map.put("schType", schType);
 			map.put("kwd", kwd);
 			
@@ -254,6 +256,15 @@ public class RentController {
 			}
 			
 			List<RentProduct> listFile = service.listProductFile(productNum);
+			
+			List<RentProduct> listCategory = service.listCategory();
+			List<RentProduct> listSubCategory = service.listSubCategory(dto.getCbn());
+			
+			model.addAttribute("listCategory", listCategory);
+			model.addAttribute("listSubCategory", listSubCategory);
+
+			model.addAttribute("cbn", dto.getCbn());
+			model.addAttribute("csn", dto.getCsn());
 			
 			model.addAttribute("dto", dto);
 			model.addAttribute("listFile", listFile);
