@@ -65,8 +65,10 @@ function check() {
 	
 	<div class="body-container">
 		<div class="body-content" style="justify-content: center;">
+			<aside class="sidenav">
+			</aside>
 			
-			<div class="main_content" style="width: 40%">
+			<div class="main_content"">
 				<form name="freeForm" class="freeForm" method="post" enctype="multipart/form-data">
 					<table class="table write-form">
 						<tr>
@@ -126,7 +128,9 @@ function check() {
 					</table>
 				</form>
 			</div>
-
+			
+			<aside class="sidebar">
+			</aside>
 		</div>
 	</div>
 	

@@ -77,12 +77,15 @@
 		</where>
 		<choose>
 			<when test="sortCd == 'hit'">
+				AND hitCount &gt; 0
 				ORDER BY hitCount DESC, psnum DESC
 			</when>
 			<when test="sortCd == 'reply'">
+				AND replyCount &gt; 0
 				ORDER BY replyCount DESC, psnum DESC
 			</when>
 			<when test="sortCd == 'like'">
+				AND boardLikeCount &gt; 0
 				ORDER BY boardLikeCount DESC, psnum DESC
 			</when>
 			<otherwise>

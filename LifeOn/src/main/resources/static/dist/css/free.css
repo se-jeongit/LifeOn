@@ -37,6 +37,7 @@
 .body-content {
 	display: flex;
 	flex-direction: row;
+	justify-content: center;
 	/* height: 100vh; */
 }
 
@@ -50,12 +51,11 @@
 }
 
 .main_content {
-	width: 40%;
+	width: 980px;
+	min-height: 600px;
 	padding: 30px 10px;
-	margin: 30px 0px;
-	
+	margin: 30px 0px 50px;
 	border: 1px solid #e0e0e0;
-	
 	display: inline-table;
 }
 
@@ -79,7 +79,7 @@
 
 .rightBox {
 	width: 200px;
-	padding-top: 5px;
+	min-height: 90px;
 	overflow : hidden;
 	border: 1px solid #e0e0e0;
 	margin: 30px 20px;
@@ -90,7 +90,7 @@
 
 .leftBox {
 	width: 200px;
-	padding-top: 5px;
+	min-height: 90px;
 	overflow : hidden;
 	border: 1px solid #e0e0e0;
 	margin: 30px 20px;

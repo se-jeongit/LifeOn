@@ -78,12 +78,21 @@ function elapsedText(date) {
 		<div class="body-content">
 			<aside class="sidenav" id="sidenav">
 				<div class="leftBox" style="margin-bottom: 10px;">
-					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
-						조회순
+					<div style="padding: 14px 26px 10px 26px; text-align: left; font-size: 15px; font-weight: 600;">
+						즐겨찾기순
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="dto" items="${hitList}" varStatus="status">
+						<c:if test="${empty likeList}">
+		              		<tr>
+								<td style="padding: 15px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+									<div style="padding-bottom:3px; text-align: left;">
+										즐겨찾기가 된 <br>게시글이 없습니다.😢
+									</div>
+								</td>
+		              		</tr>
+						</c:if>
+						<c:forEach var="dto" items="${likeList}" varStatus="status">
 		              		<c:if test="${status.index < 5}">
 			              		<tr>
 									<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
@@ -97,11 +106,20 @@ function elapsedText(date) {
 		            </table>
 				</div>
 				<div class="leftBox" style="margin-top: 0px;">
-					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
+					<div style="padding: 14px 26px 10px 26px; text-align: left; font-size: 15px; font-weight: 600;">
 						댓글순
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
+	              		<c:if test="${empty replyList}">
+		              		<tr>
+								<td style="padding: 15px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+									<div style="padding-bottom:3px; text-align: left;">
+										댓글 있는 <br>게시글이 없습니다.😢
+									</div>
+								</td>
+		              		</tr>
+						</c:if>
 						<c:forEach var="dto" items="${replyList}" varStatus="status">
 		              		<c:if test="${status.index < 5}">
 			              		<tr>
@@ -117,7 +135,7 @@ function elapsedText(date) {
 				</div>
 			</aside>
 			
-			<div class="main_content" style="height: 535px;">
+			<div class="main_content">
 				<!-- 상단메뉴 -->
 				<div class="main_menu">
 				   	<div>
@@ -191,12 +209,22 @@ function elapsedText(date) {
 			
 			<aside class="sidebar" id="sidebar">
 				<div class="rightBox">
-					<div style="padding: 5px 25px; text-align: left; font-size: 15px; font-weight: 600;">
-						즐겨찾기순
+				
+					<div style="padding: 14px 26px 10px 26px; text-align: left; font-size: 15px; font-weight: 600;">
+						조회순
 					</div>
 					
 					<table class="table table-hover" style="table-layout: fixed; margin: 0;">
-						<c:forEach var="dto" items="${likeList}" varStatus="status">
+						<c:if test="${empty hitList}">
+		              		<tr>
+								<td style="padding: 15px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+									<div style="padding-bottom:3px; text-align: left;">
+										조회 된 <br>게시글이 없습니다.😢
+									</div>
+								</td>
+		              		</tr>
+						</c:if>
+						<c:forEach var="dto" items="${hitList}" varStatus="status">
 							<c:if test="${status.index < 10}">
 			              		<tr>
 									<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">

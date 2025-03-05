@@ -58,7 +58,7 @@
 							</tr>
 							
 							<tr>
-								<td colspan="2" valign="top" height="200" style="border-bottom: none;">
+								<td colspan="2" valign="top" height="200" style="border-bottom: none; padding: 40px 20px 20px 20px; font-size: 16px;">
 									${dto.content}
 								</td>
 							</tr>
