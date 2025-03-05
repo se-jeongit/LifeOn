@@ -158,8 +158,8 @@
 					<div class="mb-3">
 						<label for="statusSelect" class="form-label">처리 상태 선택:</label> <select
 							id="statusSelect" class="form-select">
-							<option value="미조치">미조치</option>
-							<option value="조치 완료">조치 완료</option>
+							<option value="이상없음">이상 없음</option>
+							<option value="처리완료">처리 완료</option>
 						</select>
 					</div>
 				</div>

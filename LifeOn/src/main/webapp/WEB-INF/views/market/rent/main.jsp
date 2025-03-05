@@ -94,8 +94,32 @@ function elapsedText(date) {
 	<div class="body-container">
 		<div class="product_group">
 			<aside class="product_best" id=product_best>
-	       		<h5 style="margin: 0; font-weight: 600;">BEST</h5>
+	       		<h5 style="margin: 0; text-align: left; font-weight: 600;">BEST</h5>
+	       		
+		       	<table class="table table-hover" style="table-layout: fixed; margin: 0;">
+					<c:if test="${empty likeList}">
+		             		<tr>
+							<td style="padding: 15px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+								<div style="padding-bottom:3px; text-align: left;">
+									인기있는 <br>대여상품이 없습니다.😢
+								</div>
+							</td>
+		             		</tr>
+					</c:if>
+					<c:forEach var="dto" items="${list}" varStatus="status">
+		             		<c:if test="${status.index < 5}">
+		              		<tr>
+								<td style="padding: 10px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+									<div onclick="location.href='<c:url value='${articleUrl}/${dto.pnum}?${query}'/>'" style="cursor: pointer;">
+										<img class="product_img" src="${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}" alt="물품사진">
+									</div>
+								</td>
+		              		</tr>
+		             		</c:if>
+					</c:forEach>
+		    	</table>
         	</aside>
+        	
         	
 			<div class="product_content">
 				<div style="display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 20px;">
@@ -122,7 +146,7 @@ function elapsedText(date) {
 	            <div class="product-grid">
 	            	<c:forEach var="dto" items="${list}" varStatus="status">
 		                <div class="product-item" id="${dto.pnum}" onclick="location.href='<c:url value='${articleUrl}/${dto.pnum}?${query}'/>'" style="cursor: pointer;">
-		                    <div style="width: 100%; height: 160px; border-bottom: 1px solid #e0e0e0;">
+		                    <div style="width: 100%; height: 200px; border-bottom: 1px solid #e0e0e0;">
 			                    <c:if test="${empty dto.pph}">
 			                    	<img class="product_img" src="${pageContext.request.contextPath}/dist/images/noimage.png">
 			                    </c:if>
@@ -132,7 +156,7 @@ function elapsedText(date) {
 		                    </div>
 		                    <div class="product_info">
 		                    	<div style="display: flex; justify-content: space-between; align-items: flex-start;">
-					                <h5 class="product_name" style="text-align: left;">${dto.pname}${dto.pnum}</h5>
+					                <h5 class="product_name" style="text-align: left;">${dto.pname}</h5>
 					                <button type="button" value="${dto.pnum}" class="btnSendProductLike" style="margin-bottom: 8px; border: none; background: #fff; font-size: 20px;" title="찜하기" onclick="event.stopPropagation();">
 										<i class="bi ${dto.memberLiked == 1 ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 									</button>
@@ -173,8 +197,8 @@ function elapsedText(date) {
 	                </c:forEach>
 	            </div>
 	            
-				<div class="page-navigation" style="padding: 150px 0 20px;">
-					${dataCount == 0 ? "등록된 대여물품이 없습니다." : paging}
+				<div class="page-navigation" style="padding: 0 20px;">
+					${dataCount == 0 ? "<p style='padding-top: 150px;'>등록된 대여물품이 없습니다.</p>" : paging}
 				</div>
     		</div>
     		

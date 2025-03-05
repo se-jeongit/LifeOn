@@ -86,20 +86,19 @@ public class FlowBoardController {
 			map.put("size", size);
 			
 			// 모든 리스트 출력
-			map.put("sortCd", "");
 			List<FlowBoard> list = service.listBoard(map);
 			
 			// 조회순 리스트 출력
 			map.put("sortCd", "hit");
-			model.addAttribute("hitList", service.listBoard(map));
+			model.addAttribute("hitList", service.sortListBoard(map));
 			
 			// 댓글순 리스트 출력
 			map.put("sortCd", "reply");
-			model.addAttribute("replyList", service.listBoard(map));
+			model.addAttribute("replyList", service.sortListBoard(map));
 			
 			// 좋아요순 리스트 출력
 			map.put("sortCd", "like");
-			model.addAttribute("likeList", service.listBoard(map));
+			model.addAttribute("likeList", service.sortListBoard(map));
 			
 			String cp = req.getContextPath();
 			String query = "page=" + current_page;

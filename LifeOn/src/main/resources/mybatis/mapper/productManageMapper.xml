@@ -233,4 +233,38 @@
 	</select>
 	
 	
+	<select id="checkStatus" parameterType="Long" resultType="String">
+		SELECT status
+		FROM product_together 
+		WHERE pnum = #{pnum}
+	</select>
+	
+	<update id="updatePointRecord" parameterType="Long">		
+		MERGE INTO POINT_RECORD pr
+	    USING (
+	        SELECT o.num, SUM(o.op) AS total_op
+	        FROM ORD o
+	        JOIN ORD_DETAIL od ON o.onum = od.onum
+	        WHERE od.pnum = #{pnum}
+	        GROUP BY o.num  
+	    ) refund
+	    ON (pr.num = refund.num)
+	    WHEN MATCHED THEN
+	    UPDATE SET pr.pretp = pr.pretp + refund.total_op		
+	</update>
+	
+	<select id="listPointRecord" parameterType="Long" resultType="map">
+	    SELECT o.num as num ,COALESCE(SUM(o.op), 0) prep
+	    FROM ORD o
+	    JOIN ORD_DETAIL od ON o.onum = od.onum
+	    WHERE od.pnum = #{pnum}
+	    GROUP BY o.num
+	</select>
+		
+	<insert id="insertRefundRecord">
+		INSERT INTO point_record(prnum, prec, pret, prep, pretp, prepd, num)
+		VALUES(point_record_seq.NEXTVAL, '공동구매실패 환불', '적립', #{prep}, COALESCE(#{totalPoint}, 0) + #{prep}, SYSDATE, #{num})
+	</insert>
+	
+	
 </mapper>

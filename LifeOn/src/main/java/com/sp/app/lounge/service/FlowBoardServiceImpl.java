@@ -57,6 +57,20 @@ public class FlowBoardServiceImpl implements FlowBoardService {
 
 		return list;
 	}
+	
+	@Override
+	public List<FlowBoard> sortListBoard(Map<String, Object> map) {
+		List<FlowBoard> list = null;
+		
+		try {
+			list = mapper.sortListBoard(map);
+			
+		} catch (Exception e) {
+			log.info("sortListBoard : ", e);
+		}
+		
+		return list;
+	}
 
 	@Override
 	public int dataCount(Map<String, Object> map) {

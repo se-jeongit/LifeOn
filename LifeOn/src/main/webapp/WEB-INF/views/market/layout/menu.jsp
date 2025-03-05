@@ -16,6 +16,7 @@
     }
 
     .sub-link {
+    	font-size: 16px;
         color: #333;
     }
 

@@ -238,6 +238,11 @@ public class ProductManageController {
 	public String deleteProduct(@RequestParam(name = "pnum") long pnum,
 			@RequestParam(name = "page", defaultValue = "1") String page) {
 		try {
+			
+			if(service.checkStatus(pnum).equals("구매실패")) {
+				service.updatePointRecord(pnum); //업데이트해준다 포인트만큼
+			}
+			
 			service.deleteTogetherProduct(pnum);
 			
 		} catch (Exception e) {

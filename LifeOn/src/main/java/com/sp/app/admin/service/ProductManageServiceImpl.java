@@ -17,6 +17,7 @@ import com.sp.app.admin.model.ProductManage;
 import com.sp.app.common.StorageService;
 import com.sp.app.exception.StorageException;
 import com.sp.app.mapper.OrderMapper;
+import com.sp.app.service.PointRecordService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class ProductManageServiceImpl implements ProductManageService{
 	private final ProductManageMapper mapper;
 	private final StorageService storageSerivce;
 	private final OrderMapper odmapper;
+	private final PointRecordService prService;
 	@Override
 	public List<ProductManage> listBigCategory() {
 		List<ProductManage> list = null;
@@ -344,6 +346,44 @@ public class ProductManageServiceImpl implements ProductManageService{
 			mapper.deleteLikeProduct(pnum, num);
 		} catch (Exception e) {
 			log.info("insertLikeProduct : ", e);
+		}
+		
+	}
+
+	@Override
+	public String checkStatus(long pnum) {
+		String  result ="";
+		try {
+			result = mapper.checkStatus(pnum);
+		} catch (Exception e) {
+			log.info("checkStatus : ", e);
+		}
+		
+		return result;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
+	public void updatePointRecord(long pnum) {
+		try {
+			
+			List<Map<String, Object>> list = mapper.listPointRecord(pnum);
+			
+			
+			for(Map<String, Object> map : list) {
+	            long num = ((Number) map.get("NUM")).longValue();  // 회원번호
+	            int prep = ((Number) map.get("PREP")).intValue();  // 사용한 포인트 
+	            
+	            int totalPoint = 0;
+	            totalPoint = prService.totalPoint(num);
+	            
+	            log.debug("num: " + num + ", prep: " + prep + ", totalPoint: " + totalPoint);
+	            mapper.insertRefundRecord(num, prep, totalPoint);   
+			}
+			
+			
+		} catch (Exception e) {
+			log.info("updatePointRecord : ", e);
 		}
 		
 	}

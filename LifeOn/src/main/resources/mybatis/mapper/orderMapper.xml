@@ -5,7 +5,7 @@
 	
 	<insert id="insertOrder" parameterType="com.sp.app.model.Order">
 		INSERT INTO ord (onum, od, op, odpp, oup, ofp, os, num)
-		VALUES (ord_seq.NEXTVAL, SYSDATE, #{op}, 0, #{oup}, #{ofp}, '결제전', #{num})
+		VALUES (ord_seq.NEXTVAL, SYSDATE, #{op}, 0, #{oup}, #{ofp}, '결제완료', #{num})
 	</insert>
 	
 	<insert id="insertOrderDetail" parameterType="com.sp.app.model.Order">

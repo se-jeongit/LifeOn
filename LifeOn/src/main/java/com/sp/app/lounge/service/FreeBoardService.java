@@ -8,6 +8,7 @@ import com.sp.app.lounge.model.FreeBoard;
 public interface FreeBoardService {
 	public void insertBoard(FreeBoard dto, String uploadPath) throws Exception;
 	public List<FreeBoard> listBoard(Map<String, Object> map);
+	public List<FreeBoard> sortListBoard(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
 	public FreeBoard findById(long num);
 	public void updateHitCount(long num) throws Exception;

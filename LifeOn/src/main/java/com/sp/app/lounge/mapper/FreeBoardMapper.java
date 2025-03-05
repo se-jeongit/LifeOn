@@ -24,6 +24,7 @@ public interface FreeBoardMapper {
 	
 	public int dataCount(Map<String, Object> map);
 	public List<FreeBoard> listBoard(Map<String, Object> map);
+	public List<FreeBoard> sortListBoard(Map<String, Object> map);
 	
 	public FreeBoard findById(Long num);
 	public void updateHitCount(long num) throws SQLException;

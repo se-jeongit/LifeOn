@@ -6,8 +6,10 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import com.sp.app.admin.model.ProductManage;
+import com.sp.app.model.PointRecord;
 
 @Mapper
 public interface ProductManageMapper {
@@ -74,6 +76,11 @@ public interface ProductManageMapper {
 	
 	public List<Long> likedProduct(long num);
 	
+	//공동구매상품 환불처리
+	public String checkStatus(long pnum);//상태확인
+	public void updatePointRecord(long pnum); //포인트업데이트
 	
+	public List<Map<String, Object>> listPointRecord(long pnum);
 	
+	public void insertRefundRecord(@Param("num") long num, @Param("prep") int prep, @Param("totalPoint") int totalPoint);
 }

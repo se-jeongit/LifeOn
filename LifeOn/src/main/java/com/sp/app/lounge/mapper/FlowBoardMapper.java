@@ -24,6 +24,7 @@ public interface FlowBoardMapper {
 	
 	public int dataCount(Map<String, Object> map);
 	public List<FlowBoard> listBoard(Map<String, Object> map);
+	public List<FlowBoard> sortListBoard(Map<String, Object> map);
 	
 	public FlowBoard findById(Long num);
 	public void updateHitCount(long num) throws SQLException;

@@ -146,8 +146,10 @@
 							</form>
 						</div>
 						<div class="col text-end">
+							<c:if test="${sessionScope.member.grade == 1}">
 							<button type="button" class="btn btn-light"
 								onclick="location.href='${pageContext.request.contextPath}/policy/write';">글올리기</button>
+							</c:if>
 						</div>
 					</div>
 				</div>
