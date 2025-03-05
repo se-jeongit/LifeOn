@@ -192,6 +192,20 @@ public class RentServiceImpl implements RentService {
 
 		return list;
 	}
+	
+	@Override
+	public List<RentProduct> bestListRentProduct(Map<String, Object> map) {
+		List<RentProduct> list = null;
+		
+		try {
+			list = mapper.bestListRentProduct(map);
+			
+		} catch (Exception e) {
+			log.info("bestListRentProduct : ", e);
+		}
+		
+		return list;
+	}
 
 	@Override
 	public RentProduct findById(long productNum) {

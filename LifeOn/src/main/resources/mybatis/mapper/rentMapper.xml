@@ -124,6 +124,21 @@
 		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
 	</select>
 	
+	<!-- 베스트 물품 리스트 -->
+	<select id="bestListRentProduct" parameterType="map" resultType="com.sp.app.rent.model.RentProduct">
+		SELECT p.pnum, pname, pph, p.num, prp, prlp, NVL(productLikeCount, 0) productLikeCount
+		FROM PRODUCT p
+		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
+		LEFT OUTER JOIN (
+			SELECT pnum, COUNT(*) productLikeCount
+			FROM MEMBER_LIKED
+			GROUP BY pnum
+		) l ON p.pnum = l.pnum
+		WHERE productLikeCount &gt; 0
+		ORDER BY productLikeCount DESC, pnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+	
 	
 	<!-- 물품 상세 보기 -->
 	<select id="findById" parameterType="Long" resultType="com.sp.app.rent.model.RentProduct">

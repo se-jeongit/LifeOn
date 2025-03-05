@@ -87,6 +87,7 @@ public class RentController {
 			map.put("size", size);
 			
 			List<RentProduct> list = service.listRentProduct(map);
+			List<RentProduct> bestList = service.bestListRentProduct(map);
 			
 			String cp = req.getContextPath();
 			
@@ -123,6 +124,7 @@ public class RentController {
 			model.addAttribute("listCategory", listCategory);
 			model.addAttribute("listSubCategory", listSubCategory);
 			model.addAttribute("list", list);
+			model.addAttribute("bestList", bestList);
 			model.addAttribute("dataCount", dataCount);
 			model.addAttribute("size", size);
 			

@@ -24,6 +24,7 @@ public interface RentService {
 	// 대여물품 리스트 조회
 	public int dataCount(Map<String, Object> map); // 리스트에 출력되는 물품개수
 	public List<RentProduct> listRentProduct(Map<String, Object> map); // 전체 물품 리스트
+	public List<RentProduct> bestListRentProduct(Map<String, Object> map); // 베스트 물품 리스트
 	
 	public RentProduct findById(long productNum); // 선택한 물품정보 보기
 	public List<RentProduct> findByMemberProduct(Map<String, Object> map); // 판매자가 파는 물품리스트
