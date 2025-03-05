@@ -152,7 +152,7 @@ h2 {
     transform: translateY(20px);
     opacity: 0;
     transition: transform 0.5s ease, opacity 0.5s ease;
-    max-width: 70%;
+    max-width: 90%;
 }
 
 .slide.active .slide-content h2 {
