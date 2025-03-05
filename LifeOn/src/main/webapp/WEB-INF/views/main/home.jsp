@@ -28,54 +28,18 @@
             <!-- 슬라이드 컨테이너 -->
             <div class="slider-container">
                 <!-- 슬라이드 1 -->
+                <c:forEach var="interior" items="${interior}">
+                <a href="<c:url value='/lounge2/interior/article/${interior.num}?page=1'/>">
                 <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 1"
+                    <img src="${pageContext.request.contextPath}/uploadPath/lounge1/${interior.thumbnail}" alt="메인 이미지 1"
                          class="slide-image">
                     <div class="slide-content">
-                        <h2>인테리어 게시판 1</h2>
-                        <p class="subtitle">작성자 : </p>
+                        <h2>${interior.subject}</h2>
+                        <p class="subtitle">작성자 : ${interior.nickname}</p>
                     </div>
                 </div>
-
-                <!-- 슬라이드 2 -->
-                <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 2"
-                         class="slide-image">
-                    <div class="slide-content">
-                        <h2>인테리어 게시판 2</h2>
-                        <p class="subtitle">작성자 :</p>
-                    </div>
-                </div>
-
-                <!-- 슬라이드 3 -->
-                <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 3"
-                         class="slide-image">
-                    <div class="slide-content">
-                        <h2>인테리어 게시판 3</h2>
-                        <p class="subtitle">작성자 : </p>
-                    </div>
-                </div>
-
-                <!-- 슬라이드 4 -->
-                <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 4"
-                         class="slide-image">
-                    <div class="slide-content">
-                        <h2>인테리어 게시판 4</h2>
-                        <p class="subtitle">작성자 :</p>
-                    </div>
-                </div>
-
-                <!-- 슬라이드 5 -->
-                <div class="slide">
-                    <img src="${pageContext.request.contextPath}/dist/images/sunset.jpg" alt="메인 이미지 5"
-                         class="slide-image">
-                    <div class="slide-content">
-                        <h2>인테리어 게시판 5</h2>
-                        <p class="subtitle">작성자 : </p>
-                    </div>
-                </div>
+                </a>
+                </c:forEach>
             </div>
 
             <!-- 슬라이드 인디케이터 -->
@@ -232,6 +196,7 @@
         </div>
     </div>
 
+
     <!-- 정책정보 섹션 -->
     <div class="section">
         <div class="section-header">
@@ -240,12 +205,16 @@
         </div>
 
         <div class="regional-info">
-            <div class="regional-card">
-                <img src="placeholder.jpg" alt="정책정보 이미지 1" class="placeholder-image">
-            </div>
-            <div class="regional-card">
-                <img src="placeholder.jpg" alt="정책정보 이미지 2" class="placeholder-image">
-            </div>
+            <c:forEach var="policy" items="${policy}" varStatus="status">
+                <div class="regional-card" style="position: relative;">
+                    <a href="<c:url value='/policy/article/${policy.num}?page=1'/>">
+                        <img src="${pageContext.request.contextPath}/dist/images/judgment1.png" alt="정책정보 이미지" class="placeholder-image policy-image">
+                        <div class="text-overlay" style="">
+                            ${policy.subject}
+                        </div>
+                    </a>
+                </div>
+            </c:forEach>
         </div>
     </div>
 </main>

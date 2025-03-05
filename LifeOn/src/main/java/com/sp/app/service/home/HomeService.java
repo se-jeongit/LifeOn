@@ -52,8 +52,12 @@ public class HomeService implements HomeServiceInterFace{
 
             for (LendingPage lendingPage : result) {
                 String content = lendingPage.getContent();
+                String subject = lendingPage.getSubject();
                 if(content.length() > 50) {
                     lendingPage.setContent(content.substring(0, 50) + ".....");
+                }
+                if(subject.length() > 20) {
+                    lendingPage.setSubject(subject.substring(0, 20) + ".....");
                 }
                 lendingPage.setRegDate(removeTime(lendingPage.getRegDate()));
             }
@@ -77,6 +81,11 @@ public class HomeService implements HomeServiceInterFace{
                 LocalDate endDate = endDateTime.toLocalDate();
                 long daysLeft = ChronoUnit.DAYS.between(today, endDate);
                 lendingPage.setRegDate(String.valueOf(daysLeft));
+                String content = lendingPage.getSubject();
+                if(content.length() > 26) {
+                        lendingPage.setSubject(content.substring(0, 30) + ".....");
+                }
+
             }
 
             return result;

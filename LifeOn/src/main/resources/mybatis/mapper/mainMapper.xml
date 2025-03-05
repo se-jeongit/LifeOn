@@ -4,51 +4,51 @@
 <mapper namespace="com.sp.app.mapper.HomeMapper">
 
     <select id="findByInterior" resultType="com.sp.app.model.LendingPage">
-        SELECT num, subject, nickname, thumbnail
+        SELECT num, subject, nickname, thumbnail, regDate
         FROM (
                  SELECT h.PSNUM as num, SUBJECT as subject, NICKNAME as nickname,
-                        SSFNAME AS thumbnail,
+                        SSFNAME AS thumbnail,h.REG_DATE as regDate,
                         ROW_NUMBER() OVER (PARTITION BY h.PSNUM ORDER BY SSFNAME) as rn
                  FROM HYBRID_BOARD h
                           JOIN MEMBER m ON h.NUM = m.NUM
                           JOIN HYBRID_FILE f ON h.PSNUM = f.PSNUM
-                 WHERE BDTYPE = 'room' AND h.REG_DATE >= SYSDATE - 1
+                 WHERE BDTYPE = 'room' AND h.REG_DATE >= TO_DATE(SYSDATE , 'YYYY-MM-DD HH24:MI:SS')
                  ORDER BY ABS(SYSDATE - h.REG_DATE)
              ) subquery
         WHERE rn = 1
-        ORDER BY thumbnail
-        FETCH FIRST 5 ROWS ONLY;
+        ORDER BY regDate DESC
+            FETCH FIRST 5 ROWS ONLY
     </select>
 
 
     <select id="findByEvent" resultType="com.sp.app.model.LendingPage">
         SELECT num, subject, thumbnail
         FROM (
-            SELECT EVNUM as num, TNAIL as thumbnail, SUBJECT as subject,
-            ROW_NUMBER() OVER (PARTITION BY EVNUM ORDER BY TNAIL) as rn
-            FROM EVENT e
-            ORDER BY ABS(SYSDATE - REG_DATE)
-            ) subquery
+                 SELECT EVNUM as num, TNAIL as thumbnail, SUBJECT as subject,
+                        ROW_NUMBER() OVER (PARTITION BY EVNUM ORDER BY TNAIL) as rn
+                 FROM EVENT e
+                 ORDER BY REG_DATE DESC
+             ) subquery
         WHERE rn = 1
         ORDER BY thumbnail
-        FETCH FIRST 3 ROWS ONLY;
+            FETCH FIRST 3 ROWS ONLY;
     </select>
 
     <select id="findByTip" resultType="com.sp.app.model.LendingPage">
-        SELECT num, subject, content,nickname, regDate,thumbnail
+        SELECT num, subject, content, nickname, regDate, thumbnail
         FROM (
-                 SELECT h.PSNUM as num, SUBJECT as subject, CONTENT AS content,NICKNAME as nickname,h.REG_DATE as regDate,
+                 SELECT h.PSNUM as num, SUBJECT as subject, CONTENT AS content, NICKNAME as nickname, h.REG_DATE as regDate,
                         SSFNAME AS thumbnail,
                         ROW_NUMBER() OVER (PARTITION BY h.PSNUM ORDER BY SSFNAME) as rn
                  FROM HYBRID_BOARD h
                           JOIN MEMBER m ON h.NUM = m.NUM
                           JOIN HYBRID_FILE f ON h.PSNUM = f.PSNUM
-                 WHERE BDTYPE = 'tip' AND h.REG_DATE >= SYSDATE - 1
-                 ORDER BY ABS(SYSDATE - h.REG_DATE)
+                 WHERE BDTYPE = 'tip' AND h.REG_DATE >= TO_DATE(SYSDATE , 'YYYY-MM-DD HH24:MI:SS')
+                 ORDER BY h.REG_DATE DESC
              ) subquery
         WHERE rn = 1
-        ORDER BY thumbnail
-        FETCH FIRST 4 ROWS ONLY
+        ORDER BY regDate DESC
+            FETCH FIRST 4 ROWS ONLY
     </select>
 
     <select id="findByPrizeMain" resultType="com.sp.app.model.LendingPage">
@@ -71,7 +71,6 @@
     </select>
 
     <select id="findByRegionMeeting" resultType="com.sp.app.model.LendingPage">
-
         SELECT PSNUM    AS num,
                SUBJECT  AS subject,
                CONTENT  AS content,
@@ -84,8 +83,10 @@
     </select>
 
     <select id="findByPolicy" resultType="com.sp.app.model.LendingPage">
-
-
+        SELECT PSNUM AS num,SUBJECT AS subject
+        FROM POLICY_BOARD
+        ORDER BY REG_DATE DESC
+        FETCH FIRST 2 ROWS ONLY
     </select>
 
 

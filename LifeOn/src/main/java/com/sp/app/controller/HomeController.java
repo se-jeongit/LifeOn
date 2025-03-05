@@ -30,13 +30,13 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("main/home");
 
 
-//        mav.addObject("interior", homeService.findByInterior());
+        mav.addObject("interior", homeService.findByInterior());
 //        mav.addObject("event", homeService.findByEvent());
         mav.addObject("prizeMain", homeService.findByPrizeMain());
         mav.addObject("tip", homeService.findByTip());
 //        mav.addObject("region", homeService.findByRegion());
         mav.addObject("regionMeeting", homeService.findByRegionMeeting());
-//        mav.addObject("policy", homeService.findByPolicy());
+        mav.addObject("policy", homeService.findByPolicy());
 
 
 
