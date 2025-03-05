@@ -15,7 +15,7 @@ public class Order {
 	private int odpp; //배송금액
 	private int oup; //사용한포인트
 	private int ofp; //최종결제금액
-	private int os; //주문상태
+	private String os; //주문상태
 	private long num; //회원번호
 	
 	//주문상세 테이블
@@ -28,4 +28,8 @@ public class Order {
 	
 	//총포인트
 	private int totalPoint;
+	
+	private String pname; //상품명
+	private String pph;// 상품썸네일사진
+	
 }

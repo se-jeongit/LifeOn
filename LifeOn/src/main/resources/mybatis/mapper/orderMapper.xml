@@ -19,5 +19,21 @@
 	    WHERE pnum = #{pnum}
 	</select>
 	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT count(*)
+		FROM ord_detail od
+		JOIN ord o ON o.onum = od.onum
+		WHERE o.num = #{num}
+	</select>
+	
+	<select id="listOrder" parameterType="map" resultType="com.sp.app.model.Order">
+		SELECT p.pname, p.pph, od.odq, o.op, o.os, o.od
+		FROM ord_detail od
+		JOIN ord o ON o.onum = od.onum
+		JOIN product p ON p.pnum = od.pnum
+		WHERE o.num= #{num}
+		ORDER BY o.onum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
 	
 </mapper>

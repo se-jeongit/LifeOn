@@ -64,8 +64,8 @@ $(function(){
 		</li>
 	
 		<li class="menu--item">
-	        <a href="<c:url value='#' />" class="menu--link" title="주문/배송">
-				<span class="menu--label">주문/배송</span>
+	        <a href="<c:url value='/market/order/list' />" class="menu--link" title="주문내역">
+				<span class="menu--label">주문내역</span>
 			</a>
 		</li>
 	

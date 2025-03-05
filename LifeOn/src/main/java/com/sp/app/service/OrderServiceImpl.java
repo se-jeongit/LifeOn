@@ -1,6 +1,7 @@
 package com.sp.app.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -66,6 +67,32 @@ public class OrderServiceImpl implements OrderService {
 			log.info("insertOrder : " , e);
 			throw e;
 		}
+	}
+
+	@Override
+	public List<Order> listOrder(Map<String, Object> map) {
+		List<Order> list = null;
+		
+		try {
+			list = mapper.listOrder(map);
+		} catch (Exception e) {
+			log.info("listPoint : ", e);
+		}
+	
+		return list;
+	}
+
+	@Override
+	public int dataCount(Map<String, Object> map) {
+		int result = 0;
+		
+		try {
+			result = mapper.dataCount(map);
+		} catch (Exception e) {
+			log.info("dataCount : ", e);
+		}
+		
+		return result;
 	}
 
 }

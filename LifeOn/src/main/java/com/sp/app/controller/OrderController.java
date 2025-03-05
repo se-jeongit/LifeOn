@@ -1,5 +1,8 @@
 package com.sp.app.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sp.app.admin.model.ProductManage;
 import com.sp.app.admin.service.ProductManageService;
+import com.sp.app.common.PaginateUtil;
 import com.sp.app.model.Member;
 import com.sp.app.model.Order;
 import com.sp.app.model.SessionInfo;
@@ -19,6 +23,7 @@ import com.sp.app.service.MemberService;
 import com.sp.app.service.OrderService;
 import com.sp.app.service.PointRecordService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +37,7 @@ public class OrderController {
 	private final ProductManageService productService;
 	private final OrderService orderService;
 	private final PointRecordService pService;
-	
+	private final PaginateUtil paginateUtil;
 	
 	@GetMapping("payment")
 	public String paymentForm(@RequestParam(name = "pnum") long pnum,
@@ -95,6 +100,57 @@ public class OrderController {
 		
 		
 		return "market/order/payment";
+	}
+	
+	@GetMapping("list")
+	public String orderList(@RequestParam(name = "page", defaultValue = "1") int current_page,
+			Model model,
+			HttpSession session,
+			HttpServletRequest req) {
+		
+		
+		try {
+			int size = 10;
+			int dataCount = 0;
+			int total_page = 0;
+			Map<String, Object> map = new HashMap<>();
+			
+			SessionInfo member = (SessionInfo) session.getAttribute("member");
+			map.put("num", member.getNum());
+			
+			dataCount = orderService.dataCount(map);
+			total_page = paginateUtil.pageCount(dataCount, size);
+			current_page = Math.min(current_page, total_page);
+			
+			int offset = (current_page - 1) * size;
+			if(offset < 0) offset = 0;
+			
+			map.put("offset", offset);
+			map.put("size", size);
+			
+			String cp = req.getContextPath();
+			String listUrl = cp + "/market/order/list";
+			String query = "page=" + current_page;
+			
+			List<Order> list = orderService.listOrder(map);
+			String paging = paginateUtil.paging(current_page, total_page, listUrl);
+			
+			model.addAttribute("list", list);
+			model.addAttribute("dataCount", dataCount);
+			model.addAttribute("size", size);
+			model.addAttribute("page", current_page);
+			model.addAttribute("total_page", total_page);
+			model.addAttribute("paging", paging);
+			
+			model.addAttribute("query", query);
+			
+		} catch (Exception e) {
+			log.info("list : ", e);
+		}
+		
+		
+		
+		return "mypage/order/list";
 	}
 	
 	
