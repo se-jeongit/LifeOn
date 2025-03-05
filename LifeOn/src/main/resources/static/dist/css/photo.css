@@ -142,7 +142,9 @@ h1, h2, h3, h4, h5, h6, p, a, b {
  	display: flex;
     flex-direction: column;
     text-align: center;
-    padding: 0 100px; 
+    padding: 0 10vw; 
+    max-width: 1280px;
+    margin: 0 auto;
 }
 
 @media screen and (max-width: 520px) {
