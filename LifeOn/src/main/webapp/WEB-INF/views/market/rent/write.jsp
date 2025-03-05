@@ -370,7 +370,7 @@ $(function() {
     
     // 초기 썸네일 설정
     if (imgName) {
-        let imgSrc = '${pageContext.request.contextPath}/uploadPath/rent/${vo.ppp}';
+        let imgSrc = '${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}';
         $('#thumbnailImage').attr('src', imgSrc);  // img 태그의 src 속성으로 이미지 설정
     } else {
         $('#thumbnailImage').attr('src', '${pageContext.request.contextPath}/dist/images/add_photo.png');

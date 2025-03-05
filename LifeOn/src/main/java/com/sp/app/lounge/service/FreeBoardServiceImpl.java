@@ -57,6 +57,20 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 		return list;
 	}
+	
+	@Override
+	public List<FreeBoard> sortListBoard(Map<String, Object> map) {
+		List<FreeBoard> list = null;
+		
+		try {
+			list = mapper.sortListBoard(map);
+			
+		} catch (Exception e) {
+			log.info("sortListBoard : ", e);
+		}
+		
+		return list;
+	}
 
 	@Override
 	public int dataCount(Map<String, Object> map) {

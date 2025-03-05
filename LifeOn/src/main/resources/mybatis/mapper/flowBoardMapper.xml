@@ -75,6 +75,31 @@
 			</if>
 			AND blind = 0
 		</where>
+		ORDER BY psnum DESC
+		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+	</select>
+	
+	<select id="sortListBoard" parameterType="map" resultType="com.sp.app.lounge.model.FlowBoard">
+		SELECT hb.psnum, m.num, m.id, nickname, subject, content, hb.reg_date, uddate, hb.blind, m.grade, m.profile_image,
+			hitCount, NVL(replyCount, 0) replyCount, NVL(fileCount, 0) fileCount, NVL(boardLikeCount, 0) boardLikeCount
+		FROM FREE_BOARD hb
+		JOIN MEMBER m ON hb.num = m.num
+		LEFT OUTER JOIN (
+			SELECT psnum, COUNT(*) fileCount
+			FROM FREE_BOARD_FILE
+			GROUP BY psnum
+		) hf ON hb.psnum = hf.psnum
+		LEFT OUTER JOIN (
+			SELECT COUNT(*) replyCount, ps_num
+			FROM FREE_BOARD_REPLY
+			GROUP BY ps_num
+		) c ON hb.psnum = c.ps_num
+		LEFT OUTER JOIN (
+			SELECT psnum, COUNT(*) boardLikeCount
+			FROM FREE_BOARD_FAV
+			GROUP BY psnum
+		) b ON hb.psnum = b.psnum
+		WHERE blind = 0
 		<choose>
 			<when test="sortCd == 'hit'">
 				AND hitCount &gt; 0

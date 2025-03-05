@@ -8,6 +8,7 @@ import com.sp.app.lounge.model.FlowBoard;
 public interface FlowBoardService {
 	public void insertBoard(FlowBoard dto, String uploadPath) throws Exception;
 	public List<FlowBoard> listBoard(Map<String, Object> map);
+	public List<FlowBoard> sortListBoard(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
 	public FlowBoard findById(long num);
 	public void updateHitCount(long num) throws Exception;
