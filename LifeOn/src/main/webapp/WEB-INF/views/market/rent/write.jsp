@@ -42,6 +42,12 @@ function check() {
         return false;
     }
     
+    if (str.length > 10) {
+        alert('물품명은 10자 이하로 입력해주세요.');
+        f.pname.focus();
+        return false;
+    }
+    
     str = f.csn.value;
     if(! str) {
         alert('카테고리를 선택해주세요.');
@@ -58,6 +64,12 @@ function check() {
     
     if (parseInt(str) < 0) {
         alert('0원 이상의 금액만 가능합니다.');
+        f.prp.focus();
+        return false;
+    }
+    
+    if (parseInt(str) > 1000000000) {
+        alert('최대 10억 원까지만 입력 가능합니다.');
         f.prp.focus();
         return false;
     }
@@ -83,6 +95,12 @@ function check() {
     
     if (parseInt(str) < 0) {
         alert('0원 이상의 금액만 가능합니다.');
+        f.prlp.focus();
+        return false;
+    }
+    
+    if (parseInt(str) > 1000000000) {
+        alert('최대 10억 원까지만 입력 가능합니다.');
         f.prlp.focus();
         return false;
     }
@@ -115,7 +133,7 @@ function check() {
     }
 	
     str = f.pphFile.value;
-    if(! f.pphFile.value && ${mode == 'write'}) {
+    if(! f.pphFile.value) {
         alert('썸네일 이미지를 등록해주세요.');
         f.pphFile.focus();
         return false;
@@ -228,27 +246,44 @@ function check() {
 						</td>
 					</tr>
 					
-					<tr>
-						<td scope="row" style="vertical-align: top; padding-top: 20px;">썸네일이미지</td>
-						<td width="10%" style="vertical-align: top;">
-							<div class="thumbnail-wrap">
-								<div class="thumbnail">
-								 	<img src=""  class="thumbnailImage" name="thumbnailImage" id="thumbnailImage" alt="썸네일">
-			                        <input type="file" name="pphFile" id="pphFile" accept="image/*" style="display: none;">
+					<c:if test="${mode == 'write'}">
+						<tr>
+							<td scope="row">썸네일이미지</td>
+							<td width="10%">
+								<div class="thumbnail-wrap">
+									<div class="thumbnail">
+									 	<img src=""  class="thumbnailImage" name="thumbnailImage" id="thumbnailImage" alt="썸네일">
+				                        <input type="file" name="pphFile" id="pphFile" accept="image/*" style="display: none;">
+									</div>
 								</div>
-							</div>
-						</td>
-						<td scope="row" width="15%" style="vertical-align: top; padding-top: 20px;">추가이미지</td>
-						<td colspan="3">
-							<div class="img-grid"><img class="item img-add rounded" src="${pageContext.request.contextPath}/dist/images/add_photo.png"></div>
-							<input type="file" name="selectFile" accept="image/*" multiple style="display: none;" class="rent-control">
-						</td>
-					</tr>
-					
-					<tr>
-					</tr>
+							</td>
+							<td scope="row" width="15%">추가이미지</td>
+							<td colspan="3">
+								<div class="img-grid"><img class="item img-add rounded" src="${pageContext.request.contextPath}/dist/images/add_photo.png"></div>
+								<input type="file" name="selectFile" accept="image/*" multiple style="display: none;" class="rent-control">
+							</td>
+						</tr>
+					</c:if>
 					
 					<c:if test="${mode=='update'}">
+						<tr>
+							<td scope="row">등록된 썸네일이미지</td>
+							<td width="10%">
+								<div class="thumbnail-wrap">
+									<div class="thumbnail">
+									 	<img src=""  class="thumbnailImage" name="thumbnailImage" id="thumbnailImage" alt="썸네일">
+				                        <input type="file" name="pphFile" id="pphFile" accept="image/*" style="display: none;">
+									</div>
+										<button type="button" class="return_btn">되돌리기</button>
+								</div>
+							</td>
+							<td scope="row" width="15%">추가이미지</td>
+							<td colspan="3">
+								<div class="img-grid"><img class="item img-add rounded" src="${pageContext.request.contextPath}/dist/images/add_photo.png"></div>
+								<input type="file" name="selectFile" accept="image/*" multiple style="display: none;" class="rent-control">
+							</td>
+						</tr>
+						
 						<tr style="height: 116.5px;">
 							<td scope="row">등록된 추가이미지</td>
 							<td colspan="3"> 
@@ -279,6 +314,7 @@ function check() {
 							<c:if test="${mode == 'update'}">
 								<input type="hidden" name="num" value="${dto.num}">
 								<input type="hidden" name="pnum" value="${dto.pnum}">
+								<input type="hidden" name="pph" value="${dto.pph}">
 								<input type="hidden" name="page" value="${page}">
 							</c:if>
 						</td>
@@ -288,6 +324,49 @@ function check() {
 		</div>
 	</div>
 </main>
+
+<script type="text/javascript">
+	$(function() {
+	    let imgName = '${dto.pph}';
+	    
+	    // 초기 썸네일 설정
+	    if (imgName) {
+	        let imgSrc = '${pageContext.request.contextPath}/uploadPath/rent/' + imgName;
+	        $('#thumbnailImage').attr('src', imgSrc);  // img 태그의 src 속성으로 이미지 설정
+	    } else {
+	        $('#thumbnailImage').attr('src', '${pageContext.request.contextPath}/dist/images/add_photo.png');
+	    }
+	    
+	    // 이미지 클릭 시 파일 선택 창 열기
+	    $('#thumbnailImage').click(function(){
+	        $('form[name=rentForm] input[name=pphFile]').trigger('click');
+	    });
+	    
+	    // 파일 선택 후 이미지 변경
+	    $('form[name=rentForm] input[name=pphFile]').change(function(){
+	        let file = this.files[0];
+	        
+	        // 이미지 파일만 처리
+	        if (! file.type.match('image.*')) {
+	            this.focus();
+	            return false;
+	        }
+	        
+		    // 되돌리기 변경 버튼 클릭 시
+		    $('.return_btn[type="button"]').click(function() {
+		        $('#thumbnailImage').attr('src', '${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}');
+		    });
+	        
+	        // 선택된 파일을 미리보기로 설정
+	        let reader = new FileReader();
+	        reader.onload = function(e) {
+	            $('#thumbnailImage').attr('src', e.target.result);  // 미리보기 이미지로 설정
+	        }
+	        reader.readAsDataURL(file);
+	    });
+	});
+</script>
+
 
 <c:if test="${mode=='update'}">
 	<script type="text/javascript">
@@ -386,52 +465,6 @@ function daumPostcode() {
 </script>
 
 <script type="text/javascript">
-$(function() {
-    let imgName = '${dto.ppnum}';
-    
-    // 초기 썸네일 설정
-    if (imgName) {
-        let imgSrc = '${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}';
-        $('#thumbnailImage').attr('src', imgSrc);  // img 태그의 src 속성으로 이미지 설정
-    } else {
-        $('#thumbnailImage').attr('src', '${pageContext.request.contextPath}/dist/images/add_photo.png');
-    }
-    
-    // 이미지 클릭 시 파일 선택 창 열기
-    $('#thumbnailImage').click(function(){
-        $('form[name=rentForm] input[name=pphFile]').trigger('click');
-    });
-    
-    // 파일 선택 후 이미지 변경
-    $('form[name=rentForm] input[name=pphFile]').change(function(){
-        let file = this.files[0];
-        
-        // 파일이 없으면 초기 이미지
-        if (! file) {
-            $('#thumbnailImage').attr('src', '${pageContext.request.contextPath}/dist/images/add_photo.png');
-            return false;
-        }
-        
-        // 이미지 파일만 처리
-        if (! file.type.match('image.*')) {
-            this.focus();
-            return false;
-        }
-        
-        // 선택된 파일을 미리보기로 설정
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            $('#thumbnailImage').attr('src', e.target.result);  // 미리보기 이미지로 설정
-        }
-        reader.readAsDataURL(file);
-    });
-});
-
-window.addEventListener('load', () => {
-	const dateELS = document.querySelectorAll('form input[type=date]');
-	dateELS.forEach( inputEL => inputEL.addEventListener('keydown', e => e.preventDefault()) );
-});
-  
 window.addEventListener('DOMContentLoaded', evt => {
 	var sel_files = [];
 	
