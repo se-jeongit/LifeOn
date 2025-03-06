@@ -9,7 +9,7 @@
 <title>LifeOn</title>
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/meeting.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/meeting.css" type="text/css">
 
 </head>
 <body>
@@ -86,10 +86,10 @@
         </div>
      
       
-      	<div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1100px;">
+      	<div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1280px;">
           <button class="btn" onclick="location.href='${pageContext.request.contextPath}/city/meeting/write';">글쓰기</button>
         </div>
-
+	<div>
       <section class="main__content">
        	 <c:forEach var="dto" items="${list}">
         	<div class="meetings">
@@ -100,16 +100,18 @@
                   <span class="meeting__category">${dto.cbc}</span>
                   <span class="meeting__location"><i class="bi bi-geo-alt"></i>${dto.loca}</span>
                   <span class="meeting__date"><i class="bi bi-calendar-check"></i>&nbsp;${dto.mdate}</span>
-      
+      				
                 </div>
+                </div>
+              </div>
+              <div>
                 <h5 class="meeting__title">${dto.subject}</h5>
               </div>
-              
               <div class="meeting_infos">
               	<span class="meeting__category">#${dto.age}</span>
               	<span class="meeting__category">#${dto.gender}</span>
               	<span class="meeting__category">#${dto.person_c}</span>
-              </div>
+             
               
               <div style="display: flex; justify-content: space-between; align-items: left;">
 				 <div class="status-box" style="font-size: 10px; font-weight: bold;">
@@ -118,7 +120,7 @@
 				    </div>
 				</div>
 				
-                  <div>
+                  <div style="margin-top: 5px">
 						<i class="tip_icon bi bi-bookmark"></i>
 						<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
 						<i class="tip_icon bi bi-eye"></i>
@@ -131,6 +133,7 @@
                   </div>
           	</c:forEach>
       </section>
+                  </div>
 
     </main>
     

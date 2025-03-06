@@ -362,7 +362,8 @@ fieldset[disabled] .btn {
   display: flex;
   justify-content: space-between;
   margin: 20px auto;
-  max-width: 1100px;
+  max-width: 1280px;
+  margin-bottom: -10px;
 }
 
 .region-category .select-box {
@@ -407,11 +408,11 @@ fieldset[disabled] .btn {
 }
 
 .main__content {
-  max-width: 1100px;
+  max-width: 1280px;
   margin: 20px auto 20px;
   display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(5, 1fr);
+  gap: 43px;
+  grid-template-columns: repeat(5, 216px);
 }
 
 /* 모임 리스트 스타일 */
@@ -419,10 +420,12 @@ fieldset[disabled] .btn {
   list-style: none;
   padding: 0;
   width: 250px;
-  height: 130px;
   border: 1.5px solid #e0e0e0;
   border-radius: 10px;
-  padding: 8px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .meeting {
@@ -444,6 +447,7 @@ fieldset[disabled] .btn {
   display: flex;
   justify-content: space-between;
   align-items: center;
+          
 }
 
 .meeting__info-detail-more {
@@ -458,7 +462,7 @@ fieldset[disabled] .btn {
  text-align: left;
  font-size: 10px; 	
  color: #7F7F7F;
- margin-bottom: 5px;
+ margin-top: 15px;
 	
 }
 
@@ -479,6 +483,7 @@ fieldset[disabled] .btn {
   display: inline-block;
   width: 60px;
   text-align: center;
+  margin-top: 3px;
 }
 
 .meeting__status--on {
