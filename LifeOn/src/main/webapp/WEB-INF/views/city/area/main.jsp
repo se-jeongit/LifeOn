@@ -23,7 +23,7 @@
 </header>
  
     <!-- 메인 콘텐츠 -->
-    <main>
+    <main class="min-vh-100">
         <!-- 상단 슬라이더 -->
         <div class="slider-container">
             <div class="slider" id="main-slider">
@@ -63,7 +63,7 @@
         
         <!-- MBTI 배너 -->
         <div class="mbti-banner" id="mbti-banner">
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%EC%A7%80%EC%97%AD%EC%A0%95%EB%B3%B4.jpg-Gf72nwNDcS2T0Q8ZYEjmwHhA1VAdw8.jpeg" alt="MBTI 테스트 배너">
+            <img src="" alt="MBTI 테스트 배너">
         </div>
         
         <!-- 지역 정보 -->
@@ -202,7 +202,7 @@
             </button>
             
             <div class="modal-body">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%EB%AA%A8%EB%8B%AC%EC%B0%BD.jpg-On59nM2Y42loq47ibPYtw4EEf4kTSe.jpeg" alt="MBTI 테스트" class="modal-image">
+                <img src="" alt="MBTI 테스트" class="modal-image">
                 
                 <div class="modal-question-container">
                     <h3 class="modal-question" id="modal-question">입대표 버스도 <더를 역세권> 동네라면 대환영?</h3>

@@ -27,6 +27,7 @@
  height: 250px; 
  object-fit: cover; 
  border-radius: 5px;
+ padding: 0;
 }
 .photo-grid {
  display: grid;
