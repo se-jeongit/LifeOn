@@ -133,7 +133,7 @@ function check() {
     }
 	
     str = f.pphFile.value;
-    if(! f.pphFile.value) {
+    if(! f.pphFile.value && ${mode == 'write'}) {
         alert('썸네일 이미지를 등록해주세요.');
         f.pphFile.focus();
         return false;
@@ -274,7 +274,6 @@ function check() {
 									 	<img src=""  class="thumbnailImage" name="thumbnailImage" id="thumbnailImage" alt="썸네일">
 				                        <input type="file" name="pphFile" id="pphFile" accept="image/*" style="display: none;">
 									</div>
-										<button type="button" class="return_btn">되돌리기</button>
 								</div>
 							</td>
 							<td scope="row" width="15%">추가이미지</td>
@@ -351,12 +350,7 @@ function check() {
 	            this.focus();
 	            return false;
 	        }
-	        
-		    // 되돌리기 변경 버튼 클릭 시
-		    $('.return_btn[type="button"]').click(function() {
-		        $('#thumbnailImage').attr('src', '${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}');
-		    });
-	        
+
 	        // 선택된 파일을 미리보기로 설정
 	        let reader = new FileReader();
 	        reader.onload = function(e) {

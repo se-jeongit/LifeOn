@@ -73,6 +73,9 @@ public class RentServiceImpl implements RentService {
 		try {
 			if (dto.getPphFile() != null && ! dto.getPphFile().isEmpty()) {
 				deleteUploadFile(uploadPath, dto.getPph());
+				
+				String filename = storageService.uploadFileToServer(dto.getPphFile(), uploadPath);
+				dto.setPph(filename);
 			}
 			
 			mapper.updateProduct(dto);

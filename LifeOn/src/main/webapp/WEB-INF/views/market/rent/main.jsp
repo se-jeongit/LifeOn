@@ -376,9 +376,14 @@ $(function() {
     // cbn 값 추출
     const cbnValue = getQueryParam('cbn');
     
-    // cbn 값이 있으면 화면에 표시
-    if (cbnValue !== null) {
-        document.getElementById('cbn-value').textContent = cbnValue;
+    // csn 값 추출
+    const csnValue = getQueryParam('csn');
+    
+    if (cbnValue !== null) { // cbn 값이 있으면 화면에 표시
+        document.getElementById('cbn-value').textContent = '${largeCate}';
+    } else if (csnValue != null) { // csn 값이 있으면 화면에 cbn -> csn 형태로 표시
+    	const textVal = '${largeCate} <i class="bi bi-chevron-right"></i> ${smallCate}';
+    	document.getElementById('cbn-value').innerHTML = textVal;
     } else {
         document.getElementById('cbn-value').textContent = '전체';
     }

@@ -46,8 +46,4 @@ public interface RentMapper {
 	public RentProduct findByCategory(long categoryNum);
 	public List<RentProduct> listCategory(); // 대분류
 	public List<RentProduct> listSubCategory(long categoryNum); // 소분류
-	
-	// 대여물품 신청하면 판매가 확인 후 대여시작날짜, 대여종료날짜 업데이트
-	// 대여상태(대여가능, 대여중, 대여불가능) 업데이트
-	// 연체된 경우 연체기간, 보증금 업데이트
 }

@@ -109,7 +109,7 @@
 										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 										&nbsp;<span id="productLikeCount">${dto.productLikeCount}</span>
 									</button>
-				            		<button class="search_btn" style="margin: 0">대여신청</button>
+				            		<button class="search_btn" style="margin: 0" onclick="javascript:dialogRentRequest();">대여신청</button>
 				            	</div>
 		           			</div>
         				</c:if>
@@ -188,6 +188,68 @@
 		}
 	</script>
 </c:if>
+
+<script type="text/javascript">
+function dialogRentRequest() {
+	$('#dialogRentRequest').modal('show');	
+}
+</script>
+
+<div class="modal fade" id="dialogRentRequest" tabindex="-1" role="dialog" aria-labelledby="rentRequestModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		
+      		<div class="modal-header" style="display: flex; justify-content: space-between; padding: 10px 20px;">
+        		<h5 class="modal-title">대여 신청하기</h5>
+        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      		</div>
+      		
+      		<div class="modal-body" style="padding: 5px 0px;">
+       			<form id="rentRequestForm">
+          			<div class="form-group">
+			        	<table class="table table-hover reportable m-0">
+			            	<thead>
+			              		<tr>
+			                		<th>
+			                			대여신청 시 주의사항
+			                		</th>
+			              		</tr>
+			            	</thead>
+			            	<tbody>
+			              		<tr>
+			                		<td>
+				                		대여날짜
+			                		</td>
+			              		</tr>
+			              		<tr>
+			                		<td>
+			                			반납일자
+			                		</td>
+			              		</tr>
+			              		<tr>
+			                		<td>
+			                			1일대여비 x 총날짜출력 = 대여비
+			                		</td>
+			              		</tr>
+			              		<tr>
+			                		<td>
+			                			대여비 + 보증금 = 총 금액
+			                		</td>
+			              		</tr>
+			            	</tbody>
+			            </table>
+			            <p style="text-align: center; margin: 0; padding: 10px; padding-top: 15px; color: #999; border-top: 1px solid #e0e0e0;">주의사항을 확인하셨나요?</p>
+          			</div>
+        		</form>
+      		</div>
+      		
+      		<div class="modal-footer" style="display: flex; justify-content: center;">
+        		<button type="button" class="ssbtn" id="submitRentProduct">결제</button>
+        		<button type="button" class="ssbtn" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
 
 <script type="text/javascript">
 const product_list = document.querySelector('#product_list');

@@ -51,15 +51,10 @@ public class RentProduct {
 	// 물품대여 상품정보 PRODUCT_RENT
 	private int prp; // 대여비(1일기준)
 	private String prd; // 상품등록날짜 : SYSDATE(DEFAULT)
-	private String prsd; // 상품대여시작일
-	private String pred; // 상품대여종료일
 	
 	private String prs; // 대여상태 : 대여가능, 대여중, 대여불가능
 	private String pra; // 거래위치
 	private String prad; // 거래상세주소
 	
 	private int prlp; // 보증금
-	// 대여종료일 후 반납하지 않고 연락 두절인 경우 받는 금액
-	private String prld; // 연체기간
-	// 대여종료일 후 반납하지 않을 경우 일자를 저장하여 그 기간만큼 1일 대여비를 환불받을 보증금에서 제외
 }

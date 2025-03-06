@@ -72,6 +72,23 @@ public class RentController {
 			map.put("schType", schType);
 			map.put("kwd", kwd);
 			
+			if (categoryNum != 0) {
+				for (int i = 0; i < listCategory.size(); i++) {
+					if (listCategory.get(i).getCbn() == categoryNum) {
+						model.addAttribute("largeCate", listCategory.get(i).getCbc());
+					}
+				}
+			} else if (subCategoryNum != 0) {
+				for (int i = 0; i < listCategory.size(); i++) {
+					for (int j = 0; j < listCategory.get(i).getListSub().size(); j++) {
+						if (listCategory.get(i).getListSub().get(j).getCsn() == subCategoryNum) {
+							model.addAttribute("largeCate", listCategory.get(i).getCbc());
+							model.addAttribute("smallCate", listCategory.get(i).getListSub().get(j).getCsc());
+						}
+					}
+				}
+			}
+			
 			SessionInfo info = (SessionInfo)session.getAttribute("member");
 			
 			dataCount = service.dataCount(map);
