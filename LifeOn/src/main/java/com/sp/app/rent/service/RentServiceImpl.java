@@ -29,8 +29,10 @@ public class RentServiceImpl implements RentService {
 	public void insertRentProduct(RentProduct dto, String uploadPath) throws Exception {
 		try {
 			// 썸네일 이미지
-			String filename = storageService.uploadFileToServer(dto.getPphFile(), uploadPath);
-			dto.setPph(filename);
+			if (! dto.getPphFile().isEmpty()) {
+				String filename = storageService.uploadFileToServer(dto.getPphFile(), uploadPath);
+				dto.setPph(filename);
+			}
 			
 			// 상품 저장
 			Long productNum = mapper.productSeq();
@@ -54,6 +56,7 @@ public class RentServiceImpl implements RentService {
 		for (MultipartFile mf : dto.getSelectFile()) {
 			try {
 				String saveFilename = Objects.requireNonNull(storageService.uploadFileToServer(mf, uploadPath));
+				
 				dto.setPpp(saveFilename);
 				
 				mapper.insertRentProductFile(dto);
@@ -68,7 +71,11 @@ public class RentServiceImpl implements RentService {
 	@Override
 	public void updateRentProduct(RentProduct dto, String uploadPath) throws Exception {
 		try {
-			// 할수있을까...
+			if (dto.getPphFile() != null && ! dto.getPphFile().isEmpty()) {
+				deleteUploadFile(uploadPath, dto.getPph());
+			}
+			
+			mapper.updateProduct(dto);
 			mapper.updateRentProduct(dto);
 			
 			if (! dto.getSelectFile().isEmpty()) {
@@ -96,8 +103,10 @@ public class RentServiceImpl implements RentService {
 			    return;
 			}
 			
+			deleteUploadFile(uploadPath, dto.getPph());
+			
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("field", "ppnum");
+			map.put("field", "pnum");
 			map.put("pnum", productNum);
 			deleteRentProductFile(map);
 			

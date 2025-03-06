@@ -50,14 +50,14 @@
 	</sql>
 	
 	<!-- 대여물품 수정 -->
- 	<update id="updateRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
-		<![CDATA[
+ 	<update id="updateProduct" parameterType="com.sp.app.rent.model.RentProduct">
 		UPDATE PRODUCT SET pname = #{pname}, pct = #{pct}, pph = #{pph, jdbcType=VARCHAR}, csn = #{csn}
-		WHERE pnum = #{pnum};
-		
+		WHERE pnum = #{pnum}
+	</update>
+	
+ 	<update id="updateRentProduct" parameterType="com.sp.app.rent.model.RentProduct">
 		UPDATE PRODUCT_RENT SET prp = #{prp}, pra = #{pra}, prad = #{prad}, prlp = #{prlp}
-		WHERE pnum = #{pnum};
-		]]>
+		WHERE pnum = #{pnum}
 	</update>
 	
 	<!-- 대여물품 삭제 -->

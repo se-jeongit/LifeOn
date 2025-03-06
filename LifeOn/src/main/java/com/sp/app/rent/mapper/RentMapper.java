@@ -18,6 +18,7 @@ public interface RentMapper {
 	public void insertRentProductFile(RentProduct dto) throws SQLException;
 	
 	// 대여물품 수정
+	public void updateProduct(RentProduct dto) throws SQLException;
 	public void updateRentProduct(RentProduct dto) throws SQLException;
 	
 	// 대여물품 삭제

@@ -66,7 +66,7 @@ function elapsedText(date) {
 	            
 	            <c:forEach var="main" items="${listCategory}">
 		            <li class="topMenuLi">
-		                <a class="menuLink" style="width: calc(1278px / ${listCategory.size() + 1});" onclick="location.href='<c:url value='/market/rent/main?cbn=${main.cbn}'/>'">${main.cbc}</a>
+		                <a class="menuLink" style="width: calc(1278px / ${listCategory.size() + 1});" onclick="location.href='<c:url value='/market/rent/main?cbn=${main.cbn}'/>'" data-cbc="${main.cbc}">${main.cbc}</a>
 		                <ul class="submenu">
 		                	<c:forEach var="sub" items="${main.listSub}">
 		                    	<li class="submenuLink" style="width: calc(1280px / ${main.listSub.size()});" onclick="location.href='<c:url value='/market/rent/main?csn=${sub.csn}'/>'"><a class="subLink" ></a>${sub.csc}</li>
@@ -82,7 +82,7 @@ function elapsedText(date) {
 	<!-- 카테고리 타이틀-->
     <div class="category_title" id="category_title">
     	<div>
-        	<h3 style="margin: 0; font-weight: 500;">전체</h3>
+        	<h3 id="cbn-value" style="margin: 0; font-weight: 500;">전체</h3>
 		</div>
         <div>
             <span>
@@ -94,14 +94,14 @@ function elapsedText(date) {
 	<div class="body-container">
 		<div class="product_group">
 			<aside class="product_best" id=product_best>
-	       		<h5 style="margin: 0; padding: 10px 20px; text-align: left; font-weight: 600;">BEST</h5>
+	       		<h5 style="margin: 0; padding: 10px 20px; text-align: center; font-weight: 600;">✨ BEST ✨</h5>
 	       		
-		       	<table class="table" style="table-layout: fixed; margin: 0;">
+		       	<table class="table productTable" style="table-layout: fixed; margin: 0;">
 					<c:if test="${empty bestList}">
 		             		<tr>
 							<td style="padding: 15px 25px; word-wrap: break-word; border-top: 1px solid #e0e0e0; border-bottom: none;">
 								<div style="padding-bottom:3px; text-align: left;">
-									인기있는 <br>대여상품이 없습니다.😢
+									인기있는 <br>대여물품이 없습니다.😢
 								</div>
 							</td>
 		             		</tr>
@@ -109,9 +109,17 @@ function elapsedText(date) {
 					<c:forEach var="dto" items="${bestList}" varStatus="status">
 		             		<c:if test="${status.index < 5}">
 		              		<tr>
-								<td style="padding: 20px;; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
-									<div onclick="location.href='<c:url value='${articleUrl}/${dto.pnum}?${query}'/>'" style="cursor: pointer;">
-										<img class="bestProduct_img" src="${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}" alt="물품사진">
+								<td style="padding: 20px; word-wrap: break-word; border-top: 1px solid #e0e0e0;">
+									<div class="bestProduct" onclick="location.href='<c:url value='${articleUrl}/${dto.pnum}?${query}'/>'" style="cursor: pointer;">
+										<div class="rankText">${status.index + 1}</div>
+										<div class="bestProduct_imgBox">
+											<img class="bestProduct_img" src="${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}" alt="물품사진">
+										</div>
+										<div style="text-align: left; padding: 8px; display: flow;">
+											<div style="margin-bottom: 3px; font-size: 15px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${dto.pname}</div>
+											<span>대여비 <fmt:formatNumber value="${dto.prp}"/>원/일</span><br>
+											<span>보증금 <fmt:formatNumber value="${dto.prlp}"/>원</span>
+										</div>
 									</div>
 								</td>
 		              		</tr>
@@ -155,8 +163,8 @@ function elapsedText(date) {
 			                    </c:if>
 		                    </div>
 		                    <div class="product_info">
-		                    	<div style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-					                <h5 class="product_name" style="margin: 0; text-align: left;">${dto.pname}</h5>
+		                    	<div style="margin-bottom: 10px; width: 179.38px; display: flex; justify-content: space-between; align-items: center;">
+					                <h5 class="product_name" style="margin: 0; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 90%;">${dto.pname}</h5>
 					                <button type="button" value="${dto.pnum}" class="btnSendProductLike" style="border: none; background: #fff; font-size: 20px;" title="찜하기" onclick="event.stopPropagation();">
 										<i class="bi ${dto.memberLiked == 1 ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 									</button>
@@ -168,7 +176,7 @@ function elapsedText(date) {
 			                    		<span> /일</span>
 		                    		</div>
 			                    <div style="text-align: left; padding-bottom: 5px;">보증금 : <fmt:formatNumber value="${dto.prlp}"/> 원</div>
-								<div style="text-align: left;">
+								<div style="text-align: left; display: flex; flex-wrap: wrap;">
 									<span id="output-${dto.pnum}"></span>
 	                             	<script type="text/javascript">
 		                             	document.addEventListener("DOMContentLoaded", function() {
@@ -218,44 +226,6 @@ function elapsedText(date) {
 		
     </div>
 </main>
-
-<script type="text/javascript">
-/* document.querySelectorAll('.menuLink').forEach(menuLink => {
-    
-    menuLink.addEventListener('click', function (e) {
-        e.preventDefault(); // 기본 링크 이동 방지
-        const submenu = this.nextElementSibling; // 서브 메뉴 (ul)
-        
-        if (submenu) {
-	        // 이미 열려 있는 서브 메뉴는 닫기
-	        const allSubmenus = document.querySelectorAll('.submenu');
-	        allSubmenus.forEach(sub => {
-	            if (sub !== submenu) {
-	                sub.style.height = '0'; // 다른 서브 메뉴 닫기
-	            }
-	        });
-	
-	        // 해당 서브 메뉴 열기
-	        if (submenu.style.height === '0px' || submenu.style.height === '') {
-	            submenu.style.height = submenu.scrollHeight + 'px'; // 서브 메뉴 열기
-	        } else {
-	            submenu.style.height = '0'; // 서브 메뉴 닫기
-	        }
-        }
-    });
-});
-
-//바깥 화면 클릭 시 서브 메뉴 닫기
-document.addEventListener('click', function(e) {
-    const clickedInsideMenu = e.target.closest('.category_nav'); // .category_nav 내부 클릭 여부
-    if (!clickedInsideMenu) {
-        const allSubmenus = document.querySelectorAll('.submenu');
-        allSubmenus.forEach(sub => {
-            sub.style.height = '0'; // 서브 메뉴 닫기
-        });
-    }
-}); */
-</script>
 
 <script type="text/javascript">
 // 검색 키워드 입력란에서 엔터를 누른 경우 서버 전송 막기 
@@ -380,6 +350,10 @@ $(function() {
 					$i.removeClass('bi-suit-heart').addClass('bi-suit-heart-fill redColor');
 				}
 				
+			setTimeout(function() {
+	              window.location.reload();
+		    }, 100);
+				
 			} else if (state == "liked") {
 				alert('찜은 한번만 가능합니다.');
 			} else {
@@ -390,6 +364,24 @@ $(function() {
 		ajaxRequest(url, 'post', params, 'json', fn);
 	});
 });
+</script>
+
+<script>
+    // URL에서 cbn 파라미터 값 추출
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // cbn 값 추출
+    const cbnValue = getQueryParam('cbn');
+    
+    // cbn 값이 있으면 화면에 표시
+    if (cbnValue !== null) {
+        document.getElementById('cbn-value').textContent = cbnValue;
+    } else {
+        document.getElementById('cbn-value').textContent = '전체';
+    }
 </script>
 
 <footer class="mt-auto py-2 text-center w-100" style="left: 0px; bottom: 0px; background: #F7F9FA;">
