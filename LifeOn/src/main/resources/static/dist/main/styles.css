@@ -393,11 +393,9 @@ h2 {
 
 /* 섹션 공통 스타일 */
 .section {
-    margin-bottom: 48px;
+    margin-bottom: 28px;
     background-color: white;
     padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .section-header {

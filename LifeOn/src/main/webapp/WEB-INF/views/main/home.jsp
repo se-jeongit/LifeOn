@@ -169,7 +169,7 @@
                 </div>
 
                 <div class="local-news">
-                    <img src="placeholder.jpg" alt="지역 새소식 이미지" class="news-image">
+                    <img src="#" alt="지역 새소식 이미지" class="news-image">
                     <div class="news-content">
                         <h3>여기는 무엇인가?</h3>
                         <p>4월 봄축제 개최합니다</p>

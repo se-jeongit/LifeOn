@@ -83,5 +83,13 @@
             WHERE PNUM = #{pNum}
     </delete>
 
+    <select id="findByPictureList" resultType="com.sp.app.auction.response.prize.PrizeDetailRep">
+        SELECT PPP as thumbnail , PPH as prName
+        FROM PRODUCT_PICTURE pc
+        JOIN PRODUCT p on pc.PNUM = p.PNUM
+        WHERE p.PNUM = #{pNum}
+
+    </select>
+
 
 </mapper>

@@ -175,7 +175,7 @@ public class SellerController {
 
         ModelAndView mav = new ModelAndView("redirect:/mypage/seller/info");
         try {
-            sellerService.deleteSeller(pNum);
+            sellerService.deleteSeller(pNum,uploadPath);
         } catch (Exception e) {
             log.info("deleteSeller : ", e);
 
@@ -204,6 +204,13 @@ public class SellerController {
         mav.addObject("mode", "update");
 
         return mav;
+    }
+
+
+
+    @GetMapping("/deleteFile")
+    public void fileDelete(){
+        sellerService.deleteFileEM(uploadPath);
     }
 
 

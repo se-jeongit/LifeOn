@@ -30,6 +30,7 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("main/home");
 
 
+        // TODO 지역정보 미완
         mav.addObject("interior", homeService.findByInterior());
         mav.addObject("event", homeService.findByEvent());
         mav.addObject("prizeMain", homeService.findByPrizeMain());

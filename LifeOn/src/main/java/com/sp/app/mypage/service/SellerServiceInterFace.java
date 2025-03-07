@@ -19,6 +19,7 @@ public interface SellerServiceInterFace {
 
     PrizeDetailRep findBySellerDetail(Map<String, Object> map);
 
-    void deleteSeller(long map) throws Exception;
+    void deleteSeller(long map,String upPath) throws Exception;
 
+    void deleteFileEM(String upPath);
 }

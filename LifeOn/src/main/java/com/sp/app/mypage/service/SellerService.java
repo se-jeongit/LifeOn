@@ -3,6 +3,7 @@ package com.sp.app.mypage.service;
 import com.sp.app.auction.response.prize.PrizeDetailRep;
 import com.sp.app.common.StorageService;
 import com.sp.app.exception.StorageException;
+import com.sp.app.lounge.model.FreeBoard;
 import com.sp.app.mapper.AuctionMapper;
 import com.sp.app.mapper.SellerMapper;
 import com.sp.app.mypage.controller.dto.request.SellerRequest;
@@ -116,12 +117,20 @@ public class SellerService implements SellerServiceInterFace {
         return null;
     }
 
+
+
+
     @Override
     @Transactional
-    public void deleteSeller(long pNum) throws Exception {
+    public void deleteSeller(long pNum,String upPath) throws Exception {
 
         try {
+
+            deleteUploadFile(pNum,upPath);
+
+
             sellerMapper.deleteSeller(pNum);
+
 
         } catch (Exception e) {
             log.info("deleteSeller : ", e);
@@ -129,6 +138,47 @@ public class SellerService implements SellerServiceInterFace {
         }
 
     }
+
+    @Override
+    public void deleteFileEM(String upPath) {
+        List<PrizeDetailRep> listFile = null;
+        try {
+//            listFile = sellerMapper.findByPictureListEM();
+            List<String> picName = storageService.listAllFiles(upPath);
+
+
+
+        }catch (Exception e) {
+            log.info("deleteFileEM : ", e);
+        }
+    }
+
+
+    protected void deleteUploadFile(long num,String upPath) throws Exception {
+        List<PrizeDetailRep> listFile = null;
+        try {
+            listFile = sellerMapper.findByPictureList(num);
+            List<String> picName = new ArrayList<>();
+
+            if (listFile != null) {
+                for (PrizeDetailRep prizeDetailRep : listFile) {
+                    picName.add(prizeDetailRep.getThumbnail());
+                }
+                picName.add(listFile.get(0).getPrName());
+                for (String s : picName) {
+                    storageService.deleteFile(upPath, s);
+                }
+
+
+            }
+
+        } catch (Exception e) {
+            log.info("deleteUploadFile : ", e);
+            throw e;
+        }
+
+    }
+
 
 
     protected void insertFile(SellerRequest dto, String uploadPath) throws Exception {
@@ -142,8 +192,7 @@ public class SellerService implements SellerServiceInterFace {
                 //auctionMapper.updateFile(dto);
                 sellerMapper.insertFile(dto);
 
-            } catch (NullPointerException e) {
-            } catch (StorageException e) {
+            } catch (NullPointerException | StorageException ignored) {
             } catch (Exception e) {
                 throw e;
             }

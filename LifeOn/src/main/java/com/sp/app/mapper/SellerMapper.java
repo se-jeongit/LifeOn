@@ -20,4 +20,7 @@ public interface SellerMapper {
 
     void deleteSeller(long map);
 
+    List<PrizeDetailRep> findByPictureList(long num);
+
+
 }
