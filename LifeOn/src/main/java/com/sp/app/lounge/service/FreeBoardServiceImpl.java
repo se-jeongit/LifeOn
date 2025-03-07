@@ -423,4 +423,31 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		}
 		
 	}
+
+	@Override
+	public List<FreeBoard> memberBoradLike(Map<String, Object> map) {
+		List<FreeBoard> list = null;
+
+		try {
+			list = mapper.memberBoradLike(map);
+			
+		} catch (Exception e) {
+			log.info("memberBoradLike : ", e);
+		}
+
+		return list;
+	}
+
+	@Override
+	public int likeDataCount(Map<String, Object> map) {
+		int result = 0;
+
+		try {
+			result = mapper.likeDataCount(map);
+		} catch (Exception e) {
+			log.info("likeDataCount : ", e);
+		}
+
+		return result;
+	}
 }

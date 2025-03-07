@@ -295,4 +295,18 @@
 		WHERE rpnum = #{rpnum} AND num = #{num}
 	</select>
 	
+	<select id="memberBoradLike" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
+		SELECT f.psnum, f.num, subject, nickname, hb.reg_date, hitCount, bdtype
+		FROM hybrid_board_fav f
+		JOIN hybrid_board hb ON f.psnum = hb.psnum
+		JOIN member m ON f.num = m.num
+		WHERE f.num = #{num}
+	</select>
+	
+	<select id="likeDataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM hybrid_board_fav
+        WHERE num = #{num}
+	</select>
+	
 </mapper>

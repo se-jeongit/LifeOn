@@ -9,12 +9,28 @@ var tid = setInterval( function () {
   var nav = document.querySelector('.vertical_nav');
   var wrapper = document.querySelector('.wrapper');
 
-  // Toggle menu click
-  querySelector('.toggle_menu').onclick = function () {
+  var menu = document.getElementById("js-menu");
+  var subnavs = menu.querySelectorAll('.menu--item__has_sub_menu');    
 
-    nav.classList.toggle('vertical_nav__opened');
+  // Open Sub Menu
+  for (var i = 0; i < subnavs.length; i++) {
+    
+    if (subnavs[i].classList.contains('menu--item__has_sub_menu') ) {
+      
+      subnavs[i].querySelector('.menu--link').addEventListener('click', function (e) {
 
-    wrapper.classList.toggle('toggle-content');
+          for (var j = 0; j < subnavs.length; j++) {
 
- 	};
- });
+            if(e.target.offsetParent != subnavs[j])
+              subnavs[j].classList.remove('menu--subitens__opened');          
+
+          }
+
+          e.target.offsetParent.classList.toggle('menu--subitens__opened');
+
+      }, false);
+
+    }
+  }
+
+}, 100 );

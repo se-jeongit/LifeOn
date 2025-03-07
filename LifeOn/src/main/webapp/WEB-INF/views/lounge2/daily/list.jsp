@@ -66,8 +66,8 @@ function elapsedText(date) {
 					<input type="search" name=kwd value="${kwd}" class="searchBox" placeholder="궁금한 이야기를 검색해보세요!">
 					<!-- 검색버튼 -->
 			   		<button class="mybtn" style="margin-right: 2px;" onclick="searchList();">검색&nbsp;<i class="bi bi-search"></i></button>
-				   	<%-- <!-- 새로고침 버튼 -->
-					<button type="button" class="ssbtn" onclick="location.href='${pageContext.request.contextPath}/lounge2/daily';" title="새로고침">새로고침&nbsp;<i class="bi bi-arrow-repeat"></i></button> --%>
+				   	<!-- 새로고침 버튼 -->
+					<button type="button" class="ssbtn" style="height: 40px;" onclick="location.href='${pageContext.request.contextPath}/lounge2/daily';" title="새로고침">새로고침&nbsp;<i class="bi bi-arrow-repeat"></i></button>
 		   		</form>
 			</div>
 		</div>

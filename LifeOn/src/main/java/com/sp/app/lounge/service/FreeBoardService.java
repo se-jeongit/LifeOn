@@ -46,4 +46,8 @@ public interface FreeBoardService {
 	
 	// 댓글 신고
 	public void updateReplyBlind(Map<String, Object> map) throws Exception;
+	
+	// 회원이 즐겨찾기한 리스트
+	public List<FreeBoard> memberBoradLike(Map<String, Object> map);
+	public int likeDataCount(Map<String, Object> map);
 }

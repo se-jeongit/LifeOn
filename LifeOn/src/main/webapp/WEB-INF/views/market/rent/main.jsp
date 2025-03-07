@@ -19,6 +19,7 @@ function elapsedText(date) {
 	const minute = seconds * 60;
 	const hour = minute * 60;
 	const day = hour * 24;
+	const year = 365 * day;
 	
 	var today = new Date();
 	var elapsedTime = Math.trunc((today.getTime() - date.getTime()) / 1000);
@@ -32,10 +33,16 @@ function elapsedText(date) {
 		elapsedText = Math.trunc(elapsedTime / minute) + "분 전";
 	} else if (elapsedTime < day) {
 		elapsedText = Math.trunc(elapsedTime / hour) + "시간 전";
+ 	} else {
+		elapsedText = Math.trunc(elapsedTime / day) + "일 전";
+/* 	3일 이후, 1년 후 날짜를 다르게 하고 싶을 경우
 	} else if (elapsedTime < (day * 3)) {
 		elapsedText = Math.trunc(elapsedTime / day) + "일 전";
+	} else if (elapsedTime >= year) {
+		elapsedText = (date.getFullYear() + '').slice(-2) + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate().toString().padStart(2, '0');
 	} else {
-		elapsedText = date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, '0') + "-" + date.getDate().toString().padStart(2, '0');
+		elapsedText = (date.getMonth() + 1).toString().padStart(2, '0') + "월 " + date.getDate().toString().padStart(2, '0') + "일";
+*/
 	}
 	
 	return elapsedText;
@@ -82,7 +89,7 @@ function elapsedText(date) {
 	<!-- 카테고리 타이틀-->
     <div class="category_title" id="category_title">
     	<div>
-        	<h3 id="cbn-value" style="margin: 0; font-weight: 500;">전체</h3>
+        	<h4 id="cbn-value" style="margin: 0; font-weight: 500;">전체</h4>
 		</div>
         <div>
             <span>

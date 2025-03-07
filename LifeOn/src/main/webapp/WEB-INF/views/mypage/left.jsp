@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/dist/js/menu2.js"></script>
 <script type="text/javascript">
 // 메뉴 활성화
 $(function(){
@@ -34,8 +35,44 @@ $(function(){
         
         if($('nav ul>li>a').hasClass('active_menu')) return false;
         
+        $('nav ul>.menu--item__has_sub_menu ul>li>a').each(function() {
+    		if ($(this).attr('href') === '#' || ! $(this).attr('href').trim()) return true;
+    		
+    		let preUrl = url.substring(0, url.lastIndexOf('/'));
+    		if (this.href.endsWith(preUrl)) {
+    			$(this).addClass('active_menu');
+    			return false;
+    		}
+    	});
+        
+        if($('nav ul>li>a').hasClass('active_menu')) return false;
+    	
+    	$('nav ul>.menu--item__has_sub_menu ul>li>a').each(function() {
+    		if ($(this).attr('href') === '#' || ! $(this).attr('href').trim()) return true;
+    		
+    		let preUrl = url.substring(0, url.lastIndexOf('/'));
+    		if(preUrl.lastIndexOf('/') === -1) return false;
+    		preUrl = preUrl.substring(0, preUrl.lastIndexOf('/'));
+    		
+    		if ($(this).attr('href').startsWith(preUrl)) {
+    			$(this).addClass('active_menu');
+    			return false;
+    		}
+    	});
+    	
+        if($('nav ul>li>a').hasClass('active_menu')) return false;
+        
     }catch(e) {
     }
+});
+
+$(function(){
+	$('nav ul>.menu--item__has_sub_menu ul>li>a').each(function() {
+		if($(this).hasClass('active_menu')) {
+			$(this).closest(".menu--item__has_sub_menu").addClass('menu--subitens__opened');
+			return false;
+		}
+	});
 });
 </script>
 
@@ -68,11 +105,20 @@ $(function(){
 				<span class="menu--label">주문내역</span>
 			</a>
 		</li>
-	
-		<li class="menu--item">
-	        <a href="<c:url value='/mypage/seller/info' />" class="menu--link" title="판매관리">
+		
+		<li class="menu--item menu--item__has_sub_menu">
+			<label class="menu--link" title="판매관리">
 				<span class="menu--label">판매관리</span>
-			</a>
+			</label>
+		
+			<ul class="sub_menu">
+				<li class="sub_menu--item">
+					<a href="<c:url value='/'/>" class="sub_menu--link">대여물품</a>
+				</li>
+				<li class="sub_menu--item">
+					<a href="<c:url value='/mypage/seller/info'/>" class="sub_menu--link">경매물품</a>
+				</li>
+			</ul>
 		</li>
 		
 		<li class="menu--item">
@@ -82,7 +128,7 @@ $(function(){
 		</li>
 	
 		<li class="menu--item">
-	        <a href="#" class="menu--link" title="즐겨찾기">
+	        <a href="<c:url value='/likeBoard/list'/>" class="menu--link" title="즐겨찾기">
 				<span class="menu--label">즐겨찾기</span>
 			</a>
 		</li>

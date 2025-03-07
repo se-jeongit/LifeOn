@@ -10,7 +10,6 @@
 
 <jsp:include page="/WEB-INF/views/layout/headerResources.jsp"/>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/menu3.css" type="text/css">
-<!-- <script type="text/javascript" src="${pageContext.request.contextPath}/dist/js/menu2.js"></script> -->
 <style>
     .sejin-container {
         max-width: 1300px;
