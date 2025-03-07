@@ -244,6 +244,45 @@ main {
   color: #fff;
 }
 
+/* 페이징 */
+.page-navigation {
+	padding: 0;
+	
+
+}
+
+.page-navigation .pagination {
+    background-color: #FFF;
+    margin: 0;
+    padding-top: 20px;
+    bottom: 0;
+}
+
+.page-navigation .pagination .page-item {
+    border: none;
+    margin: 2px;
+}
+
+.page-navigation .pagination .page-link {
+    border: none;
+    background-color: #FFF;
+    color: #222;
+}
+
+.page-navigation .pagination .page-item.active .page-link {
+	border-radius: 50px;
+    background-color: #006AFF;
+    color: #FFF;
+}
+
+.page-link:hover {
+    text-decoration: none;
+}
+
+.page-navigation .pagination .page-link:focus {
+    box-shadow: none;
+}
+
 /* 기본 버튼 스타일 */
 .btn {
     height: 40px;

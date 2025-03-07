@@ -131,9 +131,13 @@
                   </div>
                   </div>
                   </div>
-          	</c:forEach>
+          		</c:forEach>
       </section>
-                  </div>
+                 <div class="page-navigation" style="margin-block: auto;">
+					${dataCount == 0 ? "등록된 모임모집이 없습니다.." : paging}
+				</div>
+   </div>
+                  
 
     </main>
     

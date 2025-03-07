@@ -9,18 +9,41 @@ img {
     max-width: 100%;
     height: auto;
 }
-
+.body {
+	max-width: 1280px;
+	margin: 10 auto;
+}
 button {
     cursor: pointer;
     border: none;
     background: none;
+    
+}
+.main-banner {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 5px;
+	margin: 20px auto;
+	max-width: 1280px;
+	padding: 20px auto;
+	
 }
 
+.top5{
+	flex: 0 0 35%; 
+}
 /* 메인 슬라이더 스타일 */
 .slider-container {
     position: relative;
     overflow: hidden;
     height: 300px;
+    width: 50%;
+    margin: 0 auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    flex: 0 0 60%;
 }
 
 .slider {
@@ -33,16 +56,13 @@ button {
     min-width: 100%;
     height: 100%;
     background-color: #333;
-    background-image: url('placeholder.jpg');
     background-size: cover;
     background-position: center;
-    position: relative;
+
 }
 
 .slide-content {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -52,6 +72,8 @@ button {
     color: white;
     text-align: center;
     background-color: rgba(0, 0, 0, 0.4);
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .slide-content h2 {
@@ -116,8 +138,10 @@ button {
 
 /* MBTI 배너 스타일 */
 .mbti-banner {
-    margin: 30px auto;
-    max-width: 800px;
+    margin: 20px auto;
+    width: 90%;
+    height: 150px;
+    max-width: 1280px;
     cursor: pointer;
     border-radius: 8px;
     overflow: hidden;
@@ -135,6 +159,32 @@ button {
     object-fit: cover;
 }
 
+ /* 검색 바 스타일 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #7fb4ff;
+  border-radius: 20px;
+  padding: 12px 16px;
+  width: 445px;
+  margin: 20px auto;
+}
+
+.search-bar .icon {
+  color: #b3b3b3;
+}
+
+.search-content {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+}
+
+
 /* 지역 정보 스타일 */
 .section-title {
     font-size: 1.5rem;
@@ -146,26 +196,25 @@ button {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .card-title {
     font-size: 1.2rem;
-    margin-bottom: 15px;
-    font-weight: 600;
+    margin-bottom: 5px;
+    font-weight: 400;
 }
 
 .region-list {
-    display: flex;
+    width: 250px;
     flex-direction: column;
-    gap: 15px;
 }
 
 .region-item {
     display: flex;
     align-items: flex-start;
-    padding-bottom: 15px;
+    margin-top:10px;
+    margin-bottom:-10px;
     border-bottom: 1px solid #eee;
 }
 
@@ -196,6 +245,7 @@ button {
 /* 전체 노선 슬라이더 스타일 */
 .route-section {
     margin: 30px 0;
+    cursor: pointer;
 }
 
 .section-header {
@@ -247,8 +297,9 @@ button {
 
 .route-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 1100px;
 }
 
 .route-card {
@@ -257,6 +308,7 @@ button {
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    width: 250px;
 }
 
 .route-card:hover {
@@ -290,135 +342,275 @@ button {
 }
 
 
-/* MBTI 모달 스타일 */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.modal.show {
-    opacity: 1;
-    visibility: visible;
-}
-
+/* 모달 오버레이 스타일 */
 .modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
 }
 
+/* 모달 컨테이너 스타일 */
+.modal-container {
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  height: 80vh;
+  max-height: 700px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  background-color: transparent; /* 배경 이미지를 위해 투명하게 설정 */
+}
+
+/* 닫기 버튼 스타일 */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  transition: background-color 0.3s;
+}
+
+.close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 진행 상태 표시 스타일 */
+.progress-indicator {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  z-index: 10;
+}
+
+/* 질문 모달 스타일 */
 .modal-content {
-    position: relative;
-    width: 90%;
-    max-width: 400px;
-    z-index: 1001;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: white;
+  text-align: center;
 }
 
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1002;
+/* 질문 헤더 스타일 */
+.question-header {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 30px;
 }
 
-.modal-body {
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
+/* 질문 텍스트 스타일 */
+.question-text {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 60px;
+  line-height: 1.4;
+  padding: 0 20px;
+  word-break: keep-all;
 }
 
-.modal-image {
-    width: 100%;
-    height: 600px;
-    object-fit: cover;
+/* 답변 버튼 컨테이너 */
+.answer-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
 }
 
-.modal-question-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
+/* 답변 버튼 스타일 */
+.answer-btn {
+  background-color: white;
+  color: #000;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.modal-question {
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    padding: 0 20px;
-    position: absolute;
-    top: 33%;
-    width: 100%;
+.answer-btn:hover {
+  transform: translateY(-3px);
+  background-color: #f8f8f8;
 }
 
-.modal-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 75%;
-    max-width: 300px;
-    position: absolute;
-    bottom: 25%;
+.answer-btn:active {
+  transform: translateY(0);
 }
 
-.modal-btn {
-    background-color: white;
-    color: black;
-    font-weight: 700;
-    padding: 12px 20px;
-    border-radius: 50px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+/* 결과 모달 스타일 */
+.result-modal {
+  background-color: white;
+  color: #333;
+  overflow-y: auto;
+  padding: 40px 20px;
 }
 
-.modal-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.result-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #000;
+  word-break: keep-all;
 }
 
-.modal-progress {
-    display: flex;
-    gap: 8px;
-    position: absolute;
-    bottom: 30px;
+.result-content {
+  margin-bottom: 30px;
+  text-align: left;
 }
 
-.progress-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.4);
+.result-emoji {
+  font-size: 32px;
+  margin-bottom: 10px;
 }
 
-.progress-dot.active {
-    background-color: white;
+.result-description {
+  font-size: 16px;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.result-tag {
+  font-size: 22px;
+  font-weight: bold;
+  color: #000;
+  margin: 20px 0;
+}
+
+/* 더 알아보기 버튼 스타일 */
+.more-info-btn {
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.more-info-btn:hover {
+  transform: translateY(-3px);
+  background-color: #222;
+}
+
+/* 페이징 */
+.page-navigation {
+	padding: 0;
+}
+
+.page-navigation .pagination {
+    background-color: #FFF;
+    margin: 0;
+    padding-top: 20px;
+}
+
+.page-navigation .pagination .page-item {
+    border: none;
+    margin: 2px;
+}
+
+.page-navigation .pagination .page-link {
+    border: none;
+    background-color: #FFF;
+    color: #222;
+}
+
+.page-navigation .pagination .page-item.active .page-link {
+	border-radius: 50px;
+    background-color: #006AFF;
+    color: #FFF;
+}
+
+.page-link:hover {
+    text-decoration: none;
+}
+
+.page-navigation .pagination .page-link:focus {
+    box-shadow: none;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 95%;
+    height: 85vh;
+  }
+
+  .question-header {
+    font-size: 36px;
+  }
+
+  .question-text {
+    font-size: 20px;
+  }
+
+  .answer-btn {
+    font-size: 18px;
+  }
+
+  .result-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .question-header {
+    font-size: 32px;
+  }
+
+  .question-text {
+    font-size: 18px;
+    margin-bottom: 40px;
+  }
+
+  .answer-btn {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+
+  .result-title {
+    font-size: 20px;
+  }
+
+  .result-description {
+    font-size: 14px;
+  }
 }
 
 /* 반응형 스타일 */
@@ -458,7 +650,7 @@ button {
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 1280px) {
     .slider-container {
         height: 250px;
     }
