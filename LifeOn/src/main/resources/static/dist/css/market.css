@@ -400,3 +400,9 @@ li { list-style: none; }
 	cursor: pointer;
 	z-index: 100;
 }
+
+#submitRentProduct:disabled {
+	background-color: #eee;
+	cursor: not-allowed;
+	opacity: 0.6;
+}

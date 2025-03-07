@@ -44,7 +44,7 @@
     </div>
     
     <div style="width: 250px; text-align: right;">
-    	<img src="" alt="OpenAPI" style="width: 120px; height: 50px; object-fit: cover;">
-    	<img src="" alt="OpenAPI" style="width: 120px; height: 50px; object-fit: cover;">
+    	<img src="${pageContext.request.contextPath}/dist/images/kg.jpg" alt="OpenAPI" style="width: 120px; height: 50px;">
+    	<img src="${pageContext.request.contextPath}/dist/images/coolsms.jpg" alt="OpenAPI" style="width: 120px; height: 50px;">
     </div>
 </div>

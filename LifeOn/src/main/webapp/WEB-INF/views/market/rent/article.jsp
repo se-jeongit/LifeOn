@@ -68,11 +68,6 @@
 			      					<c:choose>
 										<c:when test="${sessionScope.member.nickName == dto.nickname}">
 											<button type="button" class="search_btn" onclick="location.href='${pageContext.request.contextPath}/market/rent/update?pnum=${dto.pnum}&page=${page}';">수정</button>
-										</c:when>
-									</c:choose>
-									
-									<c:choose>
-										<c:when test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
 								    		<button type="button" class="search_btn" onclick="deleteOk();">삭제</button>
 										</c:when>
 									</c:choose>
@@ -82,7 +77,7 @@
 										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 										&nbsp;<span id="productLikeCount">${dto.productLikeCount}</span>
 									</button>
-				            		<button class="search_btn" style="margin: 0">대여신청</button>
+				            		<button class="search_btn" style="margin: 0" onclick="javascript:dialogRentRequest();">대여신청</button>
 				            	</div>
 		           			</div>
         				</c:if>
@@ -145,7 +140,7 @@
 		    	<div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0 60px;">
 			    	<p style="color: #333; font-size: 24px; font-weight: 500; margin-bottom: 30px;">현재 판매자의 다른 대여물품</p>
 					<c:if test="${empty memberProduct}">
-						<p style="margin: 20px 0 60px; color: #999; font-size: 16px;">판매자가 추가로 판매하는 대여물품이 없습니다.</p>
+						<p style="margin: 0 0 60px; color: #999; font-size: 16px;">판매자가 추가로 판매하는 대여물품이 없습니다.</p>
 					</c:if>
 					<c:if test="${not empty memberProduct}">
 						<div class="tab_item">
@@ -177,7 +172,7 @@
 	</div>
 </main>
 
-<c:if test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
+<c:if test="${sessionScope.member.nickName == dto.nickname}">
 	<script type="text/javascript">
 		function deleteOk() {
 			if (confirm('등록한 대여물품을 삭제 하시겠습니까?')) {
@@ -218,17 +213,17 @@ function dialogRentRequest() {
 			            	<tbody>
 			              		<tr>
 			                		<td>
-				                		대여날짜
+				                		<input type="date" id="dateInput">
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
-			                			반납일자
+			                			<input type="date" id="dateEndInput" disabled>
 			                		</td>
 			              		</tr>
 			              		<tr>
 			                		<td>
-			                			1일대여비 x 총날짜출력 = 대여비
+			                			<fmt:formatNumber value="${dto.prp}"/>원 x <span id="dateResult"></span>
 			                		</td>
 			              		</tr>
 			              		<tr>
@@ -238,18 +233,86 @@ function dialogRentRequest() {
 			              		</tr>
 			            	</tbody>
 			            </table>
-			            <p style="text-align: center; margin: 0; padding: 10px; padding-top: 15px; color: #999; border-top: 1px solid #e0e0e0;">주의사항을 확인하셨나요?</p>
+			            <p style="text-align: left; margin: 0; padding: 15px; color: #555; font-size: 13px;">
+				            1. 물건을 소중히 다뤄주세요!<br>
+							대여한 물건은 사용자에게 소유된 자산입니다. 사용 중 파손이나 훼손이 발생하지 않도록 주의해 주세요. 훼손 시에는 사용자에게 보상 책임이 있을 수 있습니다.<br><br>
+	
+							2. 연체 시 보증금 차감<br>
+							대여 기간을 초과하여 사용하면, 연체료가 부과되며 보증금에서 연체료가 차감될 수 있습니다. 연체가 반복될 경우, 추가적인 불이익이 있을 수 있으므로 기한을 꼭 지켜주세요.<br><br>
+	
+							3. 반납 전 상태 점검<br>
+							물건을 반납하기 전에 상태를 점검하여 파손, 오염 등이 없는지 확인해 주세요. 반납 시 이상이 있을 경우, 수리비나 청소비가 발생할 수 있습니다.
+			            </p>
+			            <p style="text-align: center; margin: 0; padding: 15px; color: #000; border-top: 1px solid #e0e0e0;">위반 시 계약이 취소되거나 추가적인 비용이 부과될 수 있습니다.<br> 주의사항을 확인하셨나요?</p>
+          				<div style="padding-bottom: 15px; text-align: center; font-size: 13px;">
+	          				<input type="checkbox" id="agreement" onclick="toggleSubmitButton()"> 
+	            			<label for="agreement">주의사항을 확인하고 동의합니다.</label>
+            			</div>
           			</div>
         		</form>
       		</div>
       		
       		<div class="modal-footer" style="display: flex; justify-content: center;">
-        		<button type="button" class="ssbtn" id="submitRentProduct">결제</button>
+        		<button type="button" class="ssbtn" id="submitRentProduct" disabled>결제</button>
         		<button type="button" class="ssbtn" data-bs-dismiss="modal" aria-label="Close">닫기</button>
       		</div>
     	</div>
   	</div>
 </div>
+
+<script>
+function toggleSubmitButton() {
+    const checkbox = document.getElementById("agreement");
+    const submitButton = document.getElementById("submitRentProduct");
+
+    submitButton.disabled = !checkbox.checked;
+}
+
+const today = new Date();
+today.setDate(today.getDate() + 1);
+const tomorrow = today.toISOString().split('T')[0];
+
+document.getElementById('dateInput').setAttribute('min', tomorrow);
+
+document.getElementById('dateInput').addEventListener('input', function() {
+    const dateInputValue = this.value;
+
+    if (dateInputValue) {
+        dateEndInput.disabled = false;
+        
+        const dateEnd = new Date(dateInputValue);
+        dateEnd.setDate(dateEnd.getDate() + 1);
+        const dateEndStr = dateEnd.toISOString().split('T')[0];
+        dateEndInput.setAttribute('min', dateEndStr);
+    } else {
+        dateEndInput.disabled = true;
+    }
+});
+
+function calculateDateDifference() {
+    const dateInputValue = document.getElementById('dateInput').value;
+    const dateEndInputValue = document.getElementById('dateEndInput').value;
+
+    if (dateInputValue && dateEndInputValue) {
+        const dateInput = new Date(dateInputValue);
+        const dateEnd = new Date(dateEndInputValue);
+
+        const differenceInTime = dateEnd - dateInput;
+        const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+		
+        const prp = '${dto.prp}';
+        const prpValue = (differenceInDays * prp);
+        const prpResult = prpValue.toLocaleString();;
+        document.getElementById('dateResult').textContent = differenceInDays + '일 = ' + prpResult + '원';
+    } else {
+        document.getElementById('dateResult').textContent = "";
+    }
+}
+
+document.getElementById('dateEndInput').addEventListener('input', calculateDateDifference);
+// 'multiplier' 값이 바뀔 때도 계산하도록 리스너 추가
+document.getElementById('multiplier').addEventListener('input', calculateDateDifference);
+</script>
 
 <script type="text/javascript">
 const product_list = document.querySelector('#product_list');
