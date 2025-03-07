@@ -1,39 +1,34 @@
-package com.sp.app.mapper;
+package com.sp.app.service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import org.apache.ibatis.annotations.Mapper;
 
 import com.sp.app.model.Area;
 
-@Mapper
-public interface AreaMapper {
-	public Long AreaSeq();
-	public void insertBoard(Area Area) throws SQLException;
-	public void insertBoardFile(Area dto) throws SQLException;
-	
-	public void updateBoard(Area dto) throws SQLException;
-	public void deleteBoard(long psnum) throws SQLException;
-	
-	public int dataCount(Map<String, Object> map);
+public interface AreaService {
+	public void insertBoard(Area dto, String uploadPath) throws Exception;
+	public void updateBoard(Area dto, String uploadPath) throws Exception;
+	public void deleteBoard(long psnum, String uploadPath, long num) throws Exception;
 	public List<Area> listBoard(Map<String, Object> map);
 	public List<Area> bestArea(Map<String, Object> map); // 인기지역
+	public Area findById(long psnum);
 	
 	public List<Area> listAreaFile(long psnum);
 	public Area findByFileId(long fileNum);
-	public void deleteAreaFile(Map<String, Object> map) throws SQLException;
-
-	public Area findById(long psnum);
-	public void updateHitCount(long num) throws SQLException;
+	public void deleteAreaFile(Map<String, Object> map) throws Exception;
 	
+	public boolean deleteUploadFile(String uploadPath, String filename);
+	
+	public int dataCount(Map<String, Object> map);
+	public void updateHitCount(long num) throws Exception;	
+	
+	// 스크랩
 	public void boardLike(Map<String, Object> map) throws Exception;
 	public void deleteBoardLike(Map<String, Object> map) throws Exception;
 	public int boardLikeCount(long num);
-	public Area memberBoardLiked(Map<String, Object> map);
+	public boolean memberBoardLiked(Map<String, Object> map);
 	
+	// 댓글
 	public void reply(Area dto) throws Exception;
 	public int replyCount(Map<String, Object> map);
 	public List<Area> listReply(Map<String, Object> map);
@@ -41,8 +36,9 @@ public interface AreaMapper {
 	
 	public void replyLike(Map<String, Object> map) throws Exception;
 	public Map<String, Object> replyLikeCount(Map<String, Object> map);
-	public Optional<Integer> memberReplyLiked(Map<String, Object> map);
 	
-	public List<Area> listCategory();
 	public Area findByCategory(long categoryNum);
+	public List<Area> listCategory();
+
+	
 }

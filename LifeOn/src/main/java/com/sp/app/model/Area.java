@@ -1,5 +1,7 @@
 package com.sp.app.model;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +18,10 @@ public class Area {
     private String id; 
     private String thp; // 썸네일사진
     private MultipartFile thpFile;
+    
+	private long fnum; // 파일번호
+	private String ssfname; // 서버에 저장된 파일경로
+	private List<MultipartFile> selectFile;
     
     private String nickname; 
     private String profile_image;

@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.sp.app.common.MyUtil;
 import com.sp.app.common.StorageService;
-import com.sp.app.lounge.model.PhotoBoard;
 import com.sp.app.mapper.MeetingMapper;
 import com.sp.app.model.Meeting;
-import com.sp.app.rent.model.RentProduct;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -23,45 +23,31 @@
 </header>
  
     <!-- 메인 콘텐츠 -->
-    <main class="body">
+    <main class="d-flex flex-column min-vh-100 align-items-center" style="padding-top: 84px;">
         <!-- 상단 슬라이더 -->
         <div class="main-banner">
-        <div class="slider-container">
-            <div class="slider">
-                    <div class="slide-content">
-                        <h2>어디 살지?</h2>
-                        <p>나랑 맞는 동네 찾기</p>                   
-                </div>
-            </div>
-            
-             <div class="slider-indicators">
-                <span class="indicator active" data-index="0"></span>
-                <span class="indicator" data-index="1"></span>
-                <span class="indicator" data-index="2"></span>
-                <span class="indicator" data-index="3"></span>
-                <span class="indicator" data-index="4"></span>
-            </div>
-            
-            
-            <div class="slider-dots" id="main-dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
+        <!-- MBTI 배너 -->
+        <div class="mbti-banner" id="mbti-banner">
+            <img src="/placeholder.svg?height=200&width=800" alt="MBTI 테스트 배너">
         </div>
         
         <!-- 지역 정보 -->
         <div class="top5">
-            <h3 class="section-title">인기순 TOP5</h3>
             
             <div class="region-info-card">
                 
                 <div class="region-list">
+               		 <div class="region-item">
+                        <div class="region-details">
+                            <h5 style="font-size: 20px;">인기순 TOP5</h5>
+                        </div>
+                    </div>
+                    
                     <div class="region-item">
                         <div class="region-number">1</div>
                         <div class="region-details">
-                            <h5>가산디지털단지</h5>
-                            <p style="font-size: 12px;">새로운 신흥 지구가 형성된 G.O.A.T</p>
+                            <h5 style="font-size: 15px">가산디지털단지</h5>
+                            <p style="font-size: 11px;">새로운 신흥 지구가 형성된 G.O.A.T</p>
                         </div>
                     </div>
                     
@@ -104,11 +90,6 @@
         <div class="search-bar">
           <input id="search-bar-input" class="search-content" type="text" placeholder="원하는 지역을 찾아보세요!"/>
           <span class="icon icon-search" ><i class="bi bi-search" style="font-size: 16px; padding-top: 3px;"></i></span>
-        </div>
-        
-        <!-- MBTI 배너 -->
-        <div class="mbti-banner" id="mbti-banner">
-            <img src="/placeholder.svg?height=200&width=800" alt="MBTI 테스트 배너">
         </div>
             
             <!-- 전체 노선 슬라이더 -->
