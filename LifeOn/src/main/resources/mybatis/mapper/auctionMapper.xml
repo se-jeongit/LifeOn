@@ -125,7 +125,7 @@
                  JOIN CATEGORY_BIG CB on CB.CBN = CS.CBN
         WHERE PTYPE = '경매'
           AND p.PNUM = #{pnum}
-        <if test="userId != null and userId != ''">
+        <if test="type != '입찰' and type != null">
             AND M.NUM = #{userId,jdbcType=BIGINT}
         </if>
     </select>

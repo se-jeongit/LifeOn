@@ -163,7 +163,7 @@ public class AuctionController {
             map.put("pnum", pnum);
             map.put("price", price);
             map.put("userId", userId);
-
+            map.put("type", "입찰");
             result = auctionService.biddingMoney(map);
 
         }catch (Exception e) {

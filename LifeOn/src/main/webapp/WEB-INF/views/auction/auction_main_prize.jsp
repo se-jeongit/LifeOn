@@ -63,7 +63,7 @@
 <div class="auction-content">
     <div class="auction-tabs">
         <div class="tag-line select-line" onclick="tagMove(event)">전체</div>
-        <div class="tag-line" onclick="tagMove(event)">시작전 상품</div>
+        <div class="tag-line" onclick="tagMove(event)">진행전 상품</div>
         <div class="tag-line" onclick="tagMove(event)">진행중 상품</div>
     </div>
 
