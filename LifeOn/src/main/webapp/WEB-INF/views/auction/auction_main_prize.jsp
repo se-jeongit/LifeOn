@@ -16,13 +16,70 @@
 
         // 클릭한 요소에 select-line 클래스를 추가합니다.
         event.target.classList.add('select-line');
+
+        // 클릭한 탭의 텍스트를 가져옵니다.
+        const selectedTab = event.target.textContent.trim();
+
+        // 모든 상품 카드를 가져옵니다.
+        const prizeCards = document.querySelectorAll('.prize-card');
+
+        // 선택된 탭에 따라 상품을 필터링합니다.
+        prizeCards.forEach(card => {
+            // 카드의 상태를 가져옵니다.
+            const status = card.querySelector('.prize-status').textContent.trim();
+
+            if (selectedTab === '전체') {
+                // '전체' 탭이 선택된 경우 모든 상품을 표시합니다.
+                card.style.display = 'flex';
+            } else if (selectedTab === '진행전 상품' && status === '진행전') {
+                // '진행전 상품' 탭이 선택되고 상태가 '진행전'인 경우 표시합니다.
+                card.style.display = 'flex';
+            } else if (selectedTab === '진행중 상품' && status === '진행중') {
+                // '진행중 상품' 탭이 선택되고 상태가 '진행중'인 경우 표시합니다.
+                card.style.display = 'flex';
+            } else {
+                // 그 외의 경우 숨깁니다.
+                card.style.display = 'none';
+            }
+        });
+
+        // 필터링 후 표시되는 상품이 없는 경우 메시지를 표시합니다.
+        const visibleCards = document.querySelectorAll('.prize-card[style="display: flex;"]');
+        const emptyMessage = document.getElementById('empty-message');
+
+        if (visibleCards.length === 0) {
+            // 표시할 상품이 없는 경우
+            if (!emptyMessage) {
+                // 메시지 요소가 없으면 생성합니다.
+                const message = document.createElement('div');
+                message.id = 'empty-message';
+                message.className = 'empty-message';
+                message.textContent = '해당 상태의 상품이 없습니다.';
+                document.querySelector('.prize-container').appendChild(message);
+            } else {
+                // 메시지 요소가 있으면 표시합니다.
+                emptyMessage.style.display = 'block';
+            }
+        } else if (emptyMessage) {
+            // 표시할 상품이 있고 메시지 요소가 있으면 숨깁니다.
+            emptyMessage.style.display = 'none';
+        }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    // 페이지 로드 시 초기 필터링을 적용합니다.
+    document.addEventListener('DOMContentLoaded', function() {
         // 각 tag-line 요소에 이벤트 리스너를 추가합니다.
         document.querySelectorAll('.tag-line').forEach(tag => {
             tag.addEventListener('click', tagMove);
         });
+
+        // 선택된 탭을 찾아 초기 필터링을 적용합니다.
+        const selectedTab = document.querySelector('.tag-line.select-line');
+        if (selectedTab) {
+            // 선택된 탭이 있으면 클릭 이벤트를 시뮬레이션합니다.
+            const event = { target: selectedTab };
+            tagMove(event);
+        }
     });
 
     $(function () {

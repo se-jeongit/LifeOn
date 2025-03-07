@@ -171,3 +171,18 @@
         font-size: 1rem;
     }
 }
+
+.empty-message {
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    background-color: var(--secondary-color);
+    border-radius: var(--radius);
+    margin: 1rem 0;
+    font-size: 1rem;
+}
+
+.prize-card {
+    display: flex; /* 기본적으로 flex로 표시 */
+}
