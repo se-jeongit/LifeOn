@@ -29,16 +29,17 @@
             <div class="slider-container">
                 <!-- 슬라이드 1 -->
                 <c:forEach var="interior" items="${interior}">
-                <a href="<c:url value='/lounge2/interior/article/${interior.num}?page=1'/>">
-                <div class="slide">
-                    <img src="${pageContext.request.contextPath}/uploadPath/lounge1/${interior.thumbnail}" alt="메인 이미지 1"
-                         class="slide-image">
-                    <div class="slide-content">
-                        <h2>${interior.subject}</h2>
-                        <p class="subtitle">작성자 : ${interior.nickname}</p>
-                    </div>
-                </div>
-                </a>
+                    <a href="<c:url value='/lounge2/interior/article/${interior.num}?page=1'/>">
+                        <div class="slide">
+                            <img src="${pageContext.request.contextPath}/uploadPath/lounge1/${interior.thumbnail}"
+                                 alt="메인 이미지 1"
+                                 class="slide-image">
+                            <div class="slide-content">
+                                <h2>${interior.subject}</h2>
+                                <p class="subtitle">작성자 : ${interior.nickname}</p>
+                            </div>
+                        </div>
+                    </a>
                 </c:forEach>
             </div>
 
@@ -54,10 +55,14 @@
 
         <!-- 오른쪽 작은 배너 (캐러셀) -->
         <div class="main-banner-right">
-            <div class="image-container">
-                <img src="placeholder.jpg" alt="이벤트 이미지" class="placeholder-image">
-            </div>
-
+            <c:forEach var="event" items="${event}">
+                <div class="image-container-right">
+                    <img src="${pageContext.request.contextPath}/uploads/event/${event.thumbnail}" alt="이벤트 이미지" class="placeholder-image">
+                    <div class="event-overlay">
+                        <p class="event-title-text">${event.subject}</p>
+                    </div>
+                </div>
+            </c:forEach>
             <!-- 캐러셀 컨트롤 -->
             <button class="carousel-control left">
                 <span class="arrow">&#10094;</span>
@@ -67,7 +72,7 @@
             </button>
 
             <div class="page-indicator">1/3 페이지</div>
-            <div class="event-title">이벤트</div>
+            <div class="event-title"></div>
         </div>
     </div>
 
@@ -208,9 +213,10 @@
             <c:forEach var="policy" items="${policy}" varStatus="status">
                 <div class="regional-card" style="position: relative;">
                     <a href="<c:url value='/policy/article/${policy.num}?page=1'/>">
-                        <img src="${pageContext.request.contextPath}/dist/images/judgment1.png" alt="정책정보 이미지" class="placeholder-image policy-image">
+                        <img src="${pageContext.request.contextPath}/dist/images/judgment1.png" alt="정책정보 이미지"
+                             class="placeholder-image policy-image">
                         <div class="text-overlay" style="">
-                            ${policy.subject}
+                                ${policy.subject}
                         </div>
                     </a>
                 </div>
@@ -229,3 +235,4 @@
 </body>
 
 </html>
+

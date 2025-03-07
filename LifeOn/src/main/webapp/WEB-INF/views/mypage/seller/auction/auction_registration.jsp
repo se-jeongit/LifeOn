@@ -330,14 +330,6 @@
 
 
 
-
-        str = f.sellBox.value.trim();
-        if (str === 'none') {
-            alert('상품의 종류를 선택하세요.');
-            f.sellBox.focus();
-            return false;
-        }
-
         str = f.prPrice.value.trim();
         if (!str) {
             alert('가격을 입력하세요.');

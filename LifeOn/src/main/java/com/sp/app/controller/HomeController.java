@@ -31,7 +31,7 @@ public class HomeController {
 
 
         mav.addObject("interior", homeService.findByInterior());
-//        mav.addObject("event", homeService.findByEvent());
+        mav.addObject("event", homeService.findByEvent());
         mav.addObject("prizeMain", homeService.findByPrizeMain());
         mav.addObject("tip", homeService.findByTip());
 //        mav.addObject("region", homeService.findByRegion());

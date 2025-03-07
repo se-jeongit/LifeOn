@@ -89,35 +89,111 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 오른쪽 작은 배너 캐러셀 기능
+    const mainBannerRight = document.querySelector(".main-banner-right")
+    const carouselImages = mainBannerRight.querySelectorAll(".image-container-right") // 클래스명 변경
     const carouselLeftBtn = document.querySelector(".carousel-control.left")
     const carouselRightBtn = document.querySelector(".carousel-control.right")
     const pageIndicator = document.querySelector(".page-indicator")
 
-    let currentPage = 1
-    const totalPages = 3
+    console.log("캐러셀 이미지 개수:", carouselImages.length)
 
-    function updatePage(direction) {
-        if (direction === "next") {
-            currentPage = currentPage < totalPages ? currentPage + 1 : 1
-        } else {
-            currentPage = currentPage > 1 ? currentPage - 1 : totalPages
-        }
+    let currentPage = 0
+    const totalPages = carouselImages.length
+    let carouselInterval
 
-        if (pageIndicator) {
-            pageIndicator.textContent = `${currentPage}/${totalPages} 페이지`
+    // 캐러셀 이미지 초기 설정 - 첫 번째만 표시하고 나머지는 숨김
+    function initCarousel() {
+        if (carouselImages.length === 0) return
+
+        carouselImages.forEach((image, index) => {
+            if (index === 0) {
+                image.style.display = "flex"
+            } else {
+                image.style.display = "none"
+            }
+        })
+
+        updatePageIndicator()
+    }
+
+    // 페이지 인디케이터 업데이트
+    function updatePageIndicator() {
+        if (pageIndicator && totalPages > 0) {
+            pageIndicator.textContent = `${currentPage + 1}/${totalPages} 페이지`
         }
     }
 
+    // 캐러셀 이미지 표시
+    function showCarouselImage(index) {
+        console.log("캐러셀 이미지 표시:", index)
+
+        // 모든 이미지 숨기기
+        carouselImages.forEach((image) => {
+            image.style.display = "none"
+        })
+
+        // 선택한 이미지만 표시
+        if (carouselImages[index]) {
+            carouselImages[index].style.display = "flex"
+        }
+
+        currentPage = index
+        updatePageIndicator()
+    }
+
+    // 다음 캐러셀 이미지로 이동
+    function nextCarouselImage() {
+        const nextIndex = (currentPage + 1) % totalPages
+        showCarouselImage(nextIndex)
+    }
+
+    // 이전 캐러셀 이미지로 이동
+    function prevCarouselImage() {
+        const prevIndex = (currentPage - 1 + totalPages) % totalPages
+        showCarouselImage(prevIndex)
+    }
+
+    // 자동 캐러셀 시작
+    function startCarouselShow() {
+        if (carouselInterval) {
+            clearInterval(carouselInterval)
+        }
+        carouselInterval = setInterval(nextCarouselImage, 10000) // 10초마다 자동 전환
+    }
+
+    // 자동 캐러셀 정지
+    function stopCarouselShow() {
+        clearInterval(carouselInterval)
+    }
+
+    // 캐러셀 컨트롤 버튼 이벤트
     if (carouselLeftBtn) {
         carouselLeftBtn.addEventListener("click", () => {
-            updatePage("prev")
+            prevCarouselImage()
+            stopCarouselShow()
+            startCarouselShow() // 타이머 재시작
         })
     }
 
     if (carouselRightBtn) {
         carouselRightBtn.addEventListener("click", () => {
-            updatePage("next")
+            nextCarouselImage()
+            stopCarouselShow()
+            startCarouselShow() // 타이머 재시작
         })
+    }
+
+    // 캐러셀에 마우스 오버/아웃 이벤트
+    if (mainBannerRight) {
+        mainBannerRight.addEventListener("mouseenter", stopCarouselShow)
+        mainBannerRight.addEventListener("mouseleave", startCarouselShow)
+    }
+
+    // 캐러셀 초기화 및 자동 시작
+    if (carouselImages.length > 0) {
+        console.log("캐러셀 초기화")
+        initCarousel()
+        startCarouselShow()
     }
 })
 

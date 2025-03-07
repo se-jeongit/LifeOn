@@ -80,6 +80,8 @@ public class SellerService implements SellerServiceInterFace {
         }
     }
 
+    // TODO 데이터 가져올때 진행현황 갱신 필요
+    // 비슷한 코드 AuctionService.java 에 있음
     @Override
     public List<PrizeDetailRep> findBySellerList(Map<String, Object> map) {
 

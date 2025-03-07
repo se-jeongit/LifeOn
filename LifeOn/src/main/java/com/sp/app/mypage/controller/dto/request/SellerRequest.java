@@ -16,7 +16,6 @@ public class SellerRequest {
     private String startDateTime;
     private String startDateHH;
     private String startDateMM;
-    private String sellBox;
     private String endDate;
     private String endDateTime;
     private String endDateHH;

@@ -32,7 +32,7 @@
     <insert id="insertPrize" parameterType="com.sp.app.mypage.controller.dto.request.SellerRequest">
         BEGIN
             INSERT INTO PRODUCT(PNUM, PTYPE, PNAME, PCT, PPH, NUM, CSN)
-            VALUES (PRODUCT_SEQ.NEXTVAL, #{sellBox}, #{prName}, #{content}, #{thumbnail,jdbcType=VARCHAR}, #{userId}, #{subCategory});
+            VALUES (PRODUCT_SEQ.NEXTVAL, '경매', #{prName}, #{content}, #{thumbnail,jdbcType=VARCHAR}, #{userId}, #{subCategory});
 
             INSERT INTO PRODUCT_AUCTION(PNUM, LP, PARD, PASD, PAED, PAS, PAT, FP)
             VALUES (PRODUCT_SEQ.CURRVAL, #{prPrice}, SYSDATE, TO_DATE(#{startDate}, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(#{endDate}, 'YYYY-MM-DD HH24:MI:SS'), '진행전', #{dealType}, 0);
@@ -80,7 +80,7 @@
 
     <delete id="deleteSeller" parameterType="long">
             DELETE FROM PRODUCT
-            WHERE PNUM = #{pNum};
+            WHERE PNUM = #{pNum}
     </delete>
 
 

@@ -99,7 +99,6 @@ public class SellerController {
             return mav;
         }
 
-
         return mav;
     }
 
@@ -136,7 +135,8 @@ public class SellerController {
 
 
     // TODO 판매 수정
-    @GetMapping("/seller-update")
+    // 이미지 교체 추가해야함
+    @GetMapping("/update")
     public ModelAndView registrationUpdatePage(@RequestParam(name = "pnum") long pNum, HttpSession session) {
 
         ModelAndView mav = new ModelAndView("mypage/seller/auction/auction_registration");
@@ -169,7 +169,8 @@ public class SellerController {
 
 
     // TODO  판매 삭제
-    @PostMapping("/seller-delete")
+    // TODO 사진 삭제 추가해야함
+    @GetMapping("/seller-delete")
     public ModelAndView deleteSeller(@RequestParam(name = "pnum") long pNum) {
 
         ModelAndView mav = new ModelAndView("redirect:/mypage/seller/info");

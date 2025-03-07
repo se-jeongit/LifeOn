@@ -16,7 +16,7 @@ a:hover {
 }
 
 body {
-    background-color: #FDFDFD;
+    background-color: #fdfdfd;
     color: #333;
     line-height: 1.6;
 }
@@ -44,7 +44,7 @@ h2 {
     height: 200px;
     transition: opacity 0.3s ease;
 }
-.policy-image{
+.policy-image {
     width: 564px;
 }
 .image-container {
@@ -215,6 +215,122 @@ h2 {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+
+    /* 추가된 스타일 */
+    .image-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s ease;
+        padding: 16px;
+    }
+
+    .placeholder-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .carousel-control {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        z-index: 5;
+    }
+
+    .carousel-control:hover {
+        background-color: white;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-control.left {
+        left: 12px;
+    }
+
+    .carousel-control.right {
+        right: 12px;
+    }
+
+    .carousel-control .arrow {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .page-indicator {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        font-size: 0.75rem;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 4px 10px;
+        border-radius: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-weight: 500;
+        z-index: 5;
+    }
+
+    .event-title {
+        position: absolute;
+        top: 16px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #2c3e50;
+        z-index: 5;
+    }
+
+    /* 이벤트 이미지 컨테이너 스타일 */
+    .image-container-right {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s ease;
+        padding: 16px;
+    }
+
+    /* 이벤트 오버레이 스타일 */
+    .event-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+        z-index: 3;
+    }
+
+    /* 이벤트 제목 텍스트 스타일 */
+    .event-title-text {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
 }
 
 .carousel-control {
@@ -353,8 +469,7 @@ h2 {
 .tip-subject {
     font-size: 15px;
     font-weight: 900;
-/*   글씨 굵게 */
-
+    /*   글씨 굵게 */
 }
 
 .product-description {

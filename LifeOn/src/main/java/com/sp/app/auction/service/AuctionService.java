@@ -178,7 +178,12 @@ public class AuctionService implements AuctionServiceInterface{
                 && updateSchedule.updatePrize(map.get("edDate").toString())) {
             map.put("status", "마감");
             map.put("userId",findByUserId(map));
-            // TODO 마감시 Success 테이블에 값이 안들어가는데 아직 체크 안해봄
+            if (map.get("userId") == null) {
+                map.put("status", "경매 실패");
+                map.put("price", 0);
+                updatePrizeStatus(map);
+                return "경매 실패";
+            }
             updatePrizeStatus(map);
             mapper.insertProductBiddingSuccess(map);
             return "마감";

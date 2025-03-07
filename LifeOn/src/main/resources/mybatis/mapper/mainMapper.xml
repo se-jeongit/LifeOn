@@ -13,6 +13,7 @@
                           JOIN MEMBER m ON h.NUM = m.NUM
                           JOIN HYBRID_FILE f ON h.PSNUM = f.PSNUM
                  WHERE BDTYPE = 'room' AND h.REG_DATE >= TO_DATE(SYSDATE , 'YYYY-MM-DD HH24:MI:SS')
+                AND BLIND = 0
                  ORDER BY ABS(SYSDATE - h.REG_DATE)
              ) subquery
         WHERE rn = 1
@@ -31,7 +32,7 @@
              ) subquery
         WHERE rn = 1
         ORDER BY thumbnail
-            FETCH FIRST 3 ROWS ONLY;
+            FETCH FIRST 3 ROWS ONLY
     </select>
 
     <select id="findByTip" resultType="com.sp.app.model.LendingPage">
@@ -44,6 +45,7 @@
                           JOIN MEMBER m ON h.NUM = m.NUM
                           JOIN HYBRID_FILE f ON h.PSNUM = f.PSNUM
                  WHERE BDTYPE = 'tip' AND h.REG_DATE >= TO_DATE(SYSDATE , 'YYYY-MM-DD HH24:MI:SS')
+                   AND BLIND = 0
                  ORDER BY h.REG_DATE DESC
              ) subquery
         WHERE rn = 1
@@ -79,6 +81,7 @@
                IES      AS nickname
         FROM GROUP_BOARD
         WHERE MDATE >= SYSDATE-1 AND IES != '모집 종료'
+        AND BLIND = 0
         ORDER BY ABS(SYSDATE - MDATE)
     </select>
 

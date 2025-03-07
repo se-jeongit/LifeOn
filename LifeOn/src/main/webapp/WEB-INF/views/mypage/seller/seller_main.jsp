@@ -193,7 +193,7 @@
 </header>
 
 <main class="wrapper">
-    <jsp:include page="/WEB-INF/views/admin/layout/left.jsp"/>
+    <jsp:include page="/WEB-INF/views/mypage/left.jsp"/>
     <div class="container-seller">
         <h2>경매 상품목록</h2>
         <div class="d-flex flex-column align-items-start w-100">
@@ -258,7 +258,7 @@
                                 <span style="padding-left: 10px;"></span>
                             </c:if>
                             <c:if test="${prize.prStatus ne '진행중'}">
-                                <span style="padding-left: 55px;"></span>
+                                <span style="padding-left: 20px;"></span>
                             </c:if>
                             <button class="btn btn-order"
                                     onclick="location.href='${pageContext.request.contextPath}/mypage/seller/seller-update?pnum=${prize.pnum}'">
@@ -267,13 +267,16 @@
                             <c:if test="${prize.prStatus eq '마감'}">
                                 <button class="btn btn-edit">판매완료</button>
                             </c:if>
+                            <c:if test="${prize.prStatus eq '마감' || prize.prStatus eq '경매 실패'}">
+                                <button class="btn btn-delete" onClick="deletePrize(${prize.pnum})">삭제 ❌</button>
+                            </c:if>
                             <c:if test="${prize.prStatus eq '진행중'}">
-                                <button class="btn btn-delete"
+                                <button class="btn btn-edit"
                                         onclick="if(confirm('진짜 낙찰처리 하시겠습니까?')) location.href='${pageContext.request.contextPath}/mypage/seller/bidding?pnum=${prize.pnum}'">
                                     낙찰처리
                                 </button>
                             </c:if>
-                            <c:if test="${prize.prStatus ne '마감'}">
+                            <c:if test="${prize.prStatus eq '진행중' || prize.prStatus eq '진행전'}">
                                 <button class="btn btn-delete"
                                         onclick="if(confirm('진짜 경매를 취소 하시겠습니까?')) location.href='${pageContext.request.contextPath}/mypage/seller/seller-delete?pnum=${prize.pnum}'">
                                     경매취소
@@ -293,6 +296,11 @@
 
 
 <script type="text/javascript">
+
+    function deletePrize(pnum) {
+        location.href = '${pageContext.request.contextPath}/mypage/seller/seller-delete?pnum=' + pnum;
+    }
+
 
     $(function () {
         $('.date-check').each(function (index, element) {
