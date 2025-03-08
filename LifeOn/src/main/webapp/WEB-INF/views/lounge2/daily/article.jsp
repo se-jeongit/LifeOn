@@ -100,7 +100,7 @@
 										<i class="bi ${isMemberLiked ? 'bi-bookmark-fill buleColor' : 'bi-bookmark'}"></i>
 										&nbsp;<span id="boardLikeCount">${dto.boardLikeCount}</span>
 										</button>
-											<button type="button" class="ssbtn" onclick="javascript:dialogReport();">신고하기</button>
+											<button type="button" class="ssbtn" onclick="javascript:dialogReport();">신고하기🚨</button>
 										</div>
 									</div>
 								</td>

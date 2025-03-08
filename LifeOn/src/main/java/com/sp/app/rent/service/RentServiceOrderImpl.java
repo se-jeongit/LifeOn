@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.sp.app.common.StorageService;
 import com.sp.app.rent.mapper.RentOrderMapper;
 import com.sp.app.rent.model.RentProduct;
 import com.sp.app.rent.model.RentProductOrder;
@@ -18,12 +17,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RentServiceOrderImpl implements RentServiceOrder{
 	private final RentOrderMapper mapper;
-	private final StorageService storageService;
 	
 	@Override
-	public void insertRentProductOrder(RentProductOrder dto) throws Exception {
-		// TODO Auto-generated method stub
+	public String insertRentProductOrder(RentProductOrder dto) throws Exception {
+		try {
+			int myPoint = mapper.memberPoint(dto.getNum());
+			
+			if (myPoint >= dto.getOp()) {
+				dto.setPretp(myPoint - dto.getOp());
+				dto.setPrep(-dto.getOp());
+				
+				mapper.insertPoint(dto);
+				mapper.insertRentProductOrder(dto);
+				mapper.updateStatus(dto);
+			} else {
+				return "noPoint";
+			}
+			
+		} catch (Exception e) {
+			log.info("insertRentProductOrder : ", e);
+			return "false";
+		}
 		
+		return "true";
 	}
 	
 	@Override
@@ -34,13 +50,28 @@ public class RentServiceOrderImpl implements RentServiceOrder{
 	
 	@Override
 	public int dataCount(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+
+		try {
+			result = mapper.dataCount(map);
+		} catch (Exception e) {
+			log.info("dataCount : ", e);
+		}
+
+		return result;
 	}
 	
 	@Override
 	public List<RentProduct> listRentProductOrder(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+		List<RentProduct> list = null;
+		
+		try {
+			list = mapper.listRentProductOrder(map);
+			
+		} catch (Exception e) {
+			log.info("listRentProductOrder : ", e);
+		}
+		
+		return list;
 	}
 }

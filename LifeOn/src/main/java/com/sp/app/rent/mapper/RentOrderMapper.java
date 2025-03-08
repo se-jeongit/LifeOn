@@ -14,7 +14,12 @@ public interface RentOrderMapper {
 	// 대여물품 주문
 	public void insertRentProductOrder(RentProductOrder dto) throws SQLException;
 	
+	// 회원 포인트 조회
+	public int memberPoint(long num); // 회원 잔여 포인트
+	public void insertPoint(RentProductOrder dto) throws SQLException;
+	
 	// 대여물품 상태, 보증금 연체기간 수정
+	public void updateStatus(RentProductOrder dto) throws SQLException;
 	public void updateRentProductOrder(RentProductOrder dto) throws SQLException;
 	
 	// 대여 판매리스트

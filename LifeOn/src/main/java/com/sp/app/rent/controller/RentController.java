@@ -21,7 +21,9 @@ import com.sp.app.common.PaginateUtil;
 import com.sp.app.common.StorageService;
 import com.sp.app.model.SessionInfo;
 import com.sp.app.rent.model.RentProduct;
+import com.sp.app.rent.model.RentProductOrder;
 import com.sp.app.rent.service.RentService;
+import com.sp.app.rent.service.RentServiceOrder;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/market/rent/*")
 public class RentController {
 	private final RentService service;
+	private final RentServiceOrder orderService;
 	private final StorageService storageService;
 	private final PaginateUtil paginateUtil;
 	
@@ -375,7 +378,7 @@ public class RentController {
 	
 	@ResponseBody
 	@PostMapping("insertProductLike")
-	public Map<String, ?> insertBoardLike(
+	public Map<String, ?> insertProductLike(
 			@RequestParam(name = "pnum") long productNum,
 			@RequestParam(name = "memberLiked") boolean memberLiked,
 			HttpSession session) {
@@ -408,6 +411,28 @@ public class RentController {
 		
 		model.put("state", state);
 		model.put("productLikeCount", productLikeCount);
+		
+		return model;
+	}
+	
+	@PostMapping("insertOrder")
+	@ResponseBody
+	public Map<String, Object> insertOrder(RentProductOrder dto, HttpSession session) {
+		Map<String, Object> model = new HashMap<>();
+		
+		String state = "true";
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			
+			dto.setNum(info.getNum());
+			
+			state = orderService.insertRentProductOrder(dto);
+			
+		} catch (Exception e) {
+			state = "false";
+		}
+		
+		model.put("state", state);
 		
 		return model;
 	}

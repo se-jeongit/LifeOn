@@ -30,7 +30,10 @@
 	
 	<div class="body-container">
 		<div class="rent_container" style="flex-direction: column;">
-		    <div class="product-detail">
+			<div style="display: flex; justify-content: flex-end;">
+				<button type="button" class="search_btn" style="margin: 0;" onclick="location.href='${pageContext.request.contextPath}/market/rent/main?${query}';">목록</button>
+			</div>
+		    <div class="product-detail" style="margin: 20px 0 0;">
 		    	<!-- 상품 이미지 -->
 		        <div class="product-image">
 		            <img class="thumbnail-img" src="${pageContext.request.contextPath}/uploadPath/rent/${dto.pph}" alt="물품사진">
@@ -56,7 +59,7 @@
 		           			<p style="margin: 0; font-size: 24px;"><fmt:formatNumber value="${dto.prp}"/> 원</p>
 	           			</div>
 	           			<div>
-	           				<p style="margin: 0; color: #006AFF; font-size: 24px; font-weight: 600">${dto.prs}</p>
+	           				<p style="margin: 0; color: ${dto.prs == '대여가능' ? '#006AFF' : '#FFBB00'}; font-size: 24px; font-weight: 600">${dto.prs}</p>
 	           			</div>
            			</div>
         			<div>
@@ -67,13 +70,13 @@
 			           			<div style="display: flex;">
 			      					<c:choose>
 										<c:when test="${sessionScope.member.nickName == dto.nickname}">
-											<button type="button" class="search_btn" onclick="location.href='${pageContext.request.contextPath}/market/rent/update?pnum=${dto.pnum}&page=${page}';">수정</button>
+											<button type="button" class="search_btn" onclick="handleButtonClick();">수정</button>
 								    		<button type="button" class="search_btn" onclick="deleteOk();">삭제</button>
 										</c:when>
 									</c:choose>
 			           			</div>
 			           			<div>
-			        				<button type="button" class="search_btn btnSendProductLike" style="padding: 8px 10px;" title="찜하기">
+			        				<button type="button" class="search_btn btnSendProductLike" style="padding: 8px 10px; margin-right: 3px;" title="찜하기">
 										<i class="bi ${isMemberLiked ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 										&nbsp;<span id="productLikeCount">${dto.productLikeCount}</span>
 									</button>
@@ -89,12 +92,7 @@
 			           			<div style="display: flex;">
 			      					<c:choose>
 										<c:when test="${sessionScope.member.nickName == dto.nickname}">
-											<button type="button" class="search_btn" onclick="location.href='${pageContext.request.contextPath}/market/rent/update?pnum=${dto.pnum}&page=${page}';">수정</button>
-										</c:when>
-									</c:choose>
-									
-									<c:choose>
-										<c:when test="${sessionScope.member.nickName == dto.nickname || sessionScope.member.grade >= 1}">
+											<button type="button" class="search_btn" onclick="handleButtonClick();">수정</button>
 								    		<button type="button" class="search_btn" onclick="deleteOk();">삭제</button>
 										</c:when>
 									</c:choose>
@@ -174,7 +172,22 @@
 
 <c:if test="${sessionScope.member.nickName == dto.nickname}">
 	<script type="text/javascript">
+		const prs = '${dto.prs}';
+		
+		function handleButtonClick() {
+		    if (prs !== '대여가능') {
+		        alert('대여중인 경우 수정이 불가능합니다. 관리자에게 문의해주세요.');
+		    } else {
+		        location.href = '${pageContext.request.contextPath}/market/rent/update?pnum=${dto.pnum}&page=${page}';
+		    }
+		}
+		
 		function deleteOk() {
+			if (prs !== '대여가능') {
+		        alert('대여중인 경우 삭제가 불가능합니다. 관리자에게 문의해주세요.');
+		        return false;
+			}
+			
 			if (confirm('등록한 대여물품을 삭제 하시겠습니까?')) {
 				let qs = 'pnum=${dto.pnum}&${query}';
 				let url = '${pageContext.request.contextPath}/market/rent/delete?' + qs;
@@ -185,9 +198,84 @@
 </c:if>
 
 <script type="text/javascript">
+var differenceInDays = 0;
+var totalValue = 0;
+var totalResult = '';
+
 function dialogRentRequest() {
-	$('#dialogRentRequest').modal('show');	
+	let memberNum = '${sessionScope.member.num}';
+	let sellerNum = '${dto.num}';
+	let productState = '${dto.prs}';
+	
+	if (productState === '대여중') {
+		alert('대여 중인 물품입니다.');
+		$('#dialogRentRequest').modal('hide');
+		
+		return false;
+	}
+	
+	if(memberNum === sellerNum) {
+		alert('자기 자신의 물품은 대여신청 하실 수 없습니다.');
+		$('#dialogRentRequest').modal('hide');  
+	} else {
+		$('#dialogRentRequest').modal('show');  
+	}
 }
+
+$(function() {
+	$('#dialogRentRequest').on('hide.bs.modal', function() {
+		$('button, input, select, textarea').each(function(){
+			$(this).blur();
+		});
+	});
+	
+ 	$('#submitRentProduct').on('click', function() {
+ 		let opsd = $('input[name="opsd"]').val();
+        let oped = $('input[name="oped"]').val();
+        
+        if (! opsd) {
+            alert("대여시작일을 선택해주세요.");
+            return false;
+        }
+        
+        if (! oped) {
+            alert("대여종료일을 선택해주세요.");
+            return false;
+        }
+        
+        if (! confirm('총 결제금액은 ' + totalResult + '원 입니다. 결제하시겠습니까?')) {
+        	return false;
+        }
+
+		let url = '${pageContext.request.contextPath}/market/rent/insertOrder';
+		let pnum = '${dto.pnum}';
+		let odp = '${dto.prp}';
+		let opld = '${dto.prlp}';
+		let params = {pnum: pnum, opsd: opsd, oped: oped, opld: opld, odq: differenceInDays, op: totalValue, ofp: totalValue};
+		
+		const fn = function(data) {
+			let state = data.state;
+			
+		   if (state === 'true') {
+		      $('#dialogRentRequest').modal('hide');
+              alert("결제가 완료되었습니다.");
+              
+		      setTimeout(function() {
+	              window.location.reload();
+		      }, 1000);
+
+		    } else if (state === 'noPoint') {
+		    	alert("잔여 포인트가 부족합니다.");
+		    	return false;
+		    } else {
+		        alert("오류가 발생했습니다. 다시 시도해주세요.");
+		        return false;
+		    }
+		};
+		
+		ajaxRequest(url, 'post', params, 'json', fn);
+	});
+});
 </script>
 
 <div class="modal fade" id="dialogRentRequest" tabindex="-1" role="dialog" aria-labelledby="rentRequestModalLabel" aria-hidden="true">
@@ -199,41 +287,29 @@ function dialogRentRequest() {
         		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       		</div>
       		
-      		<div class="modal-body" style="padding: 5px 0px;">
+      		<div class="modal-body" style="padding: 0px;">
        			<form id="rentRequestForm">
           			<div class="form-group">
 			        	<table class="table table-hover reportable m-0">
-			            	<thead>
-			              		<tr>
-			                		<th>
-			                			대여신청 시 주의사항
-			                		</th>
-			              		</tr>
-			            	</thead>
-			            	<tbody>
-			              		<tr>
-			                		<td>
-				                		<input type="date" id="dateInput">
-			                		</td>
-			              		</tr>
-			              		<tr>
-			                		<td>
-			                			<input type="date" id="dateEndInput" disabled>
-			                		</td>
-			              		</tr>
-			              		<tr>
-			                		<td>
-			                			<fmt:formatNumber value="${dto.prp}"/>원 x <span id="dateResult"></span>
-			                		</td>
-			              		</tr>
-			              		<tr>
-			                		<td>
-			                			대여비 + 보증금 = 총 금액
-			                		</td>
-			              		</tr>
-			            	</tbody>
+		              		<tr>
+		                		<td>
+		                			<div style="padding: 10px 5px;">대여시작일자</div>
+			                		<input type="date" class="free-control" style="margin-bottom: 10px;" name="opsd" id="dateInput">
+		                		</td>
+		              		</tr>
+		              		<tr>
+		                		<td>
+		                			<div style="padding: 10px 5px;">대여종료일자</div>
+		                			<input type="date" class="free-control" style="margin-bottom: 10px;" name="oped" id="dateEndInput" disabled>
+		                		</td>
+		              		</tr>
+		              		<tr>
+		              			<td>
+		                			<div id="dateResult" style="padding: 8px 10px;"></div>
+		              			</td>
+		              		</tr>
 			            </table>
-			            <p style="text-align: left; margin: 0; padding: 15px; color: #555; font-size: 13px;">
+			            <p style="text-align: left; margin: 0; padding: 20px; color: #555; font-size: 13px;">
 				            1. 물건을 소중히 다뤄주세요!<br>
 							대여한 물건은 사용자에게 소유된 자산입니다. 사용 중 파손이나 훼손이 발생하지 않도록 주의해 주세요. 훼손 시에는 사용자에게 보상 책임이 있을 수 있습니다.<br><br>
 	
@@ -244,7 +320,7 @@ function dialogRentRequest() {
 							물건을 반납하기 전에 상태를 점검하여 파손, 오염 등이 없는지 확인해 주세요. 반납 시 이상이 있을 경우, 수리비나 청소비가 발생할 수 있습니다.
 			            </p>
 			            <p style="text-align: center; margin: 0; padding: 15px; color: #000; border-top: 1px solid #e0e0e0;">위반 시 계약이 취소되거나 추가적인 비용이 부과될 수 있습니다.<br> 주의사항을 확인하셨나요?</p>
-          				<div style="padding-bottom: 15px; text-align: center; font-size: 13px;">
+          				<div style="padding-bottom: 15px; text-align: center;">
 	          				<input type="checkbox" id="agreement" onclick="toggleSubmitButton()"> 
 	            			<label for="agreement">주의사항을 확인하고 동의합니다.</label>
             			</div>
@@ -278,6 +354,7 @@ document.getElementById('dateInput').addEventListener('input', function() {
     const dateInputValue = this.value;
 
     if (dateInputValue) {
+    	document.getElementById('dateEndInput').value = '';
         dateEndInput.disabled = false;
         
         const dateEnd = new Date(dateInputValue);
@@ -298,20 +375,24 @@ function calculateDateDifference() {
         const dateEnd = new Date(dateEndInputValue);
 
         const differenceInTime = dateEnd - dateInput;
-        const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+        differenceInDays = differenceInTime / (1000 * 3600 * 24);
 		
-        const prp = '${dto.prp}';
+        const prp = parseInt('${dto.prp}', 10);
+        const prlp =  parseInt('${dto.prlp}', 10);
+        
         const prpValue = (differenceInDays * prp);
-        const prpResult = prpValue.toLocaleString();;
-        document.getElementById('dateResult').textContent = differenceInDays + '일 = ' + prpResult + '원';
+        const prpResult = prpValue.toLocaleString();
+        
+        totalValue = prpValue + prlp;
+        totalResult = totalValue.toLocaleString();
+        
+        document.getElementById('dateResult').innerHTML = '<p style="margin-bottom: 10px;">총 대여비</p><fmt:formatNumber value="${dto.prp}"/>원 x ' + differenceInDays + '일 = ' + prpResult + '원 <p style="margin: 20px 0 10px;">총 결제금액</p>' + prpResult + '원 + <fmt:formatNumber value="${dto.prlp}"/>원  = ' + totalResult + '원';
     } else {
         document.getElementById('dateResult').textContent = "";
     }
 }
-
+document.getElementById('dateResult').textContent = "☑️ 대여일자를 선택해주세요.";
 document.getElementById('dateEndInput').addEventListener('input', calculateDateDifference);
-// 'multiplier' 값이 바뀔 때도 계산하도록 리스너 추가
-document.getElementById('multiplier').addEventListener('input', calculateDateDifference);
 </script>
 
 <script type="text/javascript">
@@ -323,20 +404,22 @@ const nextBtn = document.querySelector('.next');
 /* 사진 개수 */
 const slideCount = '${memberProductSize}';
 
-if (slideCount < 5) {
-	product_list.style.marginLeft = '0px';
-}
+if (product_list) {
+	if (slideCount < 5) {
+		product_list.style.marginLeft = '0px';
+	}
 
-/* 현재 인덱스 */
-let currentIdx = 0;
-/* 이미지 너비 */
-let slideWidth = 200;
-/* 이미지 간 간격 */
-let slideMargin = 30;
-/* 전체 너비 설정 */
-product_list.style.width = (slideWidth + slideMargin) * slideCount - slideMargin + 'px';
-/* 초기화 */
-product_list.style.left = '0px';
+	/* 현재 인덱스 */
+	let currentIdx = 0;
+	/* 이미지 너비 */
+	let slideWidth = 200;
+	/* 이미지 간 간격 */
+	let slideMargin = 30;
+	/* 전체 너비 설정 */
+	product_list.style.width = (slideWidth + slideMargin) * slideCount - slideMargin + 'px';
+	/* 초기화 */
+	product_list.style.left = '0px';
+}
 
 function moveSlideByButton (num) {
 	product_list.style.left = -num * 230 + 'px';
@@ -363,7 +446,6 @@ $(function() {
 		let memberLiked = $i.hasClass('bi-suit-heart-fill');
 		let msg = memberLiked ? '찜을 취소하시겠습니까?' : '찜을 하시겠습니까?';
 		
-		console.log(memberLiked);
 		if (! confirm(msg)) {
 			return false;
 		}

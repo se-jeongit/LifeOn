@@ -60,7 +60,7 @@ function elapsedText(date) {
 <main class="min-vh-100">
 	<!-- 배너 -->
     <div class="body-title">
-    	<em style="font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">대여? 돼요!</em>
+    	<em style="font-size: 30px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">자주쓰지 않는 물건, 대여해서 사용해보세요!</em>
 	</div>
 	
 	<!-- 카테고리 메뉴 -->
@@ -176,7 +176,7 @@ function elapsedText(date) {
 										<i class="bi ${dto.memberLiked == 1 ? 'bi-suit-heart-fill redColor' : 'bi-suit-heart'}"></i>
 									</button>
 		                    	</div>
-		                    	<div style="text-align: left; font-size: 16px; font-weight: bold; color: #006AFF">${dto.prs}</div>
+		                    	<div style="text-align: left; font-size: 16px; font-weight: bold; color: ${dto.prs == '대여가능' ? '#006AFF' : '#FFBB00'};">${dto.prs}</div>
 			                    	<div style="text-align: left;">
 			                    		<span style="font-size: 20px; font-weight: bold;"><fmt:formatNumber value="${dto.prp}"/></span>
 			                    		<span style="font-size: 16px; font-weight: 600;">원</span>

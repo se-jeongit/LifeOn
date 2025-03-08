@@ -7,7 +7,7 @@ import com.sp.app.rent.model.RentProductOrder;
 
 public interface RentServiceOrder {
 	// 대여물품 주문
-	public void insertRentProductOrder(RentProductOrder dto) throws Exception;
+	public String insertRentProductOrder(RentProductOrder dto) throws Exception;
 	
 	// 대여물품 상태, 보증금 연체기간 수정
 	public void updateRentProductOrder(RentProductOrder dto) throws Exception;
