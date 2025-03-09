@@ -113,7 +113,7 @@ $(function(){
 		
 			<ul class="sub_menu">
 				<li class="sub_menu--item">
-					<a href="<c:url value='/'/>" class="sub_menu--link">대여물품</a>
+					<a href="<c:url value='/sellerRent/list'/>" class="sub_menu--link">대여물품</a>
 				</li>
 				<li class="sub_menu--item">
 					<a href="<c:url value='/mypage/seller/info'/>" class="sub_menu--link">경매물품</a>

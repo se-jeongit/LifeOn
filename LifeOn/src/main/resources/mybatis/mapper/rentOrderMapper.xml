@@ -12,8 +12,8 @@
 			INTO ORD_DETAIL (odnum, onum, odq, odp, ods, pnum)
 				VALUES (ord_detail_seq.NEXTVAL, ord_seq.CURRVAL, #{odq}, #{odp}, 0 ,#{pnum})
 				
-			INTO ORD_PRODCUT_RENT (onum, opsd, oped, oprs, oplp)
-				VALUES (ord_seq.CURRVAL, #{opsd, jdbcType=VARCHAR}, #{oped, jdbcType=VARCHAR}, '대여중', #{oplp})
+			INTO ORD_PRODCUT_RENT (onum, opsd, oped, oprs, oplp, opld)
+				VALUES (ord_seq.CURRVAL, #{opsd, jdbcType=VARCHAR}, #{oped, jdbcType=VARCHAR}, '대여중', #{oplp}, 0)
 		SELECT * FROM dual
 	</insert>
 	
@@ -33,6 +33,18 @@
 			VALUES (point_record_seq.NEXTVAL, '물품대여', '사용', #{prep}, #{pretp}, SYSDATE, #{num})
 	</insert>
 	
+	<!-- 판매자 회원번호 조회 -->
+	<select id="sellerNum" parameterType="long" resultType="long">
+		SELECT num sellerNum 
+		FROM PRODUCT 
+		WHERE pnum = #{pnum}
+	</select>
+	
+	<insert id="sellerInsertPoint" parameterType="com.sp.app.rent.model.RentProductOrder">
+		INSERT INTO POINT_RECORD (prnum, prec, pret, prep, pretp, prepd, num)
+			VALUES (point_record_seq.NEXTVAL, '대여물품', '판매', #{prep}, #{pretp}, SYSDATE, #{sellerNum})
+	</insert>
+	
 	<!-- 대여신청이 들어오면 물품대여상태 업데이트 -->
 	<update id="updateStatus" parameterType="com.sp.app.rent.model.RentProductOrder">
 		UPDATE PRODUCT_RENT SET prs = '대여중'
@@ -41,26 +53,32 @@
 	
 	<!-- 반납이 되지 않았을 경우 연체기간 업데이트 -->
 	<update id="updateRentProductOrder" parameterType="com.sp.app.rent.model.RentProductOrder">
-		UPDATE ORD_PRODCUT_RENT SET opld = 1
+		UPDATE ORD_PRODCUT_RENT SET opld = #{opld} + 1
 		WHERE onum = #{onum}
 	</update>
 	
 	<!-- 판매리스트에 출력되는 물품개수 -->
 	<select id="dataCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*), 0)
-		FROM ORD_PRODCUT_RENT r
-		JOIN ORD o ON r.onum = o.onum
+		FROM PRODUCT p
+        JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
         WHERE num = #{num}
 	</select>
 	
 	<!-- 판매된 전체 물품 리스트 -->
 	<select id="listRentProductOrder" parameterType="map" resultType="com.sp.app.rent.model.RentProductOrder">
-		SELECT p.pnum, pname, pct, pph, p.num, cbn, c.csn, csc, prp, prd, prs, pra, prlp
+		SELECT p.pnum, p.pname, p.pph, pr.prp, pr.prlp, pr.prs,
+			(SELECT m.nickname
+				FROM MEMBER m
+				JOIN ORD o ON m.num = o.num
+				JOIN ORD_DETAIL od ON o.onum = od.onum 
+				JOIN PRODUCT p ON p.pnum = od.pnum where p.num = #{num}) as renter, odq, TO_CHAR(opr.opsd, 'YYYY-MM-DD') opsd, TO_CHAR(opr.oped, 'YYYY-MM-DD') oped, opr.opld
 		FROM PRODUCT p
 		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
-
-		ORDER BY pnum DESC
-		OFFSET #{offset} ROWS FETCH FIRST #{size} ROWS ONLY
+		LEFT OUTER JOIN ORD_DETAIL od ON p.pnum = od.pnum
+		LEFT OUTER JOIN ORD o ON od.onum = o.onum
+		LEFT OUTER JOIN ORD_PRODCUT_RENT opr ON o.onum = opr.onum
+		WHERE p.num = #{num}
 	</select>
 	
 </mapper>

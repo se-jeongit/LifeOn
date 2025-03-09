@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.sp.app.rent.mapper.RentOrderMapper;
-import com.sp.app.rent.model.RentProduct;
 import com.sp.app.rent.model.RentProductOrder;
 
 import lombok.RequiredArgsConstructor;
@@ -24,12 +23,19 @@ public class RentServiceOrderImpl implements RentServiceOrder{
 			int myPoint = mapper.memberPoint(dto.getNum());
 			
 			if (myPoint >= dto.getOp()) {
-				dto.setPretp(myPoint - dto.getOp());
 				dto.setPrep(-dto.getOp());
+				dto.setPretp(myPoint - dto.getOp());
 				
 				mapper.insertPoint(dto);
 				mapper.insertRentProductOrder(dto);
 				mapper.updateStatus(dto);
+				
+				dto.setSellerNum(mapper.sellerNum(dto.getPnum()));
+				myPoint = mapper.memberPoint(dto.getSellerNum());
+				dto.setPrep(dto.getOdp() * dto.getOdq());
+				dto.setPretp(myPoint + dto.getPrep());
+				mapper.sellerInsertPoint(dto);
+				
 			} else {
 				return "noPoint";
 			}
@@ -44,7 +50,7 @@ public class RentServiceOrderImpl implements RentServiceOrder{
 	
 	@Override
 	public void updateRentProductOrder(RentProductOrder dto) throws Exception {
-		// TODO Auto-generated method stub
+		// TODO 반납이 완료될 경우 보증금처리, 반납되지 않을 경우 연체기간 업데이트
 		
 	}
 	
@@ -62,8 +68,8 @@ public class RentServiceOrderImpl implements RentServiceOrder{
 	}
 	
 	@Override
-	public List<RentProduct> listRentProductOrder(Map<String, Object> map) {
-		List<RentProduct> list = null;
+	public List<RentProductOrder> listRentProductOrder(Map<String, Object> map) {
+		List<RentProductOrder> list = null;
 		
 		try {
 			list = mapper.listRentProductOrder(map);

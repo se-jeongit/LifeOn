@@ -207,16 +207,16 @@ function dialogRentRequest() {
 	let sellerNum = '${dto.num}';
 	let productState = '${dto.prs}';
 	
-	if (productState === '대여중') {
-		alert('대여 중인 물품입니다.');
+	if (memberNum !== sellerNum && productState === '대여중') {
+		alert('대여 중인 물품은 대여신청을 할 수 없습니다.');
 		$('#dialogRentRequest').modal('hide');
-		
 		return false;
 	}
 	
 	if(memberNum === sellerNum) {
-		alert('자기 자신의 물품은 대여신청 하실 수 없습니다.');
+		alert('자기 자신의 물품은 대여신청을 할 수 없습니다.');
 		$('#dialogRentRequest').modal('hide');  
+		return false;
 	} else {
 		$('#dialogRentRequest').modal('show');  
 	}
@@ -251,7 +251,7 @@ $(function() {
 		let pnum = '${dto.pnum}';
 		let odp = '${dto.prp}';
 		let opld = '${dto.prlp}';
-		let params = {pnum: pnum, opsd: opsd, oped: oped, opld: opld, odq: differenceInDays, op: totalValue, ofp: totalValue};
+		let params = {pnum: pnum, opsd: opsd, oped: oped, odp: odp, opld: opld, odq: differenceInDays, op: totalValue, ofp: totalValue};
 		
 		const fn = function(data) {
 			let state = data.state;
@@ -265,10 +265,12 @@ $(function() {
 		      }, 1000);
 
 		    } else if (state === 'noPoint') {
-		    	alert("잔여 포인트가 부족합니다.");
+		    	alert("잔여 포인트가 부족합니다. 충전 후에 다시 이용해주세요.");
+		    	$('#dialogRentRequest').modal('hide');  
 		    	return false;
 		    } else {
 		        alert("오류가 발생했습니다. 다시 시도해주세요.");
+		        $('#dialogRentRequest').modal('hide');  
 		        return false;
 		    }
 		};

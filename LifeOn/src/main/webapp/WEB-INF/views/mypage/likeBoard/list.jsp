@@ -59,7 +59,7 @@
             </div>
         </div>				
 			
-		<table class="table table-hover board-list" style="width: 1280px; line-height: 60px; vertical-align: middle;">
+		<table class="table table-hover board-list" style="width: 1300px; line-height: 60px; vertical-align: middle;">
 			<thead class="table-light">
 				<tr>
 					<th class="psnum">번호</th>
@@ -86,8 +86,8 @@
 		</table>
 		</div>
 			
-		<div class="page-navigation text-center">
-			${dataCount == 0 ? "즐겨찾기한 게시물이 없습니다." : paging}
+		<div class="page-navigation" style="margin: 0 auto;">
+			${dataCount == 0 ? "<p style='padding-bottom: 200px;'>즐겨찾기한 게시물이 없습니다.</p>" : paging}
 		</div>
 	</form>
 

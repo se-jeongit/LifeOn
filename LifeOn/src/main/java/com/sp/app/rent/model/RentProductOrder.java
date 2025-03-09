@@ -1,7 +1,5 @@
 package com.sp.app.rent.model;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +12,8 @@ public class RentProductOrder {
 	private long pnum; // 상품번호 // ORD_DETAIL
 	
 	// POINT_RECORD
-	@Value("0") // 초기값
 	private int memberPoint; // 회원 잔여포인트
+	private long sellerNum; // 판매자 회원번호
 	
 	private long prnum; // 포인트내역번호
 	private String prec; // 적요
@@ -46,6 +44,11 @@ public class RentProductOrder {
 	private String oprs; // 회원대여상태 : 대여대기, 대여중, 반납
 	
 	private String prs; // 물품대여상태 : 대여가능, 대여중, 대여불가능
+	private String pname; // 물품명
+	private String pph; // 썸네일사진
+	private int prp; // 대여비(1일기준)
+	private int prlp; // 보증금
+	private String renter; // 대여자닉네임
 	
 	private int oplp; // 납부보증금
 	// 대여종료일 후 반납하지 않고 연락 두절인 경우 판매자에게 주는 금액
