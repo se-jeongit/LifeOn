@@ -28,7 +28,7 @@
         <div class="main-banner">
         <!-- MBTI 배너 -->
         <div class="mbti-banner" id="mbti-banner">
-            <img src="/placeholder.svg?height=200&width=800" alt="MBTI 테스트 배너">
+            <img src="${pageContext.request.contextPath}/dist/images/mbti.png" alt="MBTI 테스트 배너">
         </div>
         
         <!-- 지역 정보 -->
@@ -114,13 +114,8 @@
                 <div class="route-slider-container">
                 <c:forEach var="dto" items="${list}">
 		       <div class="product-item" id="${dto.rvnum}" onclick="location.href='<c:url value='${articleUrl}/${dto.rvnum}?${query}'/>'" style="cursor: pointer;">
-                    <div class="route-slider" id="route-slider">
-            			<!-- 지역 슬라이드  -->
-                        <div class="route-slide">
+            			<!-- 지역 그리드  -->
                             <div class="route-grid">
-                             <button class="control-btn" id="route-prev">
-                            <i class="fas fa-chevron-left"></i>
-                       		 </button>
                                 <div class="route-card">
                                     <div class="route-image">
                                     <c:if test="${empty dto.thp}">
@@ -144,12 +139,7 @@
                                     </div>
                                 </div>
                                 
-                                
-                                <button class="control-btn" id="route-next">
-                           		 <i class="fas fa-chevron-right"></i>
-                       			 </button>
                             </div>
-                        </div>
                         
                     </div>
                 </div>
@@ -161,7 +151,7 @@
 		</div>
     </main>
     
-  <!-- MBTI 모달 
+  <!-- MBTI 모달  -->
     모달 배경
     <div class="modal-overlay" id="modalOverlay">
         모달 컨테이너

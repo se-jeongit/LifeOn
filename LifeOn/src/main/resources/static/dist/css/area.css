@@ -33,7 +33,7 @@ button {
 
 /* MBTI 배너 스타일 */
 .mbti-banner {
-    width: 300PX;
+    width: 350PX;
     height: 250px;
     cursor: pointer;
     border-radius: 8px;
@@ -48,8 +48,8 @@ button {
 
 .mbti-banner img {
     width: 100%;
-    height: 150px;
-    object-fit: cover;
+    height: 250px;
+    object-fit: fill;
 }
 
  /* 검색 바 스타일 */
@@ -247,16 +247,10 @@ fieldset[disabled] .btn {
     padding: 10px 0;
 }
 
-.slide-title {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    font-weight: 500;
-}
-
 .route-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 5px;
     max-width: 1280px;
 }
 
@@ -302,7 +296,7 @@ fieldset[disabled] .btn {
 
 /* 모달 오버레이 스타일 */
 .modal-overlay {
-  display: flex;
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
