@@ -14,7 +14,6 @@
 				#{gender}, #{age}, #{cbn}, #{person_c}, TO_DATE(#{mdate}, 'YYYY-MM-DD'), SYSDATE, 0)
 	</insert>
 	
-	<!--  -상품번호, 상품유형, 상품명, 상품내용, 사진, 회원번호 -->
 	
 	<select id="listCategory" resultType="com.sp.app.model.Meeting">
 		SELECT cbn, cbc

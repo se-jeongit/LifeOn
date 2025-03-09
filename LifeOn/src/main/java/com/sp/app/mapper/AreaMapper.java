@@ -11,22 +11,22 @@ import com.sp.app.model.Area;
 
 @Mapper
 public interface AreaMapper {
-	public Long AreaSeq();
+	public Long areaSeq();
 	public void insertBoard(Area Area) throws SQLException;
 	public void insertBoardFile(Area dto) throws SQLException;
 	
 	public void updateBoard(Area dto) throws SQLException;
-	public void deleteBoard(long psnum) throws SQLException;
+	public void deleteBoard(long rvnum) throws SQLException;
 	
 	public int dataCount(Map<String, Object> map);
 	public List<Area> listBoard(Map<String, Object> map);
 	public List<Area> bestArea(Map<String, Object> map); // 인기지역
 	
-	public List<Area> listAreaFile(long psnum);
+	public List<Area> listAreaFile(long rvnum);
 	public Area findByFileId(long fileNum);
 	public void deleteAreaFile(Map<String, Object> map) throws SQLException;
 
-	public Area findById(long psnum);
+	public Area findById(long rvnum);
 	public void updateHitCount(long num) throws SQLException;
 	
 	public void boardLike(Map<String, Object> map) throws Exception;

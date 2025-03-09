@@ -119,7 +119,7 @@ main section {width: 100% !important;}
 									<c:if test="${not empty dto.ssfname}">
 										<p class="border text-secondary my-1 p-2">
 											<i class="bi bi-folder2-open"></i> 첨부파일 다운로드 : 
-											<a href="${pageContext.request.contextPath}/tip/download?num=${dto.psnum}">${dto.cpfname}</a>
+											<a href="${pageContext.request.contextPath}/lounge1/download?num=${dto.psnum}">${dto.cpfname}</a>
 										</p>
 									</c:if>
 								</td>

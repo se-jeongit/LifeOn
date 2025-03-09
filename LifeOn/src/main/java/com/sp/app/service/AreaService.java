@@ -8,12 +8,12 @@ import com.sp.app.model.Area;
 public interface AreaService {
 	public void insertBoard(Area dto, String uploadPath) throws Exception;
 	public void updateBoard(Area dto, String uploadPath) throws Exception;
-	public void deleteBoard(long psnum, String uploadPath, long num) throws Exception;
+	public void deleteBoard(long rvnum, String uploadPath, long num) throws Exception;
 	public List<Area> listBoard(Map<String, Object> map);
 	public List<Area> bestArea(Map<String, Object> map); // 인기지역
-	public Area findById(long psnum);
+	public Area findById(long rvnum);
 	
-	public List<Area> listAreaFile(long psnum);
+	public List<Area> listAreaFile(long rvnum);
 	public Area findByFileId(long fileNum);
 	public void deleteAreaFile(Map<String, Object> map) throws Exception;
 	

@@ -135,6 +135,71 @@ button {
     font-size: 0.9rem;
 }
 
+/* 카테고리 스타일 */
+.category-container {
+  margin: 20px 0;
+}
+
+.category-nav ul {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+}
+
+.category {
+  padding: 8px 16px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.category.selected {
+  background-color: #7fb4ff;
+  color: #fff;
+}
+/* 기본 버튼 스타일 */
+.btn {
+    height: 40px;
+    background: #fff;
+    color: #333;
+    padding: 6px 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px; /* 기본적으로 모서리 살짝 둥글게 */
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active {
+    background: #f8f9fa;
+    color: #333;
+    border-color: #e0e0e0;
+    opacity: 0.95;
+}
+
+/* 비활성화 버튼 스타일 */
+.btn[disabled],
+fieldset[disabled] .btn {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.65;
+}
+
+/* 어두운 스타일 버튼 */
+.btn-dark {
+    background: #333;
+    color: #fff;
+    border: 1px solid #222;
+}
+
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
+    background: #222;
+    border-color: #222;
+    color: #fff;
+}
+
 /* 전체 노선 슬라이더 스타일 */
 .route-section {
     margin: 30px 0;
@@ -401,6 +466,72 @@ button {
   margin: 20px 0;
 }
 
+
+.area_container {
+    max-width: 1280px;
+    margin: 0 auto;
+	display: flex;
+}
+.areaForm {
+	width: 920px;
+	margin: 60px 0 80px;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #e0e0e0;
+}
+
+.area-control {
+	border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin: 0;
+    vertical-align: baseline;
+    
+    width: 100%;
+    
+    resize: none;
+    min-height: calc(1.5em + .75rem + calc(var(--bs-border-width)* 2));
+}
+
+.area_table td {
+	vertical-align: middle;
+}
+
+.area-select {
+	border: 1px solid #e0e0e0;
+    padding: 11px;
+    margin: 0;
+    margin-left: 5px;
+    vertical-align: baseline;
+    width: 50%;
+    display: inline-block;
+}
+
+.thumbnail-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.thumbnail {
+	width: 100px;
+	height: 100px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	
+	position: relative;
+	overflow: hidden;
+}
+
+.thumbnailImage {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.thumbnail-img {
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+}
 /* 더 알아보기 버튼 스타일 */
 .more-info-btn {
   background-color: #000;

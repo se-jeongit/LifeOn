@@ -26,12 +26,13 @@ public class Area {
     private String nickname; 
     private String profile_image;
 	private String rvsubject;
+	private String rssubject;// 서브제목
 	private String rvcontent;
-	private String idaddr;
+	private String rvreg_date;
 	private int blind;
 	
-	private int swnum; // 지하철역 노선
-	private String cbc;
+	private int lnum; // 지하철역 노선
+	private String ssname;
 	
 	private int hitCount;
 	private int boardLikeCount;

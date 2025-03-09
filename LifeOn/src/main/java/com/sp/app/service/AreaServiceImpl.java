@@ -13,8 +13,6 @@ import com.sp.app.common.StorageService;
 import com.sp.app.exception.StorageException;
 import com.sp.app.mapper.AreaMapper;
 import com.sp.app.model.Area;
-import com.sp.app.model.Meeting;
-import com.sp.app.rent.model.RentProduct;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +31,17 @@ public class AreaServiceImpl implements AreaService{
 			// 썸네일
 			if (! dto.getThpFile().isEmpty()) {
 				String filename = storageService.uploadFileToServer(dto.getThpFile(), uploadPath);
-				dto.setThp(uploadPath);
+				dto.setThp(filename);
 			}
 			
-			Long psnum = mapper.AreaSeq();
+			Long rvnum = mapper.areaSeq();
 			
-			dto.setRvnum(psnum);
+			dto.setRvnum(rvnum);
 			mapper.insertBoard(dto);
+			
+			if(! dto.getSelectFile().isEmpty()) {
+				insertBoardFile(dto, uploadPath);
+			}
 			
 		} catch (Exception e) {
 			log.info("insertBoard : ", e);
@@ -88,15 +90,15 @@ public class AreaServiceImpl implements AreaService{
 	}
 
 	@Override
-	public void deleteBoard(long psnum, String uploadPath, long num) throws Exception {
+	public void deleteBoard(long rvnum, String uploadPath, long num) throws Exception {
 		try {
-			List<Area> listFile = listAreaFile(psnum);
+			List<Area> listFile = listAreaFile(rvnum);
 			if (listFile != null) {
 				for (Area dto : listFile)
 					deleteUploadFile(uploadPath, dto.getThp());
 			}
 			
-			Area dto = findById(psnum);
+			Area dto = findById(rvnum);
 			if (dto == null || (dto.getNum() != num)) {
 			    return;
 			}
@@ -105,10 +107,10 @@ public class AreaServiceImpl implements AreaService{
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("field", "rvnum");
-			map.put("rvnum", psnum);
+			map.put("rvnum", rvnum);
 			deleteAreaFile(map);
 			
-			mapper.deleteBoard(psnum);
+			mapper.deleteBoard(rvnum);
 			
 		} catch (Exception e) {
 			log.info("deleteBoard : ", e);
@@ -145,11 +147,11 @@ public class AreaServiceImpl implements AreaService{
 	}
 	
 	@Override
-	public Area findById(long psnum) {
+	public Area findById(long rvnum) {
 		Area dto = null;
 
 		try {
-			dto = mapper.findById(psnum);
+			dto = mapper.findById(rvnum);
 		} catch (Exception e) {
 			log.info("findById : ", e);
 		}
@@ -157,11 +159,11 @@ public class AreaServiceImpl implements AreaService{
 		return dto;
 	}
 	@Override
-	public List<Area> listAreaFile(long psnum) {
+	public List<Area> listAreaFile(long rvnum) {
 		List<Area> list = null;
 		
 		try {
-			list = mapper.listAreaFile(psnum);
+			list = mapper.listAreaFile(rvnum);
 		} catch (Exception e) {
 			log.info("listAreaFile : ", e);
 		}

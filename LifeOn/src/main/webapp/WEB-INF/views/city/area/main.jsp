@@ -93,16 +93,29 @@
         </div>
             
             <!-- 전체 노선 슬라이더 -->
-            <div class="route-section">
-                <div class="section-header">
-                    <h3 class="section-title">주요노선</h3>
-                    <div class="slider-controls">
-                    </div>
-                </div>
-                
+         
+                <div class="category-container">
+          			<nav class="category-nav">
+           			 <ul>
+					    <li class="category-subcontainer">
+					        <a class="category ${empty param.lnum ? 'selected' : ''}" href="<c:url value='/city/area/main'/>">전체</a>
+					    </li>
+				    <c:forEach var="main" items="${listCategory}">
+				        <li class="category-subcontainer">
+				            <a class="category ${param.lnum eq main.lnum ? 'selected' : ''}" href="<c:url value='/city/area/main?lnum=${main.lnum}'/>">${main.ssname}</a>
+				        </li>
+		   			</c:forEach>
+				</ul>
+			</nav>
+		</div>
+                <div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1280px;">
+          <button class="btn" onclick="location.href='${pageContext.request.contextPath}/city/area/write';">글쓰기</button>
+        </div>
                 <div class="route-slider-container">
+                <c:forEach var="dto" items="${list}">
+		       <div class="product-item" id="${dto.rvnum}" onclick="location.href='<c:url value='${articleUrl}/${dto.rvnum}?${query}'/>'" style="cursor: pointer;">
                     <div class="route-slider" id="route-slider">
-                        <!-- 첫 번째 슬라이드 -->
+            			<!-- 지역 슬라이드  -->
                         <div class="route-slide">
                             <div class="route-grid">
                              <button class="control-btn" id="route-prev">
@@ -110,73 +123,27 @@
                        		 </button>
                                 <div class="route-card">
                                     <div class="route-image">
-                                        <img src="placeholder.jpg" alt="가산디지털단지">
+                                    <c:if test="${empty dto.thp}">
+			                    	<img class="route-image" src="${pageContext.request.contextPath}/dist/images/noimage.png">
+			                    	</c:if>
+					                   <c:if test="${not empty dto.thp}">
+                                        <img class="route-image" src="${pageContext.request.contextPath}/uploadPath/area/${dto.thp}" alt="지역사진">
+					                    </c:if> 
                                     </div>
                                     <div class="route-info">
-                                        <h5>가산디지털단지</h5>
-                                        <p>새로운 신흥 지구가 형성된 G.O.A.T</p>
+                                        <h5>${dto.rvsubject}</h5>
+                                        <p>${dto.rssubject}</p>
+			                                <div style="margin-top: 5px">
+												<i class="tip_icon bi bi-bookmark"></i>
+												<span>${dto.boardLikeCount}&nbsp;&nbsp;</span>
+												<i class="tip_icon bi bi-eye"></i>
+												<span>${dto.hitCount}&nbsp;&nbsp;</span>
+												<i class="tip_icon bi bi-chat-dots"></i>
+												<span>${dto.replyCount}&nbsp;&nbsp;</span>
+						                 	 </div>
                                     </div>
                                 </div>
                                 
-                                <div class="route-card">
-                                    <div class="route-image">
-                                        <img src="placeholder.jpg" alt="성신여대입구">
-                                    </div>
-                                    <div class="route-info">
-                                        <h5>성신여대입구</h5>
-                                        <p>연인들에게 좋은 곳! 쇼핑가 볼거리 풍부!</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="route-card">
-                                    <div class="route-image">
-                                        <img src="placeholder.jpg" alt="선정릉">
-                                    </div>
-                                    <div class="route-info">
-                                        <h5>선정릉</h5>
-                                        <p>높은 빌딩 사이, 한적하고 안전한 지역</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="route-card">
-                                    <div class="route-image">
-                                        <img src="placeholder.jpg" alt="여의도">
-                                    </div>
-                                    <div class="route-info">
-                                        <h5>여의도</h5>
-                                        <p>금융과 비즈니스의 중심, 한강 공원 인접</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="route-card">
-                                    <div class="route-image">
-                                        <img src="placeholder.jpg" alt="여의도">
-                                    </div>
-                                    <div class="route-info">
-                                        <h5>여의도</h5>
-                                        <p>금융과 비즈니스의 중심, 한강 공원 인접</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="route-card">
-                                    <div class="route-image">
-                                        <img src="placeholder.jpg" alt="여의도">
-                                    </div>
-                                    <div class="route-info">
-                                        <h5>여의도</h5>
-                                        <p>금융과 비즈니스의 중심, 한강 공원 인접</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="route-card">
-                                    <div class="route-image">
-                                        <img src="placeholder.jpg" alt="여의도">
-                                    </div>
-                                    <div class="route-info">
-                                        <h5>여의도</h5>
-                                        <p>금융과 비즈니스의 중심, 한강 공원 인접</p>
-                                    </div>
-                                </div>
                                 
                                 <button class="control-btn" id="route-next">
                            		 <i class="fas fa-chevron-right"></i>
@@ -186,27 +153,28 @@
                         
                     </div>
                 </div>
-            </div>
+	          </c:forEach>
+           </div>
         
         <div class="page-navigation" style="margin-block: auto;">
 					${dataCount == 0 ? "등록된 지역정보가 없습니다." : paging}
 		</div>
     </main>
     
-    <!-- MBTI 모달 -->
-    <!-- 모달 배경 -->
+  <!-- MBTI 모달 
+    모달 배경
     <div class="modal-overlay" id="modalOverlay">
-        <!-- 모달 컨테이너 -->
+        모달 컨테이너
         <div class="modal-container">
-            <!-- 닫기 버튼 -->
+            닫기 버튼
             <button class="close-btn" id="closeModal">&times;</button>
             
-            <!-- 진행 상태 표시 -->
+            진행 상태 표시
             <div class="progress-indicator">
                 <span class="current-step">1</span>/<span class="total-steps">5</span>
             </div>
             
-            <!-- 질문 모달들 -->
+            질문 모달들
             <div class="modal-content" id="question1">
                 <div class="question-header">Q1.</div>
                 <div class="question-text">입대로 비싸도 &lt;더블 역세권&gt; 동네라면 대환영?</div>
@@ -252,7 +220,7 @@
                 </div>
             </div>
             
-            <!-- 결과 모달 -->
+            결과 모달
             <div class="modal-content result-modal" id="result" style="display: none;">
                 <h2 class="result-title">#똑똑똑... 혹시... 나온 집 없어요?</h2>
                 
@@ -271,98 +239,23 @@
                 <button class="more-info-btn" id="moreInfoBtn">&lt;경복궁&gt; 살기 어떤지 궁금해?</button>
             </div>
         </div>
-    </div>
+    </div> -->
     
 <script type="text/javascript">
-// 메인 슬라이더 기능
-let mainCurrentSlide = 0;
-const mainSlides = document.querySelectorAll('#main-slider .slide');
-const mainDots = document.querySelectorAll('#main-dots .dot');
-const mainPrevBtn = document.getElementById('main-prev');
-const mainNextBtn = document.getElementById('main-next');
+document.querySelectorAll('.category').forEach(function(category) {
+	category.addEventListener('click', function() {
+	
+	document.querySelectorAll('.category').forEach(function(c) {
+	      c.classList.remove('selected');
+	    });
 
-function showMainSlide(n) {
-    mainCurrentSlide = n;
-    
-    if (mainCurrentSlide < 0) {
-        mainCurrentSlide = mainSlides.length - 1;
-    }
-    if (mainCurrentSlide >= mainSlides.length) {
-        mainCurrentSlide = 0;
-    }
-    
-    // 모든 슬라이드 숨기기
-    mainSlides.forEach(slide => {
-        slide.style.transform = `translateX(-${mainCurrentSlide * 100}%)`;
-    });
-    
-    // 현재 도트 활성화
-    mainDots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === mainCurrentSlide);
-    });
-}
-
-if (mainPrevBtn) {
-    mainPrevBtn.addEventListener('click', () => {
-        showMainSlide(mainCurrentSlide - 1);
-    });
-}
-
-if (mainNextBtn) {
-    mainNextBtn.addEventListener('click', () => {
-        showMainSlide(mainCurrentSlide + 1);
-    });
-}
-
-if (mainDots) {
-    mainDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            showMainSlide(index);
-        });
-    });
-}
-
-// 자동 슬라이드
-setInterval(() => {
-    if (mainSlides && mainSlides.length > 0) {
-        showMainSlide(mainCurrentSlide + 1);
-    }
-}, 5000);
-
-// 노선 슬라이더 기능
-let routeCurrentSlide = 0;
-const routeSlides = document.querySelectorAll('#route-slider .route-slide');
-const routePrevBtn = document.getElementById('route-prev');
-const routeNextBtn = document.getElementById('route-next');
-
-function showRouteSlide(n) {
-    routeCurrentSlide = n;
-    
-    if (routeCurrentSlide < 0) {
-        routeCurrentSlide = routeSlides.length - 1;
-    }
-    if (routeCurrentSlide >= routeSlides.length) {
-        routeCurrentSlide = 0;
-    }
-    
-    const routeSlider = document.getElementById('route-slider');
-    if (routeSlider) {
-        routeSlider.style.transform = `translateX(-${routeCurrentSlide * 100}%)`;
-    }
-}
-
-if (routePrevBtn) {
-    routePrevBtn.addEventListener('click', () => {
-        showRouteSlide(routeCurrentSlide - 1);
-    });
-}
-
-if (routeNextBtn) {
-    routeNextBtn.addEventListener('click', () => {
-        showRouteSlide(routeCurrentSlide + 1);
-    });
-}
-
+	    // 클릭한 카테고리에 selected 클래스 추가
+	    category.classList.add('selected');
+	});
+});
+</script>
+   
+<script type="text/javascript">
 // MBTI 모달 스크립트
 document.addEventListener("DOMContentLoaded", function() {
   // 필요한 요소들 선택

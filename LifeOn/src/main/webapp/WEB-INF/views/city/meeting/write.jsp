@@ -166,7 +166,7 @@ function check() {
         <div class="section">
                 <label for="label">카테고리</label>
                 <select id="bigCategory" name="cbn" class="dropdown" required onchange="categoryCheck();">
-                     <option value="" disabled ${dto.cbn == '' ? 'selected' : ''}>카테고리를 선택하세요</option>
+                     < <option value="0" selected>카테고리를 선택하세요</option>
                      <c:forEach var="category" items="${Category}">
 				        <option value="${category.cbn}" ${category.cbn == dto.cbn ? 'selected' : ''}>${category.cbc}</option>
 				    </c:forEach>
@@ -223,7 +223,7 @@ function check() {
 
         <div class="section">
             <label class="label" for="detail-location">상세 장소</label>
-            <input type="text" id="detail-location" class="input-box" name="loca_d" value="${dto.loca_d}"  placeholder="상세 장소를 입력하세요">
+            <input type="text" id="detail-location" class="input-box" name="loca_d" value="${dto.loca_d}"  placeholder="상세 장소를 입력하세요" onclick="daumPostcode();">
         </div>
         
 

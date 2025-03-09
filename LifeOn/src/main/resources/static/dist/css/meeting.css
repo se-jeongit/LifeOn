@@ -340,6 +340,17 @@ fieldset[disabled] .btn {
     color: #fff;
 }
 
+.ssbtn {
+	color: #333;
+	background: #fff;
+	padding: 6px 8px;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+}
+
+.ssbtn:hover {
+	background: #f8f9fa;
+}
 /* 확인 버튼 - 주로 모달 하단 같은 데서 쓰이는 스타일 */
 .btnConfirm {
     background: #006AFF;
