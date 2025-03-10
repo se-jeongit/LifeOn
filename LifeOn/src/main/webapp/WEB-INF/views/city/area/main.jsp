@@ -112,10 +112,10 @@
           <button class="btn" onclick="location.href='${pageContext.request.contextPath}/city/area/write';">글쓰기</button>
         </div>
                 <div class="route-slider-container">
-                <c:forEach var="dto" items="${list}">
-		       <div class="product-item" id="${dto.rvnum}" onclick="location.href='<c:url value='${articleUrl}/${dto.rvnum}?${query}'/>'" style="cursor: pointer;">
             			<!-- 지역 그리드  -->
                             <div class="route-grid">
+                <c:forEach var="dto" items="${list}">
+		       <div class="product-item" id="${dto.rvnum}" onclick="location.href='<c:url value='${articleUrl}/${dto.rvnum}?${query}'/>'" style="cursor: pointer;">
                                 <div class="route-card">
                                     <div class="route-image">
                                     <c:if test="${empty dto.thp}">
@@ -140,9 +140,9 @@
                                 </div>
                                 
                             </div>
+	          		</c:forEach>
                         
                     </div>
-	          		</c:forEach>
                 </div>
         
         <div class="page-navigation" style="margin-block: auto;">
