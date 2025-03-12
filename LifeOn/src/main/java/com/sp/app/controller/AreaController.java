@@ -67,7 +67,7 @@ public class AreaController {
 			HttpServletRequest req) throws Exception {
 		
 		try {
-			int size = 10;
+			int size = 8;
 			int total_page = 0;
 			int dataCount = 0;
 			

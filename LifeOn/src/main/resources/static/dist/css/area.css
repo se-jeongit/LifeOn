@@ -398,7 +398,7 @@ fieldset[disabled] .btn {
 .close-btn {
   position: absolute;
   top: 15px;
-  left: 15px;
+  right: 15px;
   width: 36px;
   height: 36px;
   background-color: rgba(255, 255, 255, 0.3);
@@ -422,7 +422,7 @@ fieldset[disabled] .btn {
 .progress-indicator {
   position: absolute;
   top: 15px;
-  right: 15px;
+  left: 15px;
   background-color: rgba(255, 255, 255, 0.3);
   color: white;
   padding: 5px 12px;
@@ -435,7 +435,7 @@ fieldset[disabled] .btn {
 .modal-content {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 105%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -443,6 +443,8 @@ fieldset[disabled] .btn {
   padding: 20px;
   color: white;
   text-align: center;
+  background-size: cover;
+  background-position: center;
 }
 
 /* 질문 헤더 스타일 */
@@ -516,14 +518,16 @@ fieldset[disabled] .btn {
 }
 
 .result-emoji {
-  font-size: 32px;
+  font-size: 25px;
   margin-bottom: 10px;
+  text-align: center;
 }
 
-.result-description {
+.C {
   font-size: 16px;
   line-height: 1.6;
   word-break: keep-all;
+  text-align: center;
 }
 
 .result-tag {
@@ -532,7 +536,10 @@ fieldset[disabled] .btn {
   color: #000;
   margin: 20px 0;
 }
-
+ .result-description {
+    font-size: 14px;
+    text-align: center
+ }
 
 /* 더 알아보기 버튼 스타일 */
 .more-info-btn {
@@ -612,6 +619,7 @@ fieldset[disabled] .btn {
 
   .result-title {
     font-size: 22px;
+    margin-top: 10px;
   }
 }
 
@@ -634,9 +642,6 @@ fieldset[disabled] .btn {
     font-size: 20px;
   }
 
-  .result-description {
-    font-size: 14px;
-  }
 }
 
 /* 반응형 스타일 */

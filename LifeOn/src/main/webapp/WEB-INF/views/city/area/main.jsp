@@ -150,103 +150,109 @@
 		</div>
 </main>  
 
-<!-- MBTI 모달  -->
-
-		<div class="modal-overlay" id="modalOverlay">
-		    <!-- 모달 컨테이너 -->
-		    <div class="modal-container">
-		        <!-- 닫기 버튼 -->
-		        <button class="close-btn" id="closeModal">&times;</button>
-		        
-		        <!-- 진행 상태 표시 -->
-		        <div class="progress-indicator">
-		            <span class="current-step">1</span>/<span class="total-steps">7</span>
-		        </div>
-		        
-		        <!-- 질문 모달들 -->
-		        <div class="modal-content" id="question1">
-		            <div class="question-header">Q1.</div>
-		            <div class="question-text">입대로 비싸도 &lt;더블 역세권&gt; 동네라면 대환영?</div>
-		            <div class="answer-buttons">
-		                <button class="answer-btn" data-answer="yes" data-next="question2">YES!</button>
-		                <button class="answer-btn" data-answer="no" data-next="question2">NO!</button>
-		            </div>
-		        </div>
-		        
-		        <div class="modal-content" id="question2" style="display: none;">
-		            <div class="question-header">Q2.</div>
-		            <div class="question-text">동네에 맛집이 많은 것이 중요한가요?</div>
-		            <div class="answer-buttons">
-		                <button class="answer-btn" data-answer="yes" data-next="question3">YES!</button>
-		                <button class="answer-btn" data-answer="no" data-next="question3">NO!</button>
-		            </div>
-		        </div>
-		        
-		        <div class="modal-content" id="question3" style="display: none;">
-		            <div class="question-header">Q3.</div>
-		            <div class="question-text">조용한 주거환경을 선호하시나요?</div>
-		            <div class="answer-buttons">
-		                <button class="answer-btn" data-answer="yes" data-next="question4">YES!</button>
-		                <button class="answer-btn" data-answer="no" data-next="question4">NO!</button>
-		            </div>
-		        </div>
-		        
-		        <div class="modal-content" id="question4" style="display: none;">
-		            <div class="question-header">Q4.</div>
-		            <div class="question-text">대중교통 접근성이 좋은 곳을 선호하시나요?</div>
-		            <div class="answer-buttons">
-		                <button class="answer-btn" data-answer="yes" data-next="question5">YES!</button>
-		                <button class="answer-btn" data-answer="no" data-next="question5">NO!</button>
-		            </div>
-		        </div>
-		        
-		        <div class="modal-content" id="question5" style="display: none;">
-		            <div class="question-header">Q5.</div>
-		            <div class="question-text">문화시설이 가까이 있는 것이 중요한가요?</div>
-		            <div class="answer-buttons">
-		                <button class="answer-btn" data-answer="yes" data-next="question6">YES!</button>
-		                <button class="answer-btn" data-answer="no" data-next="question6">NO!</button>
-		            </div>
-		        </div>
-		        
-		        <div class="modal-content" id="question6" style="display: none;">
-		            <div class="question-header">Q6.</div>
-		            <div class="question-text">자연환경이 가까이 있는 것을 선호하시나요?</div>
-		            <div class="answer-buttons">
-		                <button class="answer-btn" data-answer="yes" data-next="question7">YES!</button>
-		                <button class="answer-btn" data-answer="no" data-next="question7">NO!</button>
-		            </div>
-		        </div>
-		        
-		        <div class="modal-content" id="question7" style="display: none;">
-		            <div class="question-header">Q7.</div>
-		            <div class="question-text">동네의 안전성이 가장 중요한 요소인가요?</div>
-		            <div class="answer-buttons">
-		                <button class="answer-btn" data-answer="yes" data-next="result">YES!</button>
-		                <button class="answer-btn" data-answer="no" data-next="result">NO!</button>
-		            </div>
-		        </div>
-		        
-		        <!-- 결과 모달 -->
-		        <div class="modal-content result-modal" id="result" style="display: none;">
-		            <h2 class="result-title">#똑똑똑... 혹시... 나온 집 없어요?</h2>
-		            
-		            <div class="result-content">
-		                <p class="result-emoji">👨</p>
-		                <p class="result-description">네 없어요... 서촌은 이사 온 사람들이 잘 안 나가기도 하고, 부동산 매물 수가 적어서 이사를 가고 싶어도 쉽게 이사를 갈 수 없는 동네에요. 그만큼 만족도가 높은 동네란 뜻이겠죠?</p>
-		            </div>
-		            
-		            <div class="result-tag">#핫플</div>
-		            
-		            <div class="result-content">
-		                <p class="result-emoji">🔥</p>
-		                <p class="result-description">서촌의 동쪽은 핫한 미술관이나 박물관이 있고, 서쪽으로 가면 고즈넉한 월플레이스가 등장해. 같은 동네인데 두 가지 면모를 갖고 있는 매력적인 동네야</p>
-		            </div>
-		            
-		            <button class="more-info-btn" id="moreInfoBtn">&lt;경복궁&gt; 살기 어떤지 궁금해?</button>
-		        </div>
-		    </div>
-		</div>  
+<!-- MBTI 모달 -->
+<div class="modal-overlay" id="modalOverlay">
+    <!-- 모달 컨테이너 -->
+    <div class="modal-container">
+        
+        <!-- 진행 상태 표시 -->
+        <div class="progress-indicator">
+            <span class="current-step">1</span>/<span class="total-steps">7</span>
+        </div>
+        
+        <!-- 닫기 버튼 -->
+        <button class="close-btn" id="closeModal">&times;</button>
+        
+        <!-- 질문 모달들 -->
+        <div class="modal-content" id="question1">
+            <div class="question-header">Q1.</div>
+            <div class="question-text">동네에 맛집,카페가 많은 것이 좋나요?</div>
+            <div class="answer-buttons">
+                <button class="answer-btn" data-answer="yes" data-next="question2">YES!</button>
+                <button class="answer-btn" data-answer="no" data-next="question2">NO!</button>
+            </div>
+        </div>
+        
+        <div class="modal-content" id="question2" style="display: none;">
+            <div class="question-header">Q2.</div>
+            <div class="question-text">문화시설이 가까이 있는 것이 중요한가요?</div>
+            <div class="answer-buttons">
+                <button class="answer-btn" data-answer="yes" data-next="question3">YES!</button>
+                <button class="answer-btn" data-answer="no" data-next="question3">NO!</button>
+            </div>
+        </div>
+        
+        <div class="modal-content" id="question3" style="display: none;">
+            <div class="question-header">Q3.</div>
+            <div class="question-text">대중교통 접근성이 좋은 곳을 선호하시나요?</div>
+            <div class="answer-buttons">
+                <button class="answer-btn" data-answer="yes" data-next="question4">YES!</button>
+                <button class="answer-btn" data-answer="no" data-next="question4">NO!</button>
+            </div>
+        </div>
+        
+        <div class="modal-content" id="question4" style="display: none;">
+            <div class="question-header">Q4.</div>
+            <div class="question-text">공원이나 산책로가 가까이 있는 것을 선호하시나요?</div>
+            <div class="answer-buttons">
+                <button class="answer-btn" data-answer="yes" data-next="question5">YES!</button>
+                <button class="answer-btn" data-answer="no" data-next="question5">NO!</button>
+            </div>
+        </div>
+        
+        <div class="modal-content" id="question5" style="display: none;">
+            <div class="question-header">Q5.</div>
+            <div class="question-text">동네가 한산한것과 상권 어떤게 더 중요하신가요?</div>
+            <div class="answer-buttons">
+                <button class="answer-btn" data-answer="yes" data-next="question6">한산함</button>
+                <button class="answer-btn" data-answer="no" data-next="question6">상권</button>
+            </div>
+        </div>
+        
+        <div class="modal-content" id="question6" style="display: none;">
+            <div class="question-header">Q6.</div>
+            <div class="question-text">서울 중심지를 선호하시나요?</div>
+            <div class="answer-buttons">
+                <button class="answer-btn" data-answer="yes" data-next="question7">YES!</button>
+                <button class="answer-btn" data-answer="no" data-next="question7">NO!</button>
+            </div>
+        </div>
+        
+        <div class="modal-content" id="question7" style="display: none;">
+            <div class="question-header">Q7.</div>
+            <div class="question-text">동네의 안전성이 가장 중요한 요소인가요?</div>
+            <div class="answer-buttons">
+                <button class="answer-btn" data-answer="yes" data-next="result">YES!</button>
+                <button class="answer-btn" data-answer="no" data-next="result">NO!</button>
+            </div>
+        </div>
+        
+        <!-- 결과 모달 -->
+        <div class="modal-content result-modal" id="result" style="display: none;">
+            <h2 class="result-title">🥁두구두구🥁... 나랑 잘 맞는 지역은?</h2>
+            
+            <div class="result-tag">🔥강남구🔥</div>
+            
+            <div class="result-content">
+                <p class="result-emoji">🏠</p>
+                <p class="result-description">강남은 고급 주거지, 편리한 교통, 교육 인프라 등 많은 장점 덕분에 사람들이 쉽게 떠나지 않는 곳이에요. <br>이곳에서 살게 되면 삶의 질을 높일 수 있기 때문에, 이사 오고 싶은 사람들이 많지만 매물이 부족한 곳이기도 하죠. 😊</p>
+            </div>
+            
+            <div class="result-content">
+                <p class="result-emoji">🛍️</p>
+                <p class="result-description">강남은 서울에서 가장 번화한 지역 중 하나로, 현대적인 건물, 쇼핑, 맛집, 비즈니스 중심지가 밀집된 곳이에요. <br>코엑스, 압구정 로데오, 가로수길 같은 핫플이 많아요.<br>
+			                <br>📍 강남에서 가볼 만한 곳
+							<br>코엑스 🛍: 쇼핑몰, 영화관, 별마당 도서관 등 볼거리가 많아요.
+							<br>가로수길 🌿: 감성적인 카페와 패션 브랜드 숍이 있는 핫플.
+						    <br>청담동 💎: 명품 거리와 유명 레스토랑이 있는 고급스러운 분위기.
+							<br>봉은사 🏯: 도심 속에서 조용히 사색할 수 있는 전통 사찰.
+							<br>강남역 일대 🍽: 다양한 맛집과 술집이 많아 밤늦게까지 붐비는 곳.</p>
+            </div>
+            
+            <button class="more-info-btn" id="moreInfoBtn">&lt;강남&gt; 살기 어떤지 궁금해?</button>
+        </div>
+    </div>
+</div>
 		     
   
 <script type="text/javascript">
@@ -263,9 +269,8 @@ document.querySelectorAll('.category').forEach(function(category) {
 });
 </script>
 
-
 <script type="text/javascript">
-//MBTI 모달 스크립트
+// MBTI 모달 스크립트
 document.addEventListener("DOMContentLoaded", function() {
   // 필요한 요소들 선택
   const mbtiModal = {
@@ -287,6 +292,27 @@ document.addEventListener("DOMContentLoaded", function() {
     moreInfoBtn: document.getElementById("moreInfoBtn"),
     answers: {}
   };
+
+  // 각 모달에 배경 이미지 설정
+  const modalBackgrounds = {
+    question1: "${pageContext.request.contextPath}/dist/images/q1.jpg",
+    question2: "${pageContext.request.contextPath}/dist/images/q2.jpg",
+    question3: "${pageContext.request.contextPath}/dist/images/q3.jpg",
+    question4: "${pageContext.request.contextPath}/dist/images/q4.jpg",
+    question5: "${pageContext.request.contextPath}/dist/images/q5.jpg",
+    question6: "${pageContext.request.contextPath}/dist/images/q6.jpg",
+    question7: "${pageContext.request.contextPath}/dist/images/q7.jpg",
+    result: "${pageContext.request.contextPath}/dist/images/result.jpg"
+  };
+
+  // 배경 이미지 적용
+  for (const key in mbtiModal.questions) {
+    if (mbtiModal.questions[key] && modalBackgrounds[key]) {
+      mbtiModal.questions[key].style.backgroundImage = `url(${modalBackgrounds[key]})`;
+      mbtiModal.questions[key].style.backgroundSize = 'cover';
+      mbtiModal.questions[key].style.backgroundPosition = 'center';
+    }
+  }
 
   // 총 질문 수 설정
   if (mbtiModal.totalSteps) {
@@ -401,27 +427,18 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   
   // 각 질문의 답변 버튼에 이벤트 리스너 추가
-  for (let i = 1; i <= 7; i++) {
-    const currentQuestionId = `question${i}`;
-    const nextQuestionId = i < 7 ? `question${i+1}` : "result";
-    
-    const currentQuestion = mbtiModal.questions[currentQuestionId];
-    if (currentQuestion) {
-      const answerButtons = currentQuestion.querySelectorAll(".answer-btn");
+  document.querySelectorAll('.answer-btn').forEach(function(button) {
+    button.addEventListener('click', function() {
+      const currentId = this.closest('.modal-content').id;
+      const nextId = this.dataset.next;
       
-      answerButtons.forEach(function(button) {
-        button.addEventListener("click", function() {
-          // 사용자 응답 저장
-          mbtiModal.answers[currentQuestionId] = this.dataset.answer;
-          
-          // 다음 질문으로 이동
-          goToNextQuestion(currentQuestionId, nextQuestionId);
-        });
-      });
+      // 사용자 응답 저장
+      mbtiModal.answers[currentId] = this.dataset.answer;
       
-      console.log(`Added event listeners to answer buttons in ${currentQuestionId}`);
-    }
-  }
+      // 다음 질문으로 이동
+      goToNextQuestion(currentId, nextId);
+    });
+  });
   
   console.log("MBTI modal script initialized");
 });
