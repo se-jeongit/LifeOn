@@ -100,12 +100,17 @@
 						<td><fmt:formatNumber value="${dto.prp}"/>원</td>
 						<td><fmt:formatNumber value="${dto.prlp}"/>원</td>
 						<td>${dto.prs}</td>
-						<td>${dto.renter}</td>
-						<td><fmt:formatNumber value="${dto.prp}"/>원 x ${dto.odq}일 = <fmt:formatNumber value="${dto.prp * dto.odq}"/>원</td>
-						<td>${dto.opsd}</td>
-						<td>${dto.oped}</td>
-						<td><button class="sebtn" onclick="checkReturnStatus();">반납완료</button></td>
-						<td>${dto.opld}일</td>
+						<c:if test="${not empty dto.renter}">
+							<td>${dto.renter}</td>
+							<td><fmt:formatNumber value="${dto.prp}"/>원 x ${dto.odq}일 = <fmt:formatNumber value="${dto.prp * dto.odq}"/>원</td>
+							<td>${dto.opsd}</td>
+							<td>${dto.oped}</td>
+							<td><button class="sebtn" onclick="checkReturnStatus();">반납완료</button></td>
+							<td>${dto.opld}</td>
+						</c:if>
+						<c:if test="${empty dto.renter}">
+							<td colspan="6">현재 대여자가 없습니다.</td>
+						</c:if>
 					</tr>
 				</c:forEach>
 			</tbody>

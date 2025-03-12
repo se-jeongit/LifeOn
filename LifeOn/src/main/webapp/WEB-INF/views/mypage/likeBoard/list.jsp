@@ -63,6 +63,7 @@
 			<thead class="table-light">
 				<tr>
 					<th class="psnum">번호</th>
+					<th class="bdtype">카테고리</th>
 					<th class="subject">제목</th>
 					<th class="nickname">작성자</th>
 					<th class="reg_date">등록일</th>
@@ -74,6 +75,7 @@
 				<c:forEach var="dto" items="${list}" varStatus="status">
 					<tr style="cursor: pointer;">
 						<td>${dataCount - (page-1) * size - status.index}</td>
+						<td>${dto.bdtype}</td>
 						<td class="left">
 							<span class="d-inline-block text-truncate align-middle" style="max-width: 390px;">${dto.subject}</span>
 						</td>

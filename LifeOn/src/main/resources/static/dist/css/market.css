@@ -354,7 +354,7 @@
 }
 
 .tab_content {
-	height: 200px;
+	height: 250px;
 	clear: both;
 	overflow: hidden;
 	position: relative;
@@ -381,9 +381,19 @@ li { list-style: none; }
 
 .productImg {
 	width: 200px;
-	height: 200px;
+	height: 150px;
 	object-fit: cover;
 	margin-right: 30px;
+	border: 1px solid #e0e0e0;
+	border-bottom: none;
+}
+
+.productInfo {
+	width: 200px;
+	margin-right: 30px;
+	text-align: left;
+	padding: 10px;
+	border: 1px solid #e0e0e0;
 }
 
 .controls {

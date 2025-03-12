@@ -147,9 +147,14 @@
 									<div class="cont_wrap">
 										<ul class="product_list" id="product_list">
 											<c:forEach var="vo" items="${memberProduct}" varStatus="status">
-												<a href="${pageContext.request.contextPath}/market/rent/article/${vo.pnum}?${query}">
+												<div style="display: flex; flex-direction: column; cursor: pointer;" onclick="location.href='<c:url value='/market/rent/article/${vo.pnum}?${query}'/>'">
 													<img class="productImg" src="${pageContext.request.contextPath}/uploadPath/rent/${vo.pph}" alt="물품사진">
-												</a>
+													<div class="productInfo">
+														<p style="margin-bottom: 5px;"><b>${vo.pname}</b></p>
+														<p style="margin-bottom: 5px;">대여비 : <fmt:formatNumber value="${vo.prp}"/> 원</p>
+														<p style="margin: 0px;">보증금 : <fmt:formatNumber value="${vo.prlp}"/> 원</p>
+													</div>
+												</div>
 											</c:forEach>
 										</ul>
 										<c:if test="${memberProductSize > 4}">
@@ -404,15 +409,15 @@ const prevBtn = document.querySelector('.prev');
 const nextBtn = document.querySelector('.next');
 
 /* 사진 개수 */
-const slideCount = '${memberProductSize}';
+const slideCount = parseInt('${memberProductSize}');
+/* 현재 인덱스 */
+let currentIdx = 0;
 
 if (product_list) {
 	if (slideCount < 5) {
 		product_list.style.marginLeft = '0px';
 	}
 
-	/* 현재 인덱스 */
-	let currentIdx = 0;
 	/* 이미지 너비 */
 	let slideWidth = 200;
 	/* 이미지 간 간격 */

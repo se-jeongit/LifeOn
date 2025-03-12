@@ -296,7 +296,15 @@
 	</select>
 	
 	<select id="memberBoradLike" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
-		SELECT f.psnum, f.num, subject, nickname, hb.reg_date, hitCount, bdtype
+		SELECT f.psnum, f.num, subject,
+			(SELECT nickname FROM hybrid_board b JOIN member m ON b.num = m.num	WHERE psnum = 153) nickname,
+			hb.reg_date, hitCount,
+			CASE 
+		        WHEN bdtype = 'room' THEN '인테리어'
+		        WHEN bdtype = 'recipe' THEN '자취요리'
+		        WHEN bdtype = 'tip' THEN '생활팁'
+		        ELSE bdtype
+    		END AS bdtype
 		FROM hybrid_board_fav f
 		JOIN hybrid_board hb ON f.psnum = hb.psnum
 		JOIN member m ON f.num = m.num

@@ -19,7 +19,7 @@
 		<ul class="nav pt-3 px-3">
 		    <li class="nav-item" style="font-size: 16px; font-weight: 600;">
 		    	<i class="bi bi-headset" style="padding-right: 5px;"></i>
-		    	<a class="text-reset" href="#">고객문의</a>
+		    	<a class="text-reset" href="<c:url value='/help'/>">고객문의</a>
 		    </li>
 		</ul>
 		<ul class="nav px-3">
@@ -32,7 +32,7 @@
     
     <div class="justify-content-center">
 		<ul class="nav p-3">
-		    <li class="nav-item"><a class="text-reset" href="#">회사소개</a></li>
+		    <li class="nav-item"><a class="text-reset" href="<c:url value='/lifeon/info'/>">회사소개</a></li>
 		    <li class="nav-item"><span>&nbsp;&middot;&nbsp;</span></li>
 		    <li class="nav-item"><a class="text-reset" href="#">서비스이용약관</a></li>
 		    <li class="nav-item"><span>&nbsp;&middot;&nbsp;</span></li>
