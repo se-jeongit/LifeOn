@@ -229,7 +229,7 @@ p {
 	        
 	        <p class="role" style="text-align: end;">이민재</p>
 	        <div class="chat-message right">
-	            <span>음? 어쩔수없죠. 슬픈일인거죠. 안타까운일인거죠. (한숨)</span>
+	            <span>🤔</span>
 	        </div>
 	        
 	        <p class="role">박래영</p>

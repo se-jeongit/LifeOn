@@ -151,9 +151,66 @@ function elapsedText(date) {
 			                <button class="search_btn" id="search_btn" onclick="searchList();">검색</button>
 			                <button type="button" class="search_btn" onclick="location.href='${pageContext.request.contextPath}/market/rent/main';" title="검색초기화"><i class="bi bi-arrow-repeat"></i></button>
 		                </form>
+		                
+						<button id="showMapBtn" class="search_btn" style="height: 40px; border-radius: 0px;" onclick="modalMap();"><i class="bi bi-map"></i></button>
+						<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+								
+						      		<div class="modal-header" style="display: flex; justify-content: space-between; padding: 10px 20px;">
+						        		<h5 class="modal-title">지도보기</h5>
+						        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						      		</div>
+						      		
+						      		<div class="modal-body" style="padding: 10px;">
+						      			<div id="map" style="width: 100%; height: 400px;"></div>
+						      		</div>
+						      	</div>
+					      	</div>
+					   	</div>
+					    
+					    <script type="text/javascript">
+					    
+							function modalMap() {
+								$('#mapModal').modal('show');	
+							}
+							
+						 	var container = document.getElementById('map');
+							var options = {
+								center: new kakao.maps.LatLng(37.556583, 126.919532),
+								level: 3
+							};
+							
+							var map = new kakao.maps.Map(container, options);
+							
+							var geocoder = new kakao.maps.services.Geocoder();
+						
+							for (let i = 0; i < '${list.size()}'; i++) {
+								geocoder.addressSearch('${list.get(i).pra}', function(result, status) {
+								     if (status === kakao.maps.services.Status.OK) {
+							
+								        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+							
+								        var marker = new kakao.maps.Marker({
+								            map: map,
+								            position: coords
+								        });
+							
+								        var infowindow = new kakao.maps.InfoWindow({
+								            content: '<div style="width:150px;text-align:center;padding:6px 0;">${list.get(i).pname}</div>'
+								        });
+								        infowindow.open(map, marker);
+								    } 
+								});
+							}
+						    var centerVal = new kakao.maps.LatLng(37.556583, 126.919532);
+						    map.setCenter(centerVal);
+					    </script>
+					    
 						<div>
 							<button class="ssbtn" style="height: 40px; border-radius: 0px;" onclick="location.href='<c:url value='write'/>'">물품등록</button>
 						</div>
+						
 					</div>
 				</div>
 				
@@ -373,7 +430,7 @@ $(function() {
 });
 </script>
 
-<script>
+<script type="text/javascript">
     // URL에서 cbn 파라미터 값 추출
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);

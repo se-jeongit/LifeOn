@@ -68,16 +68,11 @@
 	<!-- 판매된 전체 물품 리스트 -->
 	<select id="listRentProductOrder" parameterType="map" resultType="com.sp.app.rent.model.RentProductOrder">
 		SELECT p.pnum, p.pname, p.pph, pr.prp, pr.prlp, pr.prs,
-<!-- 			(SELECT m.nickname
+     			(SELECT m.nickname
 				FROM ord o
 				JOIN member m ON o.num = m.num
 				JOIN ord_detail od ON o.onum = od.onum
-				where pnum = 79 -->
-			(SELECT m.nickname
-				FROM MEMBER m
-				JOIN ORD o ON m.num = o.num
-				JOIN ORD_DETAIL od ON o.onum = od.onum 
-				JOIN PRODUCT p ON p.pnum = od.pnum where p.num = #{num}) as renter, odq, TO_CHAR(opr.opsd, 'YYYY-MM-DD') opsd, TO_CHAR(opr.oped, 'YYYY-MM-DD') oped, opr.opld || '일' opld
+				where pnum = p.pnum) as renter, odq, TO_CHAR(opr.opsd, 'YYYY-MM-DD') opsd, TO_CHAR(opr.oped, 'YYYY-MM-DD') oped, opr.opld || '일' opld
 		FROM PRODUCT p
 		JOIN PRODUCT_RENT pr ON p.pnum = pr.pnum
 		LEFT OUTER JOIN ORD_DETAIL od ON p.pnum = od.pnum
