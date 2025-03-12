@@ -77,12 +77,12 @@
 								                <button class="close-btn" id="closeBtn">✕</button>
 								            </div>
 								            <div class="modal-content">
-								                <h2>"제목"</h2>
+								                <h2>러닝크루 구합니다~!</h2>
 								                <p>참여하시겠습니까?</p>
 								            </div>
 								            <div class="modal-actions">
-								                <button class="cancel-btn" id="cancelBtn">참여취소</button>
 								                <button class="confirm-btn" id="confirmBtn">참여하기</button>
+								                <button class="cancel-btn" id="cancelBtn">참여취소</button>
 								            </div>
 								        </div>
 								    </div>
@@ -201,11 +201,12 @@
 
   document.getElementById('cancelBtn').addEventListener('click', function() {
       document.getElementById('modalOverlay').classList.remove('modal-show');
+      alert('참여 신청이 취소되었습니다😢');
   });
 
   document.getElementById('confirmBtn').addEventListener('click', function() {
       document.getElementById('modalOverlay').classList.remove('modal-show');
-      alert('참여 신청이 완료되었습니다!');
+      alert('참여 신청이 완료되었습니다😊');
   });
 
   document.getElementById('modalOverlay').addEventListener('click', function(e) {
