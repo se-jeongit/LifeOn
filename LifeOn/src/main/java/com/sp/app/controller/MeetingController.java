@@ -51,7 +51,7 @@ public class MeetingController {
 			HttpServletRequest req) throws Exception {
 		
 		try {
-			int size = 10;
+			int size = 15;
 			int total_page = 0;
 			int dataCount = 0;
 			

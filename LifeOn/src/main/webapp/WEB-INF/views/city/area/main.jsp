@@ -46,8 +46,8 @@
                     <div class="region-item">
                         <div class="region-number">1</div>
                         <div class="region-details">
-                            <h5 style="font-size: 15px">가산디지털단지</h5>
-                            <p style="font-size: 11px;">새로운 신흥 지구가 형성된 G.O.A.T</p>
+                            <h5>가산디지털단지</h5>
+                            <span style="font-size: 12px; color: #5D5D5D">새로운 신흥 지구가 형성된 G.O.A.T</span>
                         </div>
                     </div>
                     
@@ -55,7 +55,7 @@
                         <div class="region-number">2</div>
                         <div class="region-details">
                             <h5>성신여대입구</h5>
-                            <p>연인들에게 좋은 곳! 쇼핑가 볼거리 풍부!</p>
+                            <span style="font-size: 12px; color: #5D5D5D">연인들에게 좋은 곳! 쇼핑가 볼거리 풍부!</span>
                         </div>
                     </div>
                     
@@ -63,7 +63,7 @@
                         <div class="region-number">3</div>
                         <div class="region-details">
                             <h5>선정릉</h5>
-                            <p>높은 빌딩 사이, 한적하고 안전한 지역</p>
+                            <span style="font-size: 12px; color: #5D5D5D">높은 빌딩 사이, 한적하고 안전한 지역</span>
                         </div>
                     </div>
                     
@@ -71,7 +71,7 @@
                         <div class="region-number">4</div>
                         <div class="region-details">
                             <h5>선정릉</h5>
-                            <p>높은 빌딩 사이, 한적하고 안전한 지역</p>
+                            <span style="font-size: 12px; color: #5D5D5D">높은 빌딩 사이, 한적하고 안전한 지역</span>
                         </div>
                     </div>
                     
@@ -79,7 +79,7 @@
                         <div class="region-number">5</div>
                         <div class="region-details">
                             <h5>선정릉</h5>
-                            <p>높은 빌딩 사이, 한적하고 안전한 지역</p>
+                            <span style="font-size: 12px; color: #5D5D5D">높은 빌딩 사이, 한적하고 안전한 지역</span>
                         </div>
                     </div>
                 </div>
