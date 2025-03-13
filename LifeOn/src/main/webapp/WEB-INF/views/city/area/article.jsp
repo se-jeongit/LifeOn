@@ -35,7 +35,7 @@
 		            <img class="thumbnail-img" src="${pageContext.request.contextPath}/uploadPath/area/${dto.thp}" alt="지역사진">
 		        </div>
 				
-        		<!-- 상품 정보 -->
+        		<!--  정보 -->
         		<div class="product-info">
         			<div style="text-align: left; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e0e0e0;">
 	            		<div style="font-size: 24px; font-weight: 600;">${dto.ssname}<h2 style="margin: 0; font-size: 20px;">${dto.rvsubject}</h2></div>
@@ -48,7 +48,7 @@
 	            		</div>
         			</div>
         			<div style="text-align: left; padding-top: 30px; display: flex; justify-content: space-between; align-items: flex-start;">
-	        			<div>
+	        			<div class="detail" style="text-align: center;">
 	           				<p style="margin: 0; font-size: 25px;">${dto.rssubject}</p>
 	           			</div>
 	           			<div>

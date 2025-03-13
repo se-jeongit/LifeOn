@@ -46,40 +46,40 @@
                     <div class="region-item">
                         <div class="region-number">1</div>
                         <div class="region-details">
-                            <h5>가산디지털단지</h5>
-                            <span style="font-size: 12px; color: #5D5D5D">새로운 신흥 지구가 형성된 G.O.A.T</span>
+                            <h5>강남역</h5>
+                            <span style="font-size: 12px; color: #5D5D5D">서울 최대 상업·비즈니스 중심, 강남</span>
                         </div>
                     </div>
                     
                     <div class="region-item">
                         <div class="region-number">2</div>
                         <div class="region-details">
-                            <h5>성신여대입구</h5>
-                            <span style="font-size: 12px; color: #5D5D5D">연인들에게 좋은 곳! 쇼핑가 볼거리 풍부!</span>
+                            <h5>안국역</h5>
+                            <span style="font-size: 12px; color: #5D5D5D">외국관광객 필수코스! 북촌한옥마을</span>
                         </div>
                     </div>
                     
                     <div class="region-item">
                         <div class="region-number">3</div>
                         <div class="region-details">
-                            <h5>선정릉</h5>
-                            <span style="font-size: 12px; color: #5D5D5D">높은 빌딩 사이, 한적하고 안전한 지역</span>
+                            <h5>광화문역</h5>
+                            <span style="font-size: 12px; color: #5D5D5D">현재와 과거가 공존하는 광화문!</span>
                         </div>
                     </div>
                     
                     <div class="region-item">
                         <div class="region-number">4</div>
                         <div class="region-details">
-                            <h5>선정릉</h5>
-                            <span style="font-size: 12px; color: #5D5D5D">높은 빌딩 사이, 한적하고 안전한 지역</span>
+                            <h5>홍대입구</h5>
+                            <span style="font-size: 12px; color: #5D5D5D">언제나 핫한 곳, 홍대!</span>
                         </div>
                     </div>
                     
                     <div class="region-item">
                         <div class="region-number">5</div>
                         <div class="region-details">
-                            <h5>선정릉</h5>
-                            <span style="font-size: 12px; color: #5D5D5D">높은 빌딩 사이, 한적하고 안전한 지역</span>
+                            <h5>역삼역</h5>
+                            <span style="font-size: 12px; color: #5D5D5D">봉은사와 코엑스가 가까운 문화공간</span>
                         </div>
                     </div>
                 </div>
@@ -249,7 +249,7 @@
 							<br>강남역 일대 🍽: 다양한 맛집과 술집이 많아 밤늦게까지 붐비는 곳.</p>
             </div>
             
-            <button class="more-info-btn" id="moreInfoBtn">&lt;강남&gt; 살기 어떤지 궁금해?</button>
+            <button class="more-info-btn" id="moreInfoBtn" onclick="location.href='${pageContext.request.contextPath}/city/area/article/23?page=2';">&lt;강남&gt; 살기 어떤지 궁금해?</button>
         </div>
     </div>
 </div>
