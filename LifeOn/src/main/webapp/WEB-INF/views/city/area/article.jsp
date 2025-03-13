@@ -63,17 +63,18 @@
         		</div>
     		</div>
     		
-		    <div class="product-detail">
-		    	<div style="width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0;">
-			    	<p style="margin: 0 0 20px; color: #333; font-size: 24px; font-weight: 500;">${dto.rvcontent}</p>
-		    	</div>
-		    </div>
-		    
-		    <div style="display: grid; grid-template-columns: repeat(4, 200px); justify-content: space-between; width: 890px;">
+				    <div class="product-detail">
+			           		<div id="map" style="margin-top:10px; width: 400px; height: 300px;"></div>
+				    	<div class="product-de" style="width: 60%; margin-top:100px; display: flex; flex-direction: column; align-items: flex-start; padding: 20px 0;">
+					    	<p style= "margin: 0 0 20px; color: #333; font-size: 24px; font-weight: 500;">${dto.rvcontent}</p>
+				    	</div>
+				    </div>
+		  			  <div style="display: grid; margin-top:20px; grid-template-columns: repeat(4, 200px); text-align:right; width: 890px;">
 							<c:forEach var="vo" items="${listFile}">
 								<img style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 20px;" src="${pageContext.request.contextPath}/uploadPath/area/${vo.ssfname}" alt="물품추가사진">
 							</c:forEach>
 						</div>
+		    
 						<div class="reply">
 						<form name="replyForm" method="post">
 
@@ -99,7 +100,18 @@
 	</div>
 </main>
 
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=450aa7a7e3d437713d1b2f8ff91c8e44"></script>
+<script type="text/javascript">
+	
+	var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+	var options = { //지도를 생성할 때 필요한 기본 옵션
+		center: new kakao.maps.LatLng(37.498095, 127.027610), //지도의 중심좌표.
+		level: 3 //지도의 레벨(확대, 축소 정도)
+	};
 
+	var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+	
+</script>
 <script type="text/javascript">
 $(function() {
     $('.reply').on('click', '.reply-dropdown', function() {
