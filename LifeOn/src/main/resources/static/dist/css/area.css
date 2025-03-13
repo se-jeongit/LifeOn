@@ -445,6 +445,8 @@ fieldset[disabled] .btn {
   text-align: center;
   background-size: cover;
   background-position: center;
+/*  background-image:url('<c:out value="${pageContext.request.contextPath}/dist/images/q1.jpg"/>');; */
+  background-color: #777; 
 }
 
 /* 질문 헤더 스타일 */
