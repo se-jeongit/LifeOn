@@ -19,7 +19,7 @@
 
 <header>
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"/>
-	<jsp:include page="/WEB-INF/views/market/layout/menu.jsp"/>
+	<jsp:include page="/WEB-INF/views/city/layout/menu.jsp"/>
 </header>
 	
 <main class="min-vh-100">
