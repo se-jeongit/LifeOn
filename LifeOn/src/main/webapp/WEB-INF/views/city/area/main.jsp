@@ -108,9 +108,9 @@
 				</ul>
 			</nav>
 		</div>
-                <div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1280px;">
+                <%-- <div style="display: flex; justify-content: flex-end; margin: 10px auto 10px; max-width: 1280px;">
           <button class="btn" onclick="location.href='${pageContext.request.contextPath}/city/area/write';">글쓰기</button>
-        </div>
+        </div> --%>
                 <div class="route-slider-container">
             			<!-- 지역 그리드  -->
                             <div class="route-grid">
