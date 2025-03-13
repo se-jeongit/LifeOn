@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/forms.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/free.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/css/market.css" type="text/css">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=#"></script>
 
 <script type="text/javascript">
 function elapsedText(date) {
@@ -197,7 +198,7 @@ function elapsedText(date) {
 								        });
 							
 								        var infowindow = new kakao.maps.InfoWindow({
-								            content: '<div style="width:150px;text-align:center;padding:6px 0;">${list.get(i).pname}</div>'
+								            content: '<div style="width:150px; text-align:center;">${list.get(i).pname}</div>'
 								        });
 								        infowindow.open(map, marker);
 								    } 

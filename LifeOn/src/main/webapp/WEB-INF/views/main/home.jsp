@@ -149,15 +149,15 @@
                 <h3>지역인기장소 TOP3</h3>
                 <ul class="local-list">
                     <li>
-                        <span>인기장소 1</span>
+                        <span>강남역</span>
                         <span class="info-text">평점 4.8 • 리뷰 120개</span>
                     </li>
                     <li>
-                        <span>인기장소 2</span>
+                        <span>안국역</span>
                         <span class="info-text">평점 4.7 • 리뷰 98개</span>
                     </li>
                     <li>
-                        <span>인기장소 3</span>
+                        <span>광화문역</span>
                         <span class="info-text">평점 4.6 • 리뷰 85개</span>
                     </li>
                 </ul>
@@ -187,7 +187,8 @@
 
             <div class="local-content">
                 <ul class="meeting-list">
-                    <c:forEach var="meeting" items="${regionMeeting}">
+                    <c:forEach var="meeting" items="${regionMeeting}" varStatus="status">
+		                <c:if test="${status.index < 4}">
                         <li>
                             <a href="<c:url value='/city/meeting/article/${meeting.num}?page=1'/>">
                                 <p style="font-size: 18px;">${meeting.subject}</p>
@@ -195,6 +196,7 @@
                                 <p>${meeting.nickname}</p>
                             </a>
                         </li>
+	                   </c:if>
                     </c:forEach>
                 </ul>
             </div>

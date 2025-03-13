@@ -297,7 +297,7 @@
 	
 	<select id="memberBoradLike" parameterType="map" resultType="com.sp.app.lounge.model.FreeBoard">
 		SELECT f.psnum, f.num, subject,
-			(SELECT nickname FROM hybrid_board b JOIN member m ON b.num = m.num	WHERE psnum = 153) nickname,
+			(SELECT nickname FROM hybrid_board b JOIN member m ON b.num = m.num	WHERE psnum = f.psnum) nickname,
 			hb.reg_date, hitCount,
 			CASE 
 		        WHEN bdtype = 'room' THEN '인테리어'
